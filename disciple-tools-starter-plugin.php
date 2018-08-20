@@ -180,7 +180,7 @@ class DT_Structured_Mapping {
          * @see https://github.com/DiscipleTools/disciple-tools-version-control/wiki/How-to-Update-the-Starter-Plugin
          */
         Puc_v4_Factory::buildUpdateChecker(
-            'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-starter-plugin-version-control.json',
+            'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-structured-mapping-version-control.json',
             __FILE__,
             'disciple-tools-starter-plugin'
         );
@@ -289,7 +289,7 @@ function dt_structured_mapping_no_disciple_tools_theme_found()
 {
     ?>
     <div class="notice notice-error">
-        <p><?php esc_html_e( "'Disciple Tools - Starter_Plugin' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Starter_Plugin' plugin.", "dt_structured_mapping" ); ?></p>
+        <p><?php esc_html_e( "'Disciple Tools - Structured Mapping' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Structured Mapping' plugin.", "dt_structured_mapping" ); ?></p>
     </div>
     <?php
 }
@@ -361,7 +361,7 @@ function dt_starter_hook_admin_notice() {
     if ( ! get_option( 'dismissed-dt-starter', false ) ) {
         // multiple dismissible notice states ?>
         <div class="notice notice-error notice-dt-starter is-dismissible" data-notice="dt-demo">
-            <p><?php esc_html_e( "'Disciple Tools - Starter' plugin requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Starter' plugin." ); ?></p>
+            <p><?php esc_html_e( "'Disciple Tools - Structured Mapping' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Structured Mapping'." ); ?></p>
         </div>
         <script>
             jQuery(function($) {
