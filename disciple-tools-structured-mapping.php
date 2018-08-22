@@ -205,6 +205,50 @@ class DT_Structured_Mapping {
             $role->add_cap( 'manage_dt' ); // gives access to dt plugin options
         }
 
+        /**
+         * Add custom tables
+         */
+
+        global $wpdb;
+        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+
+        $charset_collate = $wpdb->get_charset_collate();
+
+        $sql1 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_mapping` (
+          `geonameid` bigint(11) unsigned NOT NULL,
+          `name` varchar(200) DEFAULT NULL,
+          `asciiname` varchar(200) DEFAULT NULL,
+          `alternatenames` varchar(10000) DEFAULT NULL,
+          `latitude` float DEFAULT NULL,
+          `longitude` float DEFAULT NULL,
+          `feature_class` char(1) DEFAULT NULL,
+          `feature_code` varchar(10) DEFAULT NULL,
+          `country_code` char(2) DEFAULT NULL,
+          `cc2` varchar(100) DEFAULT NULL,
+          `admin1_code` varchar(20) DEFAULT NULL,
+          `admin2_code` varchar(80) DEFAULT NULL,
+          `admin3_code` varchar(20) DEFAULT NULL,
+          `admin4_code` varchar(20) DEFAULT NULL,
+          `population` int(11) DEFAULT NULL,
+          `elevation` int(80) DEFAULT NULL,
+          `dem` varchar(80) DEFAULT NULL,
+          `timezone` varchar(40) DEFAULT NULL,
+          `modification_date` date DEFAULT NULL,
+          PRIMARY KEY (`geonameid`)
+        ) $charset_collate;";
+        $result1 = dbDelta( $sql1 );
+        dt_write_log($result1);
+
+        $sql2 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_mapping_polygons` (
+          `geonameid` bigint(11) unsigned NOT NULL,
+          `geoJSON` longtext,
+          PRIMARY KEY (`geonameid`)
+        ) $charset_collate;";
+
+        $result2 = dbDelta( $sql2 );
+        dt_write_log( $result2);
+
+
     }
 
     /**
