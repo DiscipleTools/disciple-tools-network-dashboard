@@ -30,8 +30,8 @@ $results = $wpdb->get_results("
     FROM $wpdb->postmeta 
     WHERE meta_key = 'zume_raw_record'
       AND post_id IN (SELECT ID FROM $wpdb->posts WHERE post_type = 'groups')", ARRAY_A);
-foreach($results as $index => $result ) {
-    $value = maybe_unserialize($result['meta_value']);
+foreach ($results as $index => $result ) {
+    $value = maybe_unserialize( $result['meta_value'] );
     $places[$index] = [
         'id' => $index,
         'name' => $value['group_name'],
@@ -43,19 +43,19 @@ foreach($results as $index => $result ) {
     //    dt_write_log($value);
 }
 // output headers so that the file is downloaded rather than displayed
-header('Content-Type: text/csv; charset=utf-8');
-header('Content-Disposition: attachment; filename=data.csv');
+header( 'Content-Type: text/csv; charset=utf-8' );
+header( 'Content-Disposition: attachment; filename=data.csv' );
 
 // create a file pointer connected to the output stream
-$output = fopen('php://output', 'w');
+$output = fopen( 'php://output', 'w' );
 
 // output the column headings
-fputcsv($output, array('id', 'name', 'address', 'type', 'lat', 'lng'));
+fputcsv( $output, array( 'id', 'name', 'address', 'type', 'lat', 'lng' ) );
 
 // fetch the data
 
 
 // loop over the rows, outputting them
 foreach ($places as $row ) {
-    fputcsv($output, $row);
+    fputcsv( $output, $row );
 }

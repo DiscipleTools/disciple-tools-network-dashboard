@@ -182,7 +182,7 @@
   <rule ref="Generic.Files.LineEndings"/>
   <rule ref="Generic.Formatting.DisallowMultipleStatements"/>
   <rule ref="Generic.Formatting.SpaceAfterCast"/>
-  <rule ref="Generic.NamingConventions.ConstructorName"/>
+  <!--<rule ref="Generic.NamingConventions.ConstructorName"/>-->
   <rule ref="Generic.NamingConventions.UpperCaseConstantName"/>
   <rule ref="Generic.PHP.DeprecatedFunctions"/>
   <rule ref="Generic.PHP.LowerCaseConstant"/>

@@ -237,7 +237,7 @@ class DT_Structured_Mapping {
           PRIMARY KEY (`geonameid`)
         ) $charset_collate;";
         $result1 = dbDelta( $sql1 );
-        dt_write_log($result1);
+        dt_write_log( $result1 );
 
         $sql2 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_mapping_polygons` (
           `geonameid` bigint(11) unsigned NOT NULL,
@@ -246,7 +246,7 @@ class DT_Structured_Mapping {
         ) $charset_collate;";
 
         $result2 = dbDelta( $sql2 );
-        dt_write_log( $result2);
+        dt_write_log( $result2 );
 
 
     }
