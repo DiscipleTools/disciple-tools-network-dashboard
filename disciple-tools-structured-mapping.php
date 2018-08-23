@@ -133,6 +133,7 @@ class DT_Structured_Mapping {
      */
     private function includes() {
         require_once( 'includes/admin/admin-menu-and-tabs.php' );
+        require_once( 'includes/locations-metabox.php' );
     }
 
     /**
@@ -214,7 +215,7 @@ class DT_Structured_Mapping {
 
         $charset_collate = $wpdb->get_charset_collate();
 
-        $sql1 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_mapping` (
+        $sql1 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_geonames` (
           `geonameid` bigint(11) unsigned NOT NULL,
           `name` varchar(200) DEFAULT NULL,
           `asciiname` varchar(200) DEFAULT NULL,
@@ -239,7 +240,7 @@ class DT_Structured_Mapping {
         $result1 = dbDelta( $sql1 );
         dt_write_log( $result1 );
 
-        $sql2 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_mapping_polygons` (
+        $sql2 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_geonames_polygons` (
           `geonameid` bigint(11) unsigned NOT NULL,
           `geoJSON` longtext,
           PRIMARY KEY (`geonameid`)
