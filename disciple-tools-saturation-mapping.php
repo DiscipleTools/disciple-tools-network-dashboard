@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Disciple Tools - Mapping
  * Plugin URI: https://github.com/ZumeProject/disciple-tools-mapping
- * Description: Adds structured mapping data for Zume Project and 2414
+ * Description: Adds saturation mapping data for Zume Project and 2414
  * Version: 0.1
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-mapping
@@ -20,7 +20,7 @@ if ( !defined( 'ABSPATH' ) ) {
 
 
 /*******************************************************************
- * Using the Structured Mapping
+ * Using the Saturation Mapping
  * The Disciple Tools starter plugin is intended to accelerate integrations and extensions to the Disciple Tools system.
  * This basic plugin starter has some of the basic elements to quickly launch and extension project in the pattern of
  * the Disciple Tools system.
@@ -28,7 +28,7 @@ if ( !defined( 'ABSPATH' ) ) {
 
 /**
  * Refactoring (renaming) this plugin as your own:
- * 1. Refactor all occurences of the name DT_Structured_Mapping, dt_structured_mapping, and Structured Mapping with you're own plugin
+ * 1. Refactor all occurences of the name DT_Saturation_Mapping, dt_saturation_mapping, and Saturation Mapping with you're own plugin
  * name for the `disciple-tools-starter-plugin.php and menu-and-tabs.php files.
  * 2. Update the README.md and LICENSE
  * 3. Update the default.pot file if you intend to make your plugin multilingual. Use a tool like POEdit
@@ -51,17 +51,17 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Gets the instance of the `DT_Structured_Mapping` class.
+ * Gets the instance of the `DT_Saturation_Mapping` class.
  *
  * @since  0.1
  * @access public
  * @return object
  */
-function dt_structured_mapping() {
+function dt_saturation_mapping() {
     $current_theme = get_option( 'current_theme' );
 
     if ( 'Disciple Tools' == $current_theme || dt_is_child_theme_of_disciple_tools() ) {
-        return DT_Structured_Mapping::get_instance();
+        return DT_Saturation_Mapping::get_instance();
     }
     else {
         add_action( 'admin_notices', 'dt_starter_hook_admin_notice' );
@@ -70,7 +70,7 @@ function dt_structured_mapping() {
     }
 
 }
-add_action( 'plugins_loaded', 'dt_structured_mapping' );
+add_action( 'plugins_loaded', 'dt_saturation_mapping' );
 
 /**
  * Singleton class for setting up the plugin.
@@ -78,7 +78,7 @@ add_action( 'plugins_loaded', 'dt_structured_mapping' );
  * @since  0.1
  * @access public
  */
-class DT_Structured_Mapping {
+class DT_Saturation_Mapping {
 
     /**
      * Declares public variables
@@ -106,7 +106,7 @@ class DT_Structured_Mapping {
         static $instance = null;
 
         if ( is_null( $instance ) ) {
-            $instance = new dt_structured_mapping();
+            $instance = new dt_saturation_mapping();
             $instance->setup();
             $instance->includes();
             $instance->setup_actions();
@@ -156,7 +156,7 @@ class DT_Structured_Mapping {
         $this->img_uri      = trailingslashit( $this->dir_uri . 'img' );
 
         // Admin and settings variables
-        $this->token             = 'dt_structured_mapping';
+        $this->token             = 'dt_saturation_mapping';
         $this->version             = '0.1';
     }
 
@@ -181,7 +181,7 @@ class DT_Structured_Mapping {
          * @see https://github.com/DiscipleTools/disciple-tools-version-control/wiki/How-to-Update-the-Starter-Plugin
          */
         Puc_v4_Factory::buildUpdateChecker(
-            'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-structured-mapping-version-control.json',
+            'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-saturation-mapping-version-control.json',
             __FILE__,
             'disciple-tools-starter-plugin'
         );
@@ -271,7 +271,7 @@ class DT_Structured_Mapping {
      * @return void
      */
     public function i18n() {
-        load_plugin_textdomain( 'dt_structured_mapping', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ). 'languages' );
+        load_plugin_textdomain( 'dt_saturation_mapping', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ). 'languages' );
     }
 
     /**
@@ -282,7 +282,7 @@ class DT_Structured_Mapping {
      * @return string
      */
     public function __toString() {
-        return 'dt_structured_mapping';
+        return 'dt_saturation_mapping';
     }
 
     /**
@@ -293,7 +293,7 @@ class DT_Structured_Mapping {
      * @return void
      */
     public function __clone() {
-        _doing_it_wrong( __FUNCTION__, esc_html__( 'Whoah, partner!', 'dt_structured_mapping' ), '0.1' );
+        _doing_it_wrong( __FUNCTION__, esc_html__( 'Whoah, partner!', 'dt_saturation_mapping' ), '0.1' );
     }
 
     /**
@@ -304,7 +304,7 @@ class DT_Structured_Mapping {
      * @return void
      */
     public function __wakeup() {
-        _doing_it_wrong( __FUNCTION__, esc_html__( 'Whoah, partner!', 'dt_structured_mapping' ), '0.1' );
+        _doing_it_wrong( __FUNCTION__, esc_html__( 'Whoah, partner!', 'dt_saturation_mapping' ), '0.1' );
     }
 
     /**
@@ -316,7 +316,7 @@ class DT_Structured_Mapping {
      */
     public function __call( $method = '', $args = array() ) {
         // @codingStandardsIgnoreLine
-        _doing_it_wrong( "dt_structured_mapping::{$method}", esc_html__( 'Method does not exist.', 'dt_structured_mapping' ), '0.1' );
+        _doing_it_wrong( "dt_saturation_mapping::{$method}", esc_html__( 'Method does not exist.', 'dt_saturation_mapping' ), '0.1' );
         unset( $method, $args );
         return null;
     }
@@ -324,17 +324,17 @@ class DT_Structured_Mapping {
 // end main plugin class
 
 // Register activation hook.
-register_activation_hook( __FILE__, [ 'DT_Structured_Mapping', 'activation' ] );
-register_deactivation_hook( __FILE__, [ 'DT_Structured_Mapping', 'deactivation' ] );
+register_activation_hook( __FILE__, [ 'DT_Saturation_Mapping', 'activation' ] );
+register_deactivation_hook( __FILE__, [ 'DT_Saturation_Mapping', 'deactivation' ] );
 
 /**
  * Admin alert for when Disciple Tools Theme is not available
  */
-function dt_structured_mapping_no_disciple_tools_theme_found()
+function dt_saturation_mapping_no_disciple_tools_theme_found()
 {
     ?>
     <div class="notice notice-error">
-        <p><?php esc_html_e( "'Disciple Tools - Structured Mapping' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Structured Mapping' plugin.", "dt_structured_mapping" ); ?></p>
+        <p><?php esc_html_e( "'Disciple Tools - Saturation Mapping' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Saturation Mapping' plugin.", "dt_saturation_mapping" ); ?></p>
     </div>
     <?php
 }
@@ -406,7 +406,7 @@ function dt_starter_hook_admin_notice() {
     if ( ! get_option( 'dismissed-dt-starter', false ) ) {
         // multiple dismissible notice states ?>
         <div class="notice notice-error notice-dt-starter is-dismissible" data-notice="dt-demo">
-            <p><?php esc_html_e( "'Disciple Tools - Structured Mapping' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Structured Mapping'." ); ?></p>
+            <p><?php esc_html_e( "'Disciple Tools - Saturation Mapping' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Saturation Mapping'." ); ?></p>
         </div>
         <script>
             jQuery(function($) {

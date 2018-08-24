@@ -1,7 +1,7 @@
 <?php
 
 
-class DT_Structured_Mapping_Metabox {
+class DT_Saturation_Mapping_Metabox {
     public function __construct()
     {
         add_action( 'admin_menu', [ $this, 'meta_box_setup' ], 20 );
@@ -16,10 +16,14 @@ class DT_Structured_Mapping_Metabox {
         Disciple_Tools_Location_Post_Type::instance()->meta_box_content( 'saturation_mapping' );
 
 
-        global $post_id;
+        global $post, $post_id;
         $post_parent_id = wp_get_post_parent_id( $post_id );
         $post_parent = get_post( $post_parent_id );
+        $location_group_count = $this->get_child_groups();
 
+        /**
+         * Parent Location
+         */
         echo '<hr>';
         echo "<h3>Parent Location</h3>";
         echo '<a href="' . admin_url() .'post.php?post=' . $post_parent->ID . '&action=edit">' . $post_parent->post_title . '</a>: ';
@@ -30,6 +34,35 @@ class DT_Structured_Mapping_Metabox {
             $groups = $par_loc / 5000;
             echo ' | ' . number_format( $groups, 0, ".", ",") . ' groups needed' ;
         }
+        echo '<br><br>';
+
+        /**
+         * Current Location
+         */
+        echo '<hr>';
+        echo "<h3>Current Location</h3>";
+        if ( $cur_population = get_post_meta( $post_id, 'population', true ) ) {
+            echo '<strong>' . $post->post_title . '</strong>: ';
+            echo number_format( $cur_population, 0, ".", ",") . ' people live here ';
+
+            $groups = $cur_population / 5000;
+            echo ' | ' . number_format( $groups, 0, ".", ",") . ' groups needed | ' ;
+
+            $groups_in_area = 0;
+            foreach ($location_group_count as $value ) {
+                if ( $value['location'] == $post_id ) {
+                    $groups_in_area = $value['count'];
+                    break;
+                }
+            }
+            echo  $groups_in_area . ' groups in area';
+
+        }
+        echo '<br><br>';
+
+        /**
+         * Child Location
+         */
         echo '<hr>';
         echo "<h3>Child Locations</h3>";
         $child_population = $this->get_child_populations();
@@ -44,16 +77,31 @@ class DT_Structured_Mapping_Metabox {
                     echo ' | ' . number_format( $groups, 0, ".", ",") . ' groups needed | ' ;
                 }
 
-                echo $this->get_child_groups() . 'groups in area';
+                $groups_in_area = 0;
+                foreach ($location_group_count as $value ) {
+                    if ( $value['location'] == $location->ID ) {
+                        $groups_in_area = $value['count'];
+                        break;
+                    }
+                }
+                echo  $groups_in_area . ' groups in area';
 
                 echo '<br><br>';
             }
         }
     }
 
+    /**
+     * Returns array of locations and counts of groups
+     * This does not distinguish between types of groups.
+     * The array contains 'location' and 'count' fields.
+     *
+     * @return array|null|object
+     */
     public function get_child_groups() {
         // get the groups and child groups of the location
-        
+        global $wpdb;
+        return $wpdb->get_results("SELECT p2p_to as location, count(p2p_id) as count FROM $wpdb->p2p WHERE p2p_type = 'groups_to_locations' GROUP BY p2p_to", ARRAY_A );
     }
 
     public function saturation_field_filter( $fields, $post_type ) {
@@ -104,4 +152,4 @@ class DT_Structured_Mapping_Metabox {
 
 
 }
-new DT_Structured_Mapping_Metabox;
+new DT_Saturation_Mapping_Metabox;
