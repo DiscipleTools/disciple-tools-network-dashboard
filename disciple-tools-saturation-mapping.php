@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: Disciple Tools - Mapping
- * Plugin URI: https://github.com/ZumeProject/disciple-tools-mapping
- * Description: Adds saturation mapping data for Zume Project and 2414
+ * Plugin Name: Disciple Tools - Saturation Mapping
+ * Plugin URI: https://github.com/ZumeProject/disciple-tools-saturation-mapping
+ * Description: Adds saturation mapping data.
  * Version: 0.1
  * Author URI: https://github.com/DiscipleTools
- * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-mapping
+ * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-saturation-mapping
  * Requires at least: 4.7.0
  * (Requires 4.7+ because of the integration of the REST API at 4.7 and the security requirements of this milestone version.)
  * Tested up to: 4.9
@@ -132,8 +132,9 @@ class DT_Saturation_Mapping {
      * @return void
      */
     private function includes() {
-        require_once( 'includes/admin/admin-menu-and-tabs.php' );
+        require_once( 'includes/menu-and-tabs.php' );
         require_once( 'includes/locations-metabox.php' );
+        require_once( 'includes/endpoints.php' );
     }
 
     /**
