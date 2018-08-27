@@ -133,7 +133,7 @@ class DT_Saturation_Mapping {
      */
     private function includes() {
         require_once( 'includes/menu-and-tabs.php' );
-        require_once( 'includes/locations-metabox.php' );
+        require_once( 'includes/locations-saturation-metabox.php' );
         require_once( 'includes/endpoints.php' );
     }
 
