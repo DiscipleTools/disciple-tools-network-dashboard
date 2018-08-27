@@ -135,6 +135,8 @@ class DT_Saturation_Mapping {
         require_once( 'includes/menu-and-tabs.php' );
         require_once( 'includes/locations-saturation-metabox.php' );
         require_once( 'includes/endpoints.php' );
+        require_once( 'includes/hooks.php' );
+        require_once( 'includes/stats.php' );
     }
 
     /**
@@ -210,7 +212,6 @@ class DT_Saturation_Mapping {
         /**
          * Add custom tables
          */
-
         global $wpdb;
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
@@ -250,6 +251,10 @@ class DT_Saturation_Mapping {
         $result2 = dbDelta( $sql2 );
         dt_write_log( $result2 );
 
+        /**
+         * Setup variables
+         */
+        update_option('dt_saturation_mapping_pd', 5000, false );
 
     }
 

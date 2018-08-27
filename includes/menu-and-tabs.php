@@ -96,8 +96,7 @@ class DT_Saturation_Mapping_Menu {
             <?php
             switch ($tab) {
                 case "general":
-                    $object = new DT_Starter_Tab_General();
-                    $object->content();
+                    $this->general_content();
                     break;
                 case "second":
                     $object = new DT_Starter_Tab_Second();
@@ -139,20 +138,36 @@ class DT_Saturation_Mapping_Menu {
     }
 
     public function general_content_main() {
+        // process post action
+        if ( isset( $_POST['population_division'] ) &&  ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'population_division'.get_current_user_id() ) ) ) {
+            $new = (int) sanitize_text_field( wp_unslash( $_POST['population_division'] ) );
+            update_option('dt_saturation_mapping_pd', $new, false );
+        }
+        $population_division = get_option('dt_saturation_mapping_pd');
+        if ( empty( $population_division ) ) {
+            update_option('dt_saturation_mapping_pd', 5000, false );
+            $population_division = 5000;
+        }
         ?>
         <!-- Box -->
+        <form method="post">
         <table class="widefat striped">
             <thead>
-            <th>Header</th>
+            <th>Groups Per Population</th>
             </thead>
             <tbody>
             <tr>
                 <td>
-                    <?php  ?>
+                    <?php wp_nonce_field( 'population_division'.get_current_user_id() ); ?>
+                    <label for="population_division">Size of population for each group: </label>
+                    <input type="number" class="text" id="population_division" name="population_division" value="<?php echo esc_attr( $population_division ); ?>" /><br>
+                    <p><em>Default is a population of 5,000 for each group. This must be a number and must not be blank. </em></p>
+                    <button type="submit" class="button">Update</button>
                 </td>
             </tr>
             </tbody>
         </table>
+        </form>
         <br>
         <!-- End Box -->
         <?php

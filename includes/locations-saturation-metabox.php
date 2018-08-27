@@ -15,13 +15,24 @@ class DT_Saturation_Mapping_Metabox {
     }
 
     public function load_mapping_meta_box() {
+
         Disciple_Tools_Location_Post_Type::instance()->meta_box_content( 'saturation_mapping' );
+
+        echo '<p><a href="javascript:void(0);" onclick="jQuery(\'#saturation_mapping_hidden\').toggle();">show more</a></p>';
+        echo '<div style="display:none;" id="saturation_mapping_hidden">';
+        Disciple_Tools_Location_Post_Type::instance()->meta_box_content( 'saturation_mapping_hidden' );
+        echo '</div>';
+
+        echo '<br><button type="submit" class="button">Update</button>';
+
+
 
 
         global $post, $post_id;
         $post_parent_id = wp_get_post_parent_id( $post_id );
         $post_parent = get_post( $post_parent_id );
         $location_group_count = $this->get_child_groups();
+        $population_division = get_option('dt_saturation_mapping_pd');
 
         /**
          * Parent Location
@@ -33,7 +44,7 @@ class DT_Saturation_Mapping_Metabox {
         if ( $par_loc = get_post_meta( $post_parent->ID, 'population', true ) ) {
             echo number_format( $par_loc, 0, ".", ",") . ' people live here ';
 
-            $groups = $par_loc / 5000;
+            $groups = $par_loc / $population_division;
             echo ' | ' . number_format( $groups, 0, ".", ",") . ' groups needed' ;
         }
         echo '<br><br>';
@@ -47,7 +58,7 @@ class DT_Saturation_Mapping_Metabox {
             echo '<strong>' . $post->post_title . '</strong>: ';
             echo number_format( $cur_population, 0, ".", ",") . ' people live here ';
 
-            $groups = $cur_population / 5000;
+            $groups = $cur_population / $population_division;
             echo ' | ' . number_format( $groups, 0, ".", ",") . ' groups needed | ' ;
 
             $groups_in_area = 0;
@@ -75,7 +86,7 @@ class DT_Saturation_Mapping_Metabox {
                 if ( $loc_population = get_post_meta( $location->ID, 'population', true ) ) {
                     echo number_format( $loc_population, 0, ".", ",") . ' people live here ';
 
-                    $groups = $loc_population / 5000;
+                    $groups = $loc_population / $population_division;
                     echo ' | ' . number_format( $groups, 0, ".", ",") . ' groups needed | ' ;
                 }
 
@@ -127,14 +138,28 @@ class DT_Saturation_Mapping_Metabox {
                 'description' => 'Add only the contents of "geometry". Add only "features->geometry->{GEOJSON SNIPPET}" ',
                 'type'        => 'text',
                 'default'     => '',
-                'section'     => 'saturation_mapping',
+                'section'     => 'saturation_mapping_hidden',
             ];
             $fields['zoom_level'] = [
                 'name'        => 'Default Zoom',
                 'description' => 'Choose between 1-15. 1 is widest. 15 is closest.',
                 'type'        => 'number',
                 'default'     => '',
-                'section'     => 'saturation_mapping',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['latitude'] = [
+                'name'        => 'Latitude',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['longitude'] = [
+                'name'        => 'Longitude',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
             ];
         }
         return $fields;
@@ -151,11 +176,9 @@ class DT_Saturation_Mapping_Metabox {
         $my_wp_query = new WP_Query();
         $all_wp_pages = $my_wp_query->query(array('post_type' => 'locations', 'posts_per_page' => '-1'));
 
-        // Filter through all pages and find Portfolio's children
-        $portfolio_children = get_page_children( $post_id, $all_wp_pages );
+        $children = get_page_children( $post_id, $all_wp_pages );
 
-        // echo what we get back from WP to the browser
-        return $portfolio_children;
+        return $children;
 
     }
 
@@ -176,7 +199,7 @@ class DT_Saturation_Mapping_Metabox {
         }
 
         echo "
-        map.data.loadGeoJson('/wp-content/plugins/disciple-tools-saturation-mapping/includes/geojson.php?page=".$post->ID."&nonce=".$nonce."');
+        map.data.loadGeoJson('/wp-content/plugins/disciple-tools-saturation-mapping/exports/geojson.php?page=".$post->ID."&nonce=".$nonce."');
         map.data.setStyle({
           fillColor: 'green',
           strokeWeight: 1
