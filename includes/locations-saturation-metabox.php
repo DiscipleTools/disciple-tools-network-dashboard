@@ -6,13 +6,15 @@ class DT_Saturation_Mapping_Metabox {
     {
         add_action( 'admin_menu', [ $this, 'meta_box_setup' ], 20 );
         add_filter( "dt_custom_fields_settings", [$this, 'saturation_field_filter'], 10, 2 );
+        add_action( 'dt_locations_map_additions', [ $this, 'add_geojson'], 20 );
     }
 
-    function meta_box_setup () {
-        add_meta_box( 'location_details_notes', __( 'Saturation Mapping', 'disciple_tools' ), [$this, 'dt_mapping_load_mapping_meta_box'], 'locations', 'advanced', 'high' );
+    public function meta_box_setup () {
+        add_meta_box( 'location_details_notes', __( 'Saturation Mapping', 'disciple_tools' ), [$this, 'load_mapping_meta_box'], 'locations', 'advanced', 'high' );
+
     }
 
-    function dt_mapping_load_mapping_meta_box() {
+    public function load_mapping_meta_box() {
         Disciple_Tools_Location_Post_Type::instance()->meta_box_content( 'saturation_mapping' );
 
 
@@ -25,7 +27,7 @@ class DT_Saturation_Mapping_Metabox {
          * Parent Location
          */
         echo '<hr>';
-        echo "<h3>Parent Location</h3>";
+        echo "<h3>". esc_attr__( 'Parent Location' ) . "</h3>";
         echo '<a href="' . admin_url() .'post.php?post=' . $post_parent->ID . '&action=edit">' . $post_parent->post_title . '</a>: ';
 
         if ( $par_loc = get_post_meta( $post_parent->ID, 'population', true ) ) {
@@ -40,7 +42,7 @@ class DT_Saturation_Mapping_Metabox {
          * Current Location
          */
         echo '<hr>';
-        echo "<h3>Current Location</h3>";
+        echo "<h3>". esc_attr__( 'Current Location' ) . "</h3>";
         if ( $cur_population = get_post_meta( $post_id, 'population', true ) ) {
             echo '<strong>' . $post->post_title . '</strong>: ';
             echo number_format( $cur_population, 0, ".", ",") . ' people live here ';
@@ -64,7 +66,7 @@ class DT_Saturation_Mapping_Metabox {
          * Child Location
          */
         echo '<hr>';
-        echo "<h3>Child Locations</h3>";
+        echo "<h3>". esc_attr__( 'Child Locations' ) . "</h3>";
         $child_population = $this->get_child_populations();
         if (! empty( $child_population ) ) {
             foreach ( $child_population as $location ) {
@@ -122,8 +124,15 @@ class DT_Saturation_Mapping_Metabox {
             ];
             $fields['geojson'] = [
                 'name'        => 'GeoJSON Polygon',
-                'description' => '',
+                'description' => 'Add only the contents of "geometry". Add only "features->geometry->{GEOJSON SNIPPET}" ',
                 'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping',
+            ];
+            $fields['zoom_level'] = [
+                'name'        => 'Default Zoom',
+                'description' => 'Choose between 1-15. 1 is widest. 15 is closest.',
+                'type'        => 'number',
                 'default'     => '',
                 'section'     => 'saturation_mapping',
             ];
@@ -148,6 +157,32 @@ class DT_Saturation_Mapping_Metabox {
         // echo what we get back from WP to the browser
         return $portfolio_children;
 
+    }
+
+    public function add_geojson() {
+        global $post;
+        if( empty( $post ) || ! $post->post_type === 'locations' ) {
+            return;
+        }
+
+        $geojson = get_post_meta( $post->ID, 'geojson', true );
+        if ( ! $geojson ) {
+            return;
+        }
+        $nonce = wp_create_nonce( 'dt_location_map_'.$post->ID );
+        $setZoom = '';
+        if ( $level = get_post_meta( $post->ID, 'zoom_level', true ) ) {
+            $setZoom = 'map.setZoom('.$level.');';
+        }
+
+        echo "
+        map.data.loadGeoJson('/wp-content/plugins/disciple-tools-saturation-mapping/includes/geojson.php?page=".$post->ID."&nonce=".$nonce."');
+        map.data.setStyle({
+          fillColor: 'green',
+          strokeWeight: 1
+        });
+        ".$setZoom."
+        ";
     }
 
 
