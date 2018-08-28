@@ -52,6 +52,7 @@ class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
               <li><a href="'. site_url( '/metrics/saturation/' ) .'#saturation_mapping_overview" onclick="show_saturation_mapping_overview()">' .  esc_html__( 'Overview' ) . '</a></li>
               <li><a href="'. site_url( '/metrics/saturation/' ) .'#saturation_tree" onclick="show_saturation_tree()">' .  esc_html__( 'Tree' ) . '</a></li>
               <li><a href="'. site_url( '/metrics/saturation/' ) .'#saturation_map" onclick="show_saturation_map()">' .  esc_html__( 'Map' ) . '</a></li>
+              <li><a href="'. site_url( '/metrics/saturation/' ) .'#saturation_side_tree" onclick="show_saturation_side_tree()">' .  esc_html__( 'Side Tree' ) . '</a></li>
             </ul>
           </li>';
         return $content;
@@ -78,6 +79,8 @@ class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
                     'table' => DT_Saturation_Mapping_Stats::get_location_table(),
                     'tree' => DT_Saturation_Mapping_Stats::get_location_tree(),
                     'map' => DT_Saturation_Mapping_Stats::get_location_map(),
+                    'side_tree' => DT_Saturation_Mapping_Stats::get_location_side_tree(),
+                    'level_tree' => DT_Saturation_Mapping_Stats::get_locations_level_tree(),
                 ],
                 'translations' => [
                     "sm_title" => __( "Saturation Mapping", "dt_zume" ),

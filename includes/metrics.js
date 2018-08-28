@@ -8,6 +8,9 @@ jQuery(document).ready(function() {
     if('#saturation_map' === window.location.hash) {
         show_saturation_map()
     }
+    if('#saturation_side_tree' === window.location.hash) {
+        show_saturation_side_tree()
+    }
 })
 
 function show_saturation_mapping_overview(){
@@ -145,6 +148,35 @@ function show_saturation_map(){
 
         map.draw(data, options);
     }
+
+    chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
+            <a onclick="refresh_stats_data( 'show_saturation_mapping_overview' ); jQuery('.spinner').show();">Refresh</a>
+            <span class="spinner" style="display: none;"><img src="`+wpApiSatMapMetrics.plugin_uri+`includes/ajax-loader.gif" /></span> 
+            </div>`)
+}
+
+function show_saturation_side_tree(){
+    "use strict";
+    let page = wpApiSatMapMetrics
+    console.log(page)
+    let screenHeight = jQuery(window).height()
+    let chartHeight = screenHeight / 1.3
+    let chartDiv = jQuery('#chart')
+    chartDiv.empty().html(`
+        <span class="section-header">`+ page.translations.sm_title +`</span>
+        <span style="float:right; font-size:1.5em;color:#3f729b;"><a data-open="zume-project-legend"><i class="fi-info"></i></a></span>
+        <div class="medium reveal" id="zume-project-legend" data-reveal> 
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <hr style="max-width:100%;">
+        <div id="chart_div" style="width:100%; height:`+chartHeight+`"></div>
+        
+        `)
+    chartDiv.append(page.stats.level_tree);
+
 
     chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
             <a onclick="refresh_stats_data( 'show_saturation_mapping_overview' ); jQuery('.spinner').show();">Refresh</a>
