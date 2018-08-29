@@ -64,8 +64,8 @@ function dt_saturation_mapping() {
         return DT_Saturation_Mapping::get_instance();
     }
     else {
-        add_action( 'admin_notices', 'dt_starter_hook_admin_notice' );
-        add_action( 'wp_ajax_dismissed_notice_handler', 'dt_starter_ajax_notice_handler' );
+        add_action( 'admin_notices', 'dt_saturation_mapping_admin_notice' );
+        add_action( 'wp_ajax_dismissed_notice_handler', 'dt_saturation_mapping_ajax_notice_handler' );
         return new WP_Error( 'current_theme_not_dt', 'Disciple Tools Theme not active.' );
     }
 
@@ -410,7 +410,7 @@ if ( ! function_exists( 'dt_is_child_theme_of_disciple_tools' ) ) {
     }
 }
 
-function dt_starter_hook_admin_notice() {
+function dt_saturation_mapping_admin_notice() {
     // Check if it's been dismissed...
     if ( ! get_option( 'dismissed-dt-starter', false ) ) {
         // multiple dismissible notice states ?>
@@ -439,7 +439,7 @@ function dt_starter_hook_admin_notice() {
 /**
  * AJAX handler to store the state of dismissible notices.
  */
-function dt_starter_ajax_notice_handler() {
+function dt_saturation_mapping_ajax_notice_handler() {
     $type = 'dt-starter';
     update_option( 'dismissed-' . $type, true );
 }
