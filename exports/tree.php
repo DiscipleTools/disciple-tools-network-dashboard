@@ -9,8 +9,7 @@ if ( ! function_exists( 'dt_write_log' ) ) {
      *
      * @param $log
      */
-    function dt_write_log( $log )
-    {
+    function dt_write_log( $log ) {
         if ( true === WP_DEBUG ) {
             if ( is_array( $log ) || is_object( $log ) ) {
                 error_log( print_r( $log, true ) );
@@ -43,11 +42,10 @@ require( $_SERVER[ 'DOCUMENT_ROOT' ] . '/wp-load.php' ); // loads the wp framewo
 </style>
 <?php
 
-function buildMenu($parent_id, $menuData, $gen)
-{
+function buildMenu( $parent_id, $menuData, $gen) {
     $html = '';
 
-    if (isset($menuData['parents'][$parent_id]))
+    if (isset( $menuData['parents'][$parent_id] ))
     {
         $html = '<ul class="ul-gen-'.$gen.'">';
         $gen++;
@@ -60,7 +58,7 @@ function buildMenu($parent_id, $menuData, $gen)
             $html .= '</li>';
 
             // find childitems recursively
-            $html .= buildMenu($itemId, $menuData, $gen);
+            $html .= buildMenu( $itemId, $menuData, $gen );
         }
         $html .= '</ul>';
 
@@ -103,4 +101,4 @@ foreach ( $query as $menuItem )
 }
 
 // output the menu
-echo buildMenu(0, $menuData, 0);
+echo buildMenu( 0, $menuData, 0 );

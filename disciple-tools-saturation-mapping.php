@@ -137,6 +137,7 @@ class DT_Saturation_Mapping {
         require_once( 'includes/endpoints.php' );
         require_once( 'includes/hooks.php' );
         require_once( 'includes/stats.php' );
+        require_once( 'install/installer.php' );
     }
 
     /**
@@ -147,7 +148,7 @@ class DT_Saturation_Mapping {
      * @return void
      */
     private function setup() {
-
+        global $wpdb;
         // Main plugin directory path and URI.
         $this->dir_path     = trailingslashit( plugin_dir_path( __FILE__ ) );
         $this->dir_uri      = trailingslashit( plugin_dir_url( __FILE__ ) );
@@ -161,6 +162,10 @@ class DT_Saturation_Mapping {
         // Admin and settings variables
         $this->token             = 'dt_saturation_mapping';
         $this->version             = '0.1';
+
+        $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
+        $wpdb->dt_geonames_polygons = $wpdb->prefix . 'dt_geonames_polygons';
+
     }
 
     /**
@@ -254,7 +259,7 @@ class DT_Saturation_Mapping {
         /**
          * Setup variables
          */
-        update_option('dt_saturation_mapping_pd', 5000, false );
+        update_option( 'dt_saturation_mapping_pd', 5000, false );
 
     }
 
@@ -336,8 +341,7 @@ register_deactivation_hook( __FILE__, [ 'DT_Saturation_Mapping', 'deactivation' 
 /**
  * Admin alert for when Disciple Tools Theme is not available
  */
-function dt_saturation_mapping_no_disciple_tools_theme_found()
-{
+function dt_saturation_mapping_no_disciple_tools_theme_found() {
     ?>
     <div class="notice notice-error">
         <p><?php esc_html_e( "'Disciple Tools - Saturation Mapping' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Saturation Mapping' plugin.", "dt_saturation_mapping" ); ?></p>
@@ -378,8 +382,7 @@ if ( !function_exists( 'dt_write_log' ) ) {
      *
      * @param $log
      */
-    function dt_write_log( $log )
-    {
+    function dt_write_log( $log ) {
         if ( true === WP_DEBUG ) {
             if ( is_array( $log ) || is_object( $log ) ) {
                 error_log( print_r( $log, true ) );

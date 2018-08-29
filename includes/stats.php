@@ -6,7 +6,14 @@ class DT_Saturation_Mapping_Stats {
 
         $chart = [];
         foreach ( $table_data as $row ) {
-            $chart[] = [ [ 'v' => $row['location'], 'f' => $row['location'] . '<br>pop: ' . $row['population'] . '<br>need: ' . $row['groups_needed']], $row['parent_name'], ''];
+            $chart[] = [
+            [
+            'v' => $row['location'],
+            'f' => $row['location'] . '<br>pop: ' . $row['population'] . '<br>need: ' . $row['groups_needed']
+            ],
+            $row['parent_name'],
+            ''
+            ];
         }
 
         return $chart;
@@ -17,7 +24,7 @@ class DT_Saturation_Mapping_Stats {
 
         $chart = [];
         foreach ( $table_data as $row ) {
-            $chart[] = [ $row['location'], (int) $row['population'], (int) $row['groups_needed'], (int) $row['groups']];
+            $chart[] = [ $row['location'], (int) $row['population'], (int) $row['groups_needed'], (int) $row['groups'] ];
         }
 
         return $chart;
@@ -27,11 +34,13 @@ class DT_Saturation_Mapping_Stats {
         $table_data = self::query_location_latlng();
 
         $chart = [];
-        $chart[] = ['Lat', 'Long', 'Name'];
+        $chart[] = [ 'Lat', 'Long', 'Name' ];
         foreach ( $table_data as $row ) {
             if ( ! empty( $row['latitude'] ) && ! empty( $row['longitude'] ) ) {
                 $chart[] = [
-                    (float) $row['latitude'], (float) $row['longitude'], $row['location']
+                    (float) $row['latitude'],
+                (float) $row['longitude'],
+                $row['location']
                 ];
             }
         }
@@ -43,7 +52,7 @@ class DT_Saturation_Mapping_Stats {
         $table_data = self::query_location_population_groups();
 
         $chart = [];
-        $chart[] = ['id', 'childLabel', 'parent', 'size', [ 'role' => 'style' ]];
+        $chart[] = [ 'id', 'childLabel', 'parent', 'size', [ 'role' => 'style' ] ];
         foreach ( $table_data as $row ) {
             if ( $row['parent_id'] == 0 ) {
                 $row['parent_id'] = -1;
@@ -126,11 +135,10 @@ class DT_Saturation_Mapping_Stats {
             $menuData['parents'][$menuItem['parent_id']][] = $menuItem['id'];
         }
 
-        function buildMenu($parent_id, $menuData, $gen)
-        {
+        function buildMenu( $parent_id, $menuData, $gen) {
             $html = '';
 
-            if (isset($menuData['parents'][$parent_id]))
+            if (isset( $menuData['parents'][$parent_id] ))
             {
                 $html = '<ul class="gen-ul ul-gen-'.$gen.'">';
                 $gen++;
@@ -146,7 +154,7 @@ class DT_Saturation_Mapping_Stats {
                     $html .= '</li>';
 
                     // find childitems recursively
-                    $html .= buildMenu($itemId, $menuData, $gen);
+                    $html .= buildMenu( $itemId, $menuData, $gen );
                 }
                 $html .= '</ul>';
             }
@@ -169,7 +177,7 @@ class DT_Saturation_Mapping_Stats {
                     }
                 </style>';
 
-        $list .= buildMenu(0, $menuData, -1);
+        $list .= buildMenu( 0, $menuData, -1 );
 
         return $list;
     }

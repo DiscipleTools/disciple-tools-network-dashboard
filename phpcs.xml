@@ -52,6 +52,7 @@
     <exclude name="WordPress.VIP.RestrictedVariables.user_meta__wpdb__usermeta" />
     <exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar" />
     <exclude name="WordPress.VIP.FileSystemWritesDisallow" />
+    <exclude name="WordPress.NamingConventions.PrefixAllGlobals" />
 
     <!-- We currently don't want these rules that WordPress imports: -->
 
@@ -214,11 +215,11 @@
   </rule>
   <rule ref="Squiz.WhiteSpace.LogicalOperatorSpacing"/>
   <rule ref="PEAR.NamingConventions.ValidClassName"/>
-  <rule ref="WordPress.NamingConventions.PrefixAllGlobals">
-    <properties>
-      <property name="prefixes" type="array" value="dt,Disciple_Tools" />
-    </properties>
-  </rule>
+  <!--<rule ref="WordPress.NamingConventions.PrefixAllGlobals">-->
+    <!--<properties>-->
+      <!--<property name="prefixes" type="array" value="dt,Disciple_Tools" />-->
+    <!--</properties>-->
+  <!--</rule>-->
 
   <!-- Maybe these rules will be enabled in the future: -->
   <!-- <rule ref="Generic.Files.LineLength"/> -->

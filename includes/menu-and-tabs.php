@@ -60,6 +60,7 @@ class DT_Saturation_Mapping_Menu {
     public function register_menu() {
         add_menu_page( __( 'Extensions (DT)', 'disciple_tools' ), __( 'Extensions (DT)', 'disciple_tools' ), 'manage_dt', 'dt_extensions', [ $this, 'extensions_menu' ], 'dashicons-admin-generic', 59 );
         add_submenu_page( 'dt_extensions', __( 'Saturation Mapping', 'dt_saturation_mapping' ), __( 'Saturation Mapping', 'dt_saturation_mapping' ), 'manage_dt', $this->token, [ $this, 'content' ] );
+//        add_submenu_page( 'edit.php?post_type=locations', __( 'Saturation Import', 'disciple_tools' ), __( 'Saturation Import', 'disciple_tools' ), 'manage_dt', 'dt_saturation_mapping&tab=second', [ $this, 'content' ] );
     }
 
     /**
@@ -89,8 +90,8 @@ class DT_Saturation_Mapping_Menu {
         <div class="wrap">
             <h2><?php esc_attr_e( 'Saturation Mapping', 'dt_saturation_mapping' ) ?></h2>
             <h2 class="nav-tab-wrapper">
-                <a href="<?php echo esc_attr( $link ) . 'general' ?>" class="nav-tab <?php ( $tab == 'general' || ! isset( $tab ) ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>"><?php esc_attr_e( 'General', 'dt_saturation_mapping' ) ?></a>
-                <a href="<?php echo esc_attr( $link ) . 'second' ?>" class="nav-tab <?php ( $tab == 'second' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>"><?php esc_attr_e( 'Second', 'dt_saturation_mapping' ) ?></a>
+                <a href="<?php echo esc_attr( $link ) . 'general' ?>" class="nav-tab <?php ( $tab == 'general' || ! isset( $tab ) ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>"><?php esc_attr_e( 'Configure', 'dt_saturation_mapping' ) ?></a>
+                <a href="<?php echo esc_attr( $link ) . 'second' ?>" class="nav-tab <?php ( $tab == 'second' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>"><?php esc_attr_e( 'Install', 'dt_saturation_mapping' ) ?></a>
             </h2>
 
             <?php
@@ -99,7 +100,7 @@ class DT_Saturation_Mapping_Menu {
                     $this->general_content();
                     break;
                 case "second":
-                    $object = new DT_Starter_Tab_Second();
+                    $object = new DT_Saturation_Mapping_Tab_Install();
                     $object->content();
                     break;
                 default:
@@ -139,13 +140,13 @@ class DT_Saturation_Mapping_Menu {
 
     public function general_content_main() {
         // process post action
-        if ( isset( $_POST['population_division'] ) &&  ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'population_division'.get_current_user_id() ) ) ) {
+        if ( isset( $_POST['population_division'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'population_division'.get_current_user_id() ) ) ) {
             $new = (int) sanitize_text_field( wp_unslash( $_POST['population_division'] ) );
-            update_option('dt_saturation_mapping_pd', $new, false );
+            update_option( 'dt_saturation_mapping_pd', $new, false );
         }
-        $population_division = get_option('dt_saturation_mapping_pd');
+        $population_division = get_option( 'dt_saturation_mapping_pd' );
         if ( empty( $population_division ) ) {
-            update_option('dt_saturation_mapping_pd', 5000, false );
+            update_option( 'dt_saturation_mapping_pd', 5000, false );
             $population_division = 5000;
         }
         ?>
@@ -178,7 +179,7 @@ class DT_Saturation_Mapping_Menu {
 /**
  * Class DT_Starter_Tab_Second
  */
-class DT_Starter_Tab_Second
+class DT_Saturation_Mapping_Tab_Install
 {
     public function content() {
         ?>
@@ -208,26 +209,67 @@ class DT_Starter_Tab_Second
     }
 
     public function main_column() {
+        $available_locations = DT_Saturation_Mapping_Installer::get_list_of_available_locations();
         ?>
         <!-- Box -->
+        <form method="post">
         <table class="widefat striped">
             <thead>
-            <th>Header</th>
+            <th>Install</th>
             </thead>
             <tbody>
             <tr>
                 <td>
-                    Content
+                    <select name="selected_country" id="selected_country">
+                        <option>Select</option>
+                        <?php
+                        foreach ( $available_locations as $file => $name ) {
+                            echo '<option value="'.$file.'">'.$name.'</option>';
+                        }
+                        ?>
+
+                    </select>
+                    <a href="javascript:void(0);" onclick="import_by_name()" class="button" id="import_button">Import</a>
+                    <script>
+                        function import_by_name() {
+                            let button = jQuery('#import_button')
+                            button.append('<span> <img src="<?php echo plugin_dir_url( __FILE__ ). '/'; ?>ajax-loader.gif" /></span>')
+
+                            let file_name = jQuery('#selected_country').val()
+                            let data = { "file": file_name }
+                            jQuery.ajax({
+                                type: "POST",
+                                data: JSON.stringify(data),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                url: '<?php echo esc_url_raw( rest_url() ); ?>dt/v1/saturation/import',
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('X-WP-Nonce', '<?php echo wp_create_nonce( 'wp_rest' ) ?>');
+                                },
+                            })
+                                .done(function (data) {
+                                    button.empty().append('Import')
+                                    console.log( 'success ')
+                                    console.log( data )
+                                })
+                                .fail(function (err) {
+                                    console.log("error");
+                                    console.log(err);
+                                })
+                        }
+                    </script>
                 </td>
             </tr>
             </tbody>
         </table>
+        </form>
         <br>
         <!-- End Box -->
         <?php
     }
 
     public function right_column() {
+        return;
         ?>
         <!-- Box -->
         <table class="widefat striped">

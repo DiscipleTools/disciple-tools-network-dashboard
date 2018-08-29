@@ -58,28 +58,31 @@ class DT_Saturation_Mapping_Endpoints
 
     public function add_api_routes() {
         register_rest_route(
-            $this->namespace, '/people-groups/compact', [
-                'methods'  => 'GET',
-                'callback' => [ $this, 'get_people_groups_compact' ],
+            $this->namespace, '/saturation/import', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'import' ],
             ]
         );
-
     }
 
     /**
      * @param \WP_REST_Request $request
      *
-     * @return array
+     * @return array|WP_Error
      */
-    public function get_people_groups_compact( WP_REST_Request $request ) {
+    public function import( WP_REST_Request $request ) {
+
+        if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
 
         $params = $request->get_params();
-        $search = "";
-        if ( isset( $params['s'] ) ) {
-            $search = $params['s'];
+        if ( isset( $params['file'] ) ) {
+            $result = DT_Saturation_Mapping_Installer::import_by_file_name( $params['file'] );
+            return $result;
+        } else {
+            return new WP_Error( __METHOD__, 'Missing parameters.' );
         }
-        $people_groups = Disciple_Tools_people_groups::get_people_groups_compact( $search );
-
-        return $people_groups;
     }
 }
+DT_Saturation_Mapping_Endpoints::instance();
