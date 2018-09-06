@@ -63,6 +63,12 @@ class DT_Saturation_Mapping_Endpoints
                 'callback' => [ $this, 'import' ],
             ]
         );
+        register_rest_route(
+            $this->namespace, '/saturation/load_by_country', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'load_by_country' ],
+            ]
+        );
     }
 
     /**
@@ -78,6 +84,21 @@ class DT_Saturation_Mapping_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['file'] ) ) {
+            $result = DT_Saturation_Mapping_Installer::import_by_file_name( $params['file'] );
+            return $result;
+        } else {
+            return new WP_Error( __METHOD__, 'Missing parameters.' );
+        }
+    }
+
+    public function load_by_country( WP_REST_Request $request ) {
+
+        if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        $params = $request->get_params();
+        if ( isset( $params['country_code'] ) ) {
             $result = DT_Saturation_Mapping_Installer::import_by_file_name( $params['file'] );
             return $result;
         } else {

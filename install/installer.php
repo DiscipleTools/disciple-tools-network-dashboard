@@ -24,9 +24,12 @@ class DT_Saturation_Mapping_Installer {
     }
 
     public static function get_list_of_available_locations() {
-        return [
-            'gn_us' => 'US - Entire Country',
-        ];
+        $json = file_get_contents(plugin_dir_path( __DIR__ ) . '/install/countries.json' );
+        return json_decode( $json );
+    }
+
+    public static function load_by_country( $country_code ) {
+
     }
 
     public static function import_by_file_name( $file ) {
@@ -35,7 +38,7 @@ class DT_Saturation_Mapping_Installer {
         $d = copy( "https://raw.githubusercontent.com/DiscipleTools/saturation-mapping-data/master/csv/gn".$file.".csv", plugin_dir_path( __DIR__ ) .'/install/' . $file . '.csv' );
 
         if ( $d ) {
-            $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . '/install/' .$file.'.csv"
+            $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/' .$file.'.csv"
                 INTO TABLE '.$wpdb->dt_geonames.'
                 FIELDS TERMINATED by \',\'
                 ENCLOSED BY \'"\'
@@ -52,26 +55,23 @@ class DT_Saturation_Mapping_Installer {
 
     }
 
-    public static function import_world_admin( $file ) {
+    public static function install_world_admin_set() {
         global $wpdb;
-
-        $d = copy( "https://raw.githubusercontent.com/DiscipleTools/saturation-mapping-data/master/csv/gn".$file.".csv", plugin_dir_path( __DIR__ ) .'/install/' . $file . '.csv' );
-
-        if ( $d ) {
-            $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . '/install/' .$file.'.csv"
-                INTO TABLE '.$wpdb->dt_geonames.'
-                FIELDS TERMINATED by \',\'
-                ENCLOSED BY \'"\'
-                LINES TERMINATED BY \'\n\'
-                IGNORE 1 LINES');
-            if ( $result ) {
-                return $result;
-            } else {
-                return $wpdb->last_error;
-            }
+        $file = 'gn_world_admin';
+        $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/' .$file.'.csv"
+            INTO TABLE '.$wpdb->dt_geonames.'
+            FIELDS TERMINATED by \',\'
+            ENCLOSED BY \'"\'
+            LINES TERMINATED BY \'\n\'
+            IGNORE 1 LINES');
+        if ($result) {
+            return true;
         } else {
-            return $d;
+            dt_write_log( $result );
+            return false;
         }
     }
+
+
 
 }

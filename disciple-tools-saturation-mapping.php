@@ -220,6 +220,7 @@ class DT_Saturation_Mapping {
         global $wpdb;
         require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
 
+        // Add tables
         $charset_collate = $wpdb->get_charset_collate();
 
         $sql1 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_geonames` (
@@ -255,6 +256,14 @@ class DT_Saturation_Mapping {
 
         $result2 = dbDelta( $sql2 );
         dt_write_log( $result2 );
+
+        /**
+         * Install initial country, admin1, and admin2 data
+         */
+        $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
+        require_once ( 'install/installer.php');
+        DT_Saturation_Mapping_Installer::install_world_admin_set();
+
 
         /**
          * Setup variables

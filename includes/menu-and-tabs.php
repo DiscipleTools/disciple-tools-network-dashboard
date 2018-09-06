@@ -223,32 +223,37 @@ class DT_Saturation_Mapping_Tab_Install
                     <select name="selected_country" id="selected_country">
                         <option>Select</option>
                         <?php
-                        foreach ( $available_locations as $file => $name ) {
-                            echo '<option value="'.$file.'">'.$name.'</option>';
+                        foreach ( $available_locations as $country_code => $name ) {
+                            echo '<option value="' . $country_code . '">'.$name.'</option>';
                         }
                         ?>
 
                     </select>
-                    <a href="javascript:void(0);" onclick="import_by_name()" class="button" id="import_button">Import</a>
+                    <a href="javascript:void(0);" onclick="import_by_name()" class="button" id="import_button">Load</a>
                     <script>
                         function import_by_name() {
                             let button = jQuery('#import_button')
-                            button.append('<span> <img src="<?php echo plugin_dir_url( __FILE__ ). '/'; ?>ajax-loader.gif" /></span>')
+                            button.append('<span><img src="<?php echo plugin_dir_url( __FILE__ ). '/'; ?>ajax-loader.gif" /></span>')
 
-                            let file_name = jQuery('#selected_country').val()
-                            let data = { "file": file_name }
+                            let country_code = jQuery('#selected_country').val()
+                            let data = { "country_code": country_code }
                             jQuery.ajax({
                                 type: "POST",
                                 data: JSON.stringify(data),
                                 contentType: "application/json; charset=utf-8",
                                 dataType: "json",
-                                url: '<?php echo esc_url_raw( rest_url() ); ?>dt/v1/saturation/import',
+                                url: '<?php echo esc_url_raw( rest_url() ); ?>dt/v1/saturation/load_by_country',
                                 beforeSend: function(xhr) {
                                     xhr.setRequestHeader('X-WP-Nonce', '<?php echo wp_create_nonce( 'wp_rest' ) ?>');
                                 },
                             })
                                 .done(function (data) {
                                     button.empty().append('Import')
+                                    let result_div = jQuery('#result')
+                                    jQuery.each(data, function(i, v) {
+                                        result_div.append( v.name + ' <span><a href="#">Install</a></span><br>')
+                                    })
+
                                     console.log( 'success ')
                                     console.log( data )
                                 })
@@ -258,6 +263,7 @@ class DT_Saturation_Mapping_Tab_Install
                                 })
                         }
                     </script>
+                    <div id="results"></div>
                 </td>
             </tr>
             </tbody>
