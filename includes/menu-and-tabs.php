@@ -233,7 +233,7 @@ class DT_Saturation_Mapping_Tab_Install
                     <script>
                         function import_by_name() {
                             let button = jQuery('#import_button')
-                            button.append('<span><img src="<?php echo plugin_dir_url( __FILE__ ). '/'; ?>ajax-loader.gif" /></span>')
+                            button.append(' <span><img src="<?php echo plugin_dir_url( __FILE__ ). '/'; ?>spinner.svg" width="12px" /></span>')
 
                             let country_code = jQuery('#selected_country').val()
                             let data = { "country_code": country_code }
@@ -248,10 +248,17 @@ class DT_Saturation_Mapping_Tab_Install
                                 },
                             })
                                 .done(function (data) {
-                                    button.empty().append('Import')
-                                    let result_div = jQuery('#result')
-                                    jQuery.each(data, function(i, v) {
-                                        result_div.append( v.name + ' <span><a href="#">Install</a></span><br>')
+                                    button.empty().append('Load')
+                                    let result_div = jQuery('#results')
+                                    result_div.empty()
+                                    jQuery.each(data, function(i,v) {
+                                        result_div.append( '<hr><dt><strong style="font-size:1.4em">' + v.name + '</strong> <a class="page-title-action"  onclick="install_admin1(\''+v.geonameid+'\')">Install</a> ' +
+                                            '<span id="install-'+v.geonameid+'"></span> </dt>')
+
+                                        jQuery.each(v.adm2, function(ii, vv) {
+                                            result_div.append('<dd><strong>' + vv.name + '</strong> <a class="page-title-action" onclick="install_admin2(\''+vv.geonameid+'\')">Install</a> ' +
+                                                '<span id="install-'+vv.geonameid+'"></span> <a class="page-title-action" onclick="install_cities(\''+vv.geonameid+'\')">Install All Cities</a> <span id="cities-'+vv.geonameid+'"></span></dd>')
+                                        })
                                     })
 
                                     console.log( 'success ')
@@ -263,6 +270,18 @@ class DT_Saturation_Mapping_Tab_Install
                                 })
                         }
                     </script>
+                    <style>
+                        dd, li {
+                            margin-bottom: 15px;
+                        }
+                        dt, li {
+                            margin-bottom: 20px;
+                            margin-top: 20px;
+                        }
+                        #results .page-title-action {
+                            vertical-align: middle;
+                        }
+                    </style>
                     <div id="results"></div>
                 </td>
             </tr>

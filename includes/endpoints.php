@@ -99,7 +99,7 @@ class DT_Saturation_Mapping_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['country_code'] ) ) {
-            $result = DT_Saturation_Mapping_Installer::import_by_file_name( $params['file'] );
+            $result = DT_Saturation_Mapping_Installer::load_by_country( $params['country_code'] );
             return $result;
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
