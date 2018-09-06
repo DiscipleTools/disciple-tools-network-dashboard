@@ -88,6 +88,7 @@ FROM $wpdb->p2p as p
 WHERE p.p2p_type = 'groups_to_groups'
         ", ARRAY_A );
 
+
 // prepare special array with parent-child relations
 $menuData = array(
     'items' => array(),
@@ -102,3 +103,4 @@ foreach ( $query as $menuItem )
 
 // output the menu
 echo buildMenu( 0, $menuData, 0 );
+

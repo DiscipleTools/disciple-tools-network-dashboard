@@ -25,9 +25,6 @@ class DT_Saturation_Mapping_Installer {
 
     public static function get_list_of_available_locations() {
         return [
-            'gn_us_md' => 'US - Maryland',
-            'gn_us_co' => 'US - Colorado',
-            'gn_us_ky' => 'US - Kentucky',
             'gn_us' => 'US - Entire Country',
         ];
     }
@@ -35,7 +32,7 @@ class DT_Saturation_Mapping_Installer {
     public static function import_by_file_name( $file ) {
         global $wpdb;
 
-        $d = copy( "https://raw.githubusercontent.com/DiscipleTools/saturation-mapping-data/master/csv/".$file.".csv", plugin_dir_path( __DIR__ ) .'/install/' . $file . '.csv' );
+        $d = copy( "https://raw.githubusercontent.com/DiscipleTools/saturation-mapping-data/master/csv/gn".$file.".csv", plugin_dir_path( __DIR__ ) .'/install/' . $file . '.csv' );
 
         if ( $d ) {
             $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . '/install/' .$file.'.csv"
@@ -53,6 +50,28 @@ class DT_Saturation_Mapping_Installer {
             return $d;
         }
 
+    }
+
+    public static function import_world_admin( $file ) {
+        global $wpdb;
+
+        $d = copy( "https://raw.githubusercontent.com/DiscipleTools/saturation-mapping-data/master/csv/gn".$file.".csv", plugin_dir_path( __DIR__ ) .'/install/' . $file . '.csv' );
+
+        if ( $d ) {
+            $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . '/install/' .$file.'.csv"
+                INTO TABLE '.$wpdb->dt_geonames.'
+                FIELDS TERMINATED by \',\'
+                ENCLOSED BY \'"\'
+                LINES TERMINATED BY \'\n\'
+                IGNORE 1 LINES');
+            if ( $result ) {
+                return $result;
+            } else {
+                return $wpdb->last_error;
+            }
+        } else {
+            return $d;
+        }
     }
 
 }

@@ -1,3 +1,4 @@
 /vendor/*
 vendor/autoload.php
 /install/*.csv
+!gn_world_admin.csv
