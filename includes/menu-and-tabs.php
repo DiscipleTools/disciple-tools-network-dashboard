@@ -58,9 +58,12 @@ class DT_Saturation_Mapping_Menu {
      * @since 0.1
      */
     public function register_menu() {
-        add_menu_page( __( 'Extensions (DT)', 'disciple_tools' ), __( 'Extensions (DT)', 'disciple_tools' ), 'manage_dt', 'dt_extensions', [ $this, 'extensions_menu' ], 'dashicons-admin-generic', 59 );
-        add_submenu_page( 'dt_extensions', __( 'Saturation Mapping', 'dt_saturation_mapping' ), __( 'Saturation Mapping', 'dt_saturation_mapping' ), 'manage_dt', $this->token, [ $this, 'content' ] );
-//        add_submenu_page( 'edit.php?post_type=locations', __( 'Saturation Import', 'disciple_tools' ), __( 'Saturation Import', 'disciple_tools' ), 'manage_dt', 'dt_saturation_mapping&tab=second', [ $this, 'content' ] );
+        add_menu_page( __( 'Extensions (DT)', 'disciple_tools' ), __( 'Extensions (DT)', 'disciple_tools' ),
+            'manage_dt', 'dt_extensions', [ $this, 'extensions_menu' ], 'dashicons-admin-generic', 59 );
+        add_submenu_page( 'dt_extensions', __( 'Saturation Mapping', 'dt_saturation_mapping' ),
+            __( 'Saturation Mapping', 'dt_saturation_mapping' ), 'manage_dt', $this->token, [ $this, 'content' ] );
+//        add_submenu_page( 'edit.php?post_type=locations', __( 'Saturation Import', 'disciple_tools' ),
+        // __( 'Saturation Import', 'disciple_tools' ), 'manage_dt', 'dt_saturation_mapping&tab=second', [ $this, 'content' ] );
     }
 
     /**
@@ -90,8 +93,12 @@ class DT_Saturation_Mapping_Menu {
         <div class="wrap">
             <h2><?php esc_attr_e( 'Saturation Mapping', 'dt_saturation_mapping' ) ?></h2>
             <h2 class="nav-tab-wrapper">
-                <a href="<?php echo esc_attr( $link ) . 'general' ?>" class="nav-tab <?php ( $tab == 'general' || ! isset( $tab ) ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>"><?php esc_attr_e( 'Configure', 'dt_saturation_mapping' ) ?></a>
-                <a href="<?php echo esc_attr( $link ) . 'second' ?>" class="nav-tab <?php ( $tab == 'second' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>"><?php esc_attr_e( 'Install', 'dt_saturation_mapping' ) ?></a>
+                <a href="<?php echo esc_attr( $link ) . 'general' ?>" class="nav-tab
+                <?php ( $tab == 'general' || ! isset( $tab ) ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
+                    <?php esc_attr_e( 'Configure', 'dt_saturation_mapping' ) ?></a>
+                <a href="<?php echo esc_attr( $link ) . 'second' ?>" class="nav-tab
+                <?php ( $tab == 'second' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
+                    <?php esc_attr_e( 'Install', 'dt_saturation_mapping' ) ?></a>
             </h2>
 
             <?php
@@ -209,7 +216,7 @@ class DT_Saturation_Mapping_Tab_Install
     }
 
     public function main_column() {
-        $available_locations = DT_Saturation_Mapping_Installer::get_list_of_available_locations();
+        $available_locations =   DT_Saturation_Mapping_Installer::get_list_of_available_locations();
         ?>
         <!-- Box -->
         <form method="post">
@@ -223,17 +230,21 @@ class DT_Saturation_Mapping_Tab_Install
                     <select name="selected_country" id="selected_country">
                         <option>Select</option>
                         <?php
+                        echo '<option>----</option>';
+                        echo '<option value="US">United States of America</option>';
+                        echo '<option>----</option>';
                         foreach ( $available_locations as $country_code => $name ) {
                             echo '<option value="' . $country_code . '">'.$name.'</option>';
                         }
                         ?>
 
                     </select>
-                    <a href="javascript:void(0);" onclick="import_by_name()" class="button" id="import_button">Load</a>
+                    <a href="javascript:void(0);" onclick="load_list_by_country()" class="button" id="import_button">Load</a>
                     <script>
-                        function import_by_name() {
+                        function load_list_by_country() {
                             let button = jQuery('#import_button')
-                            button.append(' <span><img src="<?php echo plugin_dir_url( __FILE__ ). '/'; ?>spinner.svg" width="12px" /></span>')
+                            let spinner = ' <span><img src="<?php echo plugin_dir_url( __FILE__ ). '/'; ?>spinner.svg" width="12px" /></span>'
+                            button.append(spinner)
 
                             let country_code = jQuery('#selected_country').val()
                             let data = { "country_code": country_code }
@@ -251,14 +262,25 @@ class DT_Saturation_Mapping_Tab_Install
                                     button.empty().append('Load')
                                     let result_div = jQuery('#results')
                                     result_div.empty()
+                                    result_div.append('<span style="float:right;"><a href="javascript:void(0);" ' +
+                                        'onclick="jQuery(\'.subdivision\').toggle();">collapse/expand all subdivisions</a>' +
+                                        '</span><span id="toggle-all"></span><br clear="all" />')
+
                                     jQuery.each(data, function(i,v) {
-                                        result_div.append( '<hr><dt><strong style="font-size:1.4em">' + v.name + '</strong> <a class="page-title-action"  onclick="install_admin1(\''+v.geonameid+'\')">Install</a> ' +
-                                            '<span id="install-'+v.geonameid+'"></span> </dt>')
+                                        result_div.append( '<hr><dt><strong style="font-size:1.4em">' + v.name + '</strong> ' +
+                                            '<a id="admin1-link-'+v.geonameid+'" class="page-title-action" onclick="install_admin1_geoname(\''+v.geonameid+'\'); jQuery(this).off(\'click\');">Install</a> ' +
+                                            '<span id="install-'+v.geonameid+'"></span>  <span style="float:right;">' +
+                                            '<a href="javascript:void(0);" onclick="jQuery(\'.adm2-'+v.geonameid+'\').toggle()">collapse/expand</a>' +
+                                            '</span></dt>')
 
                                         jQuery.each(v.adm2, function(ii, vv) {
-                                            result_div.append('<dd><strong>' + vv.name + '</strong> <a class="page-title-action" onclick="install_admin2(\''+vv.geonameid+'\')">Install</a> ' +
-                                                '<span id="install-'+vv.geonameid+'"></span> <a class="page-title-action" onclick="install_cities(\''+vv.geonameid+'\')">Install All Cities</a> <span id="cities-'+vv.geonameid+'"></span></dd>')
+                                            result_div.append('<dd class="adm2-'+v.geonameid+' subdivision"><strong>' + vv.name + '</strong> ' +
+                                                '<button type="button" id="button-'+vv.geonameid+'" class="page-title-action" onclick="install_admin2_geoname(\''+vv.geonameid+'\');" >Install</button> ' +
+                                                '<span id="install-'+vv.geonameid+'"></span> <a class="page-title-action" ' +
+                                                'onclick="install_all_cities(\''+vv.geonameid+'\')">Install All Cities</a> ' +
+                                                '<span id="cities-'+vv.geonameid+'"></span></dd>')
                                         })
+
                                     })
 
                                     console.log( 'success ')
@@ -269,6 +291,101 @@ class DT_Saturation_Mapping_Tab_Install
                                     console.log(err);
                                 })
                         }
+                        function install_admin2_geoname( geonameid ) {
+                            console.log('install_geoname')
+
+                            jQuery('#button-'+ geonameid ).prop("disabled",true)
+
+                            let report_span = jQuery( '#install-' + geonameid )
+                            report_span.append(' <span><img src="<?php echo plugin_dir_url( __FILE__ ). '/'; ?>spinner.svg" width="12px" /></span>')
+
+                            let data = { "geonameid": geonameid }
+                            jQuery.ajax({
+                                type: "POST",
+                                data: JSON.stringify(data),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                url: '<?php echo esc_url_raw( rest_url() ); ?>dt/v1/saturation/install_admin2_geoname',
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('X-WP-Nonce', '<?php echo wp_create_nonce( 'wp_rest' ) ?>');
+                                },
+                            })
+                                .done(function (data) {
+                                    report_span.empty().append('&#9989;')
+                                    load_current_locations()
+
+                                    console.log( 'success for ' + geonameid)
+                                    console.log( data )
+                                })
+                                .fail(function (err) {
+                                    report_span.empty().append('( oops. something failed. )')
+                                    console.log("error for " + geonameid );
+                                    console.log(err);
+                                })
+                        }
+                        function install_admin1_geoname( geonameid ) {
+                            console.log('install_geoname')
+
+                            jQuery('#button-'+ geonameid ).prop("disabled",true)
+
+                            let report_span = jQuery( '#install-' + geonameid )
+                            report_span.append(' <span><img src="<?php echo plugin_dir_url( __FILE__ ). '/'; ?>spinner.svg" width="12px" /></span>')
+
+                            let data = { "geonameid": geonameid }
+                            jQuery.ajax({
+                                type: "POST",
+                                data: JSON.stringify(data),
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                url: '<?php echo esc_url_raw( rest_url() ); ?>dt/v1/saturation/install_admin1_geoname',
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('X-WP-Nonce', '<?php echo wp_create_nonce( 'wp_rest' ) ?>');
+                                },
+                            })
+                                .done(function (data) {
+                                    report_span.empty().append('&#9989;')
+                                    load_current_locations()
+
+                                    console.log( 'success for ' + geonameid)
+                                    console.log( data )
+                                })
+                                .fail(function (err) {
+                                    report_span.empty().append('( oops. something failed. )')
+                                    console.log("error for " + geonameid );
+                                    console.log(err);
+                                })
+                        }
+                        function install_admin1_next_levels( geonameid ){
+                            console.log('install_admin1_next_levels')
+                            console.log('Get geoname record and install. Check for parent and install. Get list of children admin2 and install.')
+                        }
+                        function install_all_cities( geonameid ) {
+                            console.log('install_all_cities')
+                            console.log('Get admin2 geo name. Download places file. Install places file. Log install. Get list of places and install all places.')
+                        }
+                        function load_current_locations() {
+                            let current_locations = jQuery('#current-locations')
+                            return jQuery.ajax({
+                                type: "POST",
+                                contentType: "application/json; charset=utf-8",
+                                dataType: "json",
+                                url: '<?php echo esc_url_raw( rest_url() ); ?>dt/v1/saturation/load_current_locations',
+                                beforeSend: function(xhr) {
+                                    xhr.setRequestHeader('X-WP-Nonce', '<?php echo wp_create_nonce( 'wp_rest' ) ?>');
+                                },
+                            })
+                                .done(function (data) {
+                                    current_locations.empty().append(data)
+                                })
+                                .fail(function (err) {
+                                    console.log("error");
+                                    console.log(err);
+                                })
+                        }
+                        jQuery(document).ready(function() {
+                            load_current_locations()
+                        })
+
                     </script>
                     <style>
                         dd, li {
@@ -280,6 +397,10 @@ class DT_Saturation_Mapping_Tab_Install
                         }
                         #results .page-title-action {
                             vertical-align: middle;
+                        }
+                        .disabled-grey {
+                            color: grey;
+                            background: lightgrey;
                         }
                     </style>
                     <div id="results"></div>
@@ -294,17 +415,18 @@ class DT_Saturation_Mapping_Tab_Install
     }
 
     public function right_column() {
-        return;
         ?>
         <!-- Box -->
         <table class="widefat striped">
             <thead>
-            <th>Information</th>
+            <th>Current Locations</th>
             </thead>
             <tbody>
             <tr>
                 <td>
-                    Content
+                    <div id="current-locations"></div>
+                    <hr>
+                    <a href="<?php echo esc_url( admin_url('/edit.php?post_type=locations') ) ?>">View Locations</a>
                 </td>
             </tr>
             </tbody>

@@ -69,6 +69,24 @@ class DT_Saturation_Mapping_Endpoints
                 'callback' => [ $this, 'load_by_country' ],
             ]
         );
+        register_rest_route(
+            $this->namespace, '/saturation/install_admin2_geoname', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'install_admin2_geoname' ],
+            ]
+        );
+        register_rest_route(
+            $this->namespace, '/saturation/install_admin1_geoname', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'install_admin1_geoname' ],
+            ]
+        );
+        register_rest_route(
+            $this->namespace, '/saturation/load_current_locations', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'load_current_locations' ],
+            ]
+        );
     }
 
     /**
@@ -104,6 +122,44 @@ class DT_Saturation_Mapping_Endpoints
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
         }
+    }
+
+    public function install_admin1_geoname( WP_REST_Request $request ) {
+
+        if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        $params = $request->get_params();
+        if ( isset( $params['geonameid'] ) ) {
+            return DT_Saturation_Mapping_Installer::install_admin1_geoname( $params['geonameid'] );
+        } else {
+            return new WP_Error( __METHOD__, 'Missing parameters.' );
+        }
+    }
+
+    public function install_admin2_geoname( WP_REST_Request $request ) {
+
+        if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        $params = $request->get_params();
+        if ( isset( $params['geonameid'] ) ) {
+            return DT_Saturation_Mapping_Installer::install_admin2_geoname( $params['geonameid'] );
+        } else {
+            return new WP_Error( __METHOD__, 'Missing parameters.' );
+        }
+    }
+
+
+    public function load_current_locations( WP_REST_Request $request ) {
+
+        if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        return DT_Saturation_Mapping_Installer::load_current_locations();
     }
 }
 DT_Saturation_Mapping_Endpoints::instance();
