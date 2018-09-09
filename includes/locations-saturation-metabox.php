@@ -40,7 +40,7 @@ class DT_Saturation_Mapping_Metabox {
         echo "<h3>". esc_attr__( 'Parent Location' ) . "</h3>";
         echo '<a href="' . admin_url() .'post.php?post=' . $post_parent->ID . '&action=edit">' . $post_parent->post_title . '</a>: ';
 
-        if ( $par_loc = get_post_meta( $post_parent->ID, 'population', true ) ) {
+        if ( $par_loc = get_post_meta( $post_parent->ID, 'gn_population', true ) ) {
             echo number_format( $par_loc, 0, ".", "," ) . ' people live here ';
 
             $groups = $par_loc / $population_division;
@@ -53,7 +53,7 @@ class DT_Saturation_Mapping_Metabox {
          */
         echo '<hr>';
         echo "<h3>". esc_attr__( 'Current Location' ) . "</h3>";
-        if ( $cur_population = get_post_meta( $post_id, 'population', true ) ) {
+        if ( $cur_population = get_post_meta( $post_id, 'gn_population', true ) ) {
             echo '<strong>' . $post->post_title . '</strong>: ';
             echo number_format( $cur_population, 0, ".", "," ) . ' people live here ';
 
@@ -82,7 +82,7 @@ class DT_Saturation_Mapping_Metabox {
             foreach ( $child_population as $location ) {
                 echo '<a href="'.admin_url() .'post.php?post='.$location->ID.'&action=edit">' . $location->post_title . '</a>: ';
 
-                if ( $loc_population = get_post_meta( $location->ID, 'population', true ) ) {
+                if ( $loc_population = get_post_meta( $location->ID, 'gn_population', true ) ) {
                     echo number_format( $loc_population, 0, ".", "," ) . ' people live here ';
 
                     $groups = $loc_population / $population_division;
@@ -118,21 +118,133 @@ class DT_Saturation_Mapping_Metabox {
 
     public function saturation_field_filter( $fields, $post_type ) {
         if ( 'locations' === $post_type ) {
-            $fields['population'] = [
-                'name'        => 'Population ',
-                'description' => '',
-                'type'        => 'number',
-                'default'     => '',
-                'section'     => 'saturation_mapping',
-            ];
-            $fields['geonameid'] = [
+            $fields['gn_geonameid'] = [
                 'name'        => 'GeoNames ID ',
                 'description' => '',
                 'type'        => 'text',
                 'default'     => '',
                 'section'     => 'saturation_mapping',
             ];
-            $fields['geojson'] = [
+            $fields['gn_name'] = [
+                'name'        => 'Name ',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_asciiname'] = [
+                'name'        => 'Ascii Name ',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_alternatenames'] = [
+                'name'        => 'Alternate Names',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_latitude'] = [
+                'name'        => 'Latitude',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping',
+            ];
+            $fields['gn_longitude'] = [
+                'name'        => 'Longitude',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping',
+            ];
+            $fields['gn_feature_class'] = [
+                'name'        => 'Feature Class',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_feature_code'] = [
+                'name'        => 'Feature Code',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_country_code'] = [
+                'name'        => 'Country Code',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_admin1_code'] = [
+                'name'        => 'Admin1 Code',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_admin2_code'] = [
+                'name'        => 'Admin2 Code',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_admin3_code'] = [
+                'name'        => 'Admin3 Code',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_admin4_code'] = [
+                'name'        => 'Admin4 Code',
+                'description' => '',
+                'type'        => 'text',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_population'] = [
+                'name'        => 'Population',
+                'description' => '',
+                'type'        => 'number',
+                'default'     => '',
+                'section'     => 'saturation_mapping',
+            ];
+            $fields['gn_elevation'] = [
+                'name'        => 'Elevation ',
+                'description' => '',
+                'type'        => 'number',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_dem'] = [
+                'name'        => 'DEM ',
+                'description' => '',
+                'type'        => 'number',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_timezone'] = [
+                'name'        => 'Timezone',
+                'description' => '',
+                'type'        => 'number',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_modification_date'] = [
+                'name'        => 'Modification Date',
+                'description' => '',
+                'type'        => 'number',
+                'default'     => '',
+                'section'     => 'saturation_mapping_hidden',
+            ];
+            $fields['gn_geojson'] = [
                 'name'        => 'GeoJSON Polygon',
                 'description' => 'Add only the contents of "geometry". Add only "features->geometry->{GEOJSON SNIPPET}" ',
                 'type'        => 'text',
@@ -143,20 +255,6 @@ class DT_Saturation_Mapping_Metabox {
                 'name'        => 'Default Zoom',
                 'description' => 'Choose between 1-15. 1 is widest. 15 is closest.',
                 'type'        => 'number',
-                'default'     => '',
-                'section'     => 'saturation_mapping_hidden',
-            ];
-            $fields['latitude'] = [
-                'name'        => 'Latitude',
-                'description' => '',
-                'type'        => 'text',
-                'default'     => '',
-                'section'     => 'saturation_mapping_hidden',
-            ];
-            $fields['longitude'] = [
-                'name'        => 'Longitude',
-                'description' => '',
-                'type'        => 'text',
                 'default'     => '',
                 'section'     => 'saturation_mapping_hidden',
             ];
