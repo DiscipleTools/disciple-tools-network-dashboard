@@ -87,6 +87,18 @@ class DT_Saturation_Mapping_Endpoints
                 'callback' => [ $this, 'load_current_locations' ],
             ]
         );
+        register_rest_route(
+            $this->namespace, '/saturation/load_cities', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'load_cities' ],
+            ]
+        );
+        register_rest_route(
+            $this->namespace, '/saturation/install_single_city', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'install_single_city' ],
+            ]
+        );
     }
 
     /**
@@ -147,6 +159,44 @@ class DT_Saturation_Mapping_Endpoints
         $params = $request->get_params();
         if ( isset( $params['geonameid'] ) ) {
             return DT_Saturation_Mapping_Installer::install_admin2_geoname( $params['geonameid'] );
+        } else {
+            return new WP_Error( __METHOD__, 'Missing parameters.' );
+        }
+    }
+
+    public function load_cities( WP_REST_Request $request ) {
+
+        if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        $params = $request->get_params();
+        if ( isset( $params['geonameid'] ) ) {
+            $result = DT_Saturation_Mapping_Installer::load_cities( $params['geonameid'] );
+            if ( $result['status'] ) {
+                return $result;
+            } else {
+                return new WP_Error( 'install_cities', $result['message'], $result );
+            }
+        } else {
+            return new WP_Error( __METHOD__, 'Missing parameters.' );
+        }
+    }
+
+    public function install_single_city( WP_REST_Request $request ) {
+
+        if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        $params = $request->get_params();
+        if ( isset( $params['geonameid'] ) && $params['admin2'] ) {
+            $result = DT_Saturation_Mapping_Installer::install_single_city( $params['geonameid'], $params['admin2'] );
+            if ( $result['status'] ) {
+                return $result;
+            } else {
+                return new WP_Error( 'install_cities', $result['message'], $result );
+            }
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
         }

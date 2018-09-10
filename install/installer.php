@@ -24,9 +24,9 @@ class DT_Saturation_Mapping_Installer {
     }
 
     public static function get_list_of_available_locations() {
-        $json = file_get_contents(plugin_dir_path( __DIR__ ) . '/install/countries.json' );
+        $json = file_get_contents( plugin_dir_path( __DIR__ ) . '/install/countries.json' );
         $json = json_decode( $json, true );
-        asort(  $json );
+        asort( $json );
         return $json;
     }
 
@@ -48,7 +48,7 @@ class DT_Saturation_Mapping_Installer {
               AND feature_class = 'A'
             ORDER BY name ASC
         ",
-        $country_code
+            $country_code
         ), ARRAY_A );
 
 
@@ -71,7 +71,7 @@ class DT_Saturation_Mapping_Installer {
                 'adm2' => [],
             ];
             foreach ( $adm2 as $value2 ) {
-                if( $value2['admin1_code'] === $value1['admin1_code'] ) {
+                if ( $value2['admin1_code'] === $value1['admin1_code'] ) {
                     $nested_array[ $value2['admin1_code'] ]['adm2'][] = [
                         'geonameid' => $value2['geonameid'],
                         'name' => $value2['name'],
@@ -83,7 +83,7 @@ class DT_Saturation_Mapping_Installer {
         if ( $nested_array ) {
             return $nested_array;
         } else {
-            return new WP_Error(__METHOD__, 'Empty query');
+            return new WP_Error( __METHOD__, 'Empty query' );
         }
 
 
@@ -91,8 +91,9 @@ class DT_Saturation_Mapping_Installer {
 
     public static function import_by_file_name( $file ) {
         global $wpdb;
+        $file = strtolower( $file );
 
-        $d = copy( "https://raw.githubusercontent.com/DiscipleTools/saturation-mapping-data/master/csv/gn".$file.".csv", plugin_dir_path( __DIR__ ) .'/install/' . $file . '.csv' );
+        $d = copy( "https://raw.githubusercontent.com/DiscipleTools/saturation-mapping-data/master/csv/gn_".$file."_p.csv", plugin_dir_path( __DIR__ ) .'/install/' . $file . '.csv' );
 
         if ( $d ) {
             $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/' .$file.'.csv"
@@ -107,32 +108,181 @@ class DT_Saturation_Mapping_Installer {
                 return $wpdb->last_error;
             }
         } else {
-            return new WP_Error(__METHOD__, 'Failed to copy file from github.');
+            return new WP_Error( __METHOD__, 'Failed to copy file from github.' );
         }
 
     }
 
-    public static function install_world_admin_set() {
+    public static function load_cities( $geonameid ) {
+        // the geoname is build for an admin2 geoname, so that we can expect data to find the cities within it
+
         global $wpdb;
-        $file = 'gn_world_admin';
-        $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/' .$file.'.csv"
-            INTO TABLE '.$wpdb->dt_geonames.'
-            FIELDS TERMINATED by \',\'
-            ENCLOSED BY \'"\'
-            LINES TERMINATED BY \'\n\'
-            IGNORE 1 LINES');
-        if ($result) {
-            return true;
-        } else {
-            dt_write_log( $result );
-            return false;
+        $error = new WP_Error();
+
+        $query_results = $wpdb->get_row( $wpdb->prepare( "
+              SELECT (
+                  SELECT a.geonameid  
+                  FROM $wpdb->dt_geonames as a 
+                  WHERE a.feature_class = 'P' 
+                    AND a.country_code = t.country_code 
+                    LIMIT 1) as installed,
+                  (SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s ) as admin2_post_id, 
+                    t.*
+              FROM $wpdb->dt_geonames as t 
+              WHERE t.geonameid = %s
+              ", $geonameid, $geonameid ),
+            ARRAY_A
+        );
+        if ( empty( $query_results ) ) {
+            $error->add( __METHOD__, "No results. Bad geonameid." );
+            return [
+                'status' => false,
+                'message' => 'No results. Bad geonameid.',
+                'error' => $error,
+                'installed' => 0,
+            ];
         }
+        if ( empty( $query_results['installed'] ) ) {
+            // install data set
+            $data_install = self::import_by_file_name( $query_results['country_code'] ); // downloads and installs datasource
+            if ( is_wp_error( $data_install ) ) {
+                $error->add( __METHOD__, "Unable to install " . $query_results['country_code'] . " dataset. " . $data_install->get_error_message() );
+                return [
+                    'status' => false,
+                    'message' => "Unable to install " . $query_results['country_code'] . " dataset. " . $data_install->get_error_message(),
+                    'error' => $error,
+                    'installed' => 0,
+                ];
+            }
+        }
+
+        $country_code = $query_results['country_code'] ?? null;
+        $admin1_code = $query_results['admin1_code'] ?? null;
+        $admin2_code = $query_results['admin2_code'] ?? null;
+
+        $cities = $wpdb->get_results( $wpdb->prepare( "
+            SELECT geonameid, name
+            FROM $wpdb->dt_geonames 
+            WHERE feature_class = 'P' 
+              AND country_code = %s 
+              AND admin1_code = %s 
+              AND admin2_code = %s
+              ORDER BY name 
+        ", $country_code, $admin1_code, $admin2_code), ARRAY_A );
+
+        return [
+            'status' => true,
+            'message' => "",
+            'error' => $error,
+            'installed' => 0,
+            'admin2' => $geonameid,
+            'cities' => $cities,
+        ];
     }
+
+    public static function install_single_city( $geonameid, $admin2 ) {
+        global $wpdb;
+        $error = new WP_Error();
+
+        $geonameid_column = $wpdb->get_col( "SELECT meta_value FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid';" );
+        if ( in_array( $geonameid, $geonameid_column ) ) {
+            $error->add( __METHOD__, "Already installed" );
+            return [
+                'status' => false,
+                'message' => 'Already installed',
+                'error' => $error,
+                'installed' => 0,
+            ];
+        }
+
+        $query_results = $wpdb->get_row( $wpdb->prepare( "
+              SELECT t.*
+              FROM $wpdb->dt_geonames as t 
+              WHERE t.geonameid = %s
+              ", $geonameid ),
+            ARRAY_A
+        );
+        if ( empty( $query_results ) ) {
+            $error->add( __METHOD__, "No results. Bad geonameid." );
+            return [
+                'status' => false,
+                'message' => 'No results. Bad geonameid.',
+                'error' => $error,
+                'installed' => 0,
+            ];
+        }
+
+        if ( empty( $admin2 ) ) {
+            $error->add( __METHOD__, "Missing parent geonameid" );
+            return [
+                'status' => false,
+                'message' => 'Missing parent geonameid.',
+                'error' => $error,
+                'installed' => 0,
+            ];
+        }
+
+        $admin2_post_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s", $admin2 ) );
+        dt_write_log( $admin2_post_id );
+        if ( empty( $admin2_post_id ) ) {
+            $build = self::install_admin2_geoname( $admin2 );
+            if ( 'OK' === $build['status'] ) {
+                $admin2_post_id = $build['ids']['admin2_post_id'];
+            } else {
+                $error->add( __METHOD__, $build['error'] );
+                return [
+                    'status' => false,
+                    'message' => $build['message'] ,
+                    'error' => $build['error'] ,
+                    'installed' => 0,
+                ];
+            }
+        }
+
+        $args = [
+            'post_title' => $query_results['name'],
+            'post_status' => 'publish',
+            'post_name' => $query_results['geonameid'],
+            'post_type' => 'locations',
+            'post_parent' => $admin2_post_id,
+            'meta_input' => [
+                'gn_geonameid' => $query_results['geonameid'],
+                'gn_name' => $query_results['name'],
+                'gn_asciiname' => $query_results['asciiname'],
+                'gn_alternatenames' => $query_results['alternatenames'],
+                'gn_latitude' => $query_results['latitude'],
+                'gn_longitude' => $query_results['longitude'],
+                'gn_feature_class' => $query_results['feature_class'],
+                'gn_feature_code' => $query_results['feature_code'],
+                'gn_country_code' => $query_results['country_code'],
+                'gn_admin1_code' => $query_results['admin1_code'],
+                'gn_admin2_code' => $query_results['admin2_code'],
+                'gn_admin3_code' => $query_results['admin3_code'],
+                'gn_admin4_code' => $query_results['admin4_code'],
+                'gn_population' => $query_results['population'],
+                'gn_elevation' => $query_results['elevation'],
+                'gn_dem' => $query_results['dem'],
+                'gn_timezone' => $query_results['timezone'],
+                'gn_modification_date' => $query_results['modification_date'],
+            ],
+        ];
+        $city_post_id = wp_insert_post( $args, true );
+
+        return [
+            'status' => true,
+            'message' => "Install process successful.",
+            'error' => $error,
+            'installed' => $city_post_id,
+        ];
+    }
+
 
     public static function install_admin2_geoname( $geonameid ) {
         global $wpdb;
         $error = new WP_Error();
         $installed = [];
+
+        dt_write_log( 'first query ' . microtime() );
 
         $result = $wpdb->get_row( $wpdb->prepare("
         SELECT  
@@ -155,29 +305,36 @@ class DT_Saturation_Mapping_Installer {
         FROM $wpdb->dt_geonames as atwo
         WHERE atwo.geonameid = %s
         ",
-            $geonameid), ARRAY_A );
+        $geonameid), ARRAY_A );
 
 
         // test query results
         if ( ! $result ) {
-            $error->add(__METHOD__, 'No matching results for this geoname' );
+            $error->add( __METHOD__, 'No matching results for this geoname' );
             return [
                 'status' => 'FAIL',
                 'message' => 'No geoname found for parameter provided.',
                 'error' => $error,
-                'installed' => '',
+                'installed' => 0,
             ];
         }
 
         // admin2 duplicate check
         if ( isset( $result['admin2_post_id'] ) && ! empty( $result['admin2_post_id'] ) ) {
             return [
-                'status' => 'DUPLICATE',
-                'message' => 'This location is already installed.',
-                'error' => '',
-                'installed' => '',
+                'status' => 'OK',
+                'message' => 'Duplicate: This location is already installed.',
+                'error' => $error,
+                'installed' => 0,
+                'ids' => [
+                    'country_post_id' => $result['country_post_id'],
+                    'admin1_post_id' => $result['admin1_post_id'],
+                    'admin2_post_id' => $result['admin2_post_id'],
+                    ]
             ];
         }
+
+
 
         // country duplicate check else query build
         if ( empty( $result['country_post_id'] ) ) {
@@ -198,6 +355,7 @@ class DT_Saturation_Mapping_Installer {
                         'gn_alternatenames' => $country_result['alternatenames'],
                         'gn_latitude' => $country_result['latitude'],
                         'gn_longitude' => $country_result['longitude'],
+                        'gn_country_code' => $country_result['country_code'],
                         'gn_feature_class' => $country_result['feature_class'],
                         'gn_feature_code' => $country_result['feature_code'],
                         'gn_admin1_code' => $country_result['admin1_code'],
@@ -211,6 +369,7 @@ class DT_Saturation_Mapping_Installer {
                         'gn_modification_date' => $country_result['modification_date'],
                     ],
                 ];
+
                 $duplicate = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s", $result['country_id'] ) );
                 if ( $duplicate ) {
                     $result['country_post_id'] = $duplicate;
@@ -218,18 +377,17 @@ class DT_Saturation_Mapping_Installer {
                 } else {
                     $country_post_id = wp_insert_post( $args, true );
                     if ( is_wp_error( $country_post_id ) ) {
-                        $error->add(__METHOD__, 'Error inserting country location' );
+                        $error->add( __METHOD__, 'Error inserting country location' );
                     } else {
                         $result['country_post_id'] = $country_post_id;
                         $installed['country'] = $country_post_id;
                     }
                 }
-
             } else {
-                $error->add(__METHOD__, 'No results for country in geonames.' );
+                $error->add( __METHOD__, 'No results for country in geonames.' );
             }
         }
-
+        dt_write_log( 'admin1 post id ' . microtime() );
         // admin1 duplicate check else query build
         if ( empty( $result['admin1_post_id'] ) ) {
 
@@ -252,6 +410,7 @@ class DT_Saturation_Mapping_Installer {
                         'gn_alternatenames' => $admin1_result['alternatenames'],
                         'gn_latitude' => $admin1_result['latitude'],
                         'gn_longitude' => $admin1_result['longitude'],
+                        'gn_country_code' => $admin1_result['country_code'],
                         'gn_feature_class' => $admin1_result['feature_class'],
                         'gn_feature_code' => $admin1_result['feature_code'],
                         'gn_admin1_code' => $admin1_result['admin1_code'],
@@ -266,20 +425,21 @@ class DT_Saturation_Mapping_Installer {
                     ],
                 ];
                 $duplicate = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s", $result['admin1_id'] ) );
+                dt_write_log( 'after dup check admin1 ' . microtime() );
                 if ( $duplicate ) { // check for duplicate
                     $result['admin1_post_id'] = $duplicate;
                     $installed['admin1'] = $duplicate;
                 } else { // insert if no duplicate
                     $admin1_post_id = wp_insert_post( $args, true );
                     if ( ! is_wp_error( $admin1_post_id ) ) {
-                        $result[ 'admin1_post_id' ] = $admin1_post_id;
-                        $installed[ 'admin1' ] = $admin1_post_id;
+                        $result['admin1_post_id'] = $admin1_post_id;
+                        $installed['admin1'] = $admin1_post_id;
                     } else {
                         $error->add( __METHOD__, 'Failed to insert admin1 level. ' . $admin1_post_id->get_error_message() );
                     }
                 }
             } else {
-                $error->add(__METHOD__, 'No results for admin1 in geonames. ' . $admin1_result->get_error_message() );
+                $error->add( __METHOD__, 'No results for admin1 in geonames. ' . $admin1_result->get_error_message() );
             }
         }
 
@@ -298,6 +458,7 @@ class DT_Saturation_Mapping_Installer {
                 'gn_longitude' => $result['longitude'],
                 'gn_feature_class' => $result['feature_class'],
                 'gn_feature_code' => $result['feature_code'],
+                'gn_country_code' => $result['country_code'],
                 'gn_admin1_code' => $result['admin1_code'],
                 'gn_admin2_code' => $result['admin2_code'],
                 'gn_admin3_code' => $result['admin3_code'],
@@ -310,8 +471,9 @@ class DT_Saturation_Mapping_Installer {
             ],
         ];
         $admin2_post_id = wp_insert_post( $args, true );
+
         if ( is_wp_error( $admin2_post_id ) ) {
-            $error->add(__METHOD__, 'Error inserting admin2 level. ' . $admin2_post_id->get_error_message() );
+            $error->add( __METHOD__, 'Error inserting admin2 level. ' . $admin2_post_id->get_error_message() );
             return [
                 'status' => 'FAIL',
                 'message' => 'Failed to install admin2',
@@ -325,6 +487,11 @@ class DT_Saturation_Mapping_Installer {
                 'message' => 'Successfully installed admin2',
                 'error' => $error,
                 'installed' => $installed,
+                'ids' => [
+                    'country_post_id' => $result['country_post_id'],
+                    'admin1_post_id' => $result['admin1_post_id'],
+                    'admin2_post_id' => $admin2_post_id,
+                ]
             ];
         }
     }
@@ -347,12 +514,12 @@ class DT_Saturation_Mapping_Installer {
         FROM $wpdb->dt_geonames as atwo
         WHERE atwo.geonameid = %s
         ",
-            $geonameid), ARRAY_A );
+        $geonameid), ARRAY_A );
 
 
         // test query results
         if ( ! $result ) {
-            $error->add(__METHOD__, 'No matching results for this geoname' );
+            $error->add( __METHOD__, 'No matching results for this geoname' );
             return [
                 'status' => 'FAIL',
                 'message' => 'No geoname found for parameter provided.',
@@ -410,15 +577,14 @@ class DT_Saturation_Mapping_Installer {
                 } else {
                     $country_post_id = wp_insert_post( $args, true );
                     if ( is_wp_error( $country_post_id ) ) {
-                        $error->add(__METHOD__, 'Error inserting country location' );
+                        $error->add( __METHOD__, 'Error inserting country location' );
                     } else {
                         $result['country_post_id'] = $country_post_id;
                         $installed['country'] = $country_post_id;
                     }
                 }
-
             } else {
-                $error->add(__METHOD__, 'No results for country in geonames.' );
+                $error->add( __METHOD__, 'No results for country in geonames.' );
             }
         }
 
@@ -429,34 +595,34 @@ class DT_Saturation_Mapping_Installer {
 
         if ( $admin1_result ) {
             $args = [
-                'post_title'  => $admin1_result[ 'name' ],
+                'post_title'  => $admin1_result['name'],
                 'post_status' => 'publish',
-                'post_name'   => $admin1_result[ 'geonameid' ],
+                'post_name'   => $admin1_result['geonameid'],
                 'post_type'   => 'locations',
-                'post_parent' => $result[ 'country_post_id' ],
+                'post_parent' => $result['country_post_id'],
                 'meta_input'  => [
-                    'gn_geonameid'         => $admin1_result[ 'geonameid' ],
-                    'gn_name'              => $admin1_result[ 'name' ],
-                    'gn_asciiname'         => $admin1_result[ 'asciiname' ],
-                    'gn_alternatenames'    => $admin1_result[ 'alternatenames' ],
-                    'gn_latitude'          => $admin1_result[ 'latitude' ],
-                    'gn_longitude'         => $admin1_result[ 'longitude' ],
-                    'gn_feature_class'     => $admin1_result[ 'feature_class' ],
-                    'gn_feature_code'      => $admin1_result[ 'feature_code' ],
-                    'gn_admin1_code'       => $admin1_result[ 'admin1_code' ],
-                    'gn_admin2_code'       => $admin1_result[ 'admin2_code' ],
-                    'gn_admin3_code'       => $admin1_result[ 'admin3_code' ],
-                    'gn_admin4_code'       => $admin1_result[ 'admin4_code' ],
-                    'gn_population'        => $admin1_result[ 'population' ],
-                    'gn_elevation'         => $admin1_result[ 'elevation' ],
-                    'gn_dem'               => $admin1_result[ 'dem' ],
-                    'gn_timezone'          => $admin1_result[ 'timezone' ],
-                    'gn_modification_date' => $admin1_result[ 'modification_date' ],
+                    'gn_geonameid'         => $admin1_result['geonameid'],
+                    'gn_name'              => $admin1_result['name'],
+                    'gn_asciiname'         => $admin1_result['asciiname'],
+                    'gn_alternatenames'    => $admin1_result['alternatenames'],
+                    'gn_latitude'          => $admin1_result['latitude'],
+                    'gn_longitude'         => $admin1_result['longitude'],
+                    'gn_feature_class'     => $admin1_result['feature_class'],
+                    'gn_feature_code'      => $admin1_result['feature_code'],
+                    'gn_admin1_code'       => $admin1_result['admin1_code'],
+                    'gn_admin2_code'       => $admin1_result['admin2_code'],
+                    'gn_admin3_code'       => $admin1_result['admin3_code'],
+                    'gn_admin4_code'       => $admin1_result['admin4_code'],
+                    'gn_population'        => $admin1_result['population'],
+                    'gn_elevation'         => $admin1_result['elevation'],
+                    'gn_dem'               => $admin1_result['dem'],
+                    'gn_timezone'          => $admin1_result['timezone'],
+                    'gn_modification_date' => $admin1_result['modification_date'],
                 ],
             ];
             $admin1_post_id = wp_insert_post( $args, true );
             if ( ! is_wp_error( $admin1_post_id ) ) {
-                $installed[ 'admin1' ] = $admin1_post_id;
+                $installed['admin1'] = $admin1_post_id;
 
                 return [
                     'status'    => 'OK',
@@ -527,7 +693,6 @@ class DT_Saturation_Mapping_Installer {
                     for ($i = 0; $i < $gen; $i++ ) {
                         $html .= '-- ';
                     }
-
                 }
                 $html .= $menu_data['items'][$itemId]['name'] . '<br>';
 
@@ -538,6 +703,22 @@ class DT_Saturation_Mapping_Installer {
         return $html;
     }
 
+    public static function install_world_admin_set() {
+        global $wpdb;
+        $file = 'gn_world_admin';
+        $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/' .$file.'.csv"
+            INTO TABLE '.$wpdb->dt_geonames.'
+            FIELDS TERMINATED by \',\'
+            ENCLOSED BY \'"\'
+            LINES TERMINATED BY \'\n\'
+            IGNORE 1 LINES');
+        if ($result) {
+            return true;
+        } else {
+            dt_write_log( $result );
+            return false;
+        }
+    }
 
 
 }

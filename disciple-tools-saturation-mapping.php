@@ -243,7 +243,12 @@ class DT_Saturation_Mapping {
           `dem` varchar(80) DEFAULT NULL,
           `timezone` varchar(40) DEFAULT NULL,
           `modification_date` date DEFAULT NULL,
-          PRIMARY KEY (`geonameid`)
+          PRIMARY KEY (`geonameid`),
+          FULLTEXT KEY `feature_class` (`feature_class`),
+          FULLTEXT KEY `feature_code` (`feature_code`),
+          FULLTEXT KEY `country_code` (`country_code`),
+          FULLTEXT KEY `admin1_code` (`admin1_code`),
+          FULLTEXT KEY `admin2_code` (`admin2_code`)
         ) $charset_collate;";
         $result1 = dbDelta( $sql1 );
         dt_write_log( $result1 );
@@ -261,7 +266,7 @@ class DT_Saturation_Mapping {
          * Install initial country, admin1, and admin2 data
          */
         $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
-        require_once ( 'install/installer.php');
+        require_once( 'install/installer.php' );
         DT_Saturation_Mapping_Installer::install_world_admin_set();
 
 

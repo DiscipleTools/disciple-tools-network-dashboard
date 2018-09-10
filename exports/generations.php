@@ -132,4 +132,4 @@ echo get_number_disciples( 25, $query );
 
 $gen = new Disciple_Tools_Counter_Generations();
 print '<pre>';
-print_r( $gen->generation_status_list('baptizer_to_baptized') );
+print_r( $gen->generation_status_list( 'baptizer_to_baptized' ) );

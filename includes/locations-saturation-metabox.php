@@ -29,24 +29,29 @@ class DT_Saturation_Mapping_Metabox {
 
         global $post, $post_id;
         $post_parent_id = wp_get_post_parent_id( $post_id );
-        $post_parent = get_post( $post_parent_id );
-        $location_group_count = $this->get_child_groups();
-        $population_division = get_option( 'dt_saturation_mapping_pd' );
 
         /**
          * Parent Location
          */
-        echo '<hr>';
-        echo "<h3>". esc_attr__( 'Parent Location' ) . "</h3>";
-        echo '<a href="' . admin_url() .'post.php?post=' . $post_parent->ID . '&action=edit">' . $post_parent->post_title . '</a>: ';
+        if ( $post_parent_id ) {
+            $post_parent = get_post( $post_parent_id );
+            $location_group_count = $this->get_child_groups();
+            $population_division = get_option( 'dt_saturation_mapping_pd' );
+            $post_parent_title = isset( $post_parent->post_title ) ? $post_parent->post_title : '';
 
-        if ( $par_loc = get_post_meta( $post_parent->ID, 'gn_population', true ) ) {
-            echo number_format( $par_loc, 0, ".", "," ) . ' people live here ';
+            echo '<hr>';
+            echo "<h3>". esc_attr__( 'Parent Location' ) . "</h3>";
+            echo '<a href="' . admin_url() .'post.php?post=' . $post_parent_id . '&action=edit">' . $post_parent_title . '</a>: ';
 
-            $groups = $par_loc / $population_division;
-            echo ' | ' . number_format( $groups, 0, ".", "," ) . ' groups needed';
+            if ( $par_loc = get_post_meta( $post_parent_id, 'gn_population', true ) ) {
+                echo number_format( $par_loc, 0, ".", "," ) . ' people live here ';
+
+                $groups = $par_loc / $population_division;
+                echo ' | ' . number_format( $groups, 0, ".", "," ) . ' groups needed';
+            }
+            echo '<br><br>';
         }
-        echo '<br><br>';
+
 
         /**
          * Current Location
@@ -219,28 +224,28 @@ class DT_Saturation_Mapping_Metabox {
             $fields['gn_elevation'] = [
                 'name'        => 'Elevation ',
                 'description' => '',
-                'type'        => 'number',
+                'type'        => 'text',
                 'default'     => '',
                 'section'     => 'saturation_mapping_hidden',
             ];
             $fields['gn_dem'] = [
                 'name'        => 'DEM ',
                 'description' => '',
-                'type'        => 'number',
+                'type'        => 'text',
                 'default'     => '',
                 'section'     => 'saturation_mapping_hidden',
             ];
             $fields['gn_timezone'] = [
                 'name'        => 'Timezone',
                 'description' => '',
-                'type'        => 'number',
+                'type'        => 'text',
                 'default'     => '',
                 'section'     => 'saturation_mapping_hidden',
             ];
             $fields['gn_modification_date'] = [
                 'name'        => 'Modification Date',
                 'description' => '',
-                'type'        => 'number',
+                'type'        => 'text',
                 'default'     => '',
                 'section'     => 'saturation_mapping_hidden',
             ];
