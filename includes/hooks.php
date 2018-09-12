@@ -44,14 +44,11 @@ class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
      * @return string
      */
     public function menu( $content ) {
-        $content .= '<li><a href="'. site_url( '/metrics/saturation/' ) .'#saturation_mapping_overview" onclick="show_saturation_mapping_overview()">' .  esc_html__( 'Saturation Mapping' ) . '</a>
-            <ul class="menu vertical nested">
-              <li><a href="'. site_url( '/metrics/saturation/' ) .'#saturation_mapping_overview" onclick="show_saturation_mapping_overview()">' .  esc_html__( 'Overview' ) . '</a></li>
-              <li><a href="'. site_url( '/metrics/saturation/' ) .'#saturation_tree" onclick="show_saturation_tree()">' .  esc_html__( 'Tree' ) . '</a></li>
-              <li><a href="'. site_url( '/metrics/saturation/' ) .'#saturation_map" onclick="show_saturation_map()">' .  esc_html__( 'Map' ) . '</a></li>
-              <li><a href="'. site_url( '/metrics/saturation/' ) .'#saturation_side_tree" onclick="show_saturation_side_tree()">' .  esc_html__( 'Side Tree' ) . '</a></li>
-            </ul>
-          </li>';
+        $content .= '
+              <li><a href="'. site_url( '/network/' ) .'#saturation_mapping_overview" onclick="show_saturation_mapping_overview()">' .  esc_html__( 'Overview' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#saturation_tree" onclick="show_saturation_tree()">' .  esc_html__( 'Tree' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#saturation_map" onclick="show_saturation_map()">' .  esc_html__( 'Map' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#saturation_side_tree" onclick="show_saturation_side_tree()">' .  esc_html__( 'Side Tree' ) . '</a></li>';
         return $content;
     }
 
@@ -87,11 +84,29 @@ class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
     }
 
     public function add_url( $template_for_url ) {
-        $template_for_url['metrics/saturation'] = 'template-metrics.php';
+        $template_for_url['network'] = 'template-metrics.php';
         return $template_for_url;
     }
 
+    public function top_nav_desktop() {
+        if ( user_can( get_current_user_id(), 'view_any_contacts' ) || user_can( get_current_user_id(), 'view_project_metrics' ) ) {
+            ?><li><a href="<?php echo esc_url( site_url( '/network/' ) ); ?>"><?php esc_html_e( "Network" ); ?></a></li><?php
+        }
+    }
+
+    // Enqueue maps and charts for standard metrics
+    public function enqueue_google() {
+        /* phpcs:ignore WordPress.WP.EnqueuedResourceParameters */
+        wp_enqueue_script( 'google-charts', 'https://www.gstatic.com/charts/loader.js', [], false );
+        /* phpcs:ignore WordPress.WP.EnqueuedResourceParameters */
+        wp_enqueue_script( 'google-maps', 'https://maps.googleapis.com/maps/api/js?key=' . dt_get_option( 'map_key' ), array(), null, true );
+    }
+
     public function __construct() {
+
+        add_action( 'dt_top_nav_desktop', [$this, 'top_nav_desktop'] );
+        add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_google' ], 10 );
+
         if ( isset( $_SERVER["SERVER_NAME"] ) ) {
             $url  = ( !isset( $_SERVER["HTTPS"] ) || @( $_SERVER["HTTPS"] != 'on' ) ) ? 'http://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) ) : 'https://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) );
             if ( isset( $_SERVER["REQUEST_URI"] ) ) {
@@ -100,12 +115,12 @@ class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
         }
         $url_path = trim( str_replace( get_site_url(), "", $url ), '/' );
 
-        if ( 'metrics' === substr( $url_path, '0', 7 ) ) {
+        if ( 'network' === substr( $url_path, '0', 7 ) ) {
 
             add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ] ); // add custom URL
             add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 99 );
 
-            if ( 'metrics/saturation' === $url_path ) {
+            if ( 'network' === $url_path ) {
                 add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
             }
         }

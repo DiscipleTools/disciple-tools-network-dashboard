@@ -9,7 +9,7 @@ class DT_Saturation_Mapping_Stats {
             $chart[] = [
             [
             'v' => $row['location'],
-            'f' => $row['location'] . '<br>pop: ' . $row['population'] . '<br>need: ' . $row['groups_needed']
+            'f' => $row['location'] . '<br>pop: ' . $row['gn_population'] . '<br>need: ' . $row['groups_needed']
             ],
             $row['parent_name'],
             ''
@@ -24,7 +24,7 @@ class DT_Saturation_Mapping_Stats {
 
         $chart = [];
         foreach ( $table_data as $row ) {
-            $chart[] = [ $row['location'], (int) $row['population'], (int) $row['groups_needed'], (int) $row['groups'] ];
+            $chart[] = [ $row['location'], (int) $row['gn_population'], (int) $row['groups_needed'], (int) $row['groups'] ];
         }
 
         return $chart;
@@ -72,13 +72,13 @@ class DT_Saturation_Mapping_Stats {
             t1.post_parent as parent_id, 
             t1.post_title as location,
             (SELECT post_title FROM $wpdb->posts WHERE ID = t1.post_parent) as parent_name,
-            t2.meta_value as population, 
+            t2.meta_value as gn_population, 
             ROUND(t2.meta_value / (SELECT option_value FROM $wpdb->options WHERE option_name = 'dt_saturation_mapping_pd'), 0 ) as groups_needed,
             (SELECT count(*) FROM $wpdb->p2p WHERE p2p_to = t1.ID) as groups
             FROM $wpdb->posts as t1
             LEFT JOIN $wpdb->postmeta as t2
             ON t1.ID=t2.post_id
-            AND t2.meta_key = 'population'
+            AND t2.meta_key = 'gn_population'
             WHERE post_type = 'locations' AND post_status = 'publish'
         ", ARRAY_A );
 
@@ -96,10 +96,10 @@ class DT_Saturation_Mapping_Stats {
             FROM $wpdb->posts as t1
             LEFT JOIN $wpdb->postmeta as t2
             ON t1.ID=t2.post_id
-            AND t2.meta_key = 'latitude'
+            AND t2.meta_key = 'gn_latitude'
             LEFT JOIN $wpdb->postmeta as t3
             ON t1.ID=t3.post_id
-            AND t3.meta_key = 'longitude'
+            AND t3.meta_key = 'gn_longitude'
             WHERE post_type = 'locations' 
             AND post_status = 'publish'
             AND post_parent != '0'
@@ -115,13 +115,13 @@ class DT_Saturation_Mapping_Stats {
                     t1.ID as id, 
                     t1.post_parent as parent_id, 
                     t1.post_title as name,
-                    t2.meta_value as population, 
+                    t2.meta_value as gn_population, 
                     ROUND(t2.meta_value / (SELECT option_value FROM $wpdb->options WHERE option_name = 'dt_saturation_mapping_pd'), 0 ) as groups_needed,
                     (SELECT count(*) FROM $wpdb->p2p WHERE p2p_to = t1.ID) as groups
                     FROM $wpdb->posts as t1
                     LEFT JOIN $wpdb->postmeta as t2
                     ON t1.ID=t2.post_id
-                    AND t2.meta_key = 'population'
+                    AND t2.meta_key = 'gn_population'
                     WHERE post_type = 'locations' AND post_status = 'publish'
                 ", ARRAY_A );
         // prepare special array with parent-child relations
@@ -147,7 +147,7 @@ class DT_Saturation_Mapping_Stats {
                     $html .= '<li class="gen-li li-gen-'.$gen.'">';
                     //            $html .= '(level: '.$gen.')<br> ';
                     $html .= '<strong>'. $menuData['items'][$itemId]['name'] . '</strong><br>';
-                    $html .= 'population: '. ( $menuData['items'][$itemId]['population'] ?: '0' ) . '<br>';
+                    $html .= 'population: '. ( $menuData['items'][$itemId]['gn_population'] ?: '0' ) . '<br>';
                     $html .= 'groups needed: '. ( $menuData['items'][$itemId]['groups_needed'] ?: '0' ) . '<br>';
                     $html .= 'groups: '. $menuData['items'][$itemId]['groups'];
 

@@ -1,5 +1,5 @@
 jQuery(document).ready(function() {
-    if('#saturation_mapping_overview' === window.location.hash) {
+    if( ! window.location.hash || '#saturation_mapping_overview' === window.location.hash) {
         show_saturation_mapping_overview()
     }
     if('#saturation_tree' === window.location.hash) {

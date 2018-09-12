@@ -8,13 +8,15 @@ if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
 
 class DT_Saturation_Mapping_Installer {
 
+    public static $csv_host = 'https://storage.googleapis.com/discipletools/';
+
     public static function get_geonames_source( $file ) {
         if ( empty( $file ) ) {
             return [];
         }
 
         $csv = [];
-        if (( $handle = fopen( "https://raw.githubusercontent.com/DiscipleTools/saturation-mapping-data/master/csv/".$file.".csv", "r" ) ) !== false) {
+        if (( $handle = fopen( self::$csv_host . "gn_".$file."_p.csv", "r" ) ) !== false) {
             while (( $data = fgetcsv( $handle, 0, "," ) ) !== false) {
                 $csv[] = $data;
             }
@@ -93,22 +95,22 @@ class DT_Saturation_Mapping_Installer {
         global $wpdb;
         $file = strtolower( $file );
 
-        $d = copy( "https://raw.githubusercontent.com/DiscipleTools/saturation-mapping-data/master/csv/gn_".$file."_p.csv", plugin_dir_path( __DIR__ ) .'/install/' . $file . '.csv' );
+        $d = copy( self::$csv_host . "gn_".$file."_p.csv", plugin_dir_path( __DIR__ ) .'/install/gn_' . $file . '_p.csv' );
 
         if ( $d ) {
-            $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/' .$file.'.csv"
+            $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/gn_' .$file.'_p.csv"
                 INTO TABLE '.$wpdb->dt_geonames.'
                 FIELDS TERMINATED by \',\'
                 ENCLOSED BY \'"\'
                 LINES TERMINATED BY \'\n\'
-                IGNORE 1 LINES');
+                ');
             if ( $result ) {
                 return $result;
             } else {
                 return $wpdb->last_error;
             }
         } else {
-            return new WP_Error( __METHOD__, 'Failed to copy file from github.' );
+            return new WP_Error( __METHOD__, 'Failed to copy file.' );
         }
 
     }
@@ -282,8 +284,6 @@ class DT_Saturation_Mapping_Installer {
         $error = new WP_Error();
         $installed = [];
 
-        dt_write_log( 'first query ' . microtime() );
-
         $result = $wpdb->get_row( $wpdb->prepare("
         SELECT  
             (SELECT azero.geonameid 
@@ -306,7 +306,6 @@ class DT_Saturation_Mapping_Installer {
         WHERE atwo.geonameid = %s
         ",
         $geonameid), ARRAY_A );
-
 
         // test query results
         if ( ! $result ) {
@@ -333,8 +332,6 @@ class DT_Saturation_Mapping_Installer {
                     ]
             ];
         }
-
-
 
         // country duplicate check else query build
         if ( empty( $result['country_post_id'] ) ) {
@@ -370,7 +367,12 @@ class DT_Saturation_Mapping_Installer {
                     ],
                 ];
 
-                $duplicate = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s", $result['country_id'] ) );
+                $duplicate = $wpdb->get_var( $wpdb->prepare( "
+                          SELECT post_id 
+                          FROM $wpdb->postmeta 
+                          WHERE meta_key = 'gn_geonameid' 
+                            AND meta_value = %s",
+                    $result['country_id'] ) );
                 if ( $duplicate ) {
                     $result['country_post_id'] = $duplicate;
                     $installed['country'] = $duplicate;
@@ -387,7 +389,6 @@ class DT_Saturation_Mapping_Installer {
                 $error->add( __METHOD__, 'No results for country in geonames.' );
             }
         }
-        dt_write_log( 'admin1 post id ' . microtime() );
         // admin1 duplicate check else query build
         if ( empty( $result['admin1_post_id'] ) ) {
 
@@ -424,7 +425,12 @@ class DT_Saturation_Mapping_Installer {
                         'gn_modification_date' => $admin1_result['modification_date'],
                     ],
                 ];
-                $duplicate = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s", $result['admin1_id'] ) );
+                $duplicate = $wpdb->get_var( $wpdb->prepare( "
+                        SELECT post_id 
+                        FROM $wpdb->postmeta 
+                        WHERE meta_key = 'gn_geonameid' 
+                          AND meta_value = %s",
+                    $result['admin1_id'] ) );
                 dt_write_log( 'after dup check admin1 ' . microtime() );
                 if ( $duplicate ) { // check for duplicate
                     $result['admin1_post_id'] = $duplicate;
@@ -570,7 +576,12 @@ class DT_Saturation_Mapping_Installer {
                         'gn_modification_date' => $country_result['modification_date'],
                     ],
                 ];
-                $duplicate = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s", $result['country_id'] ) );
+                $duplicate = $wpdb->get_var( $wpdb->prepare( "
+                        SELECT post_id 
+                        FROM $wpdb->postmeta 
+                        WHERE meta_key = 'gn_geonameid' 
+                          AND meta_value = %s",
+                    $result['country_id'] ) );
                 if ( $duplicate ) {
                     $result['country_post_id'] = $duplicate;
                     $installed['country'] = $duplicate;
@@ -719,6 +730,4 @@ class DT_Saturation_Mapping_Installer {
             return false;
         }
     }
-
-
 }
