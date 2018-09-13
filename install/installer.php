@@ -225,7 +225,6 @@ class DT_Saturation_Mapping_Installer {
         }
 
         $admin2_post_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s", $admin2 ) );
-        dt_write_log( $admin2_post_id );
         if ( empty( $admin2_post_id ) ) {
             $build = self::install_admin2_geoname( $admin2 );
             if ( 'OK' === $build['status'] ) {
@@ -269,6 +268,9 @@ class DT_Saturation_Mapping_Installer {
             ],
         ];
         $city_post_id = wp_insert_post( $args, true );
+        
+        $address = $query_results['name'] . ',' . $query_results['admin1_code'] . ',' . $query_results['country_code'];
+        self::geocode_location( $address,  $city_post_id );
 
         return [
             'status' => true,
