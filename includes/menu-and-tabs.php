@@ -551,19 +551,9 @@ class DT_Saturation_Mapping_Tab_Local
                         .show-city-link {
                             cursor: pointer;
                         }
-                        #results {
-                            width: 66%;
-                            float: left;
-                        }
-                        #city-results {
-                            width: 33%;
-                            float: right;
-                        }
+
                     </style>
-                    <div id="results-container">
-                        <div id="results"></div>
-                        <div id="city-results"></div>
-                    </div>
+                    <div id="results"></div>
 
                 </td>
             </tr>

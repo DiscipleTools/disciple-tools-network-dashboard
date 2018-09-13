@@ -118,6 +118,7 @@ class DT_Saturation_Mapping {
     private function includes() {
 
         require_once( 'includes/endpoints.php' );
+        require_once( 'install/installer.php' );
         require_once( 'includes/stats.php' );
 
         if ( get_option( 'dt_saturation_mapping_enable_network' ) ) {
@@ -127,7 +128,6 @@ class DT_Saturation_Mapping {
         if ( is_admin() ) {
             require_once( 'includes/menu-and-tabs.php' );
             require_once( 'includes/locations-saturation-metabox.php' );
-            require_once( 'install/installer.php' );
 
         }
     }
@@ -157,6 +157,8 @@ class DT_Saturation_Mapping {
 
         $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
         $wpdb->dt_geonames_polygons = $wpdb->prefix . 'dt_geonames_polygons';
+        $wpdb->dt_network_reports = $wpdb->prefix . 'dt_network_reports';
+        $wpdb->dt_network_reportmeta = $wpdb->prefix . 'dt_network_reportmeta';
 
     }
 
@@ -203,76 +205,76 @@ class DT_Saturation_Mapping {
         // Disciple Tools theme is not installed, otherwise this will already have been installed by the Disciple Tools Theme
 
 
-        /**
-         * Add custom tables
-         */
-        global $wpdb;
-        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-
-        // Add tables
-        $charset_collate = $wpdb->get_charset_collate();
-
-        $sql1 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_geonames` (
-          `geonameid` bigint(11) unsigned NOT NULL,
-          `name` varchar(200) DEFAULT NULL,
-          `asciiname` varchar(200) DEFAULT NULL,
-          `alternatenames` varchar(10000) DEFAULT NULL,
-          `latitude` float DEFAULT NULL,
-          `longitude` float DEFAULT NULL,
-          `feature_class` char(1) DEFAULT NULL,
-          `feature_code` varchar(10) DEFAULT NULL,
-          `country_code` char(2) DEFAULT NULL,
-          `cc2` varchar(100) DEFAULT NULL,
-          `admin1_code` varchar(20) DEFAULT NULL,
-          `admin2_code` varchar(80) DEFAULT NULL,
-          `admin3_code` varchar(20) DEFAULT NULL,
-          `admin4_code` varchar(20) DEFAULT NULL,
-          `population` int(11) DEFAULT NULL,
-          `elevation` int(80) DEFAULT NULL,
-          `dem` varchar(80) DEFAULT NULL,
-          `timezone` varchar(40) DEFAULT NULL,
-          `modification_date` date DEFAULT NULL,
-          PRIMARY KEY (`geonameid`),
-          FULLTEXT KEY `feature_class` (`feature_class`),
-          FULLTEXT KEY `feature_code` (`feature_code`),
-          FULLTEXT KEY `country_code` (`country_code`),
-          FULLTEXT KEY `admin1_code` (`admin1_code`),
-          FULLTEXT KEY `admin2_code` (`admin2_code`)
-        ) $charset_collate;";
-        $result1 = dbDelta( $sql1 );
-        dt_write_log( $result1 );
-
-        $sql2 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_geonames_polygons` (
-          `geonameid` bigint(11) unsigned NOT NULL,
-          `geoJSON` longtext,
-          PRIMARY KEY (`geonameid`)
-        ) $charset_collate;";
-
-        $result2 = dbDelta( $sql2 );
-        dt_write_log( $result2 );
-
-        /**
-         * Install initial country, admin1, and admin2 data
-         */
-        $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
-        require_once( 'install/installer.php' );
-        DT_Saturation_Mapping_Installer::install_world_admin_set();
-
-
-        /**
-         * Setup variables
-         */
-        update_option( 'dt_saturation_mapping_pd', 5000, false );
-
-        /**
-         * Initialize partner profile
-         */
-        $partner_profile = [
-            'partner_name' => get_option( 'blogname' ),
-            'partner_description' => get_option( 'blogdescription' ),
-            'partner_id' => DT_Saturation_Mapping::get_unique_public_key(),
-        ];
-        update_option( 'dt_site_partner_profile', $partner_profile, false );
+//        /**
+//         * Add custom tables
+//         */
+//        global $wpdb;
+//        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+//
+//        // Add tables
+//        $charset_collate = $wpdb->get_charset_collate();
+//
+//        $sql1 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_geonames` (
+//          `geonameid` bigint(11) unsigned NOT NULL,
+//          `name` varchar(200) DEFAULT NULL,
+//          `asciiname` varchar(200) DEFAULT NULL,
+//          `alternatenames` varchar(10000) DEFAULT NULL,
+//          `latitude` float DEFAULT NULL,
+//          `longitude` float DEFAULT NULL,
+//          `feature_class` char(1) DEFAULT NULL,
+//          `feature_code` varchar(10) DEFAULT NULL,
+//          `country_code` char(2) DEFAULT NULL,
+//          `cc2` varchar(100) DEFAULT NULL,
+//          `admin1_code` varchar(20) DEFAULT NULL,
+//          `admin2_code` varchar(80) DEFAULT NULL,
+//          `admin3_code` varchar(20) DEFAULT NULL,
+//          `admin4_code` varchar(20) DEFAULT NULL,
+//          `population` int(11) DEFAULT NULL,
+//          `elevation` int(80) DEFAULT NULL,
+//          `dem` varchar(80) DEFAULT NULL,
+//          `timezone` varchar(40) DEFAULT NULL,
+//          `modification_date` date DEFAULT NULL,
+//          PRIMARY KEY (`geonameid`),
+//          FULLTEXT KEY `feature_class` (`feature_class`),
+//          FULLTEXT KEY `feature_code` (`feature_code`),
+//          FULLTEXT KEY `country_code` (`country_code`),
+//          FULLTEXT KEY `admin1_code` (`admin1_code`),
+//          FULLTEXT KEY `admin2_code` (`admin2_code`)
+//        ) $charset_collate;";
+//        $result1 = dbDelta( $sql1 );
+//        dt_write_log( $result1 );
+//
+//        $sql2 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_geonames_polygons` (
+//          `geonameid` bigint(11) unsigned NOT NULL,
+//          `geoJSON` longtext,
+//          PRIMARY KEY (`geonameid`)
+//        ) $charset_collate;";
+//
+//        $result2 = dbDelta( $sql2 );
+//        dt_write_log( $result2 );
+//
+//        /**
+//         * Install initial country, admin1, and admin2 data
+//         */
+//        $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
+//        require_once( 'install/installer.php' );
+//        DT_Saturation_Mapping_Installer::install_world_admin_set();
+//
+//
+//        /**
+//         * Setup variables
+//         */
+//        update_option( 'dt_saturation_mapping_pd', 5000, false );
+//
+//        /**
+//         * Initialize partner profile
+//         */
+//        $partner_profile = [
+//            'partner_name' => get_option( 'blogname' ),
+//            'partner_description' => get_option( 'blogdescription' ),
+//            'partner_id' => DT_Saturation_Mapping::get_unique_public_key(),
+//        ];
+//        update_option( 'dt_site_partner_profile', $partner_profile, false );
 
     }
 
