@@ -4,13 +4,12 @@
 class DT_Saturation_Mapping_Metabox {
     public function __construct() {
         add_action( 'admin_menu', [ $this, 'meta_box_setup' ], 20 );
-        add_filter( "dt_custom_fields_settings", [ $this, 'saturation_field_filter' ], 10, 2 );
+        add_filter( "dt_custom_fields_settings", [ $this, 'saturation_field_filter' ], 1, 2 );
         add_action( 'dt_locations_map_additions', [ $this, 'add_geojson' ], 20 );
     }
 
     public function meta_box_setup() {
         add_meta_box( 'location_details_notes', __( 'Saturation Mapping', 'disciple_tools' ), [ $this, 'load_mapping_meta_box' ], 'locations', 'advanced', 'high' );
-
     }
 
     public function load_mapping_meta_box() {

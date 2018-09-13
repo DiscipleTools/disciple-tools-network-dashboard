@@ -381,6 +381,9 @@ class DT_Saturation_Mapping_Installer {
                     if ( is_wp_error( $country_post_id ) ) {
                         $error->add( __METHOD__, 'Error inserting country location' );
                     } else {
+                        $latlng = $country_result['latitude'] . ',' . $country_result['longitude'];
+                        self::geocode_location( $latlng,  $country_post_id );
+
                         $result['country_post_id'] = $country_post_id;
                         $installed['country'] = $country_post_id;
                     }
@@ -431,13 +434,17 @@ class DT_Saturation_Mapping_Installer {
                         WHERE meta_key = 'gn_geonameid' 
                           AND meta_value = %s",
                     $result['admin1_id'] ) );
-                dt_write_log( 'after dup check admin1 ' . microtime() );
                 if ( $duplicate ) { // check for duplicate
                     $result['admin1_post_id'] = $duplicate;
                     $installed['admin1'] = $duplicate;
                 } else { // insert if no duplicate
+
                     $admin1_post_id = wp_insert_post( $args, true );
+
                     if ( ! is_wp_error( $admin1_post_id ) ) {
+                        $latlng = $admin1_result['latitude'] . ',' . $admin1_result['longitude'];
+                        self::geocode_location( $latlng,  $admin1_post_id );
+
                         $result['admin1_post_id'] = $admin1_post_id;
                         $installed['admin1'] = $admin1_post_id;
                     } else {
@@ -487,6 +494,9 @@ class DT_Saturation_Mapping_Installer {
                 'installed' => $installed,
             ];
         } else {
+            $latlng = $result['latitude'] . ',' . $result['longitude'];
+            self::geocode_location( $latlng,  $admin2_post_id );
+
             $installed['admin2'] = $admin2_post_id;
             return [
                 'status' => 'OK',
@@ -590,6 +600,8 @@ class DT_Saturation_Mapping_Installer {
                     if ( is_wp_error( $country_post_id ) ) {
                         $error->add( __METHOD__, 'Error inserting country location' );
                     } else {
+                        $latlng = $country_result['latitude'] . ',' . $country_result['longitude'];
+                        self::geocode_location( $latlng,  $country_post_id );
                         $result['country_post_id'] = $country_post_id;
                         $installed['country'] = $country_post_id;
                     }
@@ -633,6 +645,9 @@ class DT_Saturation_Mapping_Installer {
             ];
             $admin1_post_id = wp_insert_post( $args, true );
             if ( ! is_wp_error( $admin1_post_id ) ) {
+                $latlng = $admin1_result['latitude'] . ',' . $admin1_result['longitude'];
+                self::geocode_location( $latlng,  $admin1_post_id );
+
                 $installed['admin1'] = $admin1_post_id;
 
                 return [
@@ -658,6 +673,21 @@ class DT_Saturation_Mapping_Installer {
                 'error'     => $error,
                 'installed' => $installed,
             ];
+        }
+    }
+
+    public static function geocode_location( $latlng, $post_id ) {
+        if ( class_exists( 'Disciple_Tools_Google_Geocode_API') ) {
+            $geocode = new Disciple_Tools_Google_Geocode_API();
+            $raw_response = $geocode::query_google_api_reverse( $latlng );
+            if ( $geocode::check_valid_request_result( $raw_response ) ) {
+
+                update_post_meta( $post_id, 'location_address', $geocode::parse_raw_result( $raw_response, 'location_address' ) );
+                update_post_meta( $post_id, 'base_name', $geocode::parse_raw_result( $raw_response, 'base_name' ) );
+                update_post_meta( $post_id, 'types', $geocode::parse_raw_result( $raw_response, 'types' ) );
+                update_post_meta( $post_id, 'raw', $raw_response );
+
+            }
         }
     }
 

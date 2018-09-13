@@ -40,18 +40,26 @@ class DT_Saturation_Mapping_Menu {
         return self::$_instance;
     } // End instance()
 
-
     /**
      * Constructor function.
      * @access  public
      * @since   0.1.0
      */
     public function __construct() {
-
         add_action( "admin_menu", array( $this, "register_menu" ) );
 
-    } // End __construct()
+        /**
+         * Catch enabling and disabling of the network feature.
+         */
+        if ( isset( $_POST['enable_network_form'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'enable_network'.get_current_user_id() ) ) ) {
+            if ( isset( $_POST['enable_network']) ) {
+                update_option( 'dt_saturation_mapping_enable_network', 1, false );
+            } else {
+                update_option( 'dt_saturation_mapping_enable_network', 0, false );
+            }
+        }
 
+    } // End __construct()
 
     /**
      * Loads the subnav page
@@ -62,8 +70,6 @@ class DT_Saturation_Mapping_Menu {
         'manage_dt', 'dt_extensions', [ $this, 'extensions_menu' ], 'dashicons-admin-generic', 59 );
         add_submenu_page( 'dt_extensions', __( 'Saturation Mapping', 'dt_saturation_mapping' ),
         __( 'Saturation Mapping', 'dt_saturation_mapping' ), 'manage_dt', $this->token, [ $this, 'content' ] );
-//        add_submenu_page( 'edit.php?post_type=locations', __( 'Saturation Import', 'disciple_tools' ),
-        // __( 'Saturation Import', 'disciple_tools' ), 'manage_dt', 'dt_saturation_mapping&tab=second', [ $this, 'content' ] );
     }
 
     /**
@@ -95,19 +101,29 @@ class DT_Saturation_Mapping_Menu {
             <h2 class="nav-tab-wrapper">
                 <a href="<?php echo esc_attr( $link ) . 'general' ?>" class="nav-tab
                 <?php ( $tab == 'general' || ! isset( $tab ) ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
-                    <?php esc_attr_e( 'Configure', 'dt_saturation_mapping' ) ?></a>
+                    <?php esc_attr_e( 'Overview', 'dt_saturation_mapping' ) ?></a>
                 <a href="<?php echo esc_attr( $link ) . 'local' ?>" class="nav-tab
                 <?php ( $tab == 'local' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
-                    <?php esc_attr_e( 'Local Install', 'dt_saturation_mapping' ) ?></a>
-                <a href="<?php echo esc_attr( $link ) . 'network' ?>" class="nav-tab
-                <?php ( $tab == 'network' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
-                    <?php esc_attr_e( 'Network Install', 'dt_saturation_mapping' ) ?></a>
+                    <?php esc_attr_e( 'Install Local Locations', 'dt_saturation_mapping' ) ?></a>
+
+                <?php // make tab dependent on network enable.
+                if ( get_option( 'dt_saturation_mapping_enable_network' ) ) : ?>
+
+                    <a href="<?php echo esc_attr( $link ) . 'network' ?>" class="nav-tab
+                    <?php ( $tab == 'network' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
+                        <?php esc_attr_e( 'Install Network Locations', 'dt_saturation_mapping' ) ?></a>
+                    <a href="<?php echo esc_attr( $link ) . 'configure-network' ?>" class="nav-tab
+                    <?php ( $tab == 'configure-network' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
+                        <?php esc_attr_e( 'Configure Network', 'dt_saturation_mapping' ) ?></a>
+
+                <?php endif; ?>
             </h2>
 
             <?php
             switch ($tab) {
                 case "general":
-                    $this->general_content();
+                    $object = new DT_Saturation_Mapping_Tab_General();
+                    $object->content();
                     break;
                 case "local":
                     $object = new DT_Saturation_Mapping_Tab_Local();
@@ -115,6 +131,10 @@ class DT_Saturation_Mapping_Menu {
                     break;
                 case "network":
                     $object = new DT_Saturation_Mapping_Tab_Network();
+                    $object->content();
+                    break;
+                case "configure-network":
+                    $object = new DT_Saturation_Mapping_Tab_Configure_Network();
                     $object->content();
                     break;
                 default:
@@ -127,7 +147,15 @@ class DT_Saturation_Mapping_Menu {
         <?php
     }
 
-    public function general_content() {
+
+}
+
+/**
+ * Class DT_Starter_Tab_Second
+ */
+class DT_Saturation_Mapping_Tab_General
+{
+    public function content() {
         ?>
         <div class="wrap">
             <div id="poststuff">
@@ -135,7 +163,8 @@ class DT_Saturation_Mapping_Menu {
                     <div id="post-body-content">
                         <!-- Main Column -->
 
-                        <?php $this->general_content_main() ?>
+                        <?php $this->overview_message() ?>
+                        <?php $this->enable_network_box() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -152,37 +181,83 @@ class DT_Saturation_Mapping_Menu {
         <?php
     }
 
-    public function general_content_main() {
-        // process post action
-        if ( isset( $_POST['population_division'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'population_division'.get_current_user_id() ) ) ) {
-            $new = (int) sanitize_text_field( wp_unslash( $_POST['population_division'] ) );
-            update_option( 'dt_saturation_mapping_pd', $new, false );
-        }
-        $population_division = get_option( 'dt_saturation_mapping_pd' );
-        if ( empty( $population_division ) ) {
-            update_option( 'dt_saturation_mapping_pd', 5000, false );
-            $population_division = 5000;
-        }
+    public function enable_network_box() {
+        /**
+         * Note: post processing is done in the construct of DT_Saturation_Mapping_Menu
+         */
+        $network = get_option( 'dt_saturation_mapping_enable_network' );
+
         ?>
         <!-- Box -->
         <form method="post">
+            <table class="widefat striped">
+                <thead>
+                <th>Enable Network</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <?php wp_nonce_field( 'enable_network'.get_current_user_id() ); ?>
+                        <label for="enable_network">Enable the network features: </label>
+                        <input type="checkbox" class="text" id="enable_network" name="enable_network" <?php $network ? print 'checked' : print ''; ?> />
+                        <br>
+                        <p><em></em></p>
+                        <button type="submit" name="enable_network_form" value="1" class="button">Update</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function overview_message() {
+        ?>
+        <style>dt { font-weight:bold;}</style>
+        <!-- Box -->
         <table class="widefat striped">
             <thead>
-            <th>Groups Per Population</th>
+            <th>Overview of Plugin</th>
             </thead>
             <tbody>
             <tr>
                 <td>
-                    <?php wp_nonce_field( 'population_division'.get_current_user_id() ); ?>
-                    <label for="population_division">Size of population for each group: </label>
-                    <input type="number" class="text" id="population_division" name="population_division" value="<?php echo esc_attr( $population_division ); ?>" /><br>
-                    <p><em>Default is a population of 5,000 for each group. This must be a number and must not be blank. </em></p>
-                    <button type="submit" class="button">Update</button>
+                    <dl>
+                        <dt>Plugin Purpose</dt>
+                        <dd>Collecting reports across many systems is difficult and doing it automatically, even more so. Making sure
+                        counts for certain location are counted only once you need a shared database of locations to post counts to.
+                        This saturation mapping plugin attempts to set up a globally consistent mapping schema.</dd>
+
+                        <dt>Local vs Network Functions</dt>
+                        <dd>This plugin has two functions.
+                            <ol>
+                                <li> First to extend Disciple Tools with structured mapping data
+                                    and to make it easy to install those locations for a team to use as they reach out to a certain area.
+                                </li>
+                                <li>This plugin also has the ability to add a network (global) dashboard to Disciple Tools for
+                                multiple Disciple Tools teams to connect their systems and share reporting (i.e. celebration) of the
+                                work between them.
+                                </li>
+                            </ol>
+                        </dd>
+
+                        <dt></dt>
+                        <dd></dd>
+
+                        <dt></dt>
+                        <dd></dd>
+
+                        <dt></dt>
+                        <dd></dd>
+
+                    </dl>
+
                 </td>
             </tr>
             </tbody>
         </table>
-        </form>
         <br>
         <!-- End Box -->
         <?php
@@ -523,6 +598,7 @@ class DT_Saturation_Mapping_Tab_Local
     }
 }
 
+
 /**
  * Class DT_Starter_Tab_Second
  */
@@ -776,3 +852,132 @@ class DT_Saturation_Mapping_Tab_Network
         <?php
     }
 }
+
+/**
+ * Class DT_Starter_Tab_Second
+ */
+class DT_Saturation_Mapping_Tab_Configure_Network
+{
+    public function content() {
+        ?>
+        <div class="wrap">
+            <div id="poststuff">
+                <div id="post-body" class="metabox-holder columns-2">
+                    <div id="post-body-content">
+                        <!-- Main Column -->
+
+                        <?php $this->partner_profile_metabox() ?>
+                        <?php $this->population_metabox() ?>
+
+                        <!-- End Main Column -->
+                    </div><!-- end post-body-content -->
+                    <div id="postbox-container-1" class="postbox-container">
+                        <!-- Right Column -->
+
+                        <!-- End Right Column -->
+                    </div><!-- postbox-container 1 -->
+                    <div id="postbox-container-2" class="postbox-container">
+                    </div><!-- postbox-container 2 -->
+                </div><!-- post-body meta box container -->
+            </div><!--poststuff end -->
+        </div><!-- wrap end -->
+        <?php
+    }
+
+    public function population_metabox() {
+        // process post action
+        if ( isset( $_POST['population_division'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'population_division'.get_current_user_id() ) ) ) {
+            $new = (int) sanitize_text_field( wp_unslash( $_POST['population_division'] ) );
+            update_option( 'dt_saturation_mapping_pd', $new, false );
+        }
+        $population_division = get_option( 'dt_saturation_mapping_pd' );
+        if ( empty( $population_division ) ) {
+            update_option( 'dt_saturation_mapping_pd', 5000, false );
+            $population_division = 5000;
+        }
+        ?>
+        <!-- Box -->
+        <form method="post">
+            <table class="widefat striped">
+                <thead>
+                <th>Groups Per Population</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <?php wp_nonce_field( 'population_division'.get_current_user_id() ); ?>
+                        <label for="population_division">Size of population for each group: </label>
+                        <input type="number" class="text" id="population_division" name="population_division" value="<?php echo esc_attr( $population_division ); ?>" /><br>
+                        <p><em>Default is a population of 5,000 for each group. This must be a number and must not be blank. </em></p>
+                        <button type="submit" class="button">Update</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function partner_profile_metabox() {
+        // process post action
+        if ( isset( $_POST['partner_profile_form'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'partner_profile'.get_current_user_id() ) ) ) {
+
+            $partner_profile = [
+                'partner_name' => sanitize_text_field( wp_unslash( $_POST['partner_name'] ) ),
+                'partner_description' => sanitize_text_field( wp_unslash( $_POST['partner_description'] ) ),
+                'partner_id' => sanitize_text_field( wp_unslash( $_POST['partner_id'] ) ),
+            ];
+            update_option( 'dt_site_partner_profile', $partner_profile, false );
+
+        }
+        $partner_profile = get_option( 'dt_site_partner_profile' );
+
+
+        ?>
+        <!-- Box -->
+        <form method="post">
+            <?php wp_nonce_field( 'partner_profile'.get_current_user_id() ); ?>
+            <table class="widefat striped">
+                <thead>
+                <th>Your Partner Profile</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <table class="widefat">
+                            <tbody>
+                            <tr>
+                                <td><label for="partner_name">Your Group Name</label></td>
+                                <td><input type="text" class="regular-text" name="partner_name"
+                                           id="partner_name" value="<?php echo $partner_profile['partner_name'] ?>" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="partner_description">Your Group Description</label></td>
+                                <td><input type="text" class="regular-text" name="partner_description"
+                                           id="partner_description" value="<?php echo $partner_profile['partner_description'] ?>" /></td>
+                            </tr>
+                            <tr>
+                                <td><label for="partner_id">Site ID</label></td>
+                                <td><?php echo $partner_profile['partner_id'] ?>
+                                    <input type="hidden" class="regular-text" name="partner_id"
+                                           id="partner_id" value="<?php echo $partner_profile['partner_id'] ?>" /></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <p><br>
+                            <button type="submit" id="partner_profile_form" name="partner_profile_form" class="button">Update</button>
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+}
+

@@ -29,6 +29,22 @@ function dt_saturation_mapping() {
     $current_theme = get_option( 'current_theme' );
 
     if ( 'Disciple Tools' == $current_theme || dt_is_child_theme_of_disciple_tools() ) {
+
+        /**
+         * We want to make sure migrations are run on updates.
+         *
+         * @see https://www.sitepoint.com/wordpress-plugin-updates-right-way/
+         */
+        $migration_number = 0;
+        try {
+
+            require_once( plugin_dir_path(__FILE__) . '/includes/admin/class-migration-engine.php' );
+            DT_Saturation_Mapping_Migration_Engine::migrate( $migration_number );
+        } catch ( Throwable $e ) {
+            new WP_Error( 'migration_error', 'Migration engine failed to migrate.' );
+        }
+
+
         return DT_Saturation_Mapping::get_instance();
     }
     else {
@@ -100,12 +116,20 @@ class DT_Saturation_Mapping {
      * @return void
      */
     private function includes() {
-        require_once( 'includes/menu-and-tabs.php' );
-        require_once( 'includes/locations-saturation-metabox.php' );
+
         require_once( 'includes/endpoints.php' );
-        require_once( 'includes/hooks.php' );
         require_once( 'includes/stats.php' );
-        require_once( 'install/installer.php' );
+
+        if ( get_option( 'dt_saturation_mapping_enable_network' ) ) {
+            require_once( 'includes/hooks.php' );
+
+        }
+        if ( is_admin() ) {
+            require_once( 'includes/menu-and-tabs.php' );
+            require_once( 'includes/locations-saturation-metabox.php' );
+            require_once( 'install/installer.php' );
+
+        }
     }
 
     /**
@@ -243,6 +267,16 @@ class DT_Saturation_Mapping {
          */
         update_option( 'dt_saturation_mapping_pd', 5000, false );
 
+        /**
+         * Initialize partner profile
+         */
+        $partner_profile = [
+            'partner_name' => get_option( 'blogname' ),
+            'partner_description' => get_option( 'blogdescription' ),
+            'partner_id' => DT_Saturation_Mapping::get_unique_public_key(),
+        ];
+        update_option( 'dt_site_partner_profile', $partner_profile, false );
+
     }
 
     /**
@@ -313,11 +347,20 @@ class DT_Saturation_Mapping {
         unset( $method, $args );
         return null;
     }
+
+    public static function get_unique_public_key() {
+        $key = bin2hex( random_bytes( 64 ) );
+        $key = str_replace( '0', '', $key );
+        $key = str_replace( 'O', '', $key );
+        $key = str_replace( 'o', '', $key );
+        $key = strtoupper( substr( $key, 0, 5 ) );
+        return $key;
+    }
 }
 // end main plugin class
 
 // Register activation hook.
-register_activation_hook( __FILE__, [ 'DT_Saturation_Mapping', 'activation' ] );
+//register_activation_hook( __FILE__, [ 'DT_Saturation_Mapping', 'activation' ] );
 register_deactivation_hook( __FILE__, [ 'DT_Saturation_Mapping', 'deactivation' ] );
 
 /**
