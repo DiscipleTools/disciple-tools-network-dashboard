@@ -201,10 +201,7 @@ class DT_Saturation_Mapping {
 
         // Confirm 'Administrator' has 'manage_dt' privilege. This is key in 'remote' configuration when
         // Disciple Tools theme is not installed, otherwise this will already have been installed by the Disciple Tools Theme
-        $role = get_role( 'administrator' );
-        if ( !empty( $role ) ) {
-            $role->add_cap( 'manage_dt' ); // gives access to dt plugin options
-        }
+
 
         /**
          * Add custom tables
