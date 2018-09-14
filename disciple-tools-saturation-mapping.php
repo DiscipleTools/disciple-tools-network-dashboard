@@ -38,7 +38,7 @@ function dt_saturation_mapping() {
         $migration_number = 0;
         try {
 
-            require_once( plugin_dir_path(__FILE__) . '/includes/admin/class-migration-engine.php' );
+            require_once( plugin_dir_path( __FILE__ ) . '/includes/admin/class-migration-engine.php' );
             DT_Saturation_Mapping_Migration_Engine::migrate( $migration_number );
         } catch ( Throwable $e ) {
             new WP_Error( 'migration_error', 'Migration engine failed to migrate.' );
@@ -117,7 +117,8 @@ class DT_Saturation_Mapping {
      */
     private function includes() {
 
-        require_once( 'includes/endpoints.php' );
+        require_once( 'includes/local-endpoints.php' );
+        require_once( 'includes/network-endpoints.php' );
         require_once( 'install/installer.php' );
         require_once( 'includes/stats.php' );
 
@@ -275,7 +276,6 @@ class DT_Saturation_Mapping {
 //            'partner_id' => DT_Saturation_Mapping::get_unique_public_key(),
 //        ];
 //        update_option( 'dt_site_partner_profile', $partner_profile, false );
-
     }
 
     /**

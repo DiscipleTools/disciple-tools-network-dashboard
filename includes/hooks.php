@@ -104,7 +104,7 @@ class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
 
     public function __construct() {
 
-        add_action( 'dt_top_nav_desktop', [$this, 'top_nav_desktop'] );
+        add_action( 'dt_top_nav_desktop', [ $this, 'top_nav_desktop' ] );
         add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_google' ], 10 );
 
         if ( isset( $_SERVER["SERVER_NAME"] ) ) {

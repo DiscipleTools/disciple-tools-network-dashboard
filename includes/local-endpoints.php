@@ -11,9 +11,9 @@ if ( !defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly.
 
 /**
- * Class DT_Saturation_Mapping_Endpoints
+ * Class DT_Saturation_Mapping_Local_Endpoints
  */
-class DT_Saturation_Mapping_Endpoints
+class DT_Saturation_Mapping_Local_Endpoints
 {
 
     private $version = 1;
@@ -21,7 +21,7 @@ class DT_Saturation_Mapping_Endpoints
     private $namespace;
 
     /**
-     * DT_Saturation_Mapping_Endpoints The single instance of DT_Saturation_Mapping_Endpoints.
+     * DT_Saturation_Mapping_Local_Endpoints The single instance of DT_Saturation_Mapping_Local_Endpoints.
      *
      * @var     object
      * @access    private
@@ -30,12 +30,12 @@ class DT_Saturation_Mapping_Endpoints
     private static $_instance = null;
 
     /**
-     * Main DT_Saturation_Mapping_Endpoints Instance
-     * Ensures only one instance of DT_Saturation_Mapping_Endpoints is loaded or can be loaded.
+     * Main DT_Saturation_Mapping_Local_Endpoints Instance
+     * Ensures only one instance of DT_Saturation_Mapping_Local_Endpoints is loaded or can be loaded.
      *
      * @since 0.1.0
      * @static
-     * @return DT_Saturation_Mapping_Endpoints instance
+     * @return DT_Saturation_Mapping_Local_Endpoints instance
      */
     public static function instance() {
         if ( is_null( self::$_instance ) ) {
@@ -63,6 +63,8 @@ class DT_Saturation_Mapping_Endpoints
                 'callback' => [ $this, 'import' ],
             ]
         );
+
+        // local install endpoints
         register_rest_route(
             $this->namespace, '/saturation/load_by_country', [
                 'methods'  => 'POST',
@@ -99,6 +101,7 @@ class DT_Saturation_Mapping_Endpoints
                 'callback' => [ $this, 'install_single_city' ],
             ]
         );
+
     }
 
     /**
@@ -212,4 +215,4 @@ class DT_Saturation_Mapping_Endpoints
         return DT_Saturation_Mapping_Installer::load_current_locations();
     }
 }
-DT_Saturation_Mapping_Endpoints::instance();
+DT_Saturation_Mapping_Local_Endpoints::instance();

@@ -65,8 +65,8 @@ class DT_Saturation_Mapping_Migration_0000 extends DT_Saturation_Mapping_Migrati
             }
         }
 
-        delete_option('dt_saturation_mapping_pd');
-        delete_option('dt_site_partner_profile');
+        delete_option( 'dt_saturation_mapping_pd' );
+        delete_option( 'dt_site_partner_profile' );
     }
 
     /**

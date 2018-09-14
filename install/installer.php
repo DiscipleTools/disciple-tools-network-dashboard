@@ -6,6 +6,7 @@
 if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
 }
 
+
 class DT_Saturation_Mapping_Installer {
 
     public static $csv_host = 'https://storage.googleapis.com/discipletools/';
@@ -30,6 +31,29 @@ class DT_Saturation_Mapping_Installer {
         $json = json_decode( $json, true );
         asort( $json );
         return $json;
+    }
+
+    public static function get_list_of_installed_p_list() {
+        global $wpdb;
+        $master_list = self::get_list_of_available_locations();
+
+        $installed_list = $wpdb->get_results("
+          SELECT country_code, count(*) as count  
+          FROM $wpdb->dt_geonames 
+          WHERE feature_class = 'p' 
+          GROUP BY country_code", ARRAY_A );
+
+        $status_list = [];
+        $installed_list = array_column( $installed_list, 'country_code' );
+
+        foreach ( $master_list as $key => $item ) {
+            $status_list[$key] = false;
+            if ( in_array( $key, $installed_list ) ) {
+                $status_list[$key] = true;
+            }
+        }
+        dt_write_log( $status_list );
+        return $status_list;
     }
 
     /**
@@ -89,6 +113,12 @@ class DT_Saturation_Mapping_Installer {
         }
 
 
+    }
+
+    public static function load_p_list_by_country( $country_code ) {
+        $file = strtolower( $country_code );
+        $install_reponse = self::import_by_file_name( $file );
+        return $install_reponse;
     }
 
     public static function import_by_file_name( $file ) {
@@ -268,9 +298,9 @@ class DT_Saturation_Mapping_Installer {
             ],
         ];
         $city_post_id = wp_insert_post( $args, true );
-        
+
         $address = $query_results['name'] . ',' . $query_results['admin1_code'] . ',' . $query_results['country_code'];
-        self::geocode_location( $address,  $city_post_id );
+        self::geocode_location( $address, $city_post_id );
 
         return [
             'status' => true,
@@ -374,7 +404,7 @@ class DT_Saturation_Mapping_Installer {
                           FROM $wpdb->postmeta 
                           WHERE meta_key = 'gn_geonameid' 
                             AND meta_value = %s",
-                    $result['country_id'] ) );
+                $result['country_id'] ) );
                 if ( $duplicate ) {
                     $result['country_post_id'] = $duplicate;
                     $installed['country'] = $duplicate;
@@ -385,7 +415,7 @@ class DT_Saturation_Mapping_Installer {
                     } else {
 
                         $address = $country_result['name'];
-                        self::geocode_location( $address,  $country_post_id );
+                        self::geocode_location( $address, $country_post_id );
 
                         $result['country_post_id'] = $country_post_id;
                         $installed['country'] = $country_post_id;
@@ -436,7 +466,7 @@ class DT_Saturation_Mapping_Installer {
                         FROM $wpdb->postmeta 
                         WHERE meta_key = 'gn_geonameid' 
                           AND meta_value = %s",
-                    $result['admin1_id'] ) );
+                $result['admin1_id'] ) );
                 if ( $duplicate ) { // check for duplicate
                     $result['admin1_post_id'] = $duplicate;
                     $installed['admin1'] = $duplicate;
@@ -447,7 +477,7 @@ class DT_Saturation_Mapping_Installer {
                     if ( ! is_wp_error( $admin1_post_id ) ) {
 
                         $address = $admin1_result['name'] . ',' . $admin1_result['country_code'];
-                        self::geocode_location( $address,  $admin1_post_id );
+                        self::geocode_location( $address, $admin1_post_id );
 
                         $result['admin1_post_id'] = $admin1_post_id;
                         $installed['admin1'] = $admin1_post_id;
@@ -500,7 +530,7 @@ class DT_Saturation_Mapping_Installer {
         } else {
 
             $address = $result['name'] . ',' . $result['admin1_code'] . ',' . $result['country_code'];
-            self::geocode_location( $address,  $admin2_post_id );
+            self::geocode_location( $address, $admin2_post_id );
 
             $installed['admin2'] = $admin2_post_id;
             return [
@@ -597,7 +627,7 @@ class DT_Saturation_Mapping_Installer {
                         FROM $wpdb->postmeta 
                         WHERE meta_key = 'gn_geonameid' 
                           AND meta_value = %s",
-                    $result['country_id'] ) );
+                $result['country_id'] ) );
                 if ( $duplicate ) {
                     $result['country_post_id'] = $duplicate;
                     $installed['country'] = $duplicate;
@@ -608,7 +638,7 @@ class DT_Saturation_Mapping_Installer {
                     } else {
 
                         $address = $country_result['name'];
-                        self::geocode_location( $address,  $country_post_id );
+                        self::geocode_location( $address, $country_post_id );
 
                         $result['country_post_id'] = $country_post_id;
                         $installed['country'] = $country_post_id;
@@ -655,7 +685,7 @@ class DT_Saturation_Mapping_Installer {
             $admin1_post_id = wp_insert_post( $args, true );
             if ( ! is_wp_error( $admin1_post_id ) ) {
                 $address = $admin1_result['name'] . ',' . $admin1_result['country_code'];
-                self::geocode_location( $address,  $admin1_post_id );
+                self::geocode_location( $address, $admin1_post_id );
 
                 $installed['admin1'] = $admin1_post_id;
 
@@ -686,7 +716,7 @@ class DT_Saturation_Mapping_Installer {
     }
 
     public static function geocode_location( $address, $post_id ) {
-        if ( class_exists( 'Disciple_Tools_Google_Geocode_API') ) {
+        if ( class_exists( 'Disciple_Tools_Google_Geocode_API' ) ) {
             $geocode = new Disciple_Tools_Google_Geocode_API();
             $raw_response = $geocode::query_google_api( $address );
             if ( $geocode::check_valid_request_result( $raw_response ) ) {
@@ -729,6 +759,20 @@ class DT_Saturation_Mapping_Installer {
         // output the menu
         return self::build_tree( 0, $menu_data, -1 );
 
+    }
+
+    public static function load_p_countries_installed() {
+        $available_locations = self::get_list_of_available_locations();
+        $installed_list = self::get_list_of_installed_p_list();
+
+        $html = '';
+        foreach ( $installed_list as $key => $value ) {
+            if ( $value ) {
+                $html .= '<dd>' . $available_locations[$key] . '</dd>';
+            }
+        }
+
+        return $html;
     }
 
     public static function build_tree( $parent_id, $menu_data, $gen) {

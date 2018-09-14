@@ -123,13 +123,13 @@ class DT_Saturation_Mapping_Migration_Engine
         global $wpdb;
         foreach ( $expected_tables as $name => $table ) {
             if ( preg_match( '/\bIF NOT EXISTS\b/i', $table ) ) {
-                dt_write_log("Table definition of $name should not contain 'IF NOT EXISTS'");
+                dt_write_log( "Table definition of $name should not contain 'IF NOT EXISTS'" );
                 throw new Exception( "Table definition of $name should not contain 'IF NOT EXISTS'" );
             } elseif ( !preg_match( '/\b' . preg_quote( $name ) . '\b/', $table ) ) {
-                dt_write_log("Expected to find table name in table definition of $name");
+                dt_write_log( "Expected to find table name in table definition of $name" );
                 throw new Exception( "Expected to find table name in table definition of $name" );
             } elseif ( strpos( $name, $wpdb->prefix ) !== 0 ) {
-                dt_write_log("Table name expected to start with prefix {$wpdb->prefix}");
+                dt_write_log( "Table name expected to start with prefix {$wpdb->prefix}" );
                 throw new Exception( "Table name expected to start with prefix {$wpdb->prefix}" );
             }
         }
