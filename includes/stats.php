@@ -181,4 +181,21 @@ class DT_Saturation_Mapping_Stats {
 
         return $list;
     }
+
+    public static function get_site_link_list() {
+        return [
+            'site_1' => [
+                'name' => 'Site 1',
+                'key' => '8U8Y7Y',
+            ],
+            'site_2' => [
+                'name' => 'Site 2',
+                'key' => '8U84',
+            ],
+            'site_3' => [
+                'name' => 'Site 3',
+                'key' => '8U8Y6',
+            ],
+        ];
+    }
 }

@@ -69,7 +69,12 @@ class DT_Saturation_Mapping_Network_Endpoints
                 'callback' => [ $this, 'load_p_countries_installed' ],
             ]
         );
-
+        register_rest_route(
+            $this->namespace, '/saturation/get_report', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'get_report' ],
+            ]
+        );
 
     }
 
@@ -105,6 +110,20 @@ class DT_Saturation_Mapping_Network_Endpoints
         }
 
         return DT_Saturation_Mapping_Installer::load_p_countries_installed();
+    }
+
+    /**
+     * @param \WP_REST_Request $request
+     *
+     * @return string|WP_Error
+     */
+    public function get_report( WP_REST_Request $request ) {
+
+        if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        return true;
     }
 
 
