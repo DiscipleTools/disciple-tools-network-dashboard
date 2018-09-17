@@ -38,10 +38,9 @@ class DT_Saturation_Mapping_Installer {
         $master_list = self::get_list_of_available_locations();
 
         $installed_list = $wpdb->get_results("
-          SELECT country_code, count(*) as count  
+          SELECT DISTINCT country_code  
           FROM $wpdb->dt_geonames 
-          WHERE feature_class = 'p' 
-          GROUP BY country_code", ARRAY_A );
+          WHERE feature_class = 'p'", ARRAY_A );
 
         $status_list = [];
         $installed_list = array_column( $installed_list, 'country_code' );
