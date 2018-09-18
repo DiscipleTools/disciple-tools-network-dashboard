@@ -210,14 +210,15 @@ function show_report_sync(){
         `)
 
     jQuery.each(list, function(i, v) {
+        console.log( v )
         chartDiv.append(`
                     <div class="grid-x grid-padding-x grid-margin-x" >
                         <div class="cell">
-                            <h4>Linked site 2 Name <span id="status-`+v.key+`">`+page.spinner_large+`</span></h4>
+                            <h4>`+v.post_title+` <span id="status-`+v.id+`">`+page.spinner_large+`</span></h4>
                         </div>
-                        <div class="cell" id="site-`+v.key+`"></div>
+                        <div class="cell" id="site-`+v.id+`"></div>
                     </div><hr style="max-width:100%;">`)
-        let data = { "key": v.key }
+        let data = { "id": v.id }
         jQuery.ajax({
             type: "POST",
             data: JSON.stringify(data),
@@ -229,14 +230,15 @@ function show_report_sync(){
             },
         })
             .done(function (data) {
-                jQuery('#status-'+v.key).empty().append('&#10003;')
-                jQuery('#site-'+v.key).empty().append('Content')
+                jQuery('#status-'+v.id).empty().append('&#10003;')
+                jQuery('#site-'+v.id).empty().append('Content')
 
-                console.log( v.key + '  ' + data )
+                console.log( v.post_title )
+                console.log( data )
             })
             .fail(function (err) {
-                spinner_span.empty().append( "error for " + country_code  )
-                console.log("error for " + country_code );
+                jQuery('#status-'+v.id).empty().append( "error" )
+                console.log("error for " +  v.post_title );
                 console.log(err);
             })
     })

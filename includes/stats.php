@@ -6,6 +6,9 @@ class DT_Saturation_Mapping_Stats {
 
         $chart = [];
         foreach ( $table_data as $row ) {
+            if ( (int) $row['groups_needed'] < 1 ) {
+                $row['groups_needed'] = 0;
+            }
             $chart[] = [
             [
             'v' => $row['location'],
@@ -24,6 +27,9 @@ class DT_Saturation_Mapping_Stats {
 
         $chart = [];
         foreach ( $table_data as $row ) {
+            if ( (int) $row['groups_needed'] < 1 ) {
+                $row['groups_needed'] = 0;
+            }
             $chart[] = [ $row['location'], (int) $row['gn_population'], (int) $row['groups_needed'], (int) $row['groups'] ];
         }
 
@@ -125,36 +131,36 @@ class DT_Saturation_Mapping_Stats {
                     WHERE post_type = 'locations' AND post_status = 'publish'
                 ", ARRAY_A );
         // prepare special array with parent-child relations
-        $menuData = array(
+        $menu_data = array(
             'items' => array(),
             'parents' => array()
         );
         foreach ( $query as $menuItem )
         {
-            $menuData['items'][$menuItem['id']] = $menuItem;
-            $menuData['parents'][$menuItem['parent_id']][] = $menuItem['id'];
+            $menu_data['items'][$menuItem['id']] = $menuItem;
+            $menu_data['parents'][$menuItem['parent_id']][] = $menuItem['id'];
         }
 
-        function buildMenu( $parent_id, $menuData, $gen) {
+        function build_menu( $parent_id, $menu_data, $gen) {
             $html = '';
 
-            if (isset( $menuData['parents'][$parent_id] ))
+            if (isset( $menu_data['parents'][$parent_id] ))
             {
                 $html = '<ul class="gen-ul ul-gen-'.$gen.'">';
                 $gen++;
-                foreach ($menuData['parents'][$parent_id] as $itemId)
+                foreach ($menu_data['parents'][$parent_id] as $item_id)
                 {
                     $html .= '<li class="gen-li li-gen-'.$gen.'">';
                     //            $html .= '(level: '.$gen.')<br> ';
-                    $html .= '<strong>'. $menuData['items'][$itemId]['name'] . '</strong><br>';
-                    $html .= 'population: '. ( $menuData['items'][$itemId]['gn_population'] ?: '0' ) . '<br>';
-                    $html .= 'groups needed: '. ( $menuData['items'][$itemId]['groups_needed'] ?: '0' ) . '<br>';
-                    $html .= 'groups: '. $menuData['items'][$itemId]['groups'];
+                    $html .= '<strong>'. $menu_data['items'][$item_id]['name'] . '</strong><br>';
+                    $html .= 'population: '. ( $menu_data['items'][$item_id]['gn_population'] ?: '0' ) . '<br>';
+                    $html .= 'groups needed: '. ( $menu_data['items'][$item_id]['groups_needed'] ?: '0' ) . '<br>';
+                    $html .= 'groups: '. $menu_data['items'][$item_id]['groups'];
 
                     $html .= '</li>';
 
                     // find childitems recursively
-                    $html .= buildMenu( $itemId, $menuData, $gen );
+                    $html .= build_menu( $item_id, $menu_data, $gen );
                 }
                 $html .= '</ul>';
             }
@@ -177,25 +183,20 @@ class DT_Saturation_Mapping_Stats {
                     }
                 </style>';
 
-        $list .= buildMenu( 0, $menuData, -1 );
+        $list .= build_menu( 0, $menu_data, -1 );
 
         return $list;
     }
 
     public static function get_site_link_list() {
-        return [
-            'site_1' => [
-                'name' => 'Site 1',
-                'key' => '8U8Y7Y',
-            ],
-            'site_2' => [
-                'name' => 'Site 2',
-                'key' => '8U84',
-            ],
-            'site_3' => [
-                'name' => 'Site 3',
-                'key' => '8U8Y6',
-            ],
-        ];
+        global $wpdb;
+        $list = $wpdb->get_results("
+            SELECT post_title, ID as id
+            FROM $wpdb->posts
+            WHERE post_type = 'site_link_system' 
+                AND post_status = 'publish'
+        ", ARRAY_A );
+
+        return $list;
     }
 }

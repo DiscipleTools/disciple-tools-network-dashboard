@@ -108,25 +108,28 @@ class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
 
     public function __construct() {
 
-        add_action( 'dt_top_nav_desktop', [ $this, 'top_nav_desktop' ] );
-        add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_google' ], 10 );
+        if ( user_can(get_current_user_id(), 'manage_options') ) {
 
-        if ( isset( $_SERVER["SERVER_NAME"] ) ) {
-            $url  = ( !isset( $_SERVER["HTTPS"] ) || @( $_SERVER["HTTPS"] != 'on' ) ) ? 'http://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) ) : 'https://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) );
-            if ( isset( $_SERVER["REQUEST_URI"] ) ) {
-                $url .= sanitize_text_field( wp_unslash( $_SERVER["REQUEST_URI"] ) );
+            add_action( 'dt_top_nav_desktop', [ $this, 'top_nav_desktop' ] );
+            add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_google' ], 10 );
+
+            if ( isset( $_SERVER["SERVER_NAME"] ) ) {
+                $url  = ( !isset( $_SERVER["HTTPS"] ) || @( $_SERVER["HTTPS"] != 'on' ) ) ? 'http://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) ) : 'https://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) );
+                if ( isset( $_SERVER["REQUEST_URI"] ) ) {
+                    $url .= sanitize_text_field( wp_unslash( $_SERVER["REQUEST_URI"] ) );
+                }
             }
-        }
-        $url_path = trim( str_replace( get_site_url(), "", $url ), '/' );
+            $url_path = trim( str_replace( get_site_url(), "", $url ), '/' );
 
-        if ( 'network' === substr( $url_path, '0', 7 ) ) {
+            if ( 'network' === substr( $url_path, '0', 7 ) ) {
 
-            add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ] ); // add custom URL
-            add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 99 );
+                add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ] ); // add custom URL
+                add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 99 );
 
-            if ( 'network' === $url_path ) {
-                add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
+                if ( 'network' === $url_path ) {
+                    add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
+                }
             }
-        }
+        } // end admin only test
     }
 }

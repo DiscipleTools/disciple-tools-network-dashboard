@@ -157,7 +157,8 @@ class DT_Saturation_Mapping_Menu {
 
 add_action( 'admin_enqueue_scripts', 'dt_saturation_mapping_options_scripts' );
 function dt_saturation_mapping_options_scripts() {
-    if ( isset( $_GET["page"] ) && $_GET["page"] === 'dt_saturation_mapping' ) {
+    global $post;
+    if ( ( isset( $_GET["page"] ) && $_GET["page"] === 'dt_saturation_mapping' ) || ( isset( $post->post_type ) && 'locations' === $post->post_type ) ) {
         wp_enqueue_script( 'dt_saturation_mapping_options', plugin_dir_url( __FILE__ ) . 'menu-and-tabs.js', [
             'jquery',
             'jquery-ui-core',

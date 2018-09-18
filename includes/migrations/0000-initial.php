@@ -98,11 +98,11 @@ class DT_Saturation_Mapping_Migration_0000 extends DT_Saturation_Mapping_Migrati
                   `timezone` varchar(40) DEFAULT NULL,
                   `modification_date` date DEFAULT NULL,
                   PRIMARY KEY (`geonameid`),
-                  FULLTEXT KEY `feature_class` (`feature_class`),
-                  FULLTEXT KEY `feature_code` (`feature_code`),
-                  FULLTEXT KEY `country_code` (`country_code`),
-                  FULLTEXT KEY `admin1_code` (`admin1_code`),
-                  FULLTEXT KEY `admin2_code` (`admin2_code`)
+                  KEY `feature_class` (`feature_class`),
+                  KEY `feature_code` (`feature_code`),
+                  KEY `country_code` (`country_code`),
+                  KEY `admin1_code` (`admin1_code`),
+                  KEY `admin2_code` (`admin2_code`)
                 ) $charset_collate;",
             "{$wpdb->prefix}dt_geonames_polygons" =>
                 "CREATE TABLE `{$wpdb->prefix}dt_geonames_polygons` (

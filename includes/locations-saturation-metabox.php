@@ -13,96 +13,149 @@ class DT_Saturation_Mapping_Metabox {
     }
 
     public function load_mapping_meta_box() {
-
-        Disciple_Tools_Location_Post_Type::instance()->meta_box_content( 'saturation_mapping' );
-
-        echo '<p><a href="javascript:void(0);" onclick="jQuery(\'#saturation_mapping_hidden\').toggle();">show more</a></p>';
-        echo '<div style="display:none;" id="saturation_mapping_hidden">';
-        Disciple_Tools_Location_Post_Type::instance()->meta_box_content( 'saturation_mapping_hidden' );
-        echo '</div>';
-
-        echo '<br><button type="submit" class="button">Update</button>';
-
-
-
-
+        // See if geonames data is present on record. If not offer connection tool.
         global $post, $post_id;
-        $post_parent_id = wp_get_post_parent_id( $post_id );
+        if ( ! get_post_meta( $post_id, 'gn_geonameid', true ) ) {
 
-        /**
-         * Parent Location
-         */
-        if ( $post_parent_id ) {
-            $post_parent = get_post( $post_parent_id );
-            $location_group_count = $this->get_child_groups();
-            $population_division = get_option( 'dt_saturation_mapping_pd' );
-            $post_parent_title = isset( $post_parent->post_title ) ? $post_parent->post_title : '';
+            $available_locations = DT_Saturation_Mapping_Installer::get_list_of_available_locations();
 
+            ?>
+            <table class="widefat striped">
+            <thead>
+            <th>Geonames Connection Wizard. Select the country, then select the administrative level of the location.</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <select name="selected_country" id="selected_country">
+                        <option>Select</option>
+                        <?php
+                        echo '<option>----</option>';
+                        echo '<option value="US">United States of America</option>';
+                        echo '<option>----</option>';
+                        foreach ( $available_locations as $country_code => $name ) {
+                            echo '<option value="' . $country_code . '">'.$name.'</option>';
+                        }
+                        ?>
+
+                    </select>
+                    <a href="javascript:void(0);" onclick="load_list_by_country()" class="button" id="import_button">Load</a>
+
+                    <style>
+                        dd, li {
+                            margin-bottom: 15px;
+                        }
+                        dt, li {
+                            margin-bottom: 20px;
+                            margin-top: 20px;
+                        }
+                        #results .page-title-action {
+                            vertical-align: middle;
+                        }
+                        .show-city-link {
+                            cursor: pointer;
+                        }
+
+                    </style>
+                    <div id="results"></div>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <?php
+
+        } else { // show available geonames mapping information.
+
+            Disciple_Tools_Location_Post_Type::instance()->meta_box_content( 'saturation_mapping' );
+
+            echo '<p><a href="javascript:void(0);" onclick="jQuery(\'#saturation_mapping_hidden\').toggle();">show more</a></p>';
+            echo '<div style="display:none;" id="saturation_mapping_hidden">';
+            Disciple_Tools_Location_Post_Type::instance()->meta_box_content( 'saturation_mapping_hidden' );
+            echo '</div>';
+
+            echo '<br><button type="submit" class="button">Update</button>';
+
+            /**
+             * Parent Location
+             */
+            $post_parent_id = wp_get_post_parent_id( $post_id );
+
+            if ( $post_parent_id ) {
+                $post_parent = get_post( $post_parent_id );
+                $location_group_count = $this->get_child_groups();
+                $population_division = get_option( 'dt_saturation_mapping_pd' );
+                $post_parent_title = isset( $post_parent->post_title ) ? $post_parent->post_title : '';
+
+                echo '<hr>';
+                echo "<h3>". esc_attr__( 'Parent Location' ) . "</h3>";
+                echo '<a href="' . admin_url() .'post.php?post=' . $post_parent_id . '&action=edit">' . $post_parent_title . '</a>: ';
+
+                if ( $par_loc = get_post_meta( $post_parent_id, 'gn_population', true ) ) {
+                    echo number_format( $par_loc, 0, ".", "," ) . ' people live here ';
+
+                    $groups = $par_loc / $population_division;
+                    echo ' | ' . number_format( $groups, 0, ".", "," ) . ' groups needed';
+                }
+                echo '<br><br>';
+            }
+
+
+            /**
+             * Current Location
+             */
             echo '<hr>';
-            echo "<h3>". esc_attr__( 'Parent Location' ) . "</h3>";
-            echo '<a href="' . admin_url() .'post.php?post=' . $post_parent_id . '&action=edit">' . $post_parent_title . '</a>: ';
+            echo "<h3>". esc_attr__( 'Current Location' ) . "</h3>";
+            if ( $cur_population = get_post_meta( $post_id, 'gn_population', true ) ) {
+                echo '<strong>' . $post->post_title . '</strong>: ';
+                echo number_format( $cur_population, 0, ".", "," ) . ' people live here ';
 
-            if ( $par_loc = get_post_meta( $post_parent_id, 'gn_population', true ) ) {
-                echo number_format( $par_loc, 0, ".", "," ) . ' people live here ';
-
-                $groups = $par_loc / $population_division;
-                echo ' | ' . number_format( $groups, 0, ".", "," ) . ' groups needed';
-            }
-            echo '<br><br>';
-        }
-
-
-        /**
-         * Current Location
-         */
-        echo '<hr>';
-        echo "<h3>". esc_attr__( 'Current Location' ) . "</h3>";
-        if ( $cur_population = get_post_meta( $post_id, 'gn_population', true ) ) {
-            echo '<strong>' . $post->post_title . '</strong>: ';
-            echo number_format( $cur_population, 0, ".", "," ) . ' people live here ';
-
-            $groups = $cur_population / $population_division;
-            echo ' | ' . number_format( $groups, 0, ".", "," ) . ' groups needed | ';
-
-            $groups_in_area = 0;
-            foreach ($location_group_count as $value ) {
-                if ( $value['location'] == $post_id ) {
-                    $groups_in_area = $value['count'];
-                    break;
-                }
-            }
-            echo $groups_in_area . ' groups in area';
-
-        }
-        echo '<br><br>';
-
-        /**
-         * Child Location
-         */
-        echo '<hr>';
-        echo "<h3>". esc_attr__( 'Child Locations' ) . "</h3>";
-        $child_population = $this->get_child_populations();
-        if ( ! empty( $child_population ) ) {
-            foreach ( $child_population as $location ) {
-                echo '<a href="'.admin_url() .'post.php?post='.$location->ID.'&action=edit">' . $location->post_title . '</a>: ';
-
-                if ( $loc_population = get_post_meta( $location->ID, 'gn_population', true ) ) {
-                    echo number_format( $loc_population, 0, ".", "," ) . ' people live here ';
-
-                    $groups = $loc_population / $population_division;
-                    echo ' | ' . number_format( $groups, 0, ".", "," ) . ' groups needed | ';
-                }
+                $groups = $cur_population / $population_division;
+                echo ' | ' . number_format( $groups, 0, ".", "," ) . ' groups needed | ';
 
                 $groups_in_area = 0;
                 foreach ($location_group_count as $value ) {
-                    if ( $value['location'] == $location->ID ) {
+                    if ( $value['location'] == $post_id ) {
                         $groups_in_area = $value['count'];
                         break;
                     }
                 }
                 echo $groups_in_area . ' groups in area';
 
-                echo '<br><br>';
+            }
+            echo '<br><br>';
+
+            /**
+             * Child Location
+             */
+            echo '<hr>';
+            echo "<h3>". esc_attr__( 'Child Locations' ) . "</h3>";
+            $child_population = $this->get_child_populations();
+            if ( ! empty( $child_population ) ) {
+                foreach ( $child_population as $location ) {
+                    echo '<a href="'.admin_url() .'post.php?post='.$location->ID.'&action=edit">' . $location->post_title . '</a>: ';
+
+                    if ( $loc_population = get_post_meta( $location->ID, 'gn_population', true ) ) {
+                        echo number_format( $loc_population, 0, ".", "," ) . ' people live here ';
+
+                        $groups = $loc_population / $population_division;
+                        if ( $groups > 1 ) {
+                            $groups = 1;
+                        }
+                        echo ' | ' . number_format( $groups, 0, ".", "," ) . ' groups needed | ';
+                    }
+
+                    $groups_in_area = 0;
+                    foreach ($location_group_count as $value ) {
+                        if ( $value['location'] == $location->ID ) {
+                            $groups_in_area = $value['count'];
+                            break;
+                        }
+                    }
+                    echo $groups_in_area . ' groups in area';
+
+                    echo '<br><br>';
+                }
             }
         }
     }
