@@ -155,6 +155,7 @@ class DT_Saturation_Mapping_Menu {
     }
 }
 
+// Enqueues the admin scripts
 add_action( 'admin_enqueue_scripts', 'dt_saturation_mapping_options_scripts' );
 function dt_saturation_mapping_options_scripts() {
     global $post;
@@ -176,6 +177,7 @@ function dt_saturation_mapping_options_scripts() {
         );
     }
 }
+
 
 /**
  * Class DT_Starter_Tab_Second

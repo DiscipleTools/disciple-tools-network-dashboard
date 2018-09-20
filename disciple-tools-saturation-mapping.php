@@ -122,6 +122,7 @@ class DT_Saturation_Mapping {
         require_once( 'includes/network-endpoints.php' );
         require_once( 'install/installer.php' );
         require_once( 'includes/stats.php' );
+        require_once( 'includes/customized_site_linking.php' );
 
         if ( get_option( 'dt_saturation_mapping_enable_network' ) ) {
             require_once( 'includes/hooks.php' );
@@ -187,96 +188,11 @@ class DT_Saturation_Mapping {
         Puc_v4_Factory::buildUpdateChecker(
             'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-saturation-mapping-version-control.json',
             __FILE__,
-            'disciple-tools-starter-plugin'
+            'disciple-tools-saturation-mapping'
         );
 
         // Internationalize the text strings used.
         add_action( 'plugins_loaded', array( $this, 'i18n' ), 2 );
-    }
-
-    /**
-     * Method that runs only when the plugin is activated.
-     *
-     * @since  0.1
-     * @access public
-     * @return void
-     */
-    public static function activation() {
-
-        // Confirm 'Administrator' has 'manage_dt' privilege. This is key in 'remote' configuration when
-        // Disciple Tools theme is not installed, otherwise this will already have been installed by the Disciple Tools Theme
-
-
-//        /**
-//         * Add custom tables
-//         */
-//        global $wpdb;
-//        require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
-//
-//        // Add tables
-//        $charset_collate = $wpdb->get_charset_collate();
-//
-//        $sql1 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_geonames` (
-//          `geonameid` bigint(11) unsigned NOT NULL,
-//          `name` varchar(200) DEFAULT NULL,
-//          `asciiname` varchar(200) DEFAULT NULL,
-//          `alternatenames` varchar(10000) DEFAULT NULL,
-//          `latitude` float DEFAULT NULL,
-//          `longitude` float DEFAULT NULL,
-//          `feature_class` char(1) DEFAULT NULL,
-//          `feature_code` varchar(10) DEFAULT NULL,
-//          `country_code` char(2) DEFAULT NULL,
-//          `cc2` varchar(100) DEFAULT NULL,
-//          `admin1_code` varchar(20) DEFAULT NULL,
-//          `admin2_code` varchar(80) DEFAULT NULL,
-//          `admin3_code` varchar(20) DEFAULT NULL,
-//          `admin4_code` varchar(20) DEFAULT NULL,
-//          `population` int(11) DEFAULT NULL,
-//          `elevation` int(80) DEFAULT NULL,
-//          `dem` varchar(80) DEFAULT NULL,
-//          `timezone` varchar(40) DEFAULT NULL,
-//          `modification_date` date DEFAULT NULL,
-//          PRIMARY KEY (`geonameid`),
-//          FULLTEXT KEY `feature_class` (`feature_class`),
-//          FULLTEXT KEY `feature_code` (`feature_code`),
-//          FULLTEXT KEY `country_code` (`country_code`),
-//          FULLTEXT KEY `admin1_code` (`admin1_code`),
-//          FULLTEXT KEY `admin2_code` (`admin2_code`)
-//        ) $charset_collate;";
-//        $result1 = dbDelta( $sql1 );
-//        dt_write_log( $result1 );
-//
-//        $sql2 = "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_geonames_polygons` (
-//          `geonameid` bigint(11) unsigned NOT NULL,
-//          `geoJSON` longtext,
-//          PRIMARY KEY (`geonameid`)
-//        ) $charset_collate;";
-//
-//        $result2 = dbDelta( $sql2 );
-//        dt_write_log( $result2 );
-//
-//        /**
-//         * Install initial country, admin1, and admin2 data
-//         */
-//        $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
-//        require_once( 'install/installer.php' );
-//        DT_Saturation_Mapping_Installer::install_world_admin_set();
-//
-//
-//        /**
-//         * Setup variables
-//         */
-//        update_option( 'dt_saturation_mapping_pd', 5000, false );
-//
-//        /**
-//         * Initialize partner profile
-//         */
-//        $partner_profile = [
-//            'partner_name' => get_option( 'blogname' ),
-//            'partner_description' => get_option( 'blogdescription' ),
-//            'partner_id' => DT_Saturation_Mapping::get_unique_public_key(),
-//        ];
-//        update_option( 'dt_site_partner_profile', $partner_profile, false );
     }
 
     /**
@@ -360,7 +276,6 @@ class DT_Saturation_Mapping {
 // end main plugin class
 
 // Register activation hook.
-//register_activation_hook( __FILE__, [ 'DT_Saturation_Mapping', 'activation' ] );
 register_deactivation_hook( __FILE__, [ 'DT_Saturation_Mapping', 'deactivation' ] );
 
 /**
