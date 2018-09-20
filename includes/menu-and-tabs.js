@@ -49,57 +49,6 @@ function load_list_by_country() {
             console.log(err);
         })
 }
-function load_list_by_country_metabox() {
-    let button = jQuery('#import_button')
-    let spinner = dtSMOptionAPI.spinner
-    button.append(spinner)
-
-    let country_code = jQuery('#selected_country').val()
-    let data = { "country_code": country_code }
-    jQuery.ajax({
-        type: "POST",
-        data: JSON.stringify(data),
-        contentType: "application/json; charset=utf-8",
-        dataType: "json",
-        url: dtSMOptionAPI.root + 'dt/v1/saturation/load_by_country',
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce );
-        },
-    })
-        .done(function (data) {
-            button.empty().append('Load')
-            let result_div = jQuery('#results')
-            result_div.empty()
-            result_div.append('<span style="float:right;"><a href="javascript:void(0);" ' +
-                'onclick="jQuery(\'.subdivision\').toggle();">collapse/expand all subdivisions</a>' +
-                '</span><span id="toggle-all"></span><br clear="all" />')
-
-            jQuery.each(data, function(i,v) {
-                result_div.append( '<hr><dt><strong style="font-size:1.4em">' + v.name + '</strong> ' +
-                    '<a id="admin1-link-'+v.geonameid+'" class="page-title-action" onclick="install_admin1_geoname(\''+v.geonameid+'\'); jQuery(this).off(\'click\');">Connect</a> ' +
-                    '<span id="install-'+v.geonameid+'"></span>  <span style="float:right;">' +
-                    '<a href="javascript:void(0);" onclick="jQuery(\'.adm2-'+v.geonameid+'\').toggle()">collapse/expand</a>' +
-                    '</span></dt>')
-
-                jQuery.each(v.adm2, function(ii, vv) {
-                    result_div.append('<dd id="dd-'+vv.geonameid+'" class="adm2-'+v.geonameid+' subdivision"><strong>' + vv.name + '</strong> ' +
-                        '<button type="button" id="button-'+vv.geonameid+'" class="page-title-action" onclick="install_admin2_geoname(\''+vv.geonameid+'\');" >Connect</button> ' +
-                        '<span id="install-'+vv.geonameid+'"></span> ' +
-                        '<a class="show-city-link" id="cities-button-'+vv.geonameid+'" ' +
-                        'onclick="load_cities(\''+vv.geonameid+'\')">Show Cities/Places</a> ' +
-                        '<span id="cities-'+vv.geonameid+'"></span></dd>')
-                })
-
-            })
-
-            console.log( 'success ')
-            console.log( data )
-        })
-        .fail(function (err) {
-            console.log("error");
-            console.log(err);
-        })
-}
 function install_admin2_geoname( geonameid ) {
     console.log('install_geoname')
 
@@ -135,6 +84,41 @@ function install_admin2_geoname( geonameid ) {
         })
 }
 function install_admin1_geoname( geonameid ) {
+    console.log('install_geoname')
+
+    jQuery('#button-'+ geonameid ).prop("disabled",true)
+
+    let spinner = dtSMOptionAPI.spinner
+
+    let report_span = jQuery( '#install-' + geonameid )
+    report_span.append(spinner)
+
+    let data = { "geonameid": geonameid }
+    jQuery.ajax({
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        url: dtSMOptionAPI.root + 'dt/v1/saturation/install_admin1_geoname',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce);
+        },
+    })
+        .done(function (data) {
+            report_span.empty().append('&#9989;')
+            load_current_locations()
+
+            console.log( 'success for ' + geonameid)
+            console.log( data )
+        })
+        .fail(function (err) {
+            report_span.empty().append('( oops. something failed. )')
+            console.log("error for " + geonameid );
+            console.log(err);
+        })
+}
+
+function install_admin1_geoname_metabox( geonameid ) {
     console.log('install_geoname')
 
     jQuery('#button-'+ geonameid ).prop("disabled",true)

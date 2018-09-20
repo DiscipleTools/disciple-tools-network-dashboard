@@ -15,57 +15,28 @@ class DT_Saturation_Mapping_Metabox {
     public function load_mapping_meta_box() {
         // See if geonames data is present on record. If not offer connection tool.
         global $post, $post_id;
+
+
         if ( ! get_post_meta( $post_id, 'gn_geonameid', true ) ) {
 
-            $available_locations = DT_Saturation_Mapping_Installer::get_list_of_available_locations();
 
-            ?>
-            <table class="widefat striped">
-            <thead>
-            <th>Geonames Connection Wizard. Select the country, then select the administrative level of the location.</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <select name="selected_country" id="selected_country">
-                        <option>Select</option>
-                        <?php
-                        echo '<option>----</option>';
-                        echo '<option value="US">United States of America</option>';
-                        echo '<option>----</option>';
-                        foreach ( $available_locations as $country_code => $name ) {
-                            echo '<option value="' . $country_code . '">'.$name.'</option>';
-                        }
-                        ?>
+            $suggestions = $this->geonameid_suggestions();
+            if ( is_wp_error( $suggestions ) ) {
+                echo 'Error with geocoding data.' . $suggestions->get_error_message();
+            }
+            elseif ( ! empty( $suggestions ) && is_array( $suggestions )  ) {
 
-                    </select>
-                    <a href="javascript:void(0);" onclick="load_list_by_country()" class="button" id="import_button">Load</a>
+                echo '<dt>Suggestions</dt>';
+                foreach ( $suggestions as $suggestion ) {
+                    echo '<dd>' . $suggestion['name'] . ' <a onclick="" style="cursor:pointer;">Connect</a></dd>';
+                }
+            }
 
-                    <style>
-                        dd, li {
-                            margin-bottom: 15px;
-                        }
-                        dt, li {
-                            margin-bottom: 20px;
-                            margin-top: 20px;
-                        }
-                        #results .page-title-action {
-                            vertical-align: middle;
-                        }
-                        .show-city-link {
-                            cursor: pointer;
-                        }
+        }
 
-                    </style>
-                    <div id="results"></div>
-
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <?php
-
-        } else { // show available geonames mapping information.
+        // note: re-check for postmeta because the previous suggestions section might have auto-created the record data.
+        if ( get_post_meta( $post_id, 'gn_geonameid', true ) ) { // show available geonames mapping information.
+            $population_division = get_option( 'dt_saturation_mapping_pd' );
 
             Disciple_Tools_Location_Post_Type::instance()->meta_box_content( 'saturation_mapping' );
 
@@ -84,7 +55,7 @@ class DT_Saturation_Mapping_Metabox {
             if ( $post_parent_id ) {
                 $post_parent = get_post( $post_parent_id );
                 $location_group_count = $this->get_child_groups();
-                $population_division = get_option( 'dt_saturation_mapping_pd' );
+
                 $post_parent_title = isset( $post_parent->post_title ) ? $post_parent->post_title : '';
 
                 echo '<hr>';
@@ -107,10 +78,11 @@ class DT_Saturation_Mapping_Metabox {
             echo '<hr>';
             echo "<h3>". esc_attr__( 'Current Location' ) . "</h3>";
             if ( $cur_population = get_post_meta( $post_id, 'gn_population', true ) ) {
+                $cur_population = get_post_meta( $post_id, 'gn_population', true );
                 echo '<strong>' . $post->post_title . '</strong>: ';
                 echo number_format( $cur_population, 0, ".", "," ) . ' people live here ';
 
-                $groups = $cur_population / $population_division;
+                $groups = (int) $cur_population / (int) $population_division;
                 echo ' | ' . number_format( $groups, 0, ".", "," ) . ' groups needed | ';
 
                 $groups_in_area = 0;
@@ -337,6 +309,54 @@ class DT_Saturation_Mapping_Metabox {
 
         return $children;
 
+    }
+
+    public function geonameid_suggestions() {
+        global $wpdb, $post_id, $post;
+
+        if ( $raw = get_post_meta( $post_id, 'raw', true ) ) {
+
+            dt_write_log($raw);
+
+            $political_level = Disciple_Tools_Google_Geocode_API::parse_raw_result($raw, 'types');
+
+
+            switch ( $political_level ) {
+                case 'country':
+                    $country_code = Disciple_Tools_Google_Geocode_API::parse_raw_result($raw, 'country_short_name');
+                    $country_row = $wpdb->get_row($wpdb->prepare( "SELECT * FROM $wpdb->dt_geonames WHERE feature_code = 'PCLI' AND feature_class = 'A' AND country_code = %s", $country_code), ARRAY_A );
+                    if ( ! empty( $country_row['geonameid'] ) )  {
+                        $country = DT_Saturation_Mapping_Installer::install_country_by_geoname( $country_row['geonameid'], null, [], $post_id );
+                    }
+
+                    dt_write_log("Country Geoname");
+                    dt_write_log($country);
+                    return '';
+                    break;
+                case 'administrative_area_level_1':
+                    break;
+                case 'administrative_area_level_2':
+                    break;
+                case 'administrative_area_level_3':
+                    break;
+                case 'administrative_area_level_4':
+                    break;
+                case 'locality':
+                    break;
+                case 'neighborhood':
+                    break;
+                case 'route':
+                    break;
+                case 'street_address':
+                    break;
+                default:
+                    return new WP_Error(__METHOD__, 'Undefined geocoding data. Regeocode location.' );
+                    break;
+            }
+
+            } else {
+            echo __('First geocode this location using the geocoding metabox, and then we can offer suggestions to connect it with the saturation mapping system.');
+        }
     }
 
     public function add_geojson() {

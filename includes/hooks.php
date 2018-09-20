@@ -61,6 +61,7 @@ class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
             'jquery',
             'jquery-ui-core',
         ], filemtime( plugin_dir_path( __DIR__ ) . 'includes/hooks.js' ), true );
+        wp_enqueue_script( 'jquery-ui-autocomplete' );
 
         wp_localize_script(
             'dt_saturation_mapping_script', 'wpApiSatMapMetrics', [

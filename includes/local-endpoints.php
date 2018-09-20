@@ -147,7 +147,7 @@ class DT_Saturation_Mapping_Local_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['geonameid'] ) ) {
-            return DT_Saturation_Mapping_Installer::install_admin1_geoname( $params['geonameid'] );
+            return DT_Saturation_Mapping_Installer::install_admin1_by_geoname( $params['geonameid'] );
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
         }
@@ -161,7 +161,7 @@ class DT_Saturation_Mapping_Local_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['geonameid'] ) ) {
-            return DT_Saturation_Mapping_Installer::install_admin2_geoname( $params['geonameid'] );
+            return DT_Saturation_Mapping_Installer::install_admin2_by_geoname( $params['geonameid'] );
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
         }

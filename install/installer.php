@@ -255,7 +255,7 @@ class DT_Saturation_Mapping_Installer {
 
         $admin2_post_id = $wpdb->get_var( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s", $admin2 ) );
         if ( empty( $admin2_post_id ) ) {
-            $build = self::install_admin2_geoname( $admin2 );
+            $build = self::install_admin2_by_geoname( $admin2 );
             if ( 'OK' === $build['status'] ) {
                 $admin2_post_id = $build['ids']['admin2_post_id'];
             } else {
@@ -310,33 +310,19 @@ class DT_Saturation_Mapping_Installer {
     }
 
 
-    public static function install_admin2_geoname( $geonameid ) {
+    public static function install_admin2_by_geoname( $geonameid ) {
         global $wpdb;
         $error = new WP_Error();
         $installed = [];
 
         $result = $wpdb->get_row( $wpdb->prepare("
         SELECT  
-            (SELECT azero.geonameid 
-            FROM $wpdb->dt_geonames as azero 
-            WHERE azero.feature_class = 'A' 
-                AND azero.feature_code = 'PCLI' 
-                AND azero.country_code = atwo.country_code LIMIT 1) as country_id,
-            (SELECT aone.geonameid 
-            FROM $wpdb->dt_geonames as aone 
-            WHERE aone.feature_class = 'A' 
-                AND aone.feature_code = 'ADM1'
-                AND aone.admin1_code = atwo.admin1_code
-                AND aone.country_code = atwo.country_code LIMIT 1) as admin1_id,
-            atwo.geonameid as admin2_id,
-            (SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = country_id LIMIT 1) as country_post_id,
-            (SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = admin1_id LIMIT 1) as admin1_post_id,
-            (SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = admin2_id LIMIT 1) as admin2_post_id,
+            (SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s LIMIT 1) as admin2_post_id,
             atwo.*
         FROM $wpdb->dt_geonames as atwo
         WHERE atwo.geonameid = %s
         ",
-        $geonameid), ARRAY_A );
+        $geonameid, $geonameid ), ARRAY_A );
 
         // test query results
         if ( ! $result ) {
@@ -345,7 +331,8 @@ class DT_Saturation_Mapping_Installer {
                 'status' => 'FAIL',
                 'message' => 'No geoname found for parameter provided.',
                 'error' => $error,
-                'installed' => 0,
+                'installed' => ['admin2', 0],
+                'post_id' => null,
             ];
         }
 
@@ -355,7 +342,8 @@ class DT_Saturation_Mapping_Installer {
                 'status' => 'OK',
                 'message' => 'Duplicate: This location is already installed.',
                 'error' => $error,
-                'installed' => 0,
+                'installed' => ['admin2', 0],
+                'post_id' => $result['admin2_post_id'],
                 'ids' => [
                     'country_post_id' => $result['country_post_id'],
                     'admin1_post_id' => $result['admin1_post_id'],
@@ -364,129 +352,68 @@ class DT_Saturation_Mapping_Installer {
             ];
         }
 
+        $country_row = $wpdb->get_row( $wpdb->prepare("
+            SELECT azero.geonameid as country_id, 
+              (SELECT post_id 
+              FROM $wpdb->postmeta 
+              WHERE meta_key = 'gn_geonameid' 
+                AND meta_value = azero.geonameid LIMIT 1) as country_post_id
+            FROM $wpdb->dt_geonames as azero 
+            WHERE azero.feature_class = 'A' 
+                AND azero.feature_code = 'PCLI' 
+                AND azero.country_code = %s LIMIT 1
+            ", $result['country_code'] ), ARRAY_A);
+
         // country duplicate check else query build
-        if ( empty( $result['country_post_id'] ) ) {
-            $country_result = $wpdb->get_row( $wpdb->prepare(
-                "SELECT * 
-                        FROM $wpdb->dt_geonames 
-                        WHERE geonameid = %s", $result['country_id'] ), ARRAY_A );
-            if ( $country_result ) {
-                $args = [
-                    'post_title' => $country_result['name'],
-                    'post_status' => 'publish',
-                    'post_name' => $country_result['geonameid'],
-                    'post_type' => 'locations',
-                    'meta_input' => [
-                        'gn_geonameid' => $country_result['geonameid'],
-                        'gn_name' => $country_result['name'],
-                        'gn_asciiname' => $country_result['asciiname'],
-                        'gn_alternatenames' => $country_result['alternatenames'],
-                        'gn_latitude' => $country_result['latitude'],
-                        'gn_longitude' => $country_result['longitude'],
-                        'gn_country_code' => $country_result['country_code'],
-                        'gn_feature_class' => $country_result['feature_class'],
-                        'gn_feature_code' => $country_result['feature_code'],
-                        'gn_admin1_code' => $country_result['admin1_code'],
-                        'gn_admin2_code' => $country_result['admin2_code'],
-                        'gn_admin3_code' => $country_result['admin3_code'],
-                        'gn_admin4_code' => $country_result['admin4_code'],
-                        'gn_population' => $country_result['population'],
-                        'gn_elevation' => $country_result['elevation'],
-                        'gn_dem' => $country_result['dem'],
-                        'gn_timezone' => $country_result['timezone'],
-                        'gn_modification_date' => $country_result['modification_date'],
-                    ],
-                ];
+        if ( empty( $country_row['country_post_id'] ) ) {
+            $country_result = self::install_country_by_geoname( $country_row['country_id'], $error, $installed );
 
-                $duplicate = $wpdb->get_var( $wpdb->prepare( "
-                          SELECT post_id 
-                          FROM $wpdb->postmeta 
-                          WHERE meta_key = 'gn_geonameid' 
-                            AND meta_value = %s",
-                $result['country_id'] ) );
-                if ( $duplicate ) {
-                    $result['country_post_id'] = $duplicate;
-                    $installed['country'] = $duplicate;
-                } else {
-                    $country_post_id = wp_insert_post( $args, true );
-                    if ( is_wp_error( $country_post_id ) ) {
-                        $error->add( __METHOD__, 'Error inserting country location' );
-                    } else {
-
-                        $address = $country_result['name'];
-                        self::geocode_location( $address, $country_post_id );
-
-                        $result['country_post_id'] = $country_post_id;
-                        $installed['country'] = $country_post_id;
-                    }
-                }
+            if ( 'OK' === $country_result['status'] ) {
+                $error = $country_result['error'];
+                $installed = $country_result['installed'];
+                $result['country_post_id'] = $country_result['post_id'];
+                $installed[] = ['country', $country_result['post_id']];
             } else {
-                $error->add( __METHOD__, 'No results for country in geonames.' );
+                dt_write_log( $country_result );
+                $error = $country_result['error'];
+                $installed = $country_result['installed'];
+                $result['country_post_id'] = $country_result['post_id'];
+                $installed[] = ['country', $country_result['post_id']];
             }
+        } else {
+            $result['country_post_id'] = $country_row['country_post_id'];
         }
+
         // admin1 duplicate check else query build
+        $admin1_row = $wpdb->get_row( $wpdb->prepare("
+            SELECT aone.geonameid as admin1_id,
+                (SELECT post_id FROM wp_3_postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = aone.geonameid LIMIT 1) as admin1_post_id
+                 FROM wp_3_dt_geonames as aone 
+                WHERE aone.feature_class = 'A' 
+                                AND aone.feature_code = 'ADM1'
+                                AND aone.admin1_code = %s
+                                AND aone.country_code = %s LIMIT 1
+            ", $result['admin1_code'], $result['country_code'] ), ARRAY_A);
+
         if ( empty( $result['admin1_post_id'] ) ) {
 
-            $admin1_result = $wpdb->get_row( $wpdb->prepare(
-                "SELECT * 
-                        FROM $wpdb->dt_geonames 
-                        WHERE geonameid = %s", $result['admin1_id'] ), ARRAY_A );
+            $admin1_result = self::install_admin1_by_geoname( $admin1_row['admin1_id'], $error, $installed );
 
-            if ( $admin1_result ) {
-                $args = [
-                    'post_title' => $admin1_result['name'],
-                    'post_status' => 'publish',
-                    'post_name' => $admin1_result['geonameid'],
-                    'post_type' => 'locations',
-                    'post_parent' => $result['country_post_id'],
-                    'meta_input' => [
-                        'gn_geonameid' => $admin1_result['geonameid'],
-                        'gn_name' => $admin1_result['name'],
-                        'gn_asciiname' => $admin1_result['asciiname'],
-                        'gn_alternatenames' => $admin1_result['alternatenames'],
-                        'gn_latitude' => $admin1_result['latitude'],
-                        'gn_longitude' => $admin1_result['longitude'],
-                        'gn_country_code' => $admin1_result['country_code'],
-                        'gn_feature_class' => $admin1_result['feature_class'],
-                        'gn_feature_code' => $admin1_result['feature_code'],
-                        'gn_admin1_code' => $admin1_result['admin1_code'],
-                        'gn_admin2_code' => $admin1_result['admin2_code'],
-                        'gn_admin3_code' => $admin1_result['admin3_code'],
-                        'gn_admin4_code' => $admin1_result['admin4_code'],
-                        'gn_population' => $admin1_result['population'],
-                        'gn_elevation' => $admin1_result['elevation'],
-                        'gn_dem' => $admin1_result['dem'],
-                        'gn_timezone' => $admin1_result['timezone'],
-                        'gn_modification_date' => $admin1_result['modification_date'],
-                    ],
-                ];
-                $duplicate = $wpdb->get_var( $wpdb->prepare( "
-                        SELECT post_id 
-                        FROM $wpdb->postmeta 
-                        WHERE meta_key = 'gn_geonameid' 
-                          AND meta_value = %s",
-                $result['admin1_id'] ) );
-                if ( $duplicate ) { // check for duplicate
-                    $result['admin1_post_id'] = $duplicate;
-                    $installed['admin1'] = $duplicate;
-                } else { // insert if no duplicate
-
-                    $admin1_post_id = wp_insert_post( $args, true );
-
-                    if ( ! is_wp_error( $admin1_post_id ) ) {
-
-                        $address = $admin1_result['name'] . ',' . $admin1_result['country_code'];
-                        self::geocode_location( $address, $admin1_post_id );
-
-                        $result['admin1_post_id'] = $admin1_post_id;
-                        $installed['admin1'] = $admin1_post_id;
-                    } else {
-                        $error->add( __METHOD__, 'Failed to insert admin1 level. ' . $admin1_post_id->get_error_message() );
-                    }
-                }
+            if ( 'OK' === $admin1_result['status'] ) {
+                $error = $admin1_result['error'];
+                $installed = $admin1_result['installed'];
+                $result['admin1_post_id'] = $admin1_result['post_id'];
+                $installed[] = ['admin1', $admin1_result['post_id']];
             } else {
-                $error->add( __METHOD__, 'No results for admin1 in geonames. ' . $admin1_result->get_error_message() );
+                dt_write_log( $admin1_result );
+
+                $error = $admin1_result['error'];
+                $installed = $admin1_result['installed'];
+                $result['admin1_post_id'] = $admin1_result['post_id'];
+                $installed[] = ['admin1', $admin1_result['post_id']];
             }
+        } else {
+            $result['admin1_post_id'] = $admin1_row['admin1_post_id'];
         }
 
         $args = [
@@ -525,18 +452,20 @@ class DT_Saturation_Mapping_Installer {
                 'message' => 'Failed to install admin2',
                 'error' => $error,
                 'installed' => $installed,
+                'post_id' => null,
             ];
         } else {
 
             $address = $result['name'] . ',' . $result['admin1_code'] . ',' . $result['country_code'];
             self::geocode_location( $address, $admin2_post_id );
 
-            $installed['admin2'] = $admin2_post_id;
+            $installed[] = ['admin2', $admin2_post_id];
             return [
                 'status' => 'OK',
                 'message' => 'Successfully installed admin2',
                 'error' => $error,
                 'installed' => $installed,
+                'post_id' => $admin2_post_id,
                 'ids' => [
                     'country_post_id' => $result['country_post_id'],
                     'admin1_post_id' => $result['admin1_post_id'],
@@ -546,26 +475,23 @@ class DT_Saturation_Mapping_Installer {
         }
     }
 
-    public static function install_admin1_geoname( $geonameid ) {
+    public static function install_admin1_by_geoname( $geonameid, $error = [], $installed = [] ) {
         global $wpdb;
-        $error = new WP_Error();
-        $installed = [];
+        if ( empty( $error ) ) {
+            $error = new WP_Error();
+        }
+        dt_write_log( __METHOD__ );
+        dt_write_log( microtime() );
 
         $result = $wpdb->get_row( $wpdb->prepare("
         SELECT  
-            (SELECT azero.geonameid 
-            FROM $wpdb->dt_geonames as azero 
-            WHERE azero.feature_class = 'A' 
-                AND azero.feature_code = 'PCLI' 
-                AND azero.country_code = atwo.country_code LIMIT 1) as country_id,
-            (SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = country_id LIMIT 1) as country_post_id,
             (SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = atwo.geonameid LIMIT 1) as admin1_post_id,
             atwo.*
         FROM $wpdb->dt_geonames as atwo
         WHERE atwo.geonameid = %s
         ",
         $geonameid), ARRAY_A );
-
+        dt_write_log( microtime() );
 
         // test query results
         if ( ! $result ) {
@@ -574,7 +500,8 @@ class DT_Saturation_Mapping_Installer {
                 'status' => 'FAIL',
                 'message' => 'No geoname found for parameter provided.',
                 'error' => $error,
-                'installed' => '',
+                'installed' => ['admin1', 0],
+                'post_id' => null,
             ];
         }
 
@@ -584,69 +511,44 @@ class DT_Saturation_Mapping_Installer {
                 'status' => 'DUPLICATE',
                 'message' => 'This location is already installed.',
                 'error' => '',
-                'installed' => '',
+                'installed' => ['admin1', 0],
+                'post_id' => $result['admin1_post_id'],
             ];
         }
+        dt_write_log( microtime() );
 
         // country duplicate check else query build
-        if ( empty( $result['country_post_id'] ) ) {
-            $country_result = $wpdb->get_row( $wpdb->prepare(
-                "SELECT * 
-                        FROM $wpdb->dt_geonames 
-                        WHERE geonameid = %s", $result['country_id'] ), ARRAY_A );
-            if ( $country_result ) {
-                $args = [
-                    'post_title' => $country_result['name'],
-                    'post_status' => 'publish',
-                    'post_name' => $country_result['geonameid'],
-                    'post_type' => 'locations',
-                    'meta_input' => [
-                        'gn_geonameid' => $country_result['geonameid'],
-                        'gn_name' => $country_result['name'],
-                        'gn_asciiname' => $country_result['asciiname'],
-                        'gn_alternatenames' => $country_result['alternatenames'],
-                        'gn_latitude' => $country_result['latitude'],
-                        'gn_longitude' => $country_result['longitude'],
-                        'gn_feature_class' => $country_result['feature_class'],
-                        'gn_feature_code' => $country_result['feature_code'],
-                        'gn_country_code' => $country_result['country_code'],
-                        'gn_admin1_code' => $country_result['admin1_code'],
-                        'gn_admin2_code' => $country_result['admin2_code'],
-                        'gn_admin3_code' => $country_result['admin3_code'],
-                        'gn_admin4_code' => $country_result['admin4_code'],
-                        'gn_population' => $country_result['population'],
-                        'gn_elevation' => $country_result['elevation'],
-                        'gn_dem' => $country_result['dem'],
-                        'gn_timezone' => $country_result['timezone'],
-                        'gn_modification_date' => $country_result['modification_date'],
-                    ],
-                ];
-                $duplicate = $wpdb->get_var( $wpdb->prepare( "
-                        SELECT post_id 
-                        FROM $wpdb->postmeta 
-                        WHERE meta_key = 'gn_geonameid' 
-                          AND meta_value = %s",
-                $result['country_id'] ) );
-                if ( $duplicate ) {
-                    $result['country_post_id'] = $duplicate;
-                    $installed['country'] = $duplicate;
-                } else {
-                    $country_post_id = wp_insert_post( $args, true );
-                    if ( is_wp_error( $country_post_id ) ) {
-                        $error->add( __METHOD__, 'Error inserting country location' );
-                    } else {
+        $country_row = $wpdb->get_row( $wpdb->prepare("
+            SELECT azero.geonameid as country_id, 
+              (SELECT post_id 
+              FROM $wpdb->postmeta 
+              WHERE meta_key = 'gn_geonameid' 
+                AND meta_value = azero.geonameid LIMIT 1) as country_post_id
+            FROM $wpdb->dt_geonames as azero 
+            WHERE azero.feature_class = 'A' 
+                AND azero.feature_code = 'PCLI' 
+                AND azero.country_code = %s LIMIT 1
+            ", $result['country_code'] ), ARRAY_A);
 
-                        $address = $country_result['name'];
-                        self::geocode_location( $address, $country_post_id );
+        if ( empty( $country_row['country_post_id'] ) ) {
+            $country_result = self::install_country_by_geoname( $country_row['country_id'], $error, $installed );
 
-                        $result['country_post_id'] = $country_post_id;
-                        $installed['country'] = $country_post_id;
-                    }
-                }
+            if ( 'OK' === $country_result['status'] ) {
+                $error = $country_result['error'];
+                $installed = $country_result['installed'];
+                $result['country_post_id'] = $country_result['post_id'];
+                $installed[] = ['country', $country_result['post_id']];
             } else {
-                $error->add( __METHOD__, 'No results for country in geonames.' );
+                dt_write_log( $country_result );
+                $error = $country_result['error'];
+                $installed = $country_result['installed'];
+                $result['country_post_id'] = $country_result['post_id'];
+                $installed[] = ['country', $country_result['post_id']];
             }
+        } else {
+            $result['country_post_id'] = $country_row['country_post_id'];
         }
+        dt_write_log( microtime() );
 
         $admin1_result = $wpdb->get_row( $wpdb->prepare(
             "SELECT * 
@@ -683,16 +585,19 @@ class DT_Saturation_Mapping_Installer {
             ];
             $admin1_post_id = wp_insert_post( $args, true );
             if ( ! is_wp_error( $admin1_post_id ) ) {
-                $address = $admin1_result['name'] . ',' . $admin1_result['country_code'];
-                self::geocode_location( $address, $admin1_post_id );
 
-                $installed['admin1'] = $admin1_post_id;
+                if ( ! get_post_meta( $admin1_post_id, 'raw', true ) ) {
+                    $address = $admin1_result[ 'name' ] . ',' . $admin1_result[ 'country_code' ];
+                    self::geocode_location( $address, $admin1_post_id );
+                }
 
+                $installed[] = ['admin1',$admin1_post_id];
                 return [
                     'status'    => 'OK',
                     'message'   => 'Successfully installed admin1',
                     'error'     => $error,
                     'installed' => $installed,
+                    'post_id' => $admin1_post_id,
                 ];
             } else {
                 $error->add( __METHOD__, 'Error inserting admin2 level. ' . $admin1_post_id->get_error_message() );
@@ -702,6 +607,7 @@ class DT_Saturation_Mapping_Installer {
                     'message'   => 'Failed to install admin1',
                     'error'     => $error,
                     'installed' => $installed,
+                    'post_id' => null,
                 ];
             }
         } else {
@@ -710,7 +616,152 @@ class DT_Saturation_Mapping_Installer {
                 'message'   => 'Failed to install admin1 because no geonames results found',
                 'error'     => $error,
                 'installed' => $installed,
+                'post_id' => null,
             ];
+        }
+    }
+
+    /**
+     * @param       $geonameid
+     * @param array $error
+     * @param array $installed
+     *
+     * @return array
+     */
+    public static function install_country_by_geoname( $geonameid, $error = [], $installed = [], $post_id = null ) {
+        global $wpdb;
+        if ( empty( $error ) ) {
+            $error = new WP_Error();
+        }
+
+        $country_result = $wpdb->get_row( $wpdb->prepare(
+            "SELECT * 
+                    FROM $wpdb->dt_geonames 
+                    WHERE geonameid = %s", $geonameid ), ARRAY_A );
+        if ( ! $country_result ) {
+            $error->add( __METHOD__, 'No results for country in geonames.' );
+            return [
+                'status'    => 'FAIL',
+                'message'   => 'No results for country in geonames.',
+                'error'     => $error,
+                'installed' => $installed,
+                'post_id' => null,
+            ];
+        }
+
+
+        $args = [
+            'post_title'  => $country_result[ 'name' ],
+            'post_status' => 'publish',
+            'post_name'   => $country_result[ 'geonameid' ],
+            'post_type'   => 'locations',
+            'meta_input'  => [
+                'gn_geonameid'         => $country_result[ 'geonameid' ],
+                'gn_name'              => $country_result[ 'name' ],
+                'gn_asciiname'         => $country_result[ 'asciiname' ],
+                'gn_alternatenames'    => $country_result[ 'alternatenames' ],
+                'gn_latitude'          => $country_result[ 'latitude' ],
+                'gn_longitude'         => $country_result[ 'longitude' ],
+                'gn_feature_class'     => $country_result[ 'feature_class' ],
+                'gn_feature_code'      => $country_result[ 'feature_code' ],
+                'gn_country_code'      => $country_result[ 'country_code' ],
+                'gn_admin1_code'       => $country_result[ 'admin1_code' ],
+                'gn_admin2_code'       => $country_result[ 'admin2_code' ],
+                'gn_admin3_code'       => $country_result[ 'admin3_code' ],
+                'gn_admin4_code'       => $country_result[ 'admin4_code' ],
+                'gn_population'        => $country_result[ 'population' ],
+                'gn_elevation'         => $country_result[ 'elevation' ],
+                'gn_dem'               => $country_result[ 'dem' ],
+                'gn_timezone'          => $country_result[ 'timezone' ],
+                'gn_modification_date' => $country_result[ 'modification_date' ],
+            ],
+        ];
+
+        // Check if updating record
+        if ( ! empty( $post_id ) ) {
+            $args['ID'] = $post_id;
+            $country_post_id = wp_update_post( $args, true );
+
+            if ( is_wp_error( $country_post_id ) ) {
+                dt_write_log( $country_post_id );
+
+                $error->add( __METHOD__, 'Error inserting country location' );
+                return [
+                    'status'    => 'FAIL',
+                    'message'   => 'Successfully installed country',
+                    'error'     => $error,
+                    'installed' => $installed,
+                    'post_id' => null,
+                ];
+            } else {
+
+                if ( ! get_post_meta( $country_post_id, 'raw', true ) ) {
+                    $address = $country_result[ 'name' ];
+                    self::geocode_location( $address, $country_post_id );
+                }
+
+                $installed[ 'country' ] = $country_post_id;
+                return [
+                    'status'    => 'OK',
+                    'message'   => 'Successfully installed country',
+                    'error'     => $error,
+                    'installed' => $installed,
+                    'post_id' => $country_post_id,
+                ];
+            }
+        }
+
+        // Check for duplicate before create new
+        $duplicate = $wpdb->get_var( $wpdb->prepare( "
+                SELECT post_id 
+                FROM $wpdb->postmeta 
+                WHERE meta_key = 'gn_geonameid' 
+                  AND meta_value = %s",
+            $geonameid ) );
+        if ( $duplicate ) {
+            $installed[] = ['country', $duplicate];
+            return [
+                'status'    => 'DUPLICATE',
+                'message'   => 'Already installed country',
+                'error'     => $error,
+                'installed' => $installed,
+                'post_id' => $duplicate
+            ];
+
+            // Create new record
+        } else {
+            $country_post_id = wp_insert_post( $args, true );
+
+            if ( is_wp_error( $country_post_id ) ) {
+                dt_write_log( "Fail" );
+                dt_write_log( $country_post_id );
+
+                $error->add( __METHOD__, 'Error inserting country location' );
+
+                return [
+                    'status'    => 'FAIL',
+                    'message'   => 'Successfully installed country',
+                    'error'     => $error,
+                    'installed' => $installed,
+                    'post_id'   => null,
+                ];
+            } else {
+
+                if ( ! get_post_meta( $country_post_id, 'raw', true ) ) {
+                    $address = $country_result[ 'name' ];
+                    self::geocode_location( $address, $country_post_id );
+                }
+
+                $installed[ 'country' ] = $country_post_id;
+
+                return [
+                    'status'    => 'OK',
+                    'message'   => 'Successfully installed country',
+                    'error'     => $error,
+                    'installed' => $installed,
+                    'post_id'   => $country_post_id,
+                ];
+            }
         }
     }
 

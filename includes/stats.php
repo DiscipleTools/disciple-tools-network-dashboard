@@ -69,6 +69,11 @@ class DT_Saturation_Mapping_Stats {
         return $chart;
     }
 
+    public static function query_geoname_list() {
+        global $wpdb;
+        return $wpdb->get_col("SELECT CONCAT( name, ', ', country_code) FROM $wpdb->dt_geonames" );
+    }
+
     public static function query_location_population_groups() {
         global $wpdb;
 

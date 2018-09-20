@@ -117,6 +117,7 @@ class DT_Saturation_Mapping {
      */
     private function includes() {
 
+        require_once( 'includes/core.php' );
         require_once( 'includes/local-endpoints.php' );
         require_once( 'includes/network-endpoints.php' );
         require_once( 'install/installer.php' );
