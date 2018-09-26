@@ -1,6 +1,6 @@
 jQuery(document).ready(function() {
-    if( ! window.location.hash || '#saturation_mapping_overview' === window.location.hash) {
-        show_saturation_mapping_overview()
+    if( ! window.location.hash || '#network_dashboard_overview' === window.location.hash) {
+        show_network_dashboard_overview()
     }
     if('#saturation_tree' === window.location.hash) {
         show_saturation_tree()
@@ -16,7 +16,7 @@ jQuery(document).ready(function() {
     }
 })
 
-function show_saturation_mapping_overview(){
+function show_network_dashboard_overview(){
 "use strict";
 let page = wpApiSatMapMetrics
     console.log(page)
@@ -56,7 +56,7 @@ chartDiv.empty().html(`
 
 
 chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
-            <a onclick="refresh_stats_data( 'show_saturation_mapping_overview' ); jQuery('.spinner').show();">Refresh</a>
+            <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
             <span class="spinner" style="display: none;"><img src="`+wpApiSatMapMetrics.plugin_uri+`includes/ajax-loader.gif" /></span> 
             </div>`)
 }
@@ -108,7 +108,7 @@ function show_saturation_tree(){
     }
 
     chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
-            <a onclick="refresh_stats_data( 'show_saturation_mapping_overview' ); jQuery('.spinner').show();">Refresh</a>
+            <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
             <span class="spinner" style="display: none;"><img src="`+wpApiSatMapMetrics.plugin_uri+`includes/ajax-loader.gif" /></span> 
             </div>`)
 }
@@ -153,7 +153,7 @@ function show_saturation_map(){
     }
 
     chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
-            <a onclick="refresh_stats_data( 'show_saturation_mapping_overview' ); jQuery('.spinner').show();">Refresh</a>
+            <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
             <span class="spinner" style="display: none;"><img src="`+wpApiSatMapMetrics.plugin_uri+`includes/ajax-loader.gif" /></span> 
             </div>`)
 }
@@ -182,7 +182,7 @@ function show_saturation_side_tree(){
 
 
     chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
-            <a onclick="refresh_stats_data( 'show_saturation_mapping_overview' ); jQuery('.spinner').show();">Refresh</a>
+            <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
             <span class="spinner" style="display: none;"><img src="`+wpApiSatMapMetrics.plugin_uri+`includes/ajax-loader.gif" /></span> 
             </div>`)
 }
@@ -245,7 +245,7 @@ function show_report_sync(){
 
 
     chartDiv.append(`<div><span class="small grey">( stats as of  )</span> 
-            <a onclick="refresh_stats_data( 'show_saturation_mapping_overview' ); jQuery('.spinner').show();">Refresh</a>
+            <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
             <span class="spinner" style="display: none;"><img src="`+wpApiSatMapMetrics.plugin_uri+`includes/ajax-loader.gif" /></span> 
             </div>`)
 }

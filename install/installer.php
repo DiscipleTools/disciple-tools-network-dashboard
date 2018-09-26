@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
 }
 
 
-class DT_Saturation_Mapping_Installer {
+class DT_Network_Dashboard_Installer {
 
     public static $csv_host = 'https://storage.googleapis.com/discipletools/';
 
@@ -785,7 +785,7 @@ class DT_Saturation_Mapping_Installer {
 
         $query = $wpdb->get_results("
             SELECT
-                  a.ID         as id,
+                  a.ID as id,
                   a.post_parent as parent_id,
                   a.post_title as name
                 FROM $wpdb->posts as a

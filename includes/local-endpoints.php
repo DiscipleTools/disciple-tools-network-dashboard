@@ -11,9 +11,9 @@ if ( !defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly.
 
 /**
- * Class DT_Saturation_Mapping_Local_Endpoints
+ * Class DT_Network_Dashboard_Local_Endpoints
  */
-class DT_Saturation_Mapping_Local_Endpoints
+class DT_Network_Dashboard_Local_Endpoints
 {
 
     private $version = 1;
@@ -21,7 +21,7 @@ class DT_Saturation_Mapping_Local_Endpoints
     private $namespace;
 
     /**
-     * DT_Saturation_Mapping_Local_Endpoints The single instance of DT_Saturation_Mapping_Local_Endpoints.
+     * DT_Network_Dashboard_Local_Endpoints The single instance of DT_Network_Dashboard_Local_Endpoints.
      *
      * @var     object
      * @access    private
@@ -30,12 +30,12 @@ class DT_Saturation_Mapping_Local_Endpoints
     private static $_instance = null;
 
     /**
-     * Main DT_Saturation_Mapping_Local_Endpoints Instance
-     * Ensures only one instance of DT_Saturation_Mapping_Local_Endpoints is loaded or can be loaded.
+     * Main DT_Network_Dashboard_Local_Endpoints Instance
+     * Ensures only one instance of DT_Network_Dashboard_Local_Endpoints is loaded or can be loaded.
      *
      * @since 0.1.0
      * @static
-     * @return DT_Saturation_Mapping_Local_Endpoints instance
+     * @return DT_Network_Dashboard_Local_Endpoints instance
      */
     public static function instance() {
         if ( is_null( self::$_instance ) ) {
@@ -117,7 +117,7 @@ class DT_Saturation_Mapping_Local_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['file'] ) ) {
-            $result = DT_Saturation_Mapping_Installer::import_by_file_name( $params['file'] );
+            $result = DT_Network_Dashboard_Installer::import_by_file_name( $params['file'] );
             return $result;
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
@@ -132,7 +132,7 @@ class DT_Saturation_Mapping_Local_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['country_code'] ) ) {
-            $result = DT_Saturation_Mapping_Installer::load_by_country( $params['country_code'] );
+            $result = DT_Network_Dashboard_Installer::load_by_country( $params['country_code'] );
             return $result;
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
@@ -147,7 +147,7 @@ class DT_Saturation_Mapping_Local_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['geonameid'] ) ) {
-            return DT_Saturation_Mapping_Installer::install_admin1_by_geoname( $params['geonameid'] );
+            return DT_Network_Dashboard_Installer::install_admin1_by_geoname( $params['geonameid'] );
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
         }
@@ -161,7 +161,7 @@ class DT_Saturation_Mapping_Local_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['geonameid'] ) ) {
-            return DT_Saturation_Mapping_Installer::install_admin2_by_geoname( $params['geonameid'] );
+            return DT_Network_Dashboard_Installer::install_admin2_by_geoname( $params['geonameid'] );
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
         }
@@ -175,7 +175,7 @@ class DT_Saturation_Mapping_Local_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['geonameid'] ) ) {
-            $result = DT_Saturation_Mapping_Installer::load_cities( $params['geonameid'] );
+            $result = DT_Network_Dashboard_Installer::load_cities( $params['geonameid'] );
             if ( $result['status'] ) {
                 return $result;
             } else {
@@ -194,7 +194,7 @@ class DT_Saturation_Mapping_Local_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['geonameid'] ) && $params['admin2'] ) {
-            $result = DT_Saturation_Mapping_Installer::install_single_city( $params['geonameid'], $params['admin2'] );
+            $result = DT_Network_Dashboard_Installer::install_single_city( $params['geonameid'], $params['admin2'] );
             if ( $result['status'] ) {
                 return $result;
             } else {
@@ -212,7 +212,7 @@ class DT_Saturation_Mapping_Local_Endpoints
             return new WP_Error( __METHOD__, 'Permission error.' );
         }
 
-        return DT_Saturation_Mapping_Installer::load_current_locations();
+        return DT_Network_Dashboard_Installer::load_current_locations();
     }
 }
-DT_Saturation_Mapping_Local_Endpoints::instance();
+DT_Network_Dashboard_Local_Endpoints::instance();

@@ -1,8 +1,8 @@
 <?php
 /**
- * DT_Saturation_Mapping_Menu class for the admin page
+ * DT_Network_Dashboard_Menu class for the admin page
  *
- * @class       DT_Saturation_Mapping_Menu
+ * @class       DT_Network_Dashboard_Menu
  * @version     0.1.0
  * @since       0.1.0
  */
@@ -13,25 +13,25 @@ if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
 /**
  * Initialize menu class
  */
-DT_Saturation_Mapping_Menu::instance();
+DT_Network_Dashboard_Menu::instance();
 
 /**
- * Class DT_Saturation_Mapping_Menu
+ * Class DT_Network_Dashboard_Menu
  */
-class DT_Saturation_Mapping_Menu {
+class DT_Network_Dashboard_Menu {
 
-    public $token = 'dt_saturation_mapping';
+    public $token = 'dt_network_dashboard';
 
     private static $_instance = null;
 
     /**
-     * DT_Saturation_Mapping_Menu Instance
+     * DT_Network_Dashboard_Menu Instance
      *
-     * Ensures only one instance of DT_Saturation_Mapping_Menu is loaded or can be loaded.
+     * Ensures only one instance of DT_Network_Dashboard_Menu is loaded or can be loaded.
      *
      * @since 0.1.0
      * @static
-     * @return DT_Saturation_Mapping_Menu instance
+     * @return DT_Network_Dashboard_Menu instance
      */
     public static function instance() {
         if ( is_null( self::$_instance ) ) {
@@ -53,9 +53,9 @@ class DT_Saturation_Mapping_Menu {
          */
         if ( isset( $_POST['enable_network_form'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'enable_network'.get_current_user_id() ) ) ) {
             if ( isset( $_POST['enable_network'] ) ) {
-                update_option( 'dt_saturation_mapping_enable_network', 1, false );
+                update_option( 'dt_network_dashboard_enable_network', 1, false );
             } else {
-                update_option( 'dt_saturation_mapping_enable_network', 0, false );
+                update_option( 'dt_network_dashboard_enable_network', 0, false );
             }
         }
 
@@ -68,8 +68,8 @@ class DT_Saturation_Mapping_Menu {
     public function register_menu() {
         add_menu_page( __( 'Extensions (DT)', 'disciple_tools' ), __( 'Extensions (DT)', 'disciple_tools' ),
         'manage_dt', 'dt_extensions', [ $this, 'extensions_menu' ], 'dashicons-admin-generic', 59 );
-        add_submenu_page( 'dt_extensions', __( 'Saturation Mapping', 'dt_saturation_mapping' ),
-        __( 'Saturation Mapping', 'dt_saturation_mapping' ), 'manage_dt', $this->token, [ $this, 'content' ] );
+        add_submenu_page( 'dt_extensions', __( 'Network Dashboard', 'dt_network_dashboard' ),
+        __( 'Network Dashboard', 'dt_network_dashboard' ), 'manage_dt', $this->token, [ $this, 'content' ] );
     }
 
     /**
@@ -97,27 +97,27 @@ class DT_Saturation_Mapping_Menu {
 
         ?>
         <div class="wrap">
-            <h2><?php esc_attr_e( 'Saturation Mapping', 'dt_saturation_mapping' ) ?></h2>
+            <h2><?php esc_attr_e( 'Network Dashboard', 'dt_network_dashboard' ) ?></h2>
             <h2 class="nav-tab-wrapper">
                 <a href="<?php echo esc_attr( $link ) . 'general' ?>" class="nav-tab
-                <?php ( $tab == 'general' || ! isset( $tab ) ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
-                    <?php esc_attr_e( 'Overview', 'dt_saturation_mapping' ) ?></a>
+                <?php ( $tab == 'general' || ! isset( $tab ) ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                    <?php esc_attr_e( 'Overview', 'dt_network_dashboard' ) ?></a>
                 <a href="<?php echo esc_attr( $link ) . 'local' ?>" class="nav-tab
-                <?php ( $tab == 'local' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
-                    <?php esc_attr_e( 'Install Local Locations', 'dt_saturation_mapping' ) ?></a>
+                <?php ( $tab == 'local' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                    <?php esc_attr_e( 'Install Local Locations', 'dt_network_dashboard' ) ?></a>
 
                 <?php // make tab dependent on network enable.
-                if ( get_option( 'dt_saturation_mapping_enable_network' ) ) : ?>
+                if ( get_option( 'dt_network_dashboard_enable_network' ) ) : ?>
 
                     <a href="<?php echo esc_attr( $link ) . 'network' ?>" class="nav-tab
-                    <?php ( $tab == 'network' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
-                        <?php esc_attr_e( 'Install Network Locations', 'dt_saturation_mapping' ) ?></a>
+                    <?php ( $tab == 'network' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                        <?php esc_attr_e( 'Install Network Locations', 'dt_network_dashboard' ) ?></a>
                     <a href="<?php echo esc_attr( $link ) . 'configure-network' ?>" class="nav-tab
-                    <?php ( $tab == 'configure-network' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
-                        <?php esc_attr_e( 'Configure Network', 'dt_saturation_mapping' ) ?></a>
+                    <?php ( $tab == 'configure-network' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                        <?php esc_attr_e( 'Configure Network', 'dt_network_dashboard' ) ?></a>
                     <a href="<?php echo esc_attr( $link ) . 'connected' ?>" class="nav-tab
-                    <?php ( $tab == 'connected' ) ? esc_attr_e( 'nav-tab-active', 'dt_saturation_mapping' ) : print ''; ?>">
-                        <?php esc_attr_e( 'Connected', 'dt_saturation_mapping' ) ?></a>
+                    <?php ( $tab == 'connected' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                        <?php esc_attr_e( 'Connected', 'dt_network_dashboard' ) ?></a>
 
                 <?php endif; ?>
             </h2>
@@ -125,23 +125,23 @@ class DT_Saturation_Mapping_Menu {
             <?php
             switch ($tab) {
                 case "general":
-                    $object = new DT_Saturation_Mapping_Tab_General();
+                    $object = new DT_Network_Dashboard_Tab_General();
                     $object->content();
                     break;
                 case "local":
-                    $object = new DT_Saturation_Mapping_Tab_Local();
+                    $object = new DT_Network_Dashboard_Tab_Local();
                     $object->content();
                     break;
                 case "network":
-                    $object = new DT_Saturation_Mapping_Tab_Network();
+                    $object = new DT_Network_Dashboard_Tab_Network();
                     $object->content();
                     break;
                 case "configure-network":
-                    $object = new DT_Saturation_Mapping_Tab_Configure_Network();
+                    $object = new DT_Network_Dashboard_Tab_Configure_Network();
                     $object->content();
                     break;
                 case 'connected':
-                    $object = new DT_Saturation_Mapping_Tab_Connected();
+                    $object = new DT_Network_Dashboard_Tab_Connected();
                     $object->content();
                     break;
                 default:
@@ -156,16 +156,16 @@ class DT_Saturation_Mapping_Menu {
 }
 
 // Enqueues the admin scripts
-add_action( 'admin_enqueue_scripts', 'dt_saturation_mapping_options_scripts' );
-function dt_saturation_mapping_options_scripts() {
+add_action( 'admin_enqueue_scripts', 'dt_network_dashboard_options_scripts' );
+function dt_network_dashboard_options_scripts() {
     global $post;
-    if ( ( isset( $_GET["page"] ) && $_GET["page"] === 'dt_saturation_mapping' ) || ( isset( $post->post_type ) && 'locations' === $post->post_type ) ) {
-        wp_enqueue_script( 'dt_saturation_mapping_options', plugin_dir_url( __FILE__ ) . 'menu-and-tabs.js', [
+    if ( ( isset( $_GET["page"] ) && $_GET["page"] === 'dt_network_dashboard' ) || ( isset( $post->post_type ) && 'locations' === $post->post_type ) ) {
+        wp_enqueue_script( 'dt_network_dashboard_options', plugin_dir_url( __FILE__ ) . 'menu-and-tabs.js', [
             'jquery',
             'jquery-ui-core',
         ], filemtime( plugin_dir_path( __FILE__ ) . 'menu-and-tabs.js' ), true );
         wp_localize_script(
-            "dt_saturation_mapping_options", "dtSMOptionAPI", array(
+            "dt_network_dashboard_options", "dtSMOptionAPI", array(
                 'root' => esc_url_raw( rest_url() ),
                 'plugin_uri' => plugin_dir_url( __DIR__ ),
                 'nonce' => wp_create_nonce( 'wp_rest' ),
@@ -182,7 +182,7 @@ function dt_saturation_mapping_options_scripts() {
 /**
  * Class DT_Starter_Tab_Second
  */
-class DT_Saturation_Mapping_Tab_General
+class DT_Network_Dashboard_Tab_General
 {
     public function content() {
         ?>
@@ -212,9 +212,9 @@ class DT_Saturation_Mapping_Tab_General
 
     public function enable_network_box() {
         /**
-         * Note: post processing is done in the construct of DT_Saturation_Mapping_Menu
+         * Note: post processing is done in the construct of DT_Network_Dashboard_Menu
          */
-        $network = get_option( 'dt_saturation_mapping_enable_network' );
+        $network = get_option( 'dt_network_dashboard_enable_network' );
 
         ?>
         <!-- Box -->
@@ -297,7 +297,7 @@ class DT_Saturation_Mapping_Tab_General
 /**
  * Class DT_Starter_Tab_Second
  */
-class DT_Saturation_Mapping_Tab_Local
+class DT_Network_Dashboard_Tab_Local
 {
     public function content() {
         ?>
@@ -327,7 +327,7 @@ class DT_Saturation_Mapping_Tab_Local
     }
 
     public function main_column() {
-        $available_locations = DT_Saturation_Mapping_Installer::get_list_of_available_locations();
+        $available_locations = DT_Network_Dashboard_Installer::get_list_of_available_locations();
         ?>
         <!-- Box -->
         <form method="post">
@@ -412,7 +412,7 @@ class DT_Saturation_Mapping_Tab_Local
 /**
  * Class DT_Starter_Tab_Second
  */
-class DT_Saturation_Mapping_Tab_Network
+class DT_Network_Dashboard_Tab_Network
 {
     public function content() {
         ?>
@@ -442,8 +442,8 @@ class DT_Saturation_Mapping_Tab_Network
     }
 
     public function main_column() {
-        $available_locations = DT_Saturation_Mapping_Installer::get_list_of_available_locations();
-        $installed_list = DT_Saturation_Mapping_Installer::get_list_of_installed_p_list();
+        $available_locations = DT_Network_Dashboard_Installer::get_list_of_available_locations();
+        $installed_list = DT_Network_Dashboard_Installer::get_list_of_installed_p_list();
         ?>
         <!-- Box -->
         <form method="post">
@@ -505,7 +505,7 @@ class DT_Saturation_Mapping_Tab_Network
 /**
  * Class DT_Starter_Tab_Second
  */
-class DT_Saturation_Mapping_Tab_Configure_Network
+class DT_Network_Dashboard_Tab_Configure_Network
 {
     public function content() {
         ?>
@@ -537,11 +537,11 @@ class DT_Saturation_Mapping_Tab_Configure_Network
         // process post action
         if ( isset( $_POST['population_division'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'population_division'.get_current_user_id() ) ) ) {
             $new = (int) sanitize_text_field( wp_unslash( $_POST['population_division'] ) );
-            update_option( 'dt_saturation_mapping_pd', $new, false );
+            update_option( 'dt_network_dashboard_pd', $new, false );
         }
-        $population_division = get_option( 'dt_saturation_mapping_pd' );
+        $population_division = get_option( 'dt_network_dashboard_pd' );
         if ( empty( $population_division ) ) {
-            update_option( 'dt_saturation_mapping_pd', 5000, false );
+            update_option( 'dt_network_dashboard_pd', 5000, false );
             $population_division = 5000;
         }
         ?>
@@ -633,7 +633,7 @@ class DT_Saturation_Mapping_Tab_Configure_Network
 /**
  * Class DT_Starter_Tab_Second
  */
-class DT_Saturation_Mapping_Tab_Connected
+class DT_Network_Dashboard_Tab_Connected
 {
     public function content() {
         ?>

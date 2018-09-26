@@ -11,9 +11,9 @@ if ( !defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly.
 
 /**
- * Class DT_Saturation_Mapping_Network_Endpoints
+ * Class DT_Network_Dashboard_Network_Endpoints
  */
-class DT_Saturation_Mapping_Network_Endpoints
+class DT_Network_Dashboard_Network_Endpoints
 {
 
     private $version = 1;
@@ -21,7 +21,7 @@ class DT_Saturation_Mapping_Network_Endpoints
     private $public_namespace;
 
     /**
-     * DT_Saturation_Mapping_Network_Endpoints The single instance of DT_Saturation_Mapping_Network_Endpoints.
+     * DT_Network_Dashboard_Network_Endpoints The single instance of DT_Network_Dashboard_Network_Endpoints.
      *
      * @var     object
      * @access    private
@@ -30,12 +30,12 @@ class DT_Saturation_Mapping_Network_Endpoints
     private static $_instance = null;
 
     /**
-     * Main DT_Saturation_Mapping_Network_Endpoints Instance
-     * Ensures only one instance of DT_Saturation_Mapping_Network_Endpoints is loaded or can be loaded.
+     * Main DT_Network_Dashboard_Network_Endpoints Instance
+     * Ensures only one instance of DT_Network_Dashboard_Network_Endpoints is loaded or can be loaded.
      *
      * @since 0.1.0
      * @static
-     * @return DT_Saturation_Mapping_Network_Endpoints instance
+     * @return DT_Network_Dashboard_Network_Endpoints instance
      */
     public static function instance() {
         if ( is_null( self::$_instance ) ) {
@@ -100,7 +100,7 @@ class DT_Saturation_Mapping_Network_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['country_code'] ) ) {
-            $result = DT_Saturation_Mapping_Installer::load_p_list_by_country( $params['country_code'] );
+            $result = DT_Network_Dashboard_Installer::load_p_list_by_country( $params['country_code'] );
             return $result;
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
@@ -118,7 +118,7 @@ class DT_Saturation_Mapping_Network_Endpoints
             return new WP_Error( __METHOD__, 'Permission error.' );
         }
 
-        return DT_Saturation_Mapping_Installer::load_p_countries_installed();
+        return DT_Network_Dashboard_Installer::load_p_countries_installed();
     }
 
     /**
@@ -291,4 +291,4 @@ class DT_Saturation_Mapping_Network_Endpoints
 
 
 }
-DT_Saturation_Mapping_Network_Endpoints::instance();
+DT_Network_Dashboard_Network_Endpoints::instance();

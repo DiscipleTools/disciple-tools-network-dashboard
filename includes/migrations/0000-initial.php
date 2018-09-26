@@ -4,9 +4,9 @@ declare(strict_types=1);
 require_once( 'abstract.php' );
 
 /**
- * Class DT_Saturation_Mapping_Migration_0000
+ * Class DT_Network_Dashboard_Migration_0000
  */
-class DT_Saturation_Mapping_Migration_0000 extends DT_Saturation_Mapping_Migration {
+class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration {
 
     /**
      * @throws \Exception  Got error when creating table $name.
@@ -28,8 +28,8 @@ class DT_Saturation_Mapping_Migration_0000 extends DT_Saturation_Mapping_Migrati
          * Install initial country, admin1, and admin2 data
          */
         $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
-        require_once( DT_Saturation_Mapping::get_instance()->dir_path . 'install/installer.php' );
-        DT_Saturation_Mapping_Installer::install_world_admin_set();
+        require_once( DT_Network_Dashboard::get_instance()->dir_path . 'install/installer.php' );
+        DT_Network_Dashboard_Installer::install_world_admin_set();
 
         $role = get_role( 'administrator' );
         if ( !empty( $role ) ) {
@@ -39,7 +39,7 @@ class DT_Saturation_Mapping_Migration_0000 extends DT_Saturation_Mapping_Migrati
         /**
          * Setup variables
          */
-        update_option( 'dt_saturation_mapping_pd', 5000, false );
+        update_option( 'dt_network_dashboard_pd', 5000, false );
 
         /**
          * Initialize partner profile
@@ -47,7 +47,7 @@ class DT_Saturation_Mapping_Migration_0000 extends DT_Saturation_Mapping_Migrati
         $partner_profile = [
             'partner_name' => get_option( 'blogname' ),
             'partner_description' => get_option( 'blogdescription' ),
-            'partner_id' => DT_Saturation_Mapping::get_unique_public_key(),
+            'partner_id' => DT_Network_Dashboard::get_unique_public_key(),
         ];
         update_option( 'dt_site_partner_profile', $partner_profile, false );
     }
@@ -65,7 +65,7 @@ class DT_Saturation_Mapping_Migration_0000 extends DT_Saturation_Mapping_Migrati
             }
         }
 
-        delete_option( 'dt_saturation_mapping_pd' );
+        delete_option( 'dt_network_dashboard_pd' );
         delete_option( 'dt_site_partner_profile' );
     }
 

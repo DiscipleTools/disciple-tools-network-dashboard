@@ -3,7 +3,7 @@
 /**
  * Class DT_Zume_Hooks
  */
-class DT_Saturation_Mapping_Hooks
+class DT_Network_Dashboard_Hooks
 {
 
     private static $_instance = null;
@@ -19,22 +19,22 @@ class DT_Saturation_Mapping_Hooks
      * Build hook classes
      */
     public function __construct() {
-        new DT_Saturation_Mapping_Metrics();
+        new DT_Network_Dashboard_Metrics();
     }
 }
-DT_Saturation_Mapping_Hooks::instance();
+DT_Network_Dashboard_Hooks::instance();
 
 /**
  * Empty class for now..
  * Class DT_Zume_Hook_Base
  */
-abstract class DT_Saturation_Mapping_Base
+abstract class DT_Network_Dashboard_Base
 {
     public function __construct() {
     }
 }
 
-class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
+class DT_Network_Dashboard_Metrics extends DT_Network_Dashboard_Base
 {
     /**
      * This filter adds a menu item to the metrics
@@ -45,7 +45,7 @@ class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
      */
     public function menu( $content ) {
         $content .= '
-              <li><a href="'. site_url( '/network/' ) .'#saturation_mapping_overview" onclick="show_saturation_mapping_overview()">' .  esc_html__( 'Overview' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#network_dashboard_overview" onclick="show_network_dashboard_overview()">' .  esc_html__( 'Overview' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#saturation_tree" onclick="show_saturation_tree()">' .  esc_html__( 'Tree' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#saturation_map" onclick="show_saturation_map()">' .  esc_html__( 'Map' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#saturation_side_tree" onclick="show_saturation_side_tree()">' .  esc_html__( 'Side Tree' ) . '</a></li>
@@ -57,14 +57,14 @@ class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
      * Load scripts for the plugin
      */
     public function scripts() {
-        wp_enqueue_script( 'dt_saturation_mapping_script', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'hooks.js', [
+        wp_enqueue_script( 'dt_network_dashboard_script', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'hooks.js', [
             'jquery',
             'jquery-ui-core',
         ], filemtime( plugin_dir_path( __DIR__ ) . 'includes/hooks.js' ), true );
         wp_enqueue_script( 'jquery-ui-autocomplete' );
 
         wp_localize_script(
-            'dt_saturation_mapping_script', 'wpApiSatMapMetrics', [
+            'dt_network_dashboard_script', 'wpApiSatMapMetrics', [
                 'root' => esc_url_raw( rest_url() ),
                 'plugin_uri' => plugin_dir_url( __DIR__ ),
                 'nonce' => wp_create_nonce( 'wp_rest' ),
@@ -74,15 +74,15 @@ class DT_Saturation_Mapping_Metrics extends DT_Saturation_Mapping_Base
                 'spinner' => '<img src="'. plugin_dir_url( __FILE__ ) . '/spinner.svg" width="12px" />',
                 'spinner_large' => '<img src="'. plugin_dir_url( __FILE__ ) . '/spinner.svg" width="24px" />',
                 'stats' => [
-                    'table' => DT_Saturation_Mapping_Stats::get_location_table(),
-                    'tree' => DT_Saturation_Mapping_Stats::get_location_tree(),
-                    'map' => DT_Saturation_Mapping_Stats::get_location_map(),
-                    'side_tree' => DT_Saturation_Mapping_Stats::get_location_side_tree(),
-                    'level_tree' => DT_Saturation_Mapping_Stats::get_locations_level_tree(),
-                    'report_sync' => DT_Saturation_Mapping_Stats::get_site_link_list(),
+                    'table' => DT_Network_Dashboard_Stats::get_location_table(),
+                    'tree' => DT_Network_Dashboard_Stats::get_location_tree(),
+                    'map' => DT_Network_Dashboard_Stats::get_location_map(),
+                    'side_tree' => DT_Network_Dashboard_Stats::get_location_side_tree(),
+                    'level_tree' => DT_Network_Dashboard_Stats::get_locations_level_tree(),
+                    'report_sync' => DT_Network_Dashboard_Stats::get_site_link_list(),
                 ],
                 'translations' => [
-                    "sm_title" => __( "Saturation Mapping", "dt_zume" ),
+                    "sm_title" => __( "Network Dashboard", "dt_zume" ),
                 ]
             ]
         );

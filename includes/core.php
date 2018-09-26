@@ -1,6 +1,6 @@
 <?php
 
-class DT_Saturation_Mapping_Core {
+class DT_Network_Dashboard_Core {
 
 
 }

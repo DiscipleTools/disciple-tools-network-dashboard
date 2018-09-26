@@ -6,10 +6,10 @@ if ( !defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 /**
- * For more documentation, see the class DT_Saturation_Mapping_Migration in file
+ * For more documentation, see the class DT_Network_Dashboard_Migration in file
  * dt-core/migrations/abstract.php
  */
-class DT_Saturation_Mapping_Migration_Engine
+class DT_Network_Dashboard_Migration_Engine
 {
     protected static $migrations = null;
 
@@ -39,7 +39,7 @@ class DT_Saturation_Mapping_Migration_Engine
                         throw new Exception( sprintf( "Expected to find migration number %04d", $expected_migration_number ) );
                     }
                     require_once( plugin_dir_path( __DIR__ ) . "migrations/$filename" );
-                    $migration_name = sprintf( "DT_Saturation_Mapping_Migration_%04d", $got_migration_number );
+                    $migration_name = sprintf( "DT_Network_Dashboard_Migration_%04d", $got_migration_number );
                     $rv[] = new $migration_name();
                     $expected_migration_number++;
                 } else {
@@ -60,7 +60,7 @@ class DT_Saturation_Mapping_Migration_Engine
      * @param int $target_migration_number
      *
      * @throws \Exception ...
-     * @throws \DT_Saturation_Mapping_Migration_Lock_Exception ...
+     * @throws \DT_Network_Dashboard_Migration_Lock_Exception ...
      * @throws \Throwable ...
      */
     public static function migrate( int $target_migration_number ) {
@@ -68,7 +68,7 @@ class DT_Saturation_Mapping_Migration_Engine
             throw new Exception( "Migration number $target_migration_number does not exist" );
         }
         while ( true ) {
-            $current_migration_number = get_option( 'dt_saturation_mapping_migration_number' );
+            $current_migration_number = get_option( 'dt_network_dashboard_migration_number' );
             if ( $current_migration_number === false ) {
                 $current_migration_number = -1;
             }
@@ -88,16 +88,16 @@ class DT_Saturation_Mapping_Migration_Engine
 
             self::sanity_check_expected_tables( $migration->get_expected_tables() );
 
-            if ( (int) get_option( 'dt_saturation_mapping_migration_lock', 0 ) ) {
-                throw new DT_Saturation_Mapping_Migration_Lock_Exception();
+            if ( (int) get_option( 'dt_network_dashboard_migration_lock', 0 ) ) {
+                throw new DT_Network_Dashboard_Migration_Lock_Exception();
             }
-            update_option( 'dt_saturation_mapping_migration_lock', '1' );
+            update_option( 'dt_network_dashboard_migration_lock', '1' );
 
             error_log( date( " Y-m-d H:i:s T" ) . " Starting migrating to number $activating_migration_number" );
             try {
                 $migration->up();
             } catch (Throwable $e) {
-                update_option( 'dt_saturation_mapping_migrate_last_error', [
+                update_option( 'dt_network_dashboard_migrate_last_error', [
                     'message' => $e->getMessage(),
                     'code' => $e->getCode(),
                     'trace' => $e->getTrace(),
@@ -105,10 +105,10 @@ class DT_Saturation_Mapping_Migration_Engine
                 ] );
                 throw $e;
             }
-            update_option( 'dt_saturation_mapping_migration_number', (string) $activating_migration_number );
+            update_option( 'dt_network_dashboard_migration_number', (string) $activating_migration_number );
             error_log( date( " Y-m-d H:i:s T" ) . " Done migrating to number $activating_migration_number" );
 
-            update_option( 'dt_saturation_mapping_migration_lock', '0' );
+            update_option( 'dt_network_dashboard_migration_lock', '0' );
 
             $migration->test();
         }
@@ -138,7 +138,7 @@ class DT_Saturation_Mapping_Migration_Engine
 }
 
 
-class DT_Saturation_Mapping_Migration_Lock_Exception extends Exception
+class DT_Network_Dashboard_Migration_Lock_Exception extends Exception
 {
     public function __construct( $message = null, $code = 0, Exception $previous = null ) {
         /*
@@ -147,7 +147,7 @@ class DT_Saturation_Mapping_Migration_Lock_Exception extends Exception
          * that caused the lock never to be released. We could rely on the
          * error logs, but this is a bit more user-friendly.
          */
-        $last_migration_error = get_option( 'dt_saturation_mapping_migrate_last_error' );
+        $last_migration_error = get_option( 'dt_network_dashboard_migrate_last_error' );
         if ($message === null) {
             if ($last_migration_error === false) {
                 $message = "Cannot migrate, as migration lock is held";

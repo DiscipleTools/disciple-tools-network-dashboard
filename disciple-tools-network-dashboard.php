@@ -1,11 +1,11 @@
 <?php
 /**
- * Plugin Name: Disciple Tools - Saturation Mapping
- * Plugin URI: https://github.com/ZumeProject/disciple-tools-saturation-mapping
+ * Plugin Name: Disciple Tools - Network Dashboard
+ * Plugin URI: https://github.com/ZumeProject/disciple-tools-network-dashboard
  * Description: Adds saturation mapping data.
  * Version: 0.1
  * Author URI: https://github.com/DiscipleTools
- * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-saturation-mapping
+ * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
  * Requires at least: 4.7.0
  * (Requires 4.7+ because of the integration of the REST API at 4.7 and the security requirements of this milestone version.)
  * Tested up to: 4.9
@@ -19,13 +19,13 @@ if ( !defined( 'ABSPATH' ) ) {
 }
 
 /**
- * Gets the instance of the `DT_Saturation_Mapping` class.
+ * Gets the instance of the `DT_Network_Dashboard` class.
  *
  * @since  0.1
  * @access public
  * @return object
  */
-function dt_saturation_mapping() {
+function dt_network_dashboard() {
     $current_theme = get_option( 'current_theme' );
 
     if ( 'Disciple Tools' == $current_theme || dt_is_child_theme_of_disciple_tools() ) {
@@ -39,22 +39,22 @@ function dt_saturation_mapping() {
         try {
 
             require_once( plugin_dir_path( __FILE__ ) . '/includes/admin/class-migration-engine.php' );
-            DT_Saturation_Mapping_Migration_Engine::migrate( $migration_number );
+            DT_Network_Dashboard_Migration_Engine::migrate( $migration_number );
         } catch ( Throwable $e ) {
             new WP_Error( 'migration_error', 'Migration engine failed to migrate.' );
         }
 
 
-        return DT_Saturation_Mapping::get_instance();
+        return DT_Network_Dashboard::get_instance();
     }
     else {
-        add_action( 'admin_notices', 'dt_saturation_mapping_admin_notice' );
-        add_action( 'wp_ajax_dismissed_notice_handler', 'dt_saturation_mapping_ajax_notice_handler' );
+        add_action( 'admin_notices', 'dt_network_dashboard_admin_notice' );
+        add_action( 'wp_ajax_dismissed_notice_handler', 'dt_network_dashboard_ajax_notice_handler' );
         return new WP_Error( 'current_theme_not_dt', 'Disciple Tools Theme not active.' );
     }
 
 }
-add_action( 'plugins_loaded', 'dt_saturation_mapping' );
+add_action( 'plugins_loaded', 'dt_network_dashboard' );
 
 /**
  * Singleton class for setting up the plugin.
@@ -62,7 +62,7 @@ add_action( 'plugins_loaded', 'dt_saturation_mapping' );
  * @since  0.1
  * @access public
  */
-class DT_Saturation_Mapping {
+class DT_Network_Dashboard {
 
     /**
      * Declares public variables
@@ -90,7 +90,7 @@ class DT_Saturation_Mapping {
         static $instance = null;
 
         if ( is_null( $instance ) ) {
-            $instance = new dt_saturation_mapping();
+            $instance = new dt_network_dashboard();
             $instance->setup();
             $instance->includes();
             $instance->setup_actions();
@@ -124,7 +124,7 @@ class DT_Saturation_Mapping {
         require_once( 'includes/stats.php' );
         require_once( 'includes/customized_site_linking.php' );
 
-        if ( get_option( 'dt_saturation_mapping_enable_network' ) ) {
+        if ( get_option( 'dt_network_dashboard_enable_network' ) ) {
             require_once( 'includes/hooks.php' );
 
         }
@@ -155,7 +155,7 @@ class DT_Saturation_Mapping {
         $this->img_uri      = trailingslashit( $this->dir_uri . 'img' );
 
         // Admin and settings variables
-        $this->token             = 'dt_saturation_mapping';
+        $this->token             = 'dt_network_dashboard';
         $this->version             = '0.1';
 
         $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
@@ -186,9 +186,9 @@ class DT_Saturation_Mapping {
          * @see https://github.com/DiscipleTools/disciple-tools-version-control/wiki/How-to-Update-the-Starter-Plugin
          */
         Puc_v4_Factory::buildUpdateChecker(
-            'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-saturation-mapping-version-control.json',
+            'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-network-dashboard-version-control.json',
             __FILE__,
-            'disciple-tools-saturation-mapping'
+            'disciple-tools-network-dashboard'
         );
 
         // Internationalize the text strings used.
@@ -214,7 +214,7 @@ class DT_Saturation_Mapping {
      * @return void
      */
     public function i18n() {
-        load_plugin_textdomain( 'dt_saturation_mapping', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ). 'languages' );
+        load_plugin_textdomain( 'dt_network_dashboard', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ). 'languages' );
     }
 
     /**
@@ -225,7 +225,7 @@ class DT_Saturation_Mapping {
      * @return string
      */
     public function __toString() {
-        return 'dt_saturation_mapping';
+        return 'dt_network_dashboard';
     }
 
     /**
@@ -236,7 +236,7 @@ class DT_Saturation_Mapping {
      * @return void
      */
     public function __clone() {
-        _doing_it_wrong( __FUNCTION__, esc_html__( 'Whoah, partner!', 'dt_saturation_mapping' ), '0.1' );
+        _doing_it_wrong( __FUNCTION__, esc_html__( 'Whoah, partner!', 'dt_network_dashboard' ), '0.1' );
     }
 
     /**
@@ -247,7 +247,7 @@ class DT_Saturation_Mapping {
      * @return void
      */
     public function __wakeup() {
-        _doing_it_wrong( __FUNCTION__, esc_html__( 'Whoah, partner!', 'dt_saturation_mapping' ), '0.1' );
+        _doing_it_wrong( __FUNCTION__, esc_html__( 'Whoah, partner!', 'dt_network_dashboard' ), '0.1' );
     }
 
     /**
@@ -259,7 +259,7 @@ class DT_Saturation_Mapping {
      */
     public function __call( $method = '', $args = array() ) {
         // @codingStandardsIgnoreLine
-        _doing_it_wrong( "dt_saturation_mapping::{$method}", esc_html__( 'Method does not exist.', 'dt_saturation_mapping' ), '0.1' );
+        _doing_it_wrong( "dt_network_dashboard::{$method}", esc_html__( 'Method does not exist.', 'dt_network_dashboard' ), '0.1' );
         unset( $method, $args );
         return null;
     }
@@ -276,15 +276,15 @@ class DT_Saturation_Mapping {
 // end main plugin class
 
 // Register activation hook.
-register_deactivation_hook( __FILE__, [ 'DT_Saturation_Mapping', 'deactivation' ] );
+register_deactivation_hook( __FILE__, [ 'DT_Network_Dashboard', 'deactivation' ] );
 
 /**
  * Admin alert for when Disciple Tools Theme is not available
  */
-function dt_saturation_mapping_no_disciple_tools_theme_found() {
+function dt_network_dashboard_no_disciple_tools_theme_found() {
     ?>
     <div class="notice notice-error">
-        <p><?php esc_html_e( "'Disciple Tools - Saturation Mapping' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Saturation Mapping' plugin.", "dt_saturation_mapping" ); ?></p>
+        <p><?php esc_html_e( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard' plugin.", "dt_network_dashboard" ); ?></p>
     </div>
     <?php
 }
@@ -350,12 +350,12 @@ if ( ! function_exists( 'dt_is_child_theme_of_disciple_tools' ) ) {
     }
 }
 
-function dt_saturation_mapping_admin_notice() {
+function dt_network_dashboard_admin_notice() {
     // Check if it's been dismissed...
     if ( ! get_option( 'dismissed-dt-starter', false ) ) {
         // multiple dismissible notice states ?>
         <div class="notice notice-error notice-dt-starter is-dismissible" data-notice="dt-demo">
-            <p><?php esc_html_e( "'Disciple Tools - Saturation Mapping' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Saturation Mapping'." ); ?></p>
+            <p><?php esc_html_e( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard'." ); ?></p>
         </div>
         <script>
             jQuery(function($) {
@@ -379,7 +379,7 @@ function dt_saturation_mapping_admin_notice() {
 /**
  * AJAX handler to store the state of dismissible notices.
  */
-function dt_saturation_mapping_ajax_notice_handler() {
+function dt_network_dashboard_ajax_notice_handler() {
     $type = 'dt-starter';
     update_option( 'dismissed-' . $type, true );
 }

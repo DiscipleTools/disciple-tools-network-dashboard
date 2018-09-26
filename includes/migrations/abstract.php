@@ -26,17 +26,17 @@ if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
  *
  *  The names must begin with four digits, and they must be in order with no
  *  gaps, starting at 0000. Each file must contain a migration class named
- *  "DT_Saturation_Mapping_Migration_xxxx", where xxxx is the migration number. For
+ *  "DT_Network_Dashboard_Migration_xxxx", where xxxx is the migration number. For
  *  example:
  *
- *      class DT_Saturation_Mapping_Migration_0002 extends DT_Saturation_Mapping_Migration {
+ *      class DT_Network_Dashboard_Migration_0002 extends DT_Network_Dashboard_Migration {
  *          // ...
  *      }
  *
- *  See the documentation for DT_Saturation_Mapping_Migration_Engine.
+ *  See the documentation for DT_Network_Dashboard_Migration_Engine.
  *
  */
-abstract class DT_Saturation_Mapping_Migration {
+abstract class DT_Network_Dashboard_Migration {
 
     /**
      * Migrate up to this migration version. Override this method and add code
@@ -83,7 +83,7 @@ abstract class DT_Saturation_Mapping_Migration {
     }
 
     /**
-     * @throws \DT_Saturation_Mapping_Migration_Test_Exception Table $name not as expected, see error log.
+     * @throws \DT_Network_Dashboard_Migration_Test_Exception Table $name not as expected, see error log.
      */
     protected function test_expected_tables() {
         global $wpdb;
@@ -94,7 +94,7 @@ abstract class DT_Saturation_Mapping_Migration {
             $expected_table = self::clean_create_query( $expected_table );
             if ( $got_table !== $expected_table ) {
                 error_log( "Got: $got_table\n\nExpected:\n\n$expected_table\n\n" );
-                throw new DT_Saturation_Mapping_Migration_Test_Exception( "Table $name not as expected, see error log" );
+                throw new DT_Network_Dashboard_Migration_Test_Exception( "Table $name not as expected, see error log" );
             }
         }
     }
@@ -124,7 +124,7 @@ abstract class DT_Saturation_Mapping_Migration {
 }
 
 /**
- * Class DT_Saturation_Mapping_Migration_Test_Exception
+ * Class DT_Network_Dashboard_Migration_Test_Exception
  */
-class DT_Saturation_Mapping_Migration_Test_Exception extends Exception {
+class DT_Network_Dashboard_Migration_Test_Exception extends Exception {
 }

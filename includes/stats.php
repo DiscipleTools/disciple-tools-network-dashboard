@@ -1,6 +1,6 @@
 <?php
 
-class DT_Saturation_Mapping_Stats {
+class DT_Network_Dashboard_Stats {
     public static function get_location_tree() {
         $table_data = self::query_location_population_groups();
 
@@ -84,7 +84,7 @@ class DT_Saturation_Mapping_Stats {
             t1.post_title as location,
             (SELECT post_title FROM $wpdb->posts WHERE ID = t1.post_parent) as parent_name,
             t2.meta_value as gn_population, 
-            ROUND(t2.meta_value / (SELECT option_value FROM $wpdb->options WHERE option_name = 'dt_saturation_mapping_pd'), 0 ) as groups_needed,
+            ROUND(t2.meta_value / (SELECT option_value FROM $wpdb->options WHERE option_name = 'dt_network_dashboard_pd'), 0 ) as groups_needed,
             (SELECT count(*) FROM $wpdb->p2p WHERE p2p_to = t1.ID) as groups
             FROM $wpdb->posts as t1
             LEFT JOIN $wpdb->postmeta as t2
@@ -127,7 +127,7 @@ class DT_Saturation_Mapping_Stats {
                     t1.post_parent as parent_id, 
                     t1.post_title as name,
                     t2.meta_value as gn_population, 
-                    ROUND(t2.meta_value / (SELECT option_value FROM $wpdb->options WHERE option_name = 'dt_saturation_mapping_pd'), 0 ) as groups_needed,
+                    ROUND(t2.meta_value / (SELECT option_value FROM $wpdb->options WHERE option_name = 'dt_network_dashboard_pd'), 0 ) as groups_needed,
                     (SELECT count(*) FROM $wpdb->p2p WHERE p2p_to = t1.ID) as groups
                     FROM $wpdb->posts as t1
                     LEFT JOIN $wpdb->postmeta as t2
