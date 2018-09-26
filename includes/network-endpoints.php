@@ -59,19 +59,19 @@ class DT_Network_Dashboard_Network_Endpoints
 
     public function add_api_routes() {
         register_rest_route(
-            $this->namespace, '/saturation/load_p_list_by_country', [
+            $this->namespace, '/network/load_p_list_by_country', [
                 'methods'  => 'POST',
                 'callback' => [ $this, 'load_p_list_by_country' ],
             ]
         );
         register_rest_route(
-            $this->namespace, '/saturation/load_p_countries_installed', [
+            $this->namespace, '/network/load_p_countries_installed', [
                 'methods'  => 'POST',
                 'callback' => [ $this, 'load_p_countries_installed' ],
             ]
         );
         register_rest_route(
-            $this->namespace, '/saturation/get_report', [
+            $this->namespace, '/network/get_report', [
                 'methods'  => 'POST',
                 'callback' => [ $this, 'get_report' ],
             ]
@@ -79,7 +79,7 @@ class DT_Network_Dashboard_Network_Endpoints
 
         // public
         register_rest_route(
-            $this->public_namespace, '/saturation/trigger_report', [
+            $this->public_namespace, '/network/trigger_report', [
                 'methods'  => 'GET',
                 'callback' => [ $this, 'trigger_report' ],
             ]
@@ -146,7 +146,7 @@ class DT_Network_Dashboard_Network_Endpoints
                     'transfer_token' => $site['transfer_token'],
                 ]
             ];
-            $result = wp_remote_get( 'https://' . $site['url'] . '/wp-json/dt-public/v1/saturation/trigger_report', $args );
+            $result = wp_remote_get( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network/trigger_report', $args );
             if ( is_wp_error( $result ) ) {
                 return new WP_Error( 'failed_remote_get', $result->get_error_message() );
             } else {
@@ -269,7 +269,7 @@ class DT_Network_Dashboard_Network_Endpoints
                     'transfer_token' => $site['transfer_token'],
                 ]
             ];
-            $result = wp_remote_get( 'https://' . $site['url'] . '/wp-json/dt-public/v1/saturation/trigger_report', $args );
+            $result = wp_remote_get( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network/trigger_report', $args );
             if ( is_wp_error( $result ) ) {
                 return new WP_Error( 'failed_remote_get', $result->get_error_message() );
             } else {

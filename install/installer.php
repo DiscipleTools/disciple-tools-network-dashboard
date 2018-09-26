@@ -39,7 +39,7 @@ class DT_Network_Dashboard_Installer {
 
         $installed_list = $wpdb->get_results("
           SELECT DISTINCT country_code  
-          FROM $wpdb->dt_geonames 
+          FROM dt_geonames 
           WHERE feature_class = 'p'", ARRAY_A );
 
         $status_list = [];
@@ -67,7 +67,7 @@ class DT_Network_Dashboard_Installer {
 
         $adm1 = $wpdb->get_results( $wpdb->prepare("
             SELECT geonameid, name, admin1_code
-            FROM $wpdb->dt_geonames
+            FROM dt_geonames
             WHERE country_code = %s
               AND feature_code = 'ADM1'
               AND feature_class = 'A'
@@ -79,7 +79,7 @@ class DT_Network_Dashboard_Installer {
 
         $adm2 = $wpdb->get_results( $wpdb->prepare("
             SELECT geonameid, name, admin1_code
-            FROM $wpdb->dt_geonames
+            FROM dt_geonames
             WHERE country_code = %s
               AND feature_code = 'ADM2'
               AND feature_class = 'A'
@@ -128,7 +128,7 @@ class DT_Network_Dashboard_Installer {
 
         if ( $d ) {
             $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/gn_' .$file.'_p.csv"
-                INTO TABLE '.$wpdb->dt_geonames.'
+                INTO TABLE '.dt_geonames.'
                 FIELDS TERMINATED by \',\'
                 ENCLOSED BY \'"\'
                 LINES TERMINATED BY \'\n\'
@@ -153,13 +153,13 @@ class DT_Network_Dashboard_Installer {
         $query_results = $wpdb->get_row( $wpdb->prepare( "
               SELECT (
                   SELECT a.geonameid  
-                  FROM $wpdb->dt_geonames as a 
+                  FROM dt_geonames as a 
                   WHERE a.feature_class = 'P' 
                     AND a.country_code = t.country_code 
                     LIMIT 1) as installed,
                   (SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s ) as admin2_post_id, 
                     t.*
-              FROM $wpdb->dt_geonames as t 
+              FROM dt_geonames as t 
               WHERE t.geonameid = %s
               ", $geonameid, $geonameid ),
             ARRAY_A
@@ -193,7 +193,7 @@ class DT_Network_Dashboard_Installer {
 
         $cities = $wpdb->get_results( $wpdb->prepare( "
             SELECT geonameid, name
-            FROM $wpdb->dt_geonames 
+            FROM dt_geonames 
             WHERE feature_class = 'P' 
               AND country_code = %s 
               AND admin1_code = %s 
@@ -228,7 +228,7 @@ class DT_Network_Dashboard_Installer {
 
         $query_results = $wpdb->get_row( $wpdb->prepare( "
               SELECT t.*
-              FROM $wpdb->dt_geonames as t 
+              FROM dt_geonames as t 
               WHERE t.geonameid = %s
               ", $geonameid ),
             ARRAY_A
@@ -319,7 +319,7 @@ class DT_Network_Dashboard_Installer {
         SELECT  
             (SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = %s LIMIT 1) as admin2_post_id,
             atwo.*
-        FROM $wpdb->dt_geonames as atwo
+        FROM dt_geonames as atwo
         WHERE atwo.geonameid = %s
         ",
         $geonameid, $geonameid ), ARRAY_A );
@@ -358,7 +358,7 @@ class DT_Network_Dashboard_Installer {
               FROM $wpdb->postmeta 
               WHERE meta_key = 'gn_geonameid' 
                 AND meta_value = azero.geonameid LIMIT 1) as country_post_id
-            FROM $wpdb->dt_geonames as azero 
+            FROM dt_geonames as azero 
             WHERE azero.feature_class = 'A' 
                 AND azero.feature_code = 'PCLI' 
                 AND azero.country_code = %s LIMIT 1
@@ -487,7 +487,7 @@ class DT_Network_Dashboard_Installer {
         SELECT  
             (SELECT post_id FROM $wpdb->postmeta WHERE meta_key = 'gn_geonameid' AND meta_value = atwo.geonameid LIMIT 1) as admin1_post_id,
             atwo.*
-        FROM $wpdb->dt_geonames as atwo
+        FROM dt_geonames as atwo
         WHERE atwo.geonameid = %s
         ",
         $geonameid), ARRAY_A );
@@ -524,7 +524,7 @@ class DT_Network_Dashboard_Installer {
               FROM $wpdb->postmeta 
               WHERE meta_key = 'gn_geonameid' 
                 AND meta_value = azero.geonameid LIMIT 1) as country_post_id
-            FROM $wpdb->dt_geonames as azero 
+            FROM dt_geonames as azero 
             WHERE azero.feature_class = 'A' 
                 AND azero.feature_code = 'PCLI' 
                 AND azero.country_code = %s LIMIT 1
@@ -552,7 +552,7 @@ class DT_Network_Dashboard_Installer {
 
         $admin1_result = $wpdb->get_row( $wpdb->prepare(
             "SELECT * 
-                        FROM $wpdb->dt_geonames 
+                        FROM dt_geonames 
                         WHERE geonameid = %s", $geonameid ), ARRAY_A );
 
         if ( $admin1_result ) {
@@ -636,7 +636,7 @@ class DT_Network_Dashboard_Installer {
 
         $country_result = $wpdb->get_row( $wpdb->prepare(
             "SELECT * 
-                    FROM $wpdb->dt_geonames 
+                    FROM dt_geonames 
                     WHERE geonameid = %s", $geonameid ), ARRAY_A );
         if ( ! $country_result ) {
             $error->add( __METHOD__, 'No results for country in geonames.' );
@@ -850,17 +850,15 @@ class DT_Network_Dashboard_Installer {
     public static function install_world_admin_set() {
         global $wpdb;
         $file = 'gn_world_admin';
+
         $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/' .$file.'.csv"
-            INTO TABLE '.$wpdb->dt_geonames.'
+            INTO TABLE dt_geonames
             FIELDS TERMINATED by \',\'
             ENCLOSED BY \'"\'
             LINES TERMINATED BY \'\n\'
             IGNORE 1 LINES');
-        if ($result) {
-            return true;
-        } else {
-            dt_write_log( $result );
-            return false;
-        }
+
+        return $wpdb->last_result;
+
     }
 }

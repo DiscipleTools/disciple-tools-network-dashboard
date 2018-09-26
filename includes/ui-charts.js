@@ -2,14 +2,14 @@ jQuery(document).ready(function() {
     if( ! window.location.hash || '#network_dashboard_overview' === window.location.hash) {
         show_network_dashboard_overview()
     }
-    if('#saturation_tree' === window.location.hash) {
-        show_saturation_tree()
+    if('#network_tree' === window.location.hash) {
+        show_network_tree()
     }
-    if('#saturation_map' === window.location.hash) {
-        show_saturation_map()
+    if('#network_map' === window.location.hash) {
+        show_network_map()
     }
-    if('#saturation_side_tree' === window.location.hash) {
-        show_saturation_side_tree()
+    if('#network_side_tree' === window.location.hash) {
+        show_network_side_tree()
     }
     if('#report_sync' === window.location.hash) {
         show_report_sync()
@@ -18,7 +18,7 @@ jQuery(document).ready(function() {
 
 function show_network_dashboard_overview(){
 "use strict";
-let page = wpApiSatMapMetrics
+let page = wpApiNetworkDashboard
     console.log(page)
 let screenHeight = jQuery(window).height()
 let chartHeight = screenHeight / 1.3
@@ -57,13 +57,13 @@ chartDiv.empty().html(`
 
 chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
             <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
-            <span class="spinner" style="display: none;"><img src="`+wpApiSatMapMetrics.plugin_uri+`includes/ajax-loader.gif" /></span> 
+            <span class="spinner" style="display: none;"><img src="`+wpApiNetworkDashboard.plugin_uri+`includes/spinner.svg" /></span> 
             </div>`)
 }
 
-function show_saturation_tree(){
+function show_network_tree(){
     "use strict";
-    let page = wpApiSatMapMetrics
+    let page = wpApiNetworkDashboard
     console.log(page)
     let screenHeight = jQuery(window).height()
     let chartHeight = screenHeight / 1.3
@@ -109,13 +109,13 @@ function show_saturation_tree(){
 
     chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
             <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
-            <span class="spinner" style="display: none;"><img src="`+wpApiSatMapMetrics.plugin_uri+`includes/ajax-loader.gif" /></span> 
+            <span class="spinner" style="display: none;"><img src="`+wpApiNetworkDashboard.plugin_uri+`includes/spinner.svg" /></span> 
             </div>`)
 }
 
-function show_saturation_map(){
+function show_network_map(){
     "use strict";
-    let page = wpApiSatMapMetrics
+    let page = wpApiNetworkDashboard
     console.log(page)
     let screenHeight = jQuery(window).height()
     let chartHeight = screenHeight / 1.3
@@ -154,13 +154,13 @@ function show_saturation_map(){
 
     chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
             <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
-            <span class="spinner" style="display: none;"><img src="`+wpApiSatMapMetrics.plugin_uri+`includes/ajax-loader.gif" /></span> 
+            <span class="spinner" style="display: none;"><img src="`+wpApiNetworkDashboard.plugin_uri+`includes/spinner.svg" /></span> 
             </div>`)
 }
 
-function show_saturation_side_tree(){
+function show_network_side_tree(){
     "use strict";
-    let page = wpApiSatMapMetrics
+    let page = wpApiNetworkDashboard
     console.log(page)
     let screenHeight = jQuery(window).height()
     let chartHeight = screenHeight / 1.3
@@ -183,19 +183,19 @@ function show_saturation_side_tree(){
 
     chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
             <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
-            <span class="spinner" style="display: none;"><img src="`+wpApiSatMapMetrics.plugin_uri+`includes/ajax-loader.gif" /></span> 
+            <span class="spinner" style="display: none;"><img src="`+wpApiNetworkDashboard.plugin_uri+`includes/spinner.svg" /></span> 
             </div>`)
 }
 
 function show_report_sync(){
     "use strict";
-    let page = wpApiSatMapMetrics
+    let page = wpApiNetworkDashboard
     console.log(page)
 
     let screenHeight = jQuery(window).height()
     let chartHeight = screenHeight / 1.3
     let chartDiv = jQuery('#chart')
-    let list = wpApiSatMapMetrics.stats.report_sync
+    let list = wpApiNetworkDashboard.stats.report_sync
 
     chartDiv.empty().html(`
         <span class="section-header">`+ page.translations.sm_title +`</span>
@@ -224,9 +224,9 @@ function show_report_sync(){
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            url: wpApiSatMapMetrics.root+'dt/v1/saturation/get_report',
+            url: wpApiNetworkDashboard.root+'dt/v1/network/get_report',
             beforeSend: function(xhr) {
-                xhr.setRequestHeader('X-WP-Nonce', wpApiSatMapMetrics.nonce );
+                xhr.setRequestHeader('X-WP-Nonce', wpApiNetworkDashboard.nonce );
             },
         })
             .done(function (data) {
@@ -246,6 +246,6 @@ function show_report_sync(){
 
     chartDiv.append(`<div><span class="small grey">( stats as of  )</span> 
             <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
-            <span class="spinner" style="display: none;"><img src="`+wpApiSatMapMetrics.plugin_uri+`includes/ajax-loader.gif" /></span> 
+            <span class="spinner" style="display: none;"><img src="`+wpApiNetworkDashboard.plugin_uri+`includes/spinner.svg" /></span> 
             </div>`)
 }

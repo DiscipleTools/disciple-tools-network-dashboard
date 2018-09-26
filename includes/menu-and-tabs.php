@@ -48,17 +48,8 @@ class DT_Network_Dashboard_Menu {
     public function __construct() {
         add_action( "admin_menu", array( $this, "register_menu" ) );
 
-        /**
-         * Catch enabling and disabling of the network feature.
-         */
-        if ( isset( $_POST['enable_network_form'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'enable_network'.get_current_user_id() ) ) ) {
-            if ( isset( $_POST['enable_network'] ) ) {
-                update_option( 'dt_network_dashboard_enable_network', 1, false );
-            } else {
-                update_option( 'dt_network_dashboard_enable_network', 0, false );
-            }
-        }
 
+        add_action("admin_head", [ $this, 'header_script' ] );
     } // End __construct()
 
     /**
@@ -70,6 +61,19 @@ class DT_Network_Dashboard_Menu {
         'manage_dt', 'dt_extensions', [ $this, 'extensions_menu' ], 'dashicons-admin-generic', 59 );
         add_submenu_page( 'dt_extensions', __( 'Network Dashboard', 'dt_network_dashboard' ),
         __( 'Network Dashboard', 'dt_network_dashboard' ), 'manage_dt', $this->token, [ $this, 'content' ] );
+    }
+
+    public function header_script() {
+        ?>
+        <style>
+            a.pointer { cursor: pointer; }
+        </style>
+        <script>
+            jQuery(document).ready(function(){
+
+            })
+        </script>
+        <?php
     }
 
     /**
@@ -102,24 +106,23 @@ class DT_Network_Dashboard_Menu {
                 <a href="<?php echo esc_attr( $link ) . 'general' ?>" class="nav-tab
                 <?php ( $tab == 'general' || ! isset( $tab ) ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
                     <?php esc_attr_e( 'Overview', 'dt_network_dashboard' ) ?></a>
+
                 <a href="<?php echo esc_attr( $link ) . 'local' ?>" class="nav-tab
                 <?php ( $tab == 'local' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
                     <?php esc_attr_e( 'Install Local Locations', 'dt_network_dashboard' ) ?></a>
 
-                <?php // make tab dependent on network enable.
-                if ( get_option( 'dt_network_dashboard_enable_network' ) ) : ?>
+                <a href="<?php echo esc_attr( $link ) . 'network' ?>" class="nav-tab
+                <?php ( $tab == 'network' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                    <?php esc_attr_e( 'Install Network Locations', 'dt_network_dashboard' ) ?></a>
 
-                    <a href="<?php echo esc_attr( $link ) . 'network' ?>" class="nav-tab
-                    <?php ( $tab == 'network' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
-                        <?php esc_attr_e( 'Install Network Locations', 'dt_network_dashboard' ) ?></a>
-                    <a href="<?php echo esc_attr( $link ) . 'configure-network' ?>" class="nav-tab
-                    <?php ( $tab == 'configure-network' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
-                        <?php esc_attr_e( 'Configure Network', 'dt_network_dashboard' ) ?></a>
-                    <a href="<?php echo esc_attr( $link ) . 'connected' ?>" class="nav-tab
-                    <?php ( $tab == 'connected' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
-                        <?php esc_attr_e( 'Connected', 'dt_network_dashboard' ) ?></a>
+                <a href="<?php echo esc_attr( $link ) . 'configure-network' ?>" class="nav-tab
+                <?php ( $tab == 'configure-network' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                    <?php esc_attr_e( 'Configure Network', 'dt_network_dashboard' ) ?></a>
 
-                <?php endif; ?>
+                <a href="<?php echo esc_attr( $link ) . 'connected' ?>" class="nav-tab
+                <?php ( $tab == 'connected' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                    <?php esc_attr_e( 'Connected', 'dt_network_dashboard' ) ?></a>
+
             </h2>
 
             <?php
@@ -172,7 +175,7 @@ function dt_network_dashboard_options_scripts() {
                 'current_user_login' => wp_get_current_user()->user_login,
                 'current_user_id' => get_current_user_id(),
                 'map_key' => dt_get_option( 'map_key' ),
-                'spinner' => ' <span><img src="'. plugin_dir_url( __FILE__ ) . '/spinner.svg" width="12px" /></span>',
+                'spinner' => ' <img src="'. plugin_dir_url( __FILE__ ) . '/spinner.svg" width="12px" />',
             )
         );
     }
@@ -193,7 +196,7 @@ class DT_Network_Dashboard_Tab_General
                         <!-- Main Column -->
 
                         <?php $this->overview_message() ?>
-                        <?php $this->enable_network_box() ?>
+                        <?php $this->install_basics() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -207,38 +210,6 @@ class DT_Network_Dashboard_Tab_General
                 </div><!-- post-body meta box container -->
             </div><!--poststuff end -->
         </div><!-- wrap end -->
-        <?php
-    }
-
-    public function enable_network_box() {
-        /**
-         * Note: post processing is done in the construct of DT_Network_Dashboard_Menu
-         */
-        $network = get_option( 'dt_network_dashboard_enable_network' );
-
-        ?>
-        <!-- Box -->
-        <form method="post">
-            <table class="widefat striped">
-                <thead>
-                <th>Enable Network</th>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <?php wp_nonce_field( 'enable_network'.get_current_user_id() ); ?>
-                        <label for="enable_network">Enable the network features: </label>
-                        <input type="checkbox" class="text" id="enable_network" name="enable_network" <?php $network ? print 'checked' : print ''; ?> />
-                        <br>
-                        <p><em></em></p>
-                        <button type="submit" name="enable_network_form" value="1" class="button">Update</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
-        <br>
-        <!-- End Box -->
         <?php
     }
 
@@ -257,7 +228,7 @@ class DT_Network_Dashboard_Tab_General
                         <dt>Plugin Purpose</dt>
                         <dd>Collecting reports across many systems is difficult and doing it automatically, even more so. Making sure
                         counts for certain location are counted only once you need a shared database of locations to post counts to.
-                        This saturation mapping plugin attempts to set up a globally consistent mapping schema.</dd>
+                        This network mapping plugin attempts to set up a globally consistent mapping schema.</dd>
 
                         <dt>Local vs Network Functions</dt>
                         <dd>This plugin has two functions.
@@ -291,6 +262,37 @@ class DT_Network_Dashboard_Tab_General
         <!-- End Box -->
         <?php
     }
+
+    public function install_basics() {
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>Install Basic Mapping Data</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <h2>Install Geonames</h2>
+                    <a class="button pointer" id="geonames_basic" onclick="install_geonames('geonames_basic')">Install</a>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2>Install Geonames Polygons</h2>
+
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+
 }
 
 
@@ -537,11 +539,11 @@ class DT_Network_Dashboard_Tab_Configure_Network
         // process post action
         if ( isset( $_POST['population_division'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'population_division'.get_current_user_id() ) ) ) {
             $new = (int) sanitize_text_field( wp_unslash( $_POST['population_division'] ) );
-            update_option( 'dt_network_dashboard_pd', $new, false );
+            update_option( 'dt_network_dashboard_population', $new, false );
         }
-        $population_division = get_option( 'dt_network_dashboard_pd' );
+        $population_division = get_option( 'dt_network_dashboard_population' );
         if ( empty( $population_division ) ) {
-            update_option( 'dt_network_dashboard_pd', 5000, false );
+            update_option( 'dt_network_dashboard_population', 5000, false );
             $population_division = 5000;
         }
         ?>

@@ -19,7 +19,7 @@ class DT_Network_Dashboard_Hooks
      * Build hook classes
      */
     public function __construct() {
-        new DT_Network_Dashboard_Metrics();
+        new DT_Network_Dashboard_UI_Charts();
     }
 }
 DT_Network_Dashboard_Hooks::instance();
@@ -34,7 +34,7 @@ abstract class DT_Network_Dashboard_Base
     }
 }
 
-class DT_Network_Dashboard_Metrics extends DT_Network_Dashboard_Base
+class DT_Network_Dashboard_UI_Charts extends DT_Network_Dashboard_Base
 {
     /**
      * This filter adds a menu item to the metrics
@@ -46,9 +46,9 @@ class DT_Network_Dashboard_Metrics extends DT_Network_Dashboard_Base
     public function menu( $content ) {
         $content .= '
               <li><a href="'. site_url( '/network/' ) .'#network_dashboard_overview" onclick="show_network_dashboard_overview()">' .  esc_html__( 'Overview' ) . '</a></li>
-              <li><a href="'. site_url( '/network/' ) .'#saturation_tree" onclick="show_saturation_tree()">' .  esc_html__( 'Tree' ) . '</a></li>
-              <li><a href="'. site_url( '/network/' ) .'#saturation_map" onclick="show_saturation_map()">' .  esc_html__( 'Map' ) . '</a></li>
-              <li><a href="'. site_url( '/network/' ) .'#saturation_side_tree" onclick="show_saturation_side_tree()">' .  esc_html__( 'Side Tree' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#network_tree" onclick="show_network_tree()">' .  esc_html__( 'Tree' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#network_map" onclick="show_network_map()">' .  esc_html__( 'Map' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#network_side_tree" onclick="show_network_side_tree()">' .  esc_html__( 'Side Tree' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#report_sync" onclick="show_report_sync()">' .  esc_html__( 'Report Sync' ) . '</a></li>';
         return $content;
     }
@@ -57,14 +57,14 @@ class DT_Network_Dashboard_Metrics extends DT_Network_Dashboard_Base
      * Load scripts for the plugin
      */
     public function scripts() {
-        wp_enqueue_script( 'dt_network_dashboard_script', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'hooks.js', [
+        wp_enqueue_script( 'dt_network_dashboard_script', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'ui-charts', [
             'jquery',
             'jquery-ui-core',
-        ], filemtime( plugin_dir_path( __DIR__ ) . 'includes/hooks.js' ), true );
+        ], filemtime( plugin_dir_path( __DIR__ ) . 'includes/ui-charts.js' ), true );
         wp_enqueue_script( 'jquery-ui-autocomplete' );
 
         wp_localize_script(
-            'dt_network_dashboard_script', 'wpApiSatMapMetrics', [
+            'dt_network_dashboard_script', 'wpApiNetworkDashboard', [
                 'root' => esc_url_raw( rest_url() ),
                 'plugin_uri' => plugin_dir_url( __DIR__ ),
                 'nonce' => wp_create_nonce( 'wp_rest' ),
@@ -94,7 +94,7 @@ class DT_Network_Dashboard_Metrics extends DT_Network_Dashboard_Base
     }
 
     public function top_nav_desktop() {
-        if ( user_can( get_current_user_id(), 'view_any_contacts' ) || user_can( get_current_user_id(), 'view_project_metrics' ) ) {
+        if ( current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' ) ) {
             ?><li><a href="<?php echo esc_url( site_url( '/network/' ) ); ?>"><?php esc_html_e( "Network" ); ?></a></li><?php
         }
     }
@@ -109,7 +109,7 @@ class DT_Network_Dashboard_Metrics extends DT_Network_Dashboard_Base
 
     public function __construct() {
 
-        if ( user_can(get_current_user_id(), 'manage_options') ) {
+        if ( current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' ) ) {
 
             add_action( 'dt_top_nav_desktop', [ $this, 'top_nav_desktop' ] );
             add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_google' ], 10 );

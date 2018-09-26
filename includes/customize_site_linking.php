@@ -6,7 +6,7 @@
 // Adds the type of network connection to the site link system
 add_filter( 'site_link_type', 'dt_network_dashboard_site_link_type', 10, 1 );
 function dt_network_dashboard_site_link_type( $type ) {
-    $type[] = 'Network Reporting';
+    $type[] = 'Network Dashboard';
     return $type;
 }
 
@@ -14,7 +14,7 @@ function dt_network_dashboard_site_link_type( $type ) {
 add_filter( 'site_link_type_capabilities', 'dt_network_dashboard_site_link_capabilities', 10, 2 );
 function dt_network_dashboard_site_link_capabilities( $connection_type, $capabilities ) {
     if ( 'Network Reports' === $connection_type ) {
-        $capabilities[] = 'network_reports';
+        $capabilities[] = 'network_dashboard';
     }
     return $capabilities;
 }

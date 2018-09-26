@@ -4,7 +4,7 @@
 class DT_Network_Dashboard_Metabox {
     public function __construct() {
         add_action( 'admin_menu', [ $this, 'meta_box_setup' ], 20 );
-        add_filter( "dt_custom_fields_settings", [ $this, 'saturation_field_filter' ], 1, 2 );
+        add_filter( "dt_custom_fields_settings", [ $this, 'network_field_filter' ], 1, 2 );
         add_action( 'dt_locations_map_additions', [ $this, 'add_geojson' ], 20 );
     }
 
@@ -36,7 +36,7 @@ class DT_Network_Dashboard_Metabox {
 
         // note: re-check for postmeta because the previous suggestions section might have auto-created the record data.
         if ( get_post_meta( $post_id, 'gn_geonameid', true ) ) { // show available geonames mapping information.
-            $population_division = get_option( 'dt_network_dashboard_pd' );
+            $population_division = get_option( 'dt_network_dashboard_population' );
 
             Disciple_Tools_Location_Post_Type::instance()->meta_box_content( 'network_dashboard' );
 
@@ -145,7 +145,7 @@ class DT_Network_Dashboard_Metabox {
         return $wpdb->get_results( "SELECT p2p_to as location, count(p2p_id) as count FROM $wpdb->p2p WHERE p2p_type = 'groups_to_locations' GROUP BY p2p_to", ARRAY_A );
     }
 
-    public function saturation_field_filter( $fields, $post_type ) {
+    public function network_field_filter( $fields, $post_type ) {
         if ( 'locations' === $post_type ) {
             $fields['gn_geonameid'] = [
                 'name'        => 'GeoNames ID ',
@@ -324,7 +324,7 @@ class DT_Network_Dashboard_Metabox {
             switch ( $political_level ) {
                 case 'country':
                     $country_code = Disciple_Tools_Google_Geocode_API::parse_raw_result($raw, 'country_short_name');
-                    $country_row = $wpdb->get_row($wpdb->prepare( "SELECT * FROM $wpdb->dt_geonames WHERE feature_code = 'PCLI' AND feature_class = 'A' AND country_code = %s", $country_code), ARRAY_A );
+                    $country_row = $wpdb->get_row($wpdb->prepare( "SELECT * FROM dt_geonames WHERE feature_code = 'PCLI' AND feature_class = 'A' AND country_code = %s", $country_code), ARRAY_A );
                     if ( ! empty( $country_row['geonameid'] ) )  {
                         $country = DT_Network_Dashboard_Installer::install_country_by_geoname( $country_row['geonameid'], null, [], $post_id );
                     }
@@ -355,7 +355,7 @@ class DT_Network_Dashboard_Metabox {
             }
 
             } else {
-            echo __('First geocode this location using the geocoding metabox, and then we can offer suggestions to connect it with the saturation mapping system.');
+            echo __('First geocode this location using the geocoding metabox, and then we can offer suggestions to connect it with the network mapping system.');
         }
     }
 

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Disciple Tools - Network Dashboard
  * Plugin URI: https://github.com/ZumeProject/disciple-tools-network-dashboard
- * Description: Adds saturation mapping data.
+ * Description: Adds network mapping data.
  * Version: 0.1
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
@@ -118,19 +118,20 @@ class DT_Network_Dashboard {
     private function includes() {
 
         require_once( 'includes/core.php' );
-        require_once( 'includes/local-endpoints.php' );
+//        require_once( 'includes/local-endpoints.php' );
         require_once( 'includes/network-endpoints.php' );
+        require_once( 'install/installer-endpoints.php' );
         require_once( 'install/installer.php' );
         require_once( 'includes/stats.php' );
-        require_once( 'includes/customized_site_linking.php' );
+        require_once( 'includes/customize_site_linking.php' );
 
         if ( get_option( 'dt_network_dashboard_enable_network' ) ) {
-            require_once( 'includes/hooks.php' );
+            require_once( 'includes/ui-charts.php' );
 
         }
         if ( is_admin() ) {
             require_once( 'includes/menu-and-tabs.php' );
-            require_once( 'includes/locations-saturation-metabox.php' );
+            require_once( 'includes/locations-network-metabox.php' );
 
         }
     }
@@ -158,8 +159,8 @@ class DT_Network_Dashboard {
         $this->token             = 'dt_network_dashboard';
         $this->version             = '0.1';
 
-        $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
-        $wpdb->dt_geonames_polygons = $wpdb->prefix . 'dt_geonames_polygons';
+        $wpdb->dt_geonames = 'dt_geonames';
+        $wpdb->dt_geonames_polygons = 'dt_geonames_polygons';
         $wpdb->dt_network_reports = $wpdb->prefix . 'dt_network_reports';
         $wpdb->dt_network_reportmeta = $wpdb->prefix . 'dt_network_reportmeta';
 

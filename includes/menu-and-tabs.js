@@ -10,7 +10,7 @@ function load_list_by_country() {
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: dtSMOptionAPI.root + 'dt/v1/saturation/load_by_country',
+        url: dtSMOptionAPI.root + 'dt/v1/network/load_by_country',
         beforeSend: function(xhr) {
             xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce );
         },
@@ -65,7 +65,7 @@ function install_admin2_geoname( geonameid ) {
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: dtSMOptionAPI.root+'dt/v1/saturation/install_admin2_geoname',
+        url: dtSMOptionAPI.root+'dt/v1/network/install_admin2_geoname',
         beforeSend: function(xhr) {
             xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce);
         },
@@ -99,7 +99,7 @@ function install_admin1_geoname( geonameid ) {
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: dtSMOptionAPI.root + 'dt/v1/saturation/install_admin1_geoname',
+        url: dtSMOptionAPI.root + 'dt/v1/network/install_admin1_geoname',
         beforeSend: function(xhr) {
             xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce);
         },
@@ -134,7 +134,7 @@ function install_admin1_geoname_metabox( geonameid ) {
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: dtSMOptionAPI.root + 'dt/v1/saturation/install_admin1_geoname',
+        url: dtSMOptionAPI.root + 'dt/v1/network/install_admin1_geoname',
         beforeSend: function(xhr) {
             xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce);
         },
@@ -170,7 +170,7 @@ function load_cities( geonameid ) {
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: dtSMOptionAPI.root+'dt/v1/saturation/load_cities',
+        url: dtSMOptionAPI.root+'dt/v1/network/load_cities',
         beforeSend: function(xhr) {
             xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce );
         },
@@ -212,7 +212,7 @@ function install_single_city( geonameid, admin2 ) {
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: dtSMOptionAPI.root + 'dt/v1/saturation/install_single_city',
+        url: dtSMOptionAPI.root + 'dt/v1/network/install_single_city',
         beforeSend: function(xhr) {
             xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce);
         },
@@ -236,7 +236,7 @@ function load_current_locations() {
         type: "POST",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: dtSMOptionAPI.root + 'dt/v1/saturation/load_current_locations',
+        url: dtSMOptionAPI.root + 'dt/v1/network/load_current_locations',
         beforeSend: function(xhr) {
             xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce);
         },
@@ -256,7 +256,7 @@ function load_p_countries_installed() {
         type: "POST",
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: dtSMOptionAPI.root+'dt/v1/saturation/load_p_countries_installed',
+        url: dtSMOptionAPI.root+'dt/v1/network/load_p_countries_installed',
         beforeSend: function(xhr) {
             xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce );
         },
@@ -283,7 +283,7 @@ function load_p_list_by_country( country_code ) {
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
         dataType: "json",
-        url: dtSMOptionAPI.root+'dt/v1/saturation/load_p_list_by_country',
+        url: dtSMOptionAPI.root+'dt/v1/network/load_p_list_by_country',
         beforeSend: function(xhr) {
             xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce );
         },
@@ -296,6 +296,34 @@ function load_p_list_by_country( country_code ) {
         .fail(function (err) {
             spinner_span.empty().append( "error for " + country_code  )
             console.log("error for " + country_code );
+            console.log(err);
+        })
+}
+
+function install_geonames( type ) {
+    let link = jQuery('#'+type )
+    let spinner = dtSMOptionAPI.spinner
+
+    link.attr("onclick","")
+    link.append(spinner)
+
+    let data = {"type": type }
+    jQuery.ajax({
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        url: dtSMOptionAPI.root+'dt/v1/network/import',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-WP-Nonce', dtSMOptionAPI.nonce );
+        },
+    })
+        .done(function (data) {
+            link.empty().append('All finished! &#9989;')
+            console.log( data )
+        })
+        .fail(function (err) {
+            link.empty().append( "Oops. Something did not work. Maybe try again."  )
             console.log(err);
         })
 }
