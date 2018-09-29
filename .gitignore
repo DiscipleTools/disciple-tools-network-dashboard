@@ -2,3 +2,4 @@
 vendor/autoload.php
 /install/*.csv
 !gn_world_admin.csv
+/node_modules/*

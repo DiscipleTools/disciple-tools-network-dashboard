@@ -8,6 +8,9 @@ jQuery(document).ready(function() {
     if('#network_map' === window.location.hash) {
         show_network_map()
     }
+    if('#network_map_map' === window.location.hash) {
+        show_network_map_map()
+    }
     if('#network_side_tree' === window.location.hash) {
         show_network_side_tree()
     }
@@ -151,6 +154,50 @@ function show_network_map(){
 
         map.draw(data, options);
     }
+
+    chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
+            <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
+            <span class="spinner" style="display: none;"><img src="`+wpApiNetworkDashboard.plugin_uri+`includes/spinner.svg" /></span> 
+            </div>`)
+}
+
+function show_network_map_map(){
+    "use strict";
+    let page = wpApiNetworkDashboard
+    console.log(page)
+    let screenHeight = jQuery(window).height()
+    let chartHeight = screenHeight / 1.3
+    let chartDiv = jQuery('#chart')
+    chartDiv.empty().html(`
+        <span class="section-header">`+ page.translations.sm_title +`</span>
+        <span style="float:right; font-size:1.5em;color:#3f729b;"><a data-open="zume-project-legend"><i class="fi-info"></i></a></span>
+        <div class="medium reveal" id="zume-project-legend" data-reveal> 
+        <button class="close-button" data-close aria-label="Close modal" type="button">
+            
+            <span aria-hidden="true">&times;</span>
+        </button>
+        </div>
+        <hr style="max-width:100%;">
+        <div id="chart_div" style="width:100%; height:`+chartHeight+`"></div>
+        
+        `)
+
+
+    function drawChart() {
+        // map = new google.maps.Map(document.getElementById('chart_div'), {
+        //     zoom: 6,
+        //     center: {lat: 39.8736, lng: -104.338}
+        // });
+        map = new google.maps.Map(
+            document.getElementById('chart_div'), {center: {lat: 39.8736, lng: -104.338}, zoom: 12});
+
+
+        // NOTE: This uses cross-domain XHR, and may not work on older browsers.
+        // map.data.loadGeoJson(
+        //     'https://mu-zume/wp-content/plugins/disciple-tools-network-dashboard/ui/geojson.php?geonameid=5411363');
+
+    }
+    drawChart();
 
     chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
             <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>

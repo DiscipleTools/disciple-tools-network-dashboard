@@ -48,6 +48,7 @@ class DT_Network_Dashboard_UI_Charts extends DT_Network_Dashboard_Base
               <li><a href="'. site_url( '/network/' ) .'#network_dashboard_overview" onclick="show_network_dashboard_overview()">' .  esc_html__( 'Overview' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#network_tree" onclick="show_network_tree()">' .  esc_html__( 'Tree' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#network_map" onclick="show_network_map()">' .  esc_html__( 'Map' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#network_map_map" onclick="show_network_map_map()">' .  esc_html__( 'Map' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#network_side_tree" onclick="show_network_side_tree()">' .  esc_html__( 'Side Tree' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#report_sync" onclick="show_report_sync()">' .  esc_html__( 'Report Sync' ) . '</a></li>';
         return $content;
@@ -57,10 +58,10 @@ class DT_Network_Dashboard_UI_Charts extends DT_Network_Dashboard_Base
      * Load scripts for the plugin
      */
     public function scripts() {
-        wp_enqueue_script( 'dt_network_dashboard_script', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'ui-charts', [
+        wp_enqueue_script( 'dt_network_dashboard_script', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'ui-charts.js', [
             'jquery',
             'jquery-ui-core',
-        ], filemtime( plugin_dir_path( __DIR__ ) . 'includes/ui-charts.js' ), true );
+        ], filemtime( plugin_dir_path( __DIR__ ) . 'ui/ui-charts.js' ), true );
         wp_enqueue_script( 'jquery-ui-autocomplete' );
 
         wp_localize_script(

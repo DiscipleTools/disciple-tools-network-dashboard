@@ -107,21 +107,9 @@ class DT_Network_Dashboard_Menu {
                 <?php ( $tab == 'general' || ! isset( $tab ) ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
                     <?php esc_attr_e( 'Overview', 'dt_network_dashboard' ) ?></a>
 
-                <a href="<?php echo esc_attr( $link ) . 'local' ?>" class="nav-tab
-                <?php ( $tab == 'local' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
-                    <?php esc_attr_e( 'Install Local Locations', 'dt_network_dashboard' ) ?></a>
-
                 <a href="<?php echo esc_attr( $link ) . 'network' ?>" class="nav-tab
                 <?php ( $tab == 'network' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
                     <?php esc_attr_e( 'Install Network Locations', 'dt_network_dashboard' ) ?></a>
-
-                <a href="<?php echo esc_attr( $link ) . 'configure-network' ?>" class="nav-tab
-                <?php ( $tab == 'configure-network' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
-                    <?php esc_attr_e( 'Configure Network', 'dt_network_dashboard' ) ?></a>
-
-                <a href="<?php echo esc_attr( $link ) . 'connected' ?>" class="nav-tab
-                <?php ( $tab == 'connected' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
-                    <?php esc_attr_e( 'Connected', 'dt_network_dashboard' ) ?></a>
 
             </h2>
 
@@ -139,14 +127,8 @@ class DT_Network_Dashboard_Menu {
                     $object = new DT_Network_Dashboard_Tab_Network();
                     $object->content();
                     break;
-                case "configure-network":
-                    $object = new DT_Network_Dashboard_Tab_Configure_Network();
-                    $object->content();
-                    break;
-                case 'connected':
-                    $object = new DT_Network_Dashboard_Tab_Connected();
-                    $object->content();
-                    break;
+
+
                 default:
                     break;
             }
@@ -196,6 +178,7 @@ class DT_Network_Dashboard_Tab_General
                         <!-- Main Column -->
 
                         <?php $this->overview_message() ?>
+                        <?php $this->population_metabox() ?>
                         <?php $this->install_basics() ?>
 
                         <!-- End Main Column -->
@@ -284,9 +267,52 @@ class DT_Network_Dashboard_Tab_General
 
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <h2>test download</h2>
+                    <a class="button pointer" id="test_download" onclick="test_download('US')">Install</a>
+
+                </td>
+            </tr>
 
             </tbody>
         </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function population_metabox() {
+        // process post action
+        if ( isset( $_POST['population_division'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'population_division'.get_current_user_id() ) ) ) {
+            $new = (int) sanitize_text_field( wp_unslash( $_POST['population_division'] ) );
+            update_option( 'dt_network_dashboard_population', $new, false );
+        }
+        $population_division = get_option( 'dt_network_dashboard_population' );
+        if ( empty( $population_division ) ) {
+            update_option( 'dt_network_dashboard_population', 5000, false );
+            $population_division = 5000;
+        }
+        ?>
+        <!-- Box -->
+        <form method="post">
+            <table class="widefat striped">
+                <thead>
+                <th>Groups Per Population</th>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <?php wp_nonce_field( 'population_division'.get_current_user_id() ); ?>
+                        <label for="population_division">Size of population for each group: </label>
+                        <input type="number" class="text" id="population_division" name="population_division" value="<?php echo esc_attr( $population_division ); ?>" /><br>
+                        <p><em>Default is a population of 5,000 for each group. This must be a number and must not be blank. </em></p>
+                        <button type="submit" class="button">Update</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
         <br>
         <!-- End Box -->
         <?php
@@ -503,186 +529,3 @@ class DT_Network_Dashboard_Tab_Network
         <?php
     }
 }
-
-/**
- * Class DT_Starter_Tab_Second
- */
-class DT_Network_Dashboard_Tab_Configure_Network
-{
-    public function content() {
-        ?>
-        <div class="wrap">
-            <div id="poststuff">
-                <div id="post-body" class="metabox-holder columns-2">
-                    <div id="post-body-content">
-                        <!-- Main Column -->
-
-                        <?php $this->partner_profile_metabox() ?>
-                        <?php $this->population_metabox() ?>
-
-                        <!-- End Main Column -->
-                    </div><!-- end post-body-content -->
-                    <div id="postbox-container-1" class="postbox-container">
-                        <!-- Right Column -->
-
-                        <!-- End Right Column -->
-                    </div><!-- postbox-container 1 -->
-                    <div id="postbox-container-2" class="postbox-container">
-                    </div><!-- postbox-container 2 -->
-                </div><!-- post-body meta box container -->
-            </div><!--poststuff end -->
-        </div><!-- wrap end -->
-        <?php
-    }
-
-    public function population_metabox() {
-        // process post action
-        if ( isset( $_POST['population_division'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'population_division'.get_current_user_id() ) ) ) {
-            $new = (int) sanitize_text_field( wp_unslash( $_POST['population_division'] ) );
-            update_option( 'dt_network_dashboard_population', $new, false );
-        }
-        $population_division = get_option( 'dt_network_dashboard_population' );
-        if ( empty( $population_division ) ) {
-            update_option( 'dt_network_dashboard_population', 5000, false );
-            $population_division = 5000;
-        }
-        ?>
-        <!-- Box -->
-        <form method="post">
-            <table class="widefat striped">
-                <thead>
-                <th>Groups Per Population</th>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <?php wp_nonce_field( 'population_division'.get_current_user_id() ); ?>
-                        <label for="population_division">Size of population for each group: </label>
-                        <input type="number" class="text" id="population_division" name="population_division" value="<?php echo esc_attr( $population_division ); ?>" /><br>
-                        <p><em>Default is a population of 5,000 for each group. This must be a number and must not be blank. </em></p>
-                        <button type="submit" class="button">Update</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function partner_profile_metabox() {
-        // process post action
-        if ( isset( $_POST['partner_profile_form'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'partner_profile'.get_current_user_id() ) ) ) {
-
-            $partner_profile = [
-                'partner_name' => sanitize_text_field( wp_unslash( $_POST['partner_name'] ) ),
-                'partner_description' => sanitize_text_field( wp_unslash( $_POST['partner_description'] ) ),
-                'partner_id' => sanitize_text_field( wp_unslash( $_POST['partner_id'] ) ),
-            ];
-            update_option( 'dt_site_partner_profile', $partner_profile, false );
-
-        }
-        $partner_profile = get_option( 'dt_site_partner_profile' );
-
-
-        ?>
-        <!-- Box -->
-        <form method="post">
-            <?php wp_nonce_field( 'partner_profile'.get_current_user_id() ); ?>
-            <table class="widefat striped">
-                <thead>
-                <th>Your Partner Profile</th>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <table class="widefat">
-                            <tbody>
-                            <tr>
-                                <td><label for="partner_name">Your Group Name</label></td>
-                                <td><input type="text" class="regular-text" name="partner_name"
-                                           id="partner_name" value="<?php echo $partner_profile['partner_name'] ?>" /></td>
-                            </tr>
-                            <tr>
-                                <td><label for="partner_description">Your Group Description</label></td>
-                                <td><input type="text" class="regular-text" name="partner_description"
-                                           id="partner_description" value="<?php echo $partner_profile['partner_description'] ?>" /></td>
-                            </tr>
-                            <tr>
-                                <td><label for="partner_id">Site ID</label></td>
-                                <td><?php echo $partner_profile['partner_id'] ?>
-                                    <input type="hidden" class="regular-text" name="partner_id"
-                                           id="partner_id" value="<?php echo $partner_profile['partner_id'] ?>" /></td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <p><br>
-                            <button type="submit" id="partner_profile_form" name="partner_profile_form" class="button">Update</button>
-                        </p>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-}
-
-/**
- * Class DT_Starter_Tab_Second
- */
-class DT_Network_Dashboard_Tab_Connected
-{
-    public function content() {
-        ?>
-        <div class="wrap">
-            <div id="poststuff">
-                <div id="post-body" class="metabox-holder columns-2">
-                    <div id="post-body-content">
-                        <!-- Main Column -->
-
-                        <?php $this->overview_message() ?>
-
-                        <!-- End Main Column -->
-                    </div><!-- end post-body-content -->
-                    <div id="postbox-container-1" class="postbox-container">
-                        <!-- Right Column -->
-
-                        <!-- End Right Column -->
-                    </div><!-- postbox-container 1 -->
-                    <div id="postbox-container-2" class="postbox-container">
-                    </div><!-- postbox-container 2 -->
-                </div><!-- post-body meta box container -->
-            </div><!--poststuff end -->
-        </div><!-- wrap end -->
-        <?php
-    }
-
-
-    public function overview_message() {
-        ?>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <th>Connected Sites</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-
-                <!-- @todo add connnection process.-->
-
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-}
-

@@ -117,21 +117,20 @@ class DT_Network_Dashboard {
      */
     private function includes() {
 
-        require_once( 'includes/core.php' );
-//        require_once( 'includes/local-endpoints.php' );
         require_once( 'includes/network-endpoints.php' );
+
         require_once( 'install/installer-endpoints.php' );
         require_once( 'install/installer.php' );
-        require_once( 'includes/stats.php' );
-        require_once( 'includes/customize_site_linking.php' );
 
-        if ( get_option( 'dt_network_dashboard_enable_network' ) ) {
-            require_once( 'includes/ui-charts.php' );
 
-        }
+        require_once( 'ui/ui-endpoints.php' );
+        require_once( 'ui/ui-charts.php' );
+        require_once( 'ui/stats.php' );
+
         if ( is_admin() ) {
             require_once( 'includes/menu-and-tabs.php' );
             require_once( 'includes/locations-network-metabox.php' );
+            require_once( 'includes/customize_site_linking.php' );
 
         }
     }

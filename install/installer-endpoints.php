@@ -63,6 +63,12 @@ class DT_Network_Dashboard_Installer_Endpoints
                 'callback' => [ $this, 'import' ],
             ]
         );
+        register_rest_route(
+            $this->namespace, '/network/download', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'download' ],
+            ]
+        );
 
         // local install endpoints
         register_rest_route(
@@ -187,6 +193,8 @@ class DT_Network_Dashboard_Installer_Endpoints
         }
     }
 
+
+
     public function load_by_country( WP_REST_Request $request ) {
 
         if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
@@ -275,6 +283,20 @@ class DT_Network_Dashboard_Installer_Endpoints
         }
 
         return DT_Network_Dashboard_Installer::load_current_locations();
+    }
+
+    public function download( WP_REST_Request $request ) {
+
+        if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        $params = $request->get_params();
+        if ( ! isset( $params['country_code'] ) ) {
+            return new WP_Error( __METHOD__, 'Missing parameters.' );
+        }
+
+        return DT_Network_Dashboard_Installer::get_geonames_zip_download( $params['country_code'] );
     }
 }
 DT_Network_Dashboard_Installer_Endpoints::instance();

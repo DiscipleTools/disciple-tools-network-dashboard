@@ -11,6 +11,56 @@ class DT_Network_Dashboard_Installer {
 
     public static $csv_host = 'https://storage.googleapis.com/discipletools/';
 
+    public static function install_world_admin_set() {
+        global $wpdb;
+        $file = 'gn_world_admin';
+
+        $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/' .$file.'.csv"
+            INTO TABLE dt_geonames
+            FIELDS TERMINATED by \',\'
+            ENCLOSED BY \'"\'
+            LINES TERMINATED BY \'\n\'
+            IGNORE 1 LINES');
+
+        return $wpdb->last_result;
+
+    }
+
+    public static function get_geonames_zip_download( $country_code ) {
+        // get latest german WordPress file
+        dt_write_log('Begin zip download');
+        $ch = curl_init();
+        $source = "http://download.geonames.org/export/dump/" . $country_code . ".zip"; // THE FILE URL
+        curl_setopt($ch, CURLOPT_URL, $source);
+        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+        $data = curl_exec ($ch);
+        curl_close ($ch);
+        dt_write_log('after curl');
+
+        // save as wordpress.zip
+        $destination = plugin_dir_path(__FILE__) . $country_code . ".zip"; // NEW FILE LOCATION
+        $file = fopen($destination, "w+");
+        fputs($file, $data);
+        fclose($file);
+
+        dt_write_log('file downloaded');
+
+        // unzip
+        $zip = new ZipArchive;
+        $res = $zip->open(plugin_dir_path(__FILE__) . $country_code . '.zip' ); // zip datei
+        if ($res === TRUE) {
+            $zip->extractTo(plugin_dir_path(__FILE__) ); // verz zum entpacken
+            $zip->close();
+            dt_write_log('zip extracted');
+            unlink(plugin_dir_path(__FILE__) . $country_code . '.zip' );
+            dt_write_log('zip deleted');
+            return true;
+        } else {
+            dt_write_log('zip failed');
+            return false;
+        }
+    }
+
     public static function get_geonames_source( $file ) {
         if ( empty( $file ) ) {
             return [];
@@ -847,18 +897,5 @@ class DT_Network_Dashboard_Installer {
         return $html;
     }
 
-    public static function install_world_admin_set() {
-        global $wpdb;
-        $file = 'gn_world_admin';
 
-        $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/' .$file.'.csv"
-            INTO TABLE dt_geonames
-            FIELDS TERMINATED by \',\'
-            ENCLOSED BY \'"\'
-            LINES TERMINATED BY \'\n\'
-            IGNORE 1 LINES');
-
-        return $wpdb->last_result;
-
-    }
 }
