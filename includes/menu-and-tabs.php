@@ -225,56 +225,11 @@ class DT_Network_Dashboard_Tab_General
                                 </li>
                             </ol>
                         </dd>
-
-                        <dt></dt>
-                        <dd></dd>
-
-                        <dt></dt>
-                        <dd></dd>
-
-                        <dt></dt>
-                        <dd></dd>
-
+                        
                     </dl>
 
                 </td>
             </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function install_basics() {
-        ?>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <th>Install Basic Mapping Data</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <h2>Install Geonames</h2>
-                    <a class="button pointer" id="geonames_basic" onclick="install_geonames('geonames_basic')">Install</a>
-
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h2>Install Geonames Polygons</h2>
-
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <h2>test download</h2>
-                    <a class="button pointer" id="test_download" onclick="test_download('US')">Install</a>
-
-                </td>
-            </tr>
-
             </tbody>
         </table>
         <br>
@@ -318,116 +273,35 @@ class DT_Network_Dashboard_Tab_General
         <?php
     }
 
-
-}
-
-
-/**
- * Class DT_Starter_Tab_Second
- */
-class DT_Network_Dashboard_Tab_Local
-{
-    public function content() {
-        ?>
-        <div class="wrap">
-            <div id="poststuff">
-                <div id="post-body" class="metabox-holder columns-2">
-                    <div id="post-body-content">
-                        <!-- Main Column -->
-
-                        <?php $this->main_column() ?>
-
-                        <!-- End Main Column -->
-                    </div><!-- end post-body-content -->
-                    <div id="postbox-container-1" class="postbox-container">
-                        <!-- Right Column -->
-
-                        <?php $this->right_column() ?>
-
-                        <!-- End Right Column -->
-                    </div><!-- postbox-container 1 -->
-                    <div id="postbox-container-2" class="postbox-container">
-                    </div><!-- postbox-container 2 -->
-                </div><!-- post-body meta box container -->
-            </div><!--poststuff end -->
-        </div><!-- wrap end -->
-        <?php
-    }
-
-    public function main_column() {
-        $available_locations = DT_Network_Dashboard_Installer::get_list_of_available_locations();
-        ?>
-        <!-- Box -->
-        <form method="post">
-        <table class="widefat striped">
-            <thead>
-            <th>Install</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <select name="selected_country" id="selected_country">
-                        <option>Select</option>
-                        <?php
-                        echo '<option>----</option>';
-                        echo '<option value="US">United States of America</option>';
-                        echo '<option>----</option>';
-                        foreach ( $available_locations as $country_code => $name ) {
-                            echo '<option value="' . $country_code . '">'.$name.'</option>';
-                        }
-                        ?>
-
-                    </select>
-                    <a href="javascript:void(0);" onclick="load_list_by_country()" class="button" id="import_button">Load</a>
-                    <script>
-                        jQuery(document).ready(function() {
-                            load_current_locations()
-                        })
-
-                    </script>
-                    <style>
-                        dd, li {
-                            margin-bottom: 15px;
-                        }
-                        dt, li {
-                            margin-bottom: 20px;
-                            margin-top: 20px;
-                        }
-                        #results .page-title-action {
-                            vertical-align: middle;
-                        }
-                        .show-city-link {
-                            cursor: pointer;
-                        }
-
-                    </style>
-                    <div id="results"></div>
-
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        </form>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function right_column() {
+    public function install_basics() {
         ?>
         <!-- Box -->
         <table class="widefat striped">
             <thead>
-            <th>Current Locations</th>
+            <th>Install Basic Mapping Data</th>
             </thead>
             <tbody>
             <tr>
                 <td>
-                    <div id="current-locations"></div>
-                    <hr>
-                    <a href="<?php echo esc_url( admin_url( '/edit.php?post_type=locations' ) ) ?>">View Locations</a>
+                    <h2>Install Geonames</h2>
+                    <a class="button pointer" id="geonames_basic" onclick="install_geonames('geonames_basic')">Install</a>
+
                 </td>
             </tr>
+            <tr>
+                <td>
+                    <h2>Install Geonames Polygons</h2>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <h2>test download</h2>
+                    <a class="button pointer" id="test_download" onclick="test_download('US')">Install</a>
+
+                </td>
+            </tr>
+
             </tbody>
         </table>
         <br>
