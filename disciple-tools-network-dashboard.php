@@ -38,12 +38,11 @@ function dt_network_dashboard() {
         $migration_number = 0;
         try {
 
-            require_once( plugin_dir_path( __FILE__ ) . '/includes/admin/class-migration-engine.php' );
+            require_once( plugin_dir_path( __FILE__ ) . '/admin/admin/class-migration-engine.php' );
             DT_Network_Dashboard_Migration_Engine::migrate( $migration_number );
         } catch ( Throwable $e ) {
             new WP_Error( 'migration_error', 'Migration engine failed to migrate.' );
         }
-
 
         return DT_Network_Dashboard::get_instance();
     }
@@ -76,7 +75,7 @@ class DT_Network_Dashboard {
     public $dir_path = '';
     public $dir_uri = '';
     public $img_uri = '';
-    public $includes_path;
+    public $admin_path;
 
     /**
      * Returns the instance.
@@ -120,18 +119,16 @@ class DT_Network_Dashboard {
         require_once( 'install/installer-endpoints.php' );
         require_once( 'install/installer.php' );
 
-
         require_once( 'ui/ui-endpoints.php' );
         require_once( 'ui/ui.php' );
 
-        require_once( 'report-collection/report-collection.php' );
-        require_once( 'report-collection/report-collection-endpoints.php' );
+        require_once( 'report/report-collection.php' );
+        require_once( 'report/report-collection-endpoints.php' );
 
         if ( is_admin() ) {
-            require_once( 'includes/menu-and-tabs.php' );
-            require_once( 'includes/locations-network-metabox.php' );
-            require_once( 'includes/customize_site_linking.php' );
-
+            require_once( 'admin/menu-and-tabs.php' );
+            require_once( 'admin/locations-network-metabox.php' );
+            require_once( 'admin/customize_site_linking.php' );
         }
     }
 
@@ -149,7 +146,7 @@ class DT_Network_Dashboard {
         $this->dir_uri      = trailingslashit( plugin_dir_url( __FILE__ ) );
 
         // Plugin directory paths.
-        $this->includes_path      = trailingslashit( $this->dir_path . 'includes' );
+        $this->admin_path      = trailingslashit( $this->dir_path . 'admin' );
 
         // Plugin directory URIs.
         $this->img_uri      = trailingslashit( $this->dir_uri . 'img' );
@@ -176,7 +173,7 @@ class DT_Network_Dashboard {
 
         // Check for plugin updates
         if ( ! class_exists( 'Puc_v4_Factory' ) ) {
-            require( $this->includes_path . 'admin/libraries/plugin-update-checker/plugin-update-checker.php' );
+            require( $this->admin_path . 'admin/libraries/plugin-update-checker/plugin-update-checker.php' );
         }
         /**
          * Below is the publicly hosted .json file that carries the version information. This file can be hosted

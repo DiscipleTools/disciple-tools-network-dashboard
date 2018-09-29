@@ -229,6 +229,29 @@ class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
         return $results;
     }
 
+    public static function query_location_data() {
+        global $wpdb;
+
+        $results = $wpdb->get_results("
+            SELECT 
+            t1.ID as id, 
+            t1.post_parent as parent_id, 
+            t1.post_title as location,
+            (SELECT post_title FROM $wpdb->posts WHERE ID = t1.post_parent) as parent_name,
+            t2.meta_value as gn_population, 
+            ROUND(t2.meta_value / (SELECT option_value FROM $wpdb->options WHERE option_name = 'dt_network_dashboard_population'), 0 ) as groups_needed,
+            (SELECT count(*) FROM $wpdb->p2p WHERE p2p_to = t1.ID) as groups
+            
+            FROM $wpdb->posts as t1
+            LEFT JOIN $wpdb->postmeta as t2
+            ON t1.ID=t2.post_id
+            AND t2.meta_key = 'gn_population'
+            WHERE post_type = 'locations' AND post_status = 'publish'
+        ", ARRAY_A );
+
+        return $results;
+    }
+
     public static function query_location_latlng() {
         global $wpdb;
 
@@ -337,4 +360,6 @@ class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
 
         return $list;
     }
+
+
 }
