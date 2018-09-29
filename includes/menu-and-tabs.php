@@ -47,8 +47,6 @@ class DT_Network_Dashboard_Menu {
      */
     public function __construct() {
         add_action( "admin_menu", array( $this, "register_menu" ) );
-
-
         add_action("admin_head", [ $this, 'header_script' ] );
     } // End __construct()
 
@@ -110,7 +108,6 @@ class DT_Network_Dashboard_Menu {
                 <a href="<?php echo esc_attr( $link ) . 'network' ?>" class="nav-tab
                 <?php ( $tab == 'network' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
                     <?php esc_attr_e( 'Install Network Locations', 'dt_network_dashboard' ) ?></a>
-
             </h2>
 
             <?php
@@ -119,23 +116,15 @@ class DT_Network_Dashboard_Menu {
                     $object = new DT_Network_Dashboard_Tab_General();
                     $object->content();
                     break;
-                case "local":
-                    $object = new DT_Network_Dashboard_Tab_Local();
-                    $object->content();
-                    break;
                 case "network":
                     $object = new DT_Network_Dashboard_Tab_Network();
                     $object->content();
                     break;
-
-
                 default:
                     break;
             }
             ?>
-
         </div><!-- End wrap -->
-
         <?php
     }
 }
@@ -225,7 +214,7 @@ class DT_Network_Dashboard_Tab_General
                                 </li>
                             </ol>
                         </dd>
-                        
+
                     </dl>
 
                 </td>
@@ -278,7 +267,7 @@ class DT_Network_Dashboard_Tab_General
         <!-- Box -->
         <table class="widefat striped">
             <thead>
-            <th>Install Basic Mapping Data</th>
+            <th>Install Geoname Data</th>
             </thead>
             <tbody>
             <tr>

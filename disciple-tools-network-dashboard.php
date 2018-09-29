@@ -117,15 +117,15 @@ class DT_Network_Dashboard {
      */
     private function includes() {
 
-        require_once( 'includes/network-endpoints.php' );
-
         require_once( 'install/installer-endpoints.php' );
         require_once( 'install/installer.php' );
 
 
         require_once( 'ui/ui-endpoints.php' );
-        require_once( 'ui/ui-charts.php' );
-        require_once( 'ui/stats.php' );
+        require_once( 'ui/ui.php' );
+
+        require_once( 'report-collection/report-collection.php' );
+        require_once( 'report-collection/report-collection-endpoints.php' );
 
         if ( is_admin() ) {
             require_once( 'includes/menu-and-tabs.php' );
