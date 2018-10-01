@@ -71,15 +71,15 @@ class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
                 'current_user_login' => wp_get_current_user()->user_login,
                 'current_user_id' => get_current_user_id(),
                 'map_key' => dt_get_option( 'map_key' ),
-                'spinner' => '<img src="'. plugin_dir_url( __FILE__ ) . '/spinner.svg" width="12px" />',
-                'spinner_large' => '<img src="'. plugin_dir_url( __FILE__ ) . '/spinner.svg" width="24px" />',
+                'spinner' => '<img src="'. plugin_dir_url( __DIR__ ) . '/spinner.svg" width="12px" />',
+                'spinner_large' => '<img src="'. plugin_dir_url( __DIR__ ) . '/spinner.svg" width="24px" />',
                 'stats' => [
                     'table' => DT_Network_Dashboard_UI::get_location_table(),
                     'tree' => DT_Network_Dashboard_UI::get_location_tree(),
                     'map' => DT_Network_Dashboard_UI::get_location_map(),
                     'side_tree' => DT_Network_Dashboard_UI::get_location_side_tree(),
                     'level_tree' => DT_Network_Dashboard_UI::get_locations_level_tree(),
-                    'report_sync' => DT_Network_Dashboard_UI::get_site_link_list(),
+                    'report_sync' => DT_Network_Dashboard_Reports::query_site_link_list(),
                 ],
                 'translations' => [
                     "sm_title" => __( "Network Dashboard", "dt_zume" ),
@@ -345,18 +345,6 @@ class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
                 </style>';
 
         $list .= build_menu( 0, $menu_data, -1 );
-
-        return $list;
-    }
-
-    public static function get_site_link_list() {
-        global $wpdb;
-        $list = $wpdb->get_results("
-            SELECT post_title, ID as id
-            FROM $wpdb->posts
-            WHERE post_type = 'site_link_system' 
-                AND post_status = 'publish'
-        ", ARRAY_A );
 
         return $list;
     }

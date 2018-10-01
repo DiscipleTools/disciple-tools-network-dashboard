@@ -239,14 +239,12 @@ function show_report_sync(){
     let page = wpApiNetworkDashboard
     console.log(page)
 
-    let screenHeight = jQuery(window).height()
-    let chartHeight = screenHeight / 1.3
     let chartDiv = jQuery('#chart')
     let list = wpApiNetworkDashboard.stats.report_sync
 
     chartDiv.empty().html(`
-        <span class="section-header">`+ page.translations.sm_title +`</span>
-        <span style="float:right; font-size:1.5em;color:#3f729b;"><a data-open="zume-project-legend"><i class="fi-info"></i></a></span>
+        <span class="section-header">`+ page.translations.sm_title +`</span>`+
+        `<span style="float:right; font-size:1.5em;color:#3f729b;"><a data-open="zume-project-legend"><i class="fi-info"></i></a></span>
         <div class="medium reveal" id="zume-project-legend" data-reveal> 
         <button class="close-button" data-close aria-label="Close modal" type="button">
             <span aria-hidden="true">&times;</span>
@@ -257,37 +255,68 @@ function show_report_sync(){
         `)
 
     jQuery.each(list, function(i, v) {
-        console.log( v )
         chartDiv.append(`
                     <div class="grid-x grid-padding-x grid-margin-x" >
                         <div class="cell">
-                            <h4>`+v.post_title+` <span id="status-`+v.id+`">`+page.spinner_large+`</span></h4>
+                            <h4 id="header-`+v.id+`">`+v.post_title+`</h4>
                         </div>
                         <div class="cell" id="site-`+v.id+`"></div>
                     </div><hr style="max-width:100%;">`)
-        let data = { "id": v.id }
+
+        let spinner_section = jQuery('#header-'+v.id)
+        spinner_section.append( `<span id="project-total-`+v.id+`">`+page.spinner_large+`</span>`)
+
+        /* Project Totals */
+        let data = { "id": v.id, "type": 'project_totals' }
         jQuery.ajax({
             type: "POST",
             data: JSON.stringify(data),
             contentType: "application/json; charset=utf-8",
             dataType: "json",
-            url: wpApiNetworkDashboard.root+'dt/v1/network/get_report',
+            url: wpApiNetworkDashboard.root+'dt/v1/network/ui/trigger_transfer',
             beforeSend: function(xhr) {
                 xhr.setRequestHeader('X-WP-Nonce', wpApiNetworkDashboard.nonce );
             },
         })
             .done(function (data) {
-                jQuery('#status-'+v.id).empty().append('&#10003;')
-                jQuery('#site-'+v.id).empty().append('Content')
+                jQuery('#project-total-'+v.id).empty().append('&#10003;')
+                jQuery('#site-'+v.id).append( "Project Total Record Id: " + data)
 
-                console.log( v.post_title )
-                console.log( data )
             })
             .fail(function (err) {
                 jQuery('#status-'+v.id).empty().append( "error" )
                 console.log("error for " +  v.post_title );
                 console.log(err);
             })
+
+        /* Date Report */
+        spinner_section.append( `<span id="date-report-`+v.id+`">`+page.spinner_large+`</span>`)
+        let today = new Date();
+        let dd = today.getDate();
+        let data1 = { "id": v.id, "type": 'date_report', "date": dd }
+
+        jQuery.ajax({
+            type: "POST",
+            data: JSON.stringify(data1),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: wpApiNetworkDashboard.root+'dt/v1/network/ui/trigger_transfer',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-WP-Nonce', wpApiNetworkDashboard.nonce );
+            },
+        })
+            .done(function (data) {
+                jQuery('#date-report-'+v.id).empty().append('&#10003;')
+                jQuery('#site-'+v.id).append( "Date Report Record Id: " + data)
+
+            })
+            .fail(function (err) {
+                jQuery('#status-'+v.id).empty().append( "error" )
+                console.log("error for " +  v.post_title );
+                console.log(err);
+            })
+
+
     })
 
 
@@ -295,4 +324,30 @@ function show_report_sync(){
             <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
             <span class="spinner" style="display: none;"><img src="`+wpApiNetworkDashboard.plugin_uri+`includes/spinner.svg" /></span> 
             </div>`)
+}
+
+function get_network_report( id ) {
+
+    console.log('get_network_report')
+    console.log(id)
+
+    let data = { "id": id  }
+    return jQuery.ajax({
+        type: "POST",
+        data: JSON.stringify(data),
+        contentType: "application/json; charset=utf-8",
+        dataType: "json",
+        url: wpApiNetworkDashboard.root+'dt/v1/network/ui/get_network_report',
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-WP-Nonce', wpApiNetworkDashboard.nonce );
+        },
+    })
+        .done(function (data) {
+            console.log( data )
+        })
+        .fail(function (err) {
+            jQuery('#status-'+v.id).empty().append( "error" )
+            console.log("error for " +  v.post_title );
+            console.log(err);
+        })
 }

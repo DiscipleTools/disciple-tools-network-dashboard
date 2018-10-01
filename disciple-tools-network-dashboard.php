@@ -35,7 +35,7 @@ function dt_network_dashboard() {
          *
          * @see https://www.sitepoint.com/wordpress-plugin-updates-right-way/
          */
-        $migration_number = 0;
+        $migration_number = 1;
         try {
 
             require_once( plugin_dir_path( __FILE__ ) . '/admin/admin/class-migration-engine.php' );
@@ -116,19 +116,24 @@ class DT_Network_Dashboard {
      */
     private function includes() {
 
-        require_once( 'install/installer-endpoints.php' );
-        require_once( 'install/installer.php' );
+        require_once( 'admin/customize_site_linking.php' ); // loads capabilities
 
+        // adds charts and metrics to the network tab
         require_once( 'ui/ui-endpoints.php' );
         require_once( 'ui/ui.php' );
 
-        require_once( 'report/report-collection.php' );
-        require_once( 'report/report-collection-endpoints.php' );
+        // collects reports from other systems
+        require_once( 'reports/reports.php' );
+        require_once( 'reports/reports-endpoints.php' );
+        require_once( 'reports/reports-template.php' );
 
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );
             require_once( 'admin/locations-network-metabox.php' );
-            require_once( 'admin/customize_site_linking.php' );
+
+            // Installs geodata to the site
+            require_once( 'install/installer-endpoints.php' );
+            require_once( 'install/installer.php' );
         }
     }
 
