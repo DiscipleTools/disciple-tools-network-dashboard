@@ -64,6 +64,18 @@ class DT_Network_Dashboard_Reports_Endpoints
                 'callback' => [ $this, 'project_totals' ],
             ]
         );
+        register_rest_route(
+            $this->public_namespace, '/network/collect/site_profile', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'site_profile' ],
+            ]
+        );
+        register_rest_route(
+            $this->public_namespace, '/network/collect/site_locations', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'site_locations' ],
+            ]
+        );
     }
 
     /**
@@ -84,6 +96,56 @@ class DT_Network_Dashboard_Reports_Endpoints
 
         if ( isset( $params['report_data'] ) ) {
             $result = DT_Network_Dashboard_Reports::insert_report( $params['report_data'] );
+            return $result;
+        } else {
+            return new WP_Error( __METHOD__, 'Missing required parameter: report_data.' );
+        }
+
+    }
+
+    /**
+     * @param \WP_REST_Request $request
+     *
+     * @return array|int|\WP_Error
+     */
+    public function site_profile( WP_REST_Request $request ) {
+
+        $params = $this->process_token( $request );
+        if ( is_wp_error( $params ) ) {
+            return $params;
+        }
+
+        if ( ! current_user_can( 'network_dashboard_transfer' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        if ( isset( $params['report_data'] ) ) {
+            $result = 'Site Profile Success';
+            return $result;
+        } else {
+            return new WP_Error( __METHOD__, 'Missing required parameter: report_data.' );
+        }
+
+    }
+
+    /**
+     * @param \WP_REST_Request $request
+     *
+     * @return array|int|\WP_Error
+     */
+    public function site_locations( WP_REST_Request $request ) {
+
+        $params = $this->process_token( $request );
+        if ( is_wp_error( $params ) ) {
+            return $params;
+        }
+
+        if ( ! current_user_can( 'network_dashboard_transfer' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        if ( isset( $params['report_data'] ) ) {
+            $result = 'Site Locations Success';
             return $result;
         } else {
             return new WP_Error( __METHOD__, 'Missing required parameter: report_data.' );

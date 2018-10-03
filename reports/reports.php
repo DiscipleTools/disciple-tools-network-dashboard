@@ -30,12 +30,12 @@ class DT_Network_Dashboard_Reports
     public static function query_site_link_list() {
         global $wpdb;
         $list = $wpdb->get_results("
-            SELECT post_title, ID as id
+            SELECT post_title as name, ID as id
             FROM $wpdb->posts
             JOIN $wpdb->postmeta
               ON $wpdb->posts.ID=$wpdb->postmeta.post_id
               AND $wpdb->postmeta.meta_key = 'type'
-              AND $wpdb->postmeta.meta_value = 'Network Dashboard (Base)'
+              AND $wpdb->postmeta.meta_value = 'network_dashboard'
             WHERE post_type = 'site_link_system' 
                 AND post_status = 'publish'
         ", ARRAY_A );
@@ -52,6 +52,7 @@ class DT_Network_Dashboard_Reports
             'total_groups' => 0,
             'total_users' => 0,
             'date' => current_time( 'mysql' ),
+            'raw_response' => '',
         ]);
 
         $result = $wpdb->insert( $wpdb->dt_network_reports, [
@@ -60,6 +61,7 @@ class DT_Network_Dashboard_Reports
                 'total_groups' => $args['total_groups'],
                 'total_users' => $args['total_users'],
                 'date' => $args['date'],
+                'raw_response' => $args['raw_response'],
             ]);
 
         if (! $result ) {
