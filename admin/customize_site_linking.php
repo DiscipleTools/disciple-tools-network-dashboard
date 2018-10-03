@@ -1,4 +1,5 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
 /**
  * Configures the site link system for the network reporting
  */

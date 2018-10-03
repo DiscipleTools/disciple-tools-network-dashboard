@@ -1,8 +1,8 @@
 <?php
+if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
 /**
- *
+ * Class DT_Network_Dashboard_Reports
  */
-
 class DT_Network_Dashboard_Reports
 {
     public static function trigger_transfer( $site_post_id, $type ) {
@@ -70,5 +70,28 @@ class DT_Network_Dashboard_Reports
             return (int) $wpdb->insert_id;
         }
 
+    }
+
+    public static function update_site_profile( $site_id, $site_profile ) {
+        $error = new WP_Error;
+        $error_count = 0;
+
+        if ( empty( $site_profile ) ) {
+            $error->add(__METHOD__, 'Empty site profile' );
+            return [
+                'status' => 'FAIL',
+                'action' => $error,
+            ];
+        }
+
+
+        foreach ( $site_profile as $key => $value ) {
+            update_post_meta( $site_id, $key, $value );
+        }
+
+        return [
+            'status' => 'OK',
+            'action' => 'Updated'
+        ];
     }
 }

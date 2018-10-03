@@ -6,9 +6,7 @@
  * @category Plugin
  * @since    0.1
  */
-if ( !defined( 'ABSPATH' ) ) {
-    exit;
-} // Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
 
 /**
  * Class DT_Network_Dashboard_Installer_Endpoints

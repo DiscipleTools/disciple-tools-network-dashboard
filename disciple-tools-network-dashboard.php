@@ -14,8 +14,8 @@
  * @license GPL-2.0 or later
  *          https://www.gnu.org/licenses/gpl-2.0.html
  */
-if ( !defined( 'ABSPATH' ) ) {
-    return; // return unless accessed directly
+if ( ! defined( 'ABSPATH' ) ) {
+    return; // return if accessed directly
 }
 
 /**
@@ -127,11 +127,9 @@ class DT_Network_Dashboard {
         require_once( 'reports/reports-endpoints.php' );
         require_once( 'reports/reports-template.php' );
 
-        require_once( 'admin/site-profile-post-type.php' );
-
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );
-            require_once( 'admin/locations-network-metabox.php' );
+            require_once( 'admin/metabox-site-profile.php' );
 
             // Installs geodata to the site
             require_once( 'install/installer-endpoints.php' );

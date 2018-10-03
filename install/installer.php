@@ -3,10 +3,11 @@
  * Installer
  */
 
-if ( ! defined( 'ABSPATH' ) ) { exit; // Exit if accessed directly
-}
+if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
 
-
+/**
+ * Class DT_Network_Dashboard_Installer
+ */
 class DT_Network_Dashboard_Installer {
 
     public static $csv_host = 'https://storage.googleapis.com/discipletools/';

@@ -1,5 +1,5 @@
 <?php
-
+if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
 /**
  * Class DT_Zume_Hooks
  */

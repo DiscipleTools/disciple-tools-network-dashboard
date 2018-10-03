@@ -1,5 +1,6 @@
 <?php
 declare(strict_types=1);
+if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
 
 /**
  * Class DT_Network_Dashboard_Migration_0000

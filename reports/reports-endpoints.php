@@ -6,9 +6,7 @@
  * @category Plugin
  * @since    0.1
  */
-if ( !defined( 'ABSPATH' ) ) {
-    exit;
-} // Exit if accessed directly.
+if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
 
 /**
  * Class DT_Network_Dashboard_Reports_Endpoints
@@ -119,9 +117,22 @@ class DT_Network_Dashboard_Reports_Endpoints
             return new WP_Error( __METHOD__, 'Permission error.' );
         }
 
-        if ( isset( $params['report_data'] ) ) {
-            $result = 'Site Profile Success';
-            return $result;
+        if ( isset( $params['report_data'] ) && isset( $params['report_data']['check_sum'] ) ) {
+
+            // test if site link post id available
+            if ( ! $params['site_post_id'] ) {
+                return new WP_Error( __METHOD__, 'Unabled to find matching post id.' );
+            }
+
+            // test check sum to see if update is needed
+            if ( $params['report_data']['check_sum'] === get_post_meta( $params['site_post_id'], 'partner_profile_check_sum', true ) ) {
+                return [
+                    'status' => 'OK',
+                    'action' => 'Check sum match. No updated needed.',
+                ];
+            }
+
+            return DT_Network_Dashboard_Reports::update_site_profile( $params['site_post_id'], $params['report_data'] );
         } else {
             return new WP_Error( __METHOD__, 'Missing required parameter: report_data.' );
         }
@@ -166,7 +177,6 @@ class DT_Network_Dashboard_Reports_Endpoints
 
         // required valid token challenge
         if ( ! $valid_token ) {
-            dt_write_log( $valid_token );
             return new WP_Error( __METHOD__, 'Invalid transfer token' );
         }
 
@@ -174,6 +184,9 @@ class DT_Network_Dashboard_Reports_Endpoints
         if ( ! current_user_can( 'network_dashboard_transfer' ) ) {
             return new WP_Error( __METHOD__, 'Network report permission error.' );
         }
+
+        $site_key = Site_Link_System::decrypt_transfer_token( $params['transfer_token'] );
+        $params['site_post_id'] = Site_Link_System::get_post_id_by_site_key( $site_key );
 
         return $params;
     }
