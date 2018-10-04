@@ -162,8 +162,10 @@ class DT_Network_Dashboard {
 
         $wpdb->dt_geonames = 'dt_geonames';
         $wpdb->dt_geonames_polygons = 'dt_geonames_polygons';
+        $wpdb->dt_geonames_hierarchy = 'dt_geonames_hierarchy';
         $wpdb->dt_network_reports = $wpdb->prefix . 'dt_network_reports';
         $wpdb->dt_network_reportmeta = $wpdb->prefix . 'dt_network_reportmeta';
+        $wpdb->dt_network_locations = $wpdb->prefix . 'dt_network_locations';
 
     }
 

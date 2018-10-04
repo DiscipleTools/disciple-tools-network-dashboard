@@ -162,12 +162,12 @@ class DT_Network_Dashboard_Reports_Endpoints
             }
 
             // test check sum to see if update is needed
-            if ( $params['report_data']['check_sum'] === get_post_meta( $params['site_post_id'], 'partner_locations_check_sum', true ) ) {
-                return [
-                    'status' => 'OK',
-                    'action' => 'Check sum match. No updated needed.',
-                ];
-            }
+//            if ( $params['report_data']['check_sum'] === get_post_meta( $params['site_post_id'], 'partner_locations_check_sum', true ) ) {
+//                return [
+//                    'status' => 'OK',
+//                    'action' => 'Check sum match. No updated needed.',
+//                ];
+//            }
 
             return DT_Network_Dashboard_Reports::update_site_locations( $params['site_post_id'], $params['report_data'] );
         } else {
