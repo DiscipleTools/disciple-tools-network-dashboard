@@ -33,6 +33,11 @@ class DT_Network_Dashboard_Migration_0001 extends DT_Network_Dashboard_Migration
             $strategist = get_role( 'dt_admin' );
             $strategist->add_cap( 'view_network_dashboard' );
         }
+
+        /**
+         * Setup population variable
+         */
+        update_option( 'dt_network_dashboard_population', 5000, false );
     }
 
     /**
@@ -40,6 +45,7 @@ class DT_Network_Dashboard_Migration_0001 extends DT_Network_Dashboard_Migration
      */
     public function down() {
         remove_role( 'network_dashboard_viewer' );
+        delete_option( 'dt_network_dashboard_population' );
     }
 
     /**

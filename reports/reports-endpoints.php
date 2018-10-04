@@ -117,7 +117,7 @@ class DT_Network_Dashboard_Reports_Endpoints
             return new WP_Error( __METHOD__, 'Permission error.' );
         }
 
-        if ( isset( $params['report_data'] ) && isset( $params['report_data']['check_sum'] ) ) {
+        if ( isset( $params['report_data'] ) && isset( $params['report_data']['partner_profile_check_sum'] ) ) {
 
             // test if site link post id available
             if ( ! $params['site_post_id'] ) {
@@ -125,7 +125,7 @@ class DT_Network_Dashboard_Reports_Endpoints
             }
 
             // test check sum to see if update is needed
-            if ( $params['report_data']['check_sum'] === get_post_meta( $params['site_post_id'], 'partner_profile_check_sum', true ) ) {
+            if ( $params['report_data']['partner_profile_check_sum'] === get_post_meta( $params['site_post_id'], 'partner_profile_check_sum', true ) ) {
                 return [
                     'status' => 'OK',
                     'action' => 'Check sum match. No updated needed.',
@@ -155,9 +155,21 @@ class DT_Network_Dashboard_Reports_Endpoints
             return new WP_Error( __METHOD__, 'Permission error.' );
         }
 
-        if ( isset( $params['report_data'] ) ) {
-            $result = 'Site Locations Success';
-            return $result;
+        if ( isset( $params['report_data'] ) && isset( $params['report_data']['check_sum'] ) ) {
+            // test if site link post id available
+            if ( ! $params['site_post_id'] ) {
+                return new WP_Error( __METHOD__, 'Unabled to find matching post id.' );
+            }
+
+            // test check sum to see if update is needed
+            if ( $params['report_data']['check_sum'] === get_post_meta( $params['site_post_id'], 'partner_locations_check_sum', true ) ) {
+                return [
+                    'status' => 'OK',
+                    'action' => 'Check sum match. No updated needed.',
+                ];
+            }
+
+            return DT_Network_Dashboard_Reports::update_site_locations( $params['site_post_id'], $params['report_data'] );
         } else {
             return new WP_Error( __METHOD__, 'Missing required parameter: report_data.' );
         }

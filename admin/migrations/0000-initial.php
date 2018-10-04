@@ -14,11 +14,6 @@ class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration
      */
     public function up() {
         /**
-         * Setup variables
-         */
-        update_option( 'dt_network_dashboard_population', 5000, false );
-
-        /**
          * Install tables
          */
         global $wpdb;
@@ -27,7 +22,6 @@ class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration
             $rv = $wpdb->query( $table ); // WPCS: unprepared SQL OK
             if ( $rv == false ) {
                 dt_write_log("Got error when creating table $name: $wpdb->last_error" );
-//                throw new Exception( "Got error when creating table $name: $wpdb->last_error" );
             }
         }
 
@@ -45,8 +39,6 @@ class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration
                 throw new Exception( "Got error when dropping table $name: $wpdb->last_error" );
             }
         }
-
-        delete_option( 'dt_network_dashboard_population' );
     }
 
     /**
@@ -58,10 +50,10 @@ class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration
         return array(
             "{$wpdb->prefix}dt_network_reports" =>
                 "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_network_reports` (
-                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                  `partner_id` varchar(11) NOT NULL DEFAULT '',
+                  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                  `partner_id` varchar(50) NOT NULL DEFAULT '',
                   `location_name` varchar(200) DEFAULT NULL,
-                  `geonameid` int(11) NOT NULL DEFAULT '0',
+                  `geonameid` bigint(20) NOT NULL DEFAULT '0',
                   `longitude` float NOT NULL,
                   `latitude` float NOT NULL,
                   `total_contacts` int(7) NOT NULL DEFAULT '0',
@@ -81,8 +73,8 @@ class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration
                 )  $charset_collate;",
             "{$wpdb->prefix}dt_network_reportmeta" =>
                 "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_network_reportmeta` (
-                  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-                  `report_id` int(11) NOT NULL,
+                  `id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                  `report_id` bigint(20) NOT NULL,
                   `meta_key` varchar(255) NOT NULL DEFAULT '',
                   `meta_value` longtext,
                   PRIMARY KEY (`id`),
@@ -91,7 +83,7 @@ class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration
                 ) $charset_collate;",
             "dt_geonames" =>
                 "CREATE TABLE IF NOT EXISTS `dt_geonames` (
-                  `geonameid` bigint(11) unsigned NOT NULL,
+                  `geonameid` bigint(20) unsigned NOT NULL,
                   `name` varchar(200) DEFAULT NULL,
                   `asciiname` varchar(200) DEFAULT NULL,
                   `alternatenames` varchar(10000) DEFAULT NULL,
@@ -119,10 +111,36 @@ class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration
                 ) $charset_collate;",
             "dt_geonames_polygons" =>
                 "CREATE TABLE IF NOT EXISTS `dt_geonames_polygons` (
-                  `geonameid` bigint(11) unsigned NOT NULL,
+                  `geonameid` bigint(20) unsigned NOT NULL,
                   `geoJSON` longtext,
                   PRIMARY KEY (`geonameid`)
                 ) $charset_collate;",
+            "dt_geonames_hierarchy" =>
+                "CREATE TABLE IF NOT EXISTS `dt_geonames_hierarchy` (
+                  `parent_id` int(20) unsigned NOT NULL,
+                  `id` int(20) unsigned NOT NULL,
+                  `type` varchar(50) DEFAULT NULL,
+                  KEY `parent_id` (`parent_id`),
+                  KEY `id` (`id`)
+                ) $charset_collate;",
+            "{$wpdb->prefix}dt_partner_locations" =>
+                "CREATE TABLE IF NOT EXISTS `{$wpdb->prefix}dt_partner_locations` (
+                  `dtpl_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+                  `id` bigint(20) DEFAULT NULL,
+                  `parent_id` bigint(20) DEFAULT NULL,
+                  `name` varchar(50) DEFAULT NULL,
+                  `address` varchar(50) DEFAULT NULL,
+                  `latitude` float DEFAULT NULL,
+                  `longitude` float DEFAULT NULL,
+                  `geonameid` bigint(22) DEFAULT NULL,
+                  `country_code` char(2) DEFAULT NULL,
+                  `admin1_code` varchar(20) DEFAULT NULL,
+                  `admin2_code` varchar(20) DEFAULT NULL,
+                  `admin3_code` varchar(20) DEFAULT NULL,
+                  `admin4_code` varchar(20) DEFAULT NULL,
+                  `population` int(11) DEFAULT NULL,
+                  PRIMARY KEY (`dtpl_id`)
+                )  $charset_collate;",
         );
     }
 

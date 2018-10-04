@@ -74,7 +74,6 @@ class DT_Network_Dashboard_Reports
 
     public static function update_site_profile( $site_id, $site_profile ) {
         $error = new WP_Error;
-        $error_count = 0;
 
         if ( empty( $site_profile ) ) {
             $error->add(__METHOD__, 'Empty site profile' );
@@ -84,10 +83,30 @@ class DT_Network_Dashboard_Reports
             ];
         }
 
-
         foreach ( $site_profile as $key => $value ) {
             update_post_meta( $site_id, $key, $value );
         }
+
+        return [
+            'status' => 'OK',
+            'action' => 'Updated'
+        ];
+    }
+
+    public static function update_site_locations( $site_id, $site_locations ) {
+        $error = new WP_Error;
+
+        if ( empty( $site_profile ) ) {
+            $error->add(__METHOD__, 'Empty site profile' );
+            return [
+                'status' => 'FAIL',
+                'action' => $error,
+            ];
+        }
+
+        update_post_meta( $site_id, 'partner_locations_check_sum', $site_locations['check_sum'] );
+
+        
 
         return [
             'status' => 'OK',
