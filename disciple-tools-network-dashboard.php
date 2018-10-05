@@ -116,6 +116,7 @@ class DT_Network_Dashboard {
      */
     private function includes() {
 
+        require_once( 'admin/standard-queries.php' );
         require_once( 'admin/customize_site_linking.php' ); // loads capabilities
 
         // adds charts and metrics to the network tab
@@ -125,7 +126,6 @@ class DT_Network_Dashboard {
         // collects reports from other systems
         require_once( 'reports/reports.php' );
         require_once( 'reports/reports-endpoints.php' );
-        require_once( 'reports/reports-template.php' );
 
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );

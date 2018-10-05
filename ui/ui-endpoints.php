@@ -97,7 +97,7 @@ class DT_Network_Dashboard_UI_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['id'] ) ) {
-            return dtnd_get_report_by_id( $params['id'] );
+            return dt_network_dashboard_queries ( 'get_report_by_id', [ 'id' => $params['id'] ] );
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
         }

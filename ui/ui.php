@@ -79,7 +79,7 @@ class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
                     'map' => DT_Network_Dashboard_UI::get_location_map(),
                     'side_tree' => DT_Network_Dashboard_UI::get_location_side_tree(),
                     'level_tree' => DT_Network_Dashboard_UI::get_locations_level_tree(),
-                    'report_sync' => DT_Network_Dashboard_Reports::query_site_link_list(),
+                    'report_sync' => dt_network_dashboard_queries( 'site_link_list' ),
                 ],
                 'translations' => [
                     "sm_title" => __( "Network Dashboard", "dt_zume" ),

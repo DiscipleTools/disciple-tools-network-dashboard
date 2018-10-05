@@ -317,7 +317,7 @@ function show_report_sync(){
         /* Partner Location Report */
         spinner_section.append( `<p id="site-locations-`+v.id+`">`+page.spinner_large+`</p>`)
 
-        let data3 = { "id": v.id, "type": "site_locations" }
+        let data3 = { "id": v.id, "type": "outstanding_site_locations" }
         jQuery.ajax({
             type: "POST",
             data: JSON.stringify(data3),

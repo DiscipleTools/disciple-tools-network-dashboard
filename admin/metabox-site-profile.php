@@ -29,19 +29,7 @@ class DT_Network_Dashboard_Site_Profile_Metabox {
         $site_link_system = Site_Link_System::instance();
         $site_link_system->meta_box_content( 'network_dashboard' );
 
-        /**
-         * Site Locations Info
-         */
-        $site_locations = get_post_meta( $post->ID, 'partner_locations', true );
-        if ( ! empty( $site_locations ) ) {
-
-            echo '<hr>';
-
-            $site_locations = maybe_unserialize( $site_locations );
-            foreach ( $site_locations as $site_location ) {
-                echo '<dd>'. $site_location['name'].'</dd>';
-            }
-        }
+        $this->get_sync_status( $post->ID );
     }
 
     public function network_field_filter( $fields ) {
@@ -68,6 +56,56 @@ class DT_Network_Dashboard_Site_Profile_Metabox {
         ];
 
         return $fields;
+    }
+
+    public function get_sync_status( $site_post_id ) {
+        // get local count
+        $data = dt_network_dashboard_queries( 'check_sum_list', [ 'site_post_id' => $site_post_id ] );
+
+        // get remote count
+        $remote_data = DT_Network_Dashboard_Reports::stats( $site_post_id, 'locations_list' );
+        $remote_data = json_decode( $remote_data );
+
+//        dt_write_log($data);
+        dt_write_log($remote_data);
+
+        echo '<hr>';
+        echo 'Network Dashboard: ' .  count($data) . '<br>';
+        echo 'This site at the other location: ' . count($remote_data) . '<br>';
+
+        ?>
+        <p><a onclick="trigger_outstanding_locations()" class="button pointer">Sync Records</a><span id="spinner_sync"></span></p>
+        <script>
+            function trigger_outstanding_locations() {
+                let spinner_span = jQuery('#spinner_sync')
+                spinner_span.append(' <img src="<?php echo esc_url( plugin_dir_url(__FILE__) ) . 'ajax-loader.gif' ?>" width="15px" />')
+
+                let data3 = { "id": "<?php echo esc_attr( $site_post_id ); ?>", "type": "outstanding_site_locations" }
+                jQuery.ajax({
+                    type: "POST",
+                    data: JSON.stringify(data3),
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    url: '<?php echo esc_url( rest_url() ) ?>dt/v1/network/ui/trigger_transfer',
+                    beforeSend: function(xhr) {
+                        xhr.setRequestHeader('X-WP-Nonce', '<?php echo wp_create_nonce( 'wp_rest' ) ?>' );
+                    },
+                })
+                    .done(function (data) {
+                        spinner_span.empty()
+                        location.reload();
+                        console.log(data)
+                    })
+                    .fail(function (err) {
+                        spinner_span.empty()
+                        console.log(err);
+                    })
+            }
+
+        </script>
+
+        <?php
+
     }
 }
 new DT_Network_Dashboard_Site_Profile_Metabox();

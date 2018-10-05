@@ -69,9 +69,15 @@ class DT_Network_Dashboard_Reports_Endpoints
             ]
         );
         register_rest_route(
-            $this->public_namespace, '/network/collect/site_locations', [
+            $this->public_namespace, '/network/collect/update_location', [
                 'methods'  => 'POST',
-                'callback' => [ $this, 'site_locations' ],
+                'callback' => [ $this, 'update_location' ],
+            ]
+        );
+        register_rest_route(
+            $this->public_namespace, '/network/collect/delete_location', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'delete_location' ],
             ]
         );
     }
@@ -144,7 +150,7 @@ class DT_Network_Dashboard_Reports_Endpoints
      *
      * @return array|int|\WP_Error
      */
-    public function site_locations( WP_REST_Request $request ) {
+    public function update_location( WP_REST_Request $request ) {
 
         $params = $this->process_token( $request );
         if ( is_wp_error( $params ) ) {
@@ -161,15 +167,36 @@ class DT_Network_Dashboard_Reports_Endpoints
                 return new WP_Error( __METHOD__, 'Unabled to find matching post id.' );
             }
 
-            // test check sum to see if update is needed
-//            if ( $params['report_data']['check_sum'] === get_post_meta( $params['site_post_id'], 'partner_locations_check_sum', true ) ) {
-//                return [
-//                    'status' => 'OK',
-//                    'action' => 'Check sum match. No updated needed.',
-//                ];
-//            }
+            return DT_Network_Dashboard_Reports::update_location( $params['report_data'] );
+        } else {
+            return new WP_Error( __METHOD__, 'Missing required parameter: report_data.' );
+        }
 
-            return DT_Network_Dashboard_Reports::update_site_locations( $params['site_post_id'], $params['report_data'] );
+    }
+
+    /**
+     * @param \WP_REST_Request $request
+     *
+     * @return array|int|\WP_Error
+     */
+    public function delete_location( WP_REST_Request $request ) {
+
+        $params = $this->process_token( $request );
+        if ( is_wp_error( $params ) ) {
+            return $params;
+        }
+
+        if ( ! current_user_can( 'network_dashboard_transfer' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        if ( isset( $params['report_data'] ) && isset( $params['report_data']['check_sum'] ) ) {
+            // test if site link post id available
+            if ( ! $params['site_post_id'] ) {
+                return new WP_Error( __METHOD__, 'Unabled to find matching post id.' );
+            }
+
+            return DT_Network_Dashboard_Reports::delete_location( $params['report_data'] );
         } else {
             return new WP_Error( __METHOD__, 'Missing required parameter: report_data.' );
         }

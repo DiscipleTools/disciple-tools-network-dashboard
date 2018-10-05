@@ -16,8 +16,13 @@ class DT_Network_Dashboard_Reports
         $data = '';
 
         if ( 'site_locations' === $type ) {
-            $data = self::get_check_sum_list( $site_post_id );
-            dt_write_log($data);
+            $data = dt_network_dashboard_queries( 'check_sum_list', [ 'site_post_id' => $site_post_id ] );
+        }
+        if ( 'outstanding_site_locations' === $type ) {
+            $data = self::get_outstanding_locations( $site_post_id );
+            if ( empty( $data ) ) {
+                return 'No outstanding locations to sync.';
+            }
         }
 
         $args = [
@@ -36,29 +41,81 @@ class DT_Network_Dashboard_Reports
         }
     }
 
-    public static function get_check_sum_list( $site_post_id) {
-        global $wpdb;
-        $partner_id = get_post_meta( $site_post_id, 'partner_id', true );
-        $results = $wpdb->get_results( $wpdb->prepare( "
-            SELECT foreign_key, check_sum FROM $wpdb->dt_network_locations WHERE partner_id = %s
-        ", $partner_id), ARRAY_A );
-        return $results;
+    public static function stats( $site_post_id, $type ) {
+
+        $site = Site_Link_System::get_site_connection_vars( $site_post_id );
+        if ( is_wp_error( $site ) ) {
+            return new WP_Error( __METHOD__, 'Error creating site connection details.' );
+        }
+
+        $args = [
+            'method' => 'GET',
+            'body' => [
+                'transfer_token' => $site['transfer_token'],
+                'type' => $type,
+            ]
+        ];
+        $result = wp_remote_get( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network/stats', $args );
+        if ( is_wp_error( $result ) ) {
+            return new WP_Error( 'failed_remote_post', $result->get_error_message() );
+        } else {
+            return $result['body'];
+        }
     }
 
-    public static function query_site_link_list() {
-        global $wpdb;
-        $list = $wpdb->get_results("
-            SELECT post_title as name, ID as id
-            FROM $wpdb->posts
-            JOIN $wpdb->postmeta
-              ON $wpdb->posts.ID=$wpdb->postmeta.post_id
-              AND $wpdb->postmeta.meta_key = 'type'
-              AND $wpdb->postmeta.meta_value = 'network_dashboard'
-            WHERE post_type = 'site_link_system' 
-                AND post_status = 'publish'
-        ", ARRAY_A );
+    /**
+     * Function builds list locations that have changed, been added, and removes locations that have been deleted.
+     *
+     * @param $site_post_id
+     *
+     * @return array
+     */
+    public static function get_outstanding_locations( $site_post_id ) {
+        dt_write_log(__METHOD__);
 
-        return $list;
+        $action = [
+            'match' => 0,
+            'update_scheduled' => 0,
+            'schedule_error' => 0,
+        ];
+
+        $outstanding_locations = [];
+
+        $remote_data = json_decode( DT_Network_Dashboard_Reports::stats( $site_post_id, 'locations_list' ) );
+
+        $dashboard_data = dt_network_dashboard_queries( 'check_sum_list', [ 'site_post_id' => $site_post_id ] );;
+
+        foreach ( $remote_data as $master ) {
+            foreach ( $dashboard_data as $dash_value ) {
+                // first match foreign key
+                if ( $master->foreign_key === $dash_value['foreign_key'] ) {
+                    // then test if check_sum matches
+                    if ( isset( $dash_value['check_sum'] ) && $master->check_sum === $dash_value['check_sum'] ) {
+                        // record match and break to next master value
+                        $action['match']++;
+                        continue 2;
+                    }
+                }
+            }
+
+            $outstanding_locations[] = [
+                'foreign_key' => $master->foreign_key,
+                'check_sum' => $master->check_sum,
+            ];
+        }
+
+        // remove deleted locations
+        foreach ( $dashboard_data as $dash_value ) {
+            foreach ( $remote_data as $master ) {
+                if ( $master->foreign_key === $dash_value['foreign_key'] ) {
+                    continue 2;
+                }
+            }
+            self::delete_location( $dash_value );
+        }
+
+        // return list of locations that need updated or added.
+        return $outstanding_locations;
     }
 
     public static function insert_report( $args ) {
@@ -87,7 +144,6 @@ class DT_Network_Dashboard_Reports
         } else {
             return (int) $wpdb->insert_id;
         }
-
     }
 
     public static function update_site_profile( $site_id, $site_profile ) {
@@ -111,40 +167,31 @@ class DT_Network_Dashboard_Reports
         ];
     }
 
-    public static function update_site_locations( $site_id, $report_data ) {
-        $error = [];
-
-        update_post_meta( $site_id, 'partner_locations_check_sum', $report_data['check_sum'] );
-        update_post_meta( $site_id, 'partner_locations_total', $report_data['total'] );
-
-        if ( empty( $report_data['locations'] ) ) {
-            return [
-                'status' => 'FAIL',
-                'action' => 'No locations found in report data.'
-            ];
-        }
-        dt_write_log($report_data['total']);
-
+    public static function update_location( $report_data ) {
         global $wpdb;
 
-        foreach ( $report_data['locations'] as $location ) {
+        if ( empty( $report_data ) ) {
+            return [
+                'status' => 'FAIL',
+                'action' => 'No location found in report data.'
+            ];
+        }
 
-            $last_error = $wpdb->last_error;
+        $partner_id = esc_sql( $report_data['partner_id'] );
+        $foreign_key = esc_sql( $report_data['foreign_key'] );
+        $id = esc_sql( $report_data['id'] );
+        $parent_id = esc_sql( $report_data['parent_id'] );
+        $post_title = esc_sql( $report_data['post_title'] );
+        $address = esc_sql( $report_data['address'] );
+        $latitude = esc_sql( $report_data['latitude'] );
+        $longitude = esc_sql( $report_data['longitude'] );
+        $types = esc_sql( $report_data['types'] );
+        $country_short_name = esc_sql( $report_data['country_short_name'] ) ?? '';
+        $admin1_short_name = esc_sql( $report_data['admin1_short_name'] ) ?? '';
+        $check_sum = esc_sql( $report_data['check_sum'] );
 
-            $partner_id = sanitize_text_field( wp_unslash( $location['partner_id'] ) );
-            $foreign_key = sanitize_text_field( wp_unslash( $location['foreign_key'] ) );
-            $id = sanitize_text_field( wp_unslash( $location['id'] ) );
-            $parent_id = sanitize_text_field( wp_unslash( $location['parent_id'] ) );
-            $post_title = sanitize_text_field( wp_slash( $location['post_title'] ) );
-            $address = sanitize_text_field( wp_slash( $location['address'] ) );
-            $latitude = sanitize_text_field( wp_unslash( $location['latitude'] ) );
-            $longitude = sanitize_text_field( wp_unslash( $location['longitude'] ) );
-            $country_short_name = sanitize_text_field( wp_unslash( $location['country_short_name'] ) );
-            $admin1_short_name = sanitize_text_field( wp_unslash( $location['admin1_short_name'] ) );
-            $types = sanitize_text_field( wp_unslash( $location['types'] ) );
 
-
-            $sql = "INSERT INTO $wpdb->dt_network_locations (
+        $sql = "INSERT INTO $wpdb->dt_network_locations (
                     partner_id,
                     foreign_key,
                     id,
@@ -155,46 +202,66 @@ class DT_Network_Dashboard_Reports
                     longitude,
                     types,
                     country_short_name,
-                    admin1_short_name
+                    admin1_short_name,
+                    check_sum
                     ) 
                     VALUES (
                     '$partner_id',
                     '$foreign_key',
-                    $id,
-                    $parent_id,
+                    '$id',
+                    '$parent_id',
                     '$post_title',
                     '$address',
-                    $latitude,
-                    $longitude,
+                    '$latitude',
+                    '$longitude',
                     '$types',
                     '$country_short_name',
-                    '$admin1_short_name'
+                    '$admin1_short_name',
+                    '$check_sum'
                     ) 
                     ON DUPLICATE KEY UPDATE 
                     partner_id='$partner_id',
                     foreign_key='$foreign_key',
-                    id=$id,
-                    parent_id=$parent_id,
+                    id='$id',
+                    parent_id='$parent_id',
                     post_title='$post_title',
                     address='$address',
-                    latitude=$latitude,
-                    longitude=$longitude,
+                    latitude='$latitude',
+                    longitude='$longitude',
                     types='$types',
                     country_short_name='$country_short_name',
-                    admin1_short_name='$admin1_short_name'
+                    admin1_short_name='$admin1_short_name',
+                    check_sum='$check_sum'
                     ;";
 
-            $wpdb->query( $sql );
-
-            if( (empty( $wpdb->last_result ) || !$wpdb->last_result ) && !empty( $wpdb->last_error ) && $last_error != $wpdb->last_error ) {
-                $error[]= $wpdb->last_error . " ($sql)";
-            }
-
-        }
+        $wpdb->query( $sql );
 
         return [
             'status' => 'OK',
             'action' => 'Updated'
+        ];
+    }
+
+    public static function delete_location( $report_data ) {
+        global $wpdb;
+
+        if ( empty( $report_data ) ) {
+            return [
+                'status' => 'FAIL',
+                'action' => 'No location found in report data.'
+            ];
+        }
+
+        $wpdb->delete(
+            $wpdb->dt_network_locations,
+            [
+                'foreign_key' => $report_data['foreign_key']
+            ]
+        );
+
+        return [
+            'status' => 'OK',
+            'action' => $wpdb->rows_affected,
         ];
     }
 }
