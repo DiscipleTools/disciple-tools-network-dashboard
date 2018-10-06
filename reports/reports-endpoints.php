@@ -50,8 +50,8 @@ class DT_Network_Dashboard_Reports_Endpoints
      * @since   0.1.0
      */
     public function __construct() {
-        $this->namespace = "dt" . "/v" . intval( $this->version );
-        $this->public_namespace = "dt-public" . "/v" . intval( $this->version );
+        $this->namespace = "dt/v" . intval( $this->version );
+        $this->public_namespace = "dt-public/v" . intval( $this->version );
         add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
     } // End __construct()
 
@@ -190,7 +190,7 @@ class DT_Network_Dashboard_Reports_Endpoints
             return new WP_Error( __METHOD__, 'Permission error.' );
         }
 
-        if ( isset( $params['report_data'] ) && isset( $params['report_data']['check_sum'] ) ) {
+        if ( isset( $params['report_data'] ) ) {
             // test if site link post id available
             if ( ! $params['site_post_id'] ) {
                 return new WP_Error( __METHOD__, 'Unabled to find matching post id.' );

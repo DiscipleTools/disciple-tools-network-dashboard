@@ -1,8 +1,9 @@
 <?php
-require( $_SERVER[ 'DOCUMENT_ROOT' ] . '/wp-load.php' ); // loads the wp framework when called
+// @codingStandardsIgnoreStart
+require( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php' ); // loads the wp framework when called
 if ( ! isset( $_GET['map'] ) || ! isset( $_GET['value'] ) ) {
     error_log( 'Missing requirements.' );
-    wp_die('missing either map or value parameters' );
+    wp_die( 'missing either map or value parameters' );
 }
 $value = $_GET['value'];
 $map_type = $_GET['map'];
@@ -64,14 +65,14 @@ $map_type = $_GET['map'];
         };
 
         map.data.loadGeoJson('https://mu-zume/wp-content/plugins/disciple-tools-network-dashboard/ui/geojson.php?map=<?php echo $map_type; ?><?php
-            if ( is_array( $value ) ) {
-                foreach ( $value as $key => $item ) {
-                    echo '&value['.$key.']=' . $item;
-                }
-            } else {
-                echo '&value=' . $value;
+        if ( is_array( $value ) ) {
+            foreach ( $value as $key => $item ) {
+                echo '&value['.$key.']=' . $item;
             }
-             ?>');
+        } else {
+            echo '&value=' . $value;
+        }
+        ?>');
     }
 </script>
 <!-- Working single: https://dashboard.mu-zume/wp-content/plugins/disciple-tools-network-dashboard/ui/map.php?map=single&value=5411363 -->

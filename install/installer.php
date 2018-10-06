@@ -14,50 +14,50 @@ class DT_Network_Dashboard_Installer {
 
     public static function install_world_admin_set() {
         global $wpdb;
-        $file = 'gn_world_admin';
 
-        $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/' .$file.'.csv"
+        $file_path = plugin_dir_path( __DIR__ ) . 'install/gn_world_admin.csv';
+        // @todo added prepare
+        $wpdb->query( $wpdb->prepare( 'LOAD DATA LOCAL INFILE %s
             INTO TABLE dt_geonames
             FIELDS TERMINATED by \',\'
             ENCLOSED BY \'"\'
             LINES TERMINATED BY \'\n\'
-            IGNORE 1 LINES');
+            IGNORE 1 LINES', $file_path ) );
 
         return $wpdb->last_result;
-
     }
 
     public static function get_geonames_zip_download( $country_code ) {
         // get latest german WordPress file
-        dt_write_log('Begin zip download');
+        dt_write_log( 'Begin zip download' );
         $ch = curl_init();
         $source = "http://download.geonames.org/export/dump/" . $country_code . ".zip"; // THE FILE URL
-        curl_setopt($ch, CURLOPT_URL, $source);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        $data = curl_exec ($ch);
-        curl_close ($ch);
-        dt_write_log('after curl');
+        curl_setopt( $ch, CURLOPT_URL, $source );
+        curl_setopt( $ch, CURLOPT_RETURNTRANSFER, 1 );
+        $data = curl_exec( $ch );
+        curl_close( $ch );
+        dt_write_log( 'after curl' );
 
         // save as wordpress.zip
-        $destination = plugin_dir_path(__FILE__) . $country_code . ".zip"; // NEW FILE LOCATION
-        $file = fopen($destination, "w+");
-        fputs($file, $data);
-        fclose($file);
+        $destination = plugin_dir_path( __FILE__ ) . $country_code . ".zip"; // NEW FILE LOCATION
+        $file = fopen( $destination, "w+" );
+        fputs( $file, $data );
+        fclose( $file );
 
-        dt_write_log('file downloaded');
+        dt_write_log( 'file downloaded' );
 
         // unzip
-        $zip = new ZipArchive;
-        $res = $zip->open(plugin_dir_path(__FILE__) . $country_code . '.zip' ); // zip datei
-        if ($res === TRUE) {
-            $zip->extractTo(plugin_dir_path(__FILE__) ); // verz zum entpacken
+        $zip = new ZipArchive();
+        $res = $zip->open( plugin_dir_path( __FILE__ ) . $country_code . '.zip' ); // zip datei
+        if ($res === true) {
+            $zip->extractTo( plugin_dir_path( __FILE__ ) ); // verz zum entpacken
             $zip->close();
-            dt_write_log('zip extracted');
-            unlink(plugin_dir_path(__FILE__) . $country_code . '.zip' );
-            dt_write_log('zip deleted');
+            dt_write_log( 'zip extracted' );
+            unlink( plugin_dir_path( __FILE__ ) . $country_code . '.zip' );
+            dt_write_log( 'zip deleted' );
             return true;
         } else {
-            dt_write_log('zip failed');
+            dt_write_log( 'zip failed' );
             return false;
         }
     }
@@ -178,12 +178,14 @@ class DT_Network_Dashboard_Installer {
         $d = copy( self::$csv_host . "gn_".$file."_p.csv", plugin_dir_path( __DIR__ ) .'/install/gn_' . $file . '_p.csv' );
 
         if ( $d ) {
-            $result = $wpdb->query('LOAD DATA LOCAL INFILE "' . plugin_dir_path( __DIR__ ) . 'install/gn_' .$file.'_p.csv"
-                INTO TABLE '.dt_geonames.'
+            $file_path = plugin_dir_path( __DIR__ ) . 'install/gn_' .$file.'_p.csv';
+            // note: changed opening line from LOAD DATA LOCAL INFILE "{filename}"
+            $result = $wpdb->query( $wpdb->prepare( 'LOAD DATA LOCAL INFILE %s 
+                INTO TABLE dt_geonames
                 FIELDS TERMINATED by \',\'
                 ENCLOSED BY \'"\'
                 LINES TERMINATED BY \'\n\'
-                ');
+                ', $file_path )  );
             if ( $result ) {
                 return $result;
             } else {
@@ -382,7 +384,7 @@ class DT_Network_Dashboard_Installer {
                 'status' => 'FAIL',
                 'message' => 'No geoname found for parameter provided.',
                 'error' => $error,
-                'installed' => ['admin2', 0],
+                'installed' => [ 'admin2', 0 ],
                 'post_id' => null,
             ];
         }
@@ -393,7 +395,7 @@ class DT_Network_Dashboard_Installer {
                 'status' => 'OK',
                 'message' => 'Duplicate: This location is already installed.',
                 'error' => $error,
-                'installed' => ['admin2', 0],
+                'installed' => [ 'admin2', 0 ],
                 'post_id' => $result['admin2_post_id'],
                 'ids' => [
                     'country_post_id' => $result['country_post_id'],
@@ -423,13 +425,13 @@ class DT_Network_Dashboard_Installer {
                 $error = $country_result['error'];
                 $installed = $country_result['installed'];
                 $result['country_post_id'] = $country_result['post_id'];
-                $installed[] = ['country', $country_result['post_id']];
+                $installed[] = [ 'country', $country_result['post_id'] ];
             } else {
                 dt_write_log( $country_result );
                 $error = $country_result['error'];
                 $installed = $country_result['installed'];
                 $result['country_post_id'] = $country_result['post_id'];
-                $installed[] = ['country', $country_result['post_id']];
+                $installed[] = [ 'country', $country_result['post_id'] ];
             }
         } else {
             $result['country_post_id'] = $country_row['country_post_id'];
@@ -454,14 +456,14 @@ class DT_Network_Dashboard_Installer {
                 $error = $admin1_result['error'];
                 $installed = $admin1_result['installed'];
                 $result['admin1_post_id'] = $admin1_result['post_id'];
-                $installed[] = ['admin1', $admin1_result['post_id']];
+                $installed[] = [ 'admin1', $admin1_result['post_id'] ];
             } else {
                 dt_write_log( $admin1_result );
 
                 $error = $admin1_result['error'];
                 $installed = $admin1_result['installed'];
                 $result['admin1_post_id'] = $admin1_result['post_id'];
-                $installed[] = ['admin1', $admin1_result['post_id']];
+                $installed[] = [ 'admin1', $admin1_result['post_id'] ];
             }
         } else {
             $result['admin1_post_id'] = $admin1_row['admin1_post_id'];
@@ -510,7 +512,7 @@ class DT_Network_Dashboard_Installer {
             $address = $result['name'] . ',' . $result['admin1_code'] . ',' . $result['country_code'];
             self::geocode_location( $address, $admin2_post_id );
 
-            $installed[] = ['admin2', $admin2_post_id];
+            $installed[] = [ 'admin2', $admin2_post_id ];
             return [
                 'status' => 'OK',
                 'message' => 'Successfully installed admin2',
@@ -551,7 +553,7 @@ class DT_Network_Dashboard_Installer {
                 'status' => 'FAIL',
                 'message' => 'No geoname found for parameter provided.',
                 'error' => $error,
-                'installed' => ['admin1', 0],
+                'installed' => [ 'admin1', 0 ],
                 'post_id' => null,
             ];
         }
@@ -562,7 +564,7 @@ class DT_Network_Dashboard_Installer {
                 'status' => 'DUPLICATE',
                 'message' => 'This location is already installed.',
                 'error' => '',
-                'installed' => ['admin1', 0],
+                'installed' => [ 'admin1', 0 ],
                 'post_id' => $result['admin1_post_id'],
             ];
         }
@@ -588,13 +590,13 @@ class DT_Network_Dashboard_Installer {
                 $error = $country_result['error'];
                 $installed = $country_result['installed'];
                 $result['country_post_id'] = $country_result['post_id'];
-                $installed[] = ['country', $country_result['post_id']];
+                $installed[] = [ 'country', $country_result['post_id'] ];
             } else {
                 dt_write_log( $country_result );
                 $error = $country_result['error'];
                 $installed = $country_result['installed'];
                 $result['country_post_id'] = $country_result['post_id'];
-                $installed[] = ['country', $country_result['post_id']];
+                $installed[] = [ 'country', $country_result['post_id'] ];
             }
         } else {
             $result['country_post_id'] = $country_row['country_post_id'];
@@ -638,11 +640,11 @@ class DT_Network_Dashboard_Installer {
             if ( ! is_wp_error( $admin1_post_id ) ) {
 
                 if ( ! get_post_meta( $admin1_post_id, 'raw', true ) ) {
-                    $address = $admin1_result[ 'name' ] . ',' . $admin1_result[ 'country_code' ];
+                    $address = $admin1_result['name'] . ',' . $admin1_result['country_code'];
                     self::geocode_location( $address, $admin1_post_id );
                 }
 
-                $installed[] = ['admin1',$admin1_post_id];
+                $installed[] = [ 'admin1',$admin1_post_id ];
                 return [
                     'status'    => 'OK',
                     'message'   => 'Successfully installed admin1',
@@ -702,29 +704,29 @@ class DT_Network_Dashboard_Installer {
 
 
         $args = [
-            'post_title'  => $country_result[ 'name' ],
+            'post_title'  => $country_result['name'],
             'post_status' => 'publish',
-            'post_name'   => $country_result[ 'geonameid' ],
+            'post_name'   => $country_result['geonameid'],
             'post_type'   => 'locations',
             'meta_input'  => [
-                'gn_geonameid'         => $country_result[ 'geonameid' ],
-                'gn_name'              => $country_result[ 'name' ],
-                'gn_asciiname'         => $country_result[ 'asciiname' ],
-                'gn_alternatenames'    => $country_result[ 'alternatenames' ],
-                'gn_latitude'          => $country_result[ 'latitude' ],
-                'gn_longitude'         => $country_result[ 'longitude' ],
-                'gn_feature_class'     => $country_result[ 'feature_class' ],
-                'gn_feature_code'      => $country_result[ 'feature_code' ],
-                'gn_country_code'      => $country_result[ 'country_code' ],
-                'gn_admin1_code'       => $country_result[ 'admin1_code' ],
-                'gn_admin2_code'       => $country_result[ 'admin2_code' ],
-                'gn_admin3_code'       => $country_result[ 'admin3_code' ],
-                'gn_admin4_code'       => $country_result[ 'admin4_code' ],
-                'gn_population'        => $country_result[ 'population' ],
-                'gn_elevation'         => $country_result[ 'elevation' ],
-                'gn_dem'               => $country_result[ 'dem' ],
-                'gn_timezone'          => $country_result[ 'timezone' ],
-                'gn_modification_date' => $country_result[ 'modification_date' ],
+                'gn_geonameid'         => $country_result['geonameid'],
+                'gn_name'              => $country_result['name'],
+                'gn_asciiname'         => $country_result['asciiname'],
+                'gn_alternatenames'    => $country_result['alternatenames'],
+                'gn_latitude'          => $country_result['latitude'],
+                'gn_longitude'         => $country_result['longitude'],
+                'gn_feature_class'     => $country_result['feature_class'],
+                'gn_feature_code'      => $country_result['feature_code'],
+                'gn_country_code'      => $country_result['country_code'],
+                'gn_admin1_code'       => $country_result['admin1_code'],
+                'gn_admin2_code'       => $country_result['admin2_code'],
+                'gn_admin3_code'       => $country_result['admin3_code'],
+                'gn_admin4_code'       => $country_result['admin4_code'],
+                'gn_population'        => $country_result['population'],
+                'gn_elevation'         => $country_result['elevation'],
+                'gn_dem'               => $country_result['dem'],
+                'gn_timezone'          => $country_result['timezone'],
+                'gn_modification_date' => $country_result['modification_date'],
             ],
         ];
 
@@ -747,11 +749,11 @@ class DT_Network_Dashboard_Installer {
             } else {
 
                 if ( ! get_post_meta( $country_post_id, 'raw', true ) ) {
-                    $address = $country_result[ 'name' ];
+                    $address = $country_result['name'];
                     self::geocode_location( $address, $country_post_id );
                 }
 
-                $installed[ 'country' ] = $country_post_id;
+                $installed['country'] = $country_post_id;
                 return [
                     'status'    => 'OK',
                     'message'   => 'Successfully installed country',
@@ -768,9 +770,9 @@ class DT_Network_Dashboard_Installer {
                 FROM $wpdb->postmeta 
                 WHERE meta_key = 'gn_geonameid' 
                   AND meta_value = %s",
-            $geonameid ) );
+        $geonameid ) );
         if ( $duplicate ) {
-            $installed[] = ['country', $duplicate];
+            $installed[] = [ 'country', $duplicate ];
             return [
                 'status'    => 'DUPLICATE',
                 'message'   => 'Already installed country',
@@ -799,11 +801,11 @@ class DT_Network_Dashboard_Installer {
             } else {
 
                 if ( ! get_post_meta( $country_post_id, 'raw', true ) ) {
-                    $address = $country_result[ 'name' ];
+                    $address = $country_result['name'];
                     self::geocode_location( $address, $country_post_id );
                 }
 
-                $installed[ 'country' ] = $country_post_id;
+                $installed['country'] = $country_post_id;
 
                 return [
                     'status'    => 'OK',
@@ -851,10 +853,10 @@ class DT_Network_Dashboard_Installer {
             'parents' => array()
         );
 
-        foreach ( $query as $menuItem )
+        foreach ( $query as $menu_item )
         {
-            $menu_data['items'][$menuItem['id']] = $menuItem;
-            $menu_data['parents'][$menuItem['parent_id']][] = $menuItem['id'];
+            $menu_data['items'][$menu_item['id']] = $menu_item;
+            $menu_data['parents'][$menu_item['parent_id']][] = $menu_item['id'];
         }
 
         // output the menu
@@ -882,17 +884,17 @@ class DT_Network_Dashboard_Installer {
         if (isset( $menu_data['parents'][$parent_id] ))
         {
             $gen++;
-            foreach ($menu_data['parents'][$parent_id] as $itemId)
+            foreach ($menu_data['parents'][$parent_id] as $item_id)
             {
                 if ( $gen >= 1 ) {
                     for ($i = 0; $i < $gen; $i++ ) {
                         $html .= '-- ';
                     }
                 }
-                $html .= $menu_data['items'][$itemId]['name'] . '<br>';
+                $html .= $menu_data['items'][$item_id]['name'] . '<br>';
 
                 // find childitems recursively
-                $html .= self::build_tree( $itemId, $menu_data, $gen );
+                $html .= self::build_tree( $item_id, $menu_data, $gen );
             }
         }
         return $html;

@@ -50,8 +50,8 @@ class DT_Network_Dashboard_UI_Endpoints
      * @since   0.1.0
      */
     public function __construct() {
-        $this->namespace = "dt" . "/v" . intval( $this->version );
-        $this->public_namespace = "dt-public" . "/v" . intval( $this->version );
+        $this->namespace = "dt/v" . intval( $this->version );
+        $this->public_namespace = "dt-public/v" . intval( $this->version );
         add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
     } // End __construct()
 
@@ -82,7 +82,7 @@ class DT_Network_Dashboard_UI_Endpoints
         }
 
         $params = $request->get_params();
-        if ( isset( $params['id'] ) && isset( $params['type']) ) {
+        if ( isset( $params['id'] ) && isset( $params['type'] ) ) {
             return DT_Network_Dashboard_Reports::trigger_transfer( $params['id'], $params['type'] );
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
@@ -97,7 +97,7 @@ class DT_Network_Dashboard_UI_Endpoints
 
         $params = $request->get_params();
         if ( isset( $params['id'] ) ) {
-            return dt_network_dashboard_queries ( 'get_report_by_id', [ 'id' => $params['id'] ] );
+            return dt_network_dashboard_queries( 'get_report_by_id', [ 'id' => $params['id'] ] );
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
         }

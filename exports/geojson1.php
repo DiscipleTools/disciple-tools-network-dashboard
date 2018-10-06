@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreStart
 require( $_SERVER[ 'DOCUMENT_ROOT' ] . '/wp-load.php' ); // loads the wp framework when called
 header( 'Content-type:application/json;charset=utf-8' ); // add json header to response
 

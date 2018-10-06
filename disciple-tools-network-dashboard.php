@@ -117,7 +117,7 @@ class DT_Network_Dashboard {
     private function includes() {
 
         require_once( 'admin/standard-queries.php' );
-        require_once( 'admin/customize_site_linking.php' ); // loads capabilities
+        require_once( 'admin/customize-site-linking.php' ); // loads capabilities
 
         // adds charts and metrics to the network tab
         require_once( 'ui/ui-endpoints.php' );

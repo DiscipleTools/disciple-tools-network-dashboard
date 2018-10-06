@@ -1,5 +1,5 @@
 <?php
-// @codingStandardsIgnoreLine
+// @codingStandardsIgnoreStart
 require( $_SERVER[ 'DOCUMENT_ROOT' ] . '/wp-load.php' ); // loads the wp framework when called
 global $wpdb;
 
@@ -33,7 +33,7 @@ switch ( $map_type ) {
         break;
 
     case 'state':
-        $geojson = $wpdb->get_results( $wpdb->prepare( "SELECT geoJSON FROM dt_geonames as g JOIN dt_geonames_polygons as gp ON g.geonameid=gp.geonameid WHERE country_code = %s and admin1_code = %s", $value['country_code'],$value['admin1_code'] ), ARRAY_A );
+        $geojson = $wpdb->get_results( $wpdb->prepare( "SELECT geoJSON FROM dt_geonames as g JOIN dt_geonames_polygons as gp ON g.geonameid=gp.geonameid WHERE country_code = %s and admin1_code = %s", $value['country_code'], $value['admin1_code'] ), ARRAY_A );
         if ( empty( $geojson ) ) {
             dt_write_log( 'geojson.php: No geojson found for this page id' );
             empty_json();
@@ -41,16 +41,17 @@ switch ( $map_type ) {
         }
 
         ?>{"type": "FeatureCollection","features": [<?php
-            $i = 0;$html = '';
-                foreach( $geojson as $geometry ) {
-                    if ( 0 != $i ) {
-                        $html .= ',';
-                    }
-                    $html .= '{"type": "Feature","geometry": ';
-                    $html .= $geometry['geoJSON'];
-                    $html .= '}';
-                    $i++;
-                }
+            $i = 0;
+$html = '';
+foreach ( $geojson as $geometry ) {
+    if ( 0 != $i ) {
+        $html .= ',';
+    }
+    $html .= '{"type": "Feature","geometry": ';
+    $html .= $geometry['geoJSON'];
+    $html .= '}';
+    $i++;
+}
             echo $html . ']}';?>
         <?php
         /* working : https://dashboard.mu-zume/wp-content/plugins/disciple-tools-network-dashboard/ui/map.php?map=state&value[country_code]=US&value[admin1_code]=CO */
@@ -66,22 +67,22 @@ switch ( $map_type ) {
         ?>{"type": "FeatureCollection","features": [<?php
         $i = 0;
         $html = '';
-        foreach( $geojson as $geometry ) {
-            if ( 0 != $i ) {
-                $html .= ',';
-            }
-            $html .= '{"type": "Feature","geometry": ';
-            $html .= $geometry['geoJSON'];
-            $html .= '}';
-            $i++;
-        }
+foreach ( $geojson as $geometry ) {
+    if ( 0 != $i ) {
+        $html .= ',';
+    }
+    $html .= '{"type": "Feature","geometry": ';
+    $html .= $geometry['geoJSON'];
+    $html .= '}';
+    $i++;
+}
         echo $html . ']}';
 
         break;
 
     case 'world':
-        $geojson = $wpdb->get_results("SELECT geoJSON FROM dt_geonames_polygons_low", ARRAY_A );
-        dt_write_log($geojson);
+        $geojson = $wpdb->get_results( "SELECT geoJSON FROM dt_geonames_polygons_low", ARRAY_A );
+        dt_write_log( $geojson );
         if ( empty( $geojson ) ) {
             dt_write_log( 'geojson.php: No geojson found for this page id' );
             empty_json();
@@ -90,7 +91,7 @@ switch ( $map_type ) {
 
         $i = 0;
         $html = '{"type": "FeatureCollection","features": [';
-        foreach( $geojson as $geometry ) {
+        foreach ( $geojson as $geometry ) {
             if ( 0 != $i ) {
                 $html .= ',';
             }

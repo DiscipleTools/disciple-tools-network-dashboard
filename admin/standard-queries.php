@@ -8,7 +8,7 @@
  * @return array|null|object|\WP_Error
  */
 
-function dt_network_dashboard_queries ( $type, $args = [] ) {
+function dt_network_dashboard_queries( $type, $args = [] ) {
     global $wpdb;
 
     if ( empty( $type ) ) {

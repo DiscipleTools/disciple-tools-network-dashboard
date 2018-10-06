@@ -4,6 +4,7 @@ if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
 /**
  * Class DT_Network_Dashboard_Locations_Metabox
  */
+// @codingStandardsIgnoreStart
 
 class DT_Network_Dashboard_Locations_Metabox {
     public function __construct() {
@@ -28,14 +29,13 @@ class DT_Network_Dashboard_Locations_Metabox {
             if ( is_wp_error( $suggestions ) ) {
                 echo 'Error with geocoding data.' . $suggestions->get_error_message();
             }
-            elseif ( ! empty( $suggestions ) && is_array( $suggestions )  ) {
+            elseif ( ! empty( $suggestions ) && is_array( $suggestions ) ) {
 
                 echo '<dt>Suggestions</dt>';
                 foreach ( $suggestions as $suggestion ) {
                     echo '<dd>' . $suggestion['name'] . ' <a onclick="" style="cursor:pointer;">Connect</a></dd>';
                 }
             }
-
         }
 
         // note: re-check for postmeta because the previous suggestions section might have auto-created the record data.
@@ -320,21 +320,21 @@ class DT_Network_Dashboard_Locations_Metabox {
 
         if ( $raw = get_post_meta( $post_id, 'raw', true ) ) {
 
-            dt_write_log($raw);
+            dt_write_log( $raw );
 
-            $political_level = Disciple_Tools_Google_Geocode_API::parse_raw_result($raw, 'types');
+            $political_level = Disciple_Tools_Google_Geocode_API::parse_raw_result( $raw, 'types' );
 
 
             switch ( $political_level ) {
                 case 'country':
-                    $country_code = Disciple_Tools_Google_Geocode_API::parse_raw_result($raw, 'country_short_name');
-                    $country_row = $wpdb->get_row($wpdb->prepare( "SELECT * FROM dt_geonames WHERE feature_code = 'PCLI' AND feature_class = 'A' AND country_code = %s", $country_code), ARRAY_A );
-                    if ( ! empty( $country_row['geonameid'] ) )  {
+                    $country_code = Disciple_Tools_Google_Geocode_API::parse_raw_result( $raw, 'country_short_name' );
+                    $country_row = $wpdb->get_row( $wpdb->prepare( "SELECT * FROM dt_geonames WHERE feature_code = 'PCLI' AND feature_class = 'A' AND country_code = %s", $country_code ), ARRAY_A );
+                    if ( ! empty( $country_row['geonameid'] ) ) {
                         $country = DT_Network_Dashboard_Installer::install_country_by_geoname( $country_row['geonameid'], null, [], $post_id );
                     }
 
-                    dt_write_log("Country Geoname");
-                    dt_write_log($country);
+                    dt_write_log( "Country Geoname" );
+                    dt_write_log( $country );
                     return '';
                     break;
                 case 'administrative_area_level_1':
@@ -354,12 +354,11 @@ class DT_Network_Dashboard_Locations_Metabox {
                 case 'street_address':
                     break;
                 default:
-                    return new WP_Error(__METHOD__, 'Undefined geocoding data. Regeocode location.' );
+                    return new WP_Error( __METHOD__, 'Undefined geocoding data. Regeocode location.' );
                     break;
             }
-
-            } else {
-            echo __('First geocode this location using the geocoding metabox, and then we can offer suggestions to connect it with the network mapping system.');
+        } else {
+            echo __( 'First geocode this location using the geocoding metabox, and then we can offer suggestions to connect it with the network mapping system.' );
         }
     }
 

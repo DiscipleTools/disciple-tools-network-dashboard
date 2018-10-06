@@ -71,7 +71,7 @@ class DT_Network_Dashboard_Reports
      * @return array
      */
     public static function get_outstanding_locations( $site_post_id ) {
-        dt_write_log(__METHOD__);
+        dt_write_log( __METHOD__ );
 
         $action = [
             'match' => 0,
@@ -81,9 +81,10 @@ class DT_Network_Dashboard_Reports
 
         $outstanding_locations = [];
 
-        $remote_data = json_decode( DT_Network_Dashboard_Reports::stats( $site_post_id, 'locations_list' ) );
+        $remote_data = json_decode( self::stats( $site_post_id, 'locations_list' ) );
 
-        $dashboard_data = dt_network_dashboard_queries( 'check_sum_list', [ 'site_post_id' => $site_post_id ] );;
+        $dashboard_data = dt_network_dashboard_queries( 'check_sum_list', [ 'site_post_id' => $site_post_id ] );
+        ;
 
         foreach ( $remote_data as $master ) {
             foreach ( $dashboard_data as $dash_value ) {
@@ -137,20 +138,20 @@ class DT_Network_Dashboard_Reports
                 'total_users' => $args['total_users'],
                 'date' => $args['date'],
                 'raw_response' => $args['raw_response'],
-            ]);
+        ]);
 
-        if (! $result ) {
-            return new WP_Error(__METHOD__, 'Failed to insert report data. ' . $wpdb->last_error );
+        if ( ! $result ) {
+            return new WP_Error( __METHOD__, 'Failed to insert report data. ' . $wpdb->last_error );
         } else {
             return (int) $wpdb->insert_id;
         }
     }
 
     public static function update_site_profile( $site_id, $site_profile ) {
-        $error = new WP_Error;
+        $error = new WP_Error();
 
         if ( empty( $site_profile ) ) {
-            $error->add(__METHOD__, 'Empty site profile' );
+            $error->add( __METHOD__, 'Empty site profile' );
             return [
                 'status' => 'FAIL',
                 'action' => $error,
@@ -234,6 +235,7 @@ class DT_Network_Dashboard_Reports
                     check_sum='$check_sum'
                     ;";
 
+        // @codingStandardsIgnoreLine
         $wpdb->query( $sql );
 
         return [

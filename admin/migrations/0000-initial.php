@@ -21,7 +21,7 @@ class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration
         foreach ( $expected_tables as $name => $table) {
             $rv = $wpdb->query( $table ); // WPCS: unprepared SQL OK
             if ( $rv == false ) {
-                dt_write_log("Got error when creating table $name: $wpdb->last_error" );
+                dt_write_log( "Got error when creating table $name: $wpdb->last_error" );
             }
         }
 

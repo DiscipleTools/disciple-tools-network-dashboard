@@ -74,11 +74,11 @@ class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
                 'spinner' => '<img src="'. plugin_dir_url( __DIR__ ) . '/spinner.svg" width="12px" />',
                 'spinner_large' => '<img src="'. plugin_dir_url( __DIR__ ) . '/spinner.svg" width="24px" />',
                 'stats' => [
-                    'table' => DT_Network_Dashboard_UI::get_location_table(),
-                    'tree' => DT_Network_Dashboard_UI::get_location_tree(),
-                    'map' => DT_Network_Dashboard_UI::get_location_map(),
-                    'side_tree' => DT_Network_Dashboard_UI::get_location_side_tree(),
-                    'level_tree' => DT_Network_Dashboard_UI::get_locations_level_tree(),
+                    'table' => self::get_location_table(),
+                    'tree' => self::get_location_tree(),
+                    'map' => self::get_location_map(),
+                    'side_tree' => self::get_location_side_tree(),
+                    'level_tree' => self::get_locations_level_tree(),
                     'report_sync' => dt_network_dashboard_queries( 'site_link_list' ),
                 ],
                 'translations' => [
@@ -204,7 +204,7 @@ class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
 
     public static function query_geoname_list() {
         global $wpdb;
-        return $wpdb->get_col("SELECT CONCAT( name, ', ', country_code) FROM dt_geonames" );
+        return $wpdb->get_col( "SELECT CONCAT( name, ', ', country_code) FROM dt_geonames" );
     }
 
     public static function query_location_population_groups() {
@@ -296,10 +296,10 @@ class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
             'items' => array(),
             'parents' => array()
         );
-        foreach ( $query as $menuItem )
+        foreach ( $query as $menu_item )
         {
-            $menu_data['items'][$menuItem['id']] = $menuItem;
-            $menu_data['parents'][$menuItem['parent_id']][] = $menuItem['id'];
+            $menu_data['items'][$menu_item['id']] = $menu_item;
+            $menu_data['parents'][$menu_item['parent_id']][] = $menu_item['id'];
         }
 
         function build_menu( $parent_id, $menu_data, $gen) {

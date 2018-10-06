@@ -47,7 +47,7 @@ class DT_Network_Dashboard_Menu {
      */
     public function __construct() {
         add_action( "admin_menu", array( $this, "register_menu" ) );
-        add_action("admin_head", [ $this, 'header_script' ] );
+        add_action( "admin_head", [ $this, 'header_script' ] );
     } // End __construct()
 
     /**
@@ -228,7 +228,9 @@ class DT_Network_Dashboard_Tab_General
 
     public function population_metabox() {
         // process post action
-        if ( isset( $_POST['population_division'] ) && ( isset( $_POST['_wpnonce'] ) && wp_verify_nonce( $_POST['_wpnonce'], 'population_division'.get_current_user_id() ) ) ) {
+        if ( isset( $_POST['population_division'] )
+            && ( isset( $_POST['_wpnonce'] )
+                && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'population_division'.get_current_user_id() ) ) ) {
             $new = (int) sanitize_text_field( wp_unslash( $_POST['population_division'] ) );
             update_option( 'dt_network_dashboard_population', $new, false );
         }
@@ -349,7 +351,7 @@ class DT_Network_Dashboard_Tab_Network
                         foreach ( $installed_list as $country_code => $value ) {
                             echo '<dd><strong>' . esc_html( $available_locations[$country_code] ) . '</strong>';
                             if ( $value ) {
-                                echo ' ' .  '&#9989;';
+                                echo ' &#9989;';
                             } else {
                                 echo ' <a id="link-'. esc_attr( $country_code ) .'" onclick="load_p_list_by_country(\''. esc_attr( $country_code ) .'\')" style="cursor:pointer;">install</a> <span id="spinner-'.esc_attr( $country_code ).'"></span>';
                             }

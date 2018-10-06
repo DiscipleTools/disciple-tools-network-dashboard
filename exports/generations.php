@@ -2,6 +2,7 @@
 if ( defined( 'ABSPATH' ) ) {
     return; // return unless accessed directly
 }
+// @codingStandardsIgnoreStart
 if ( ! function_exists( 'dt_write_log' ) ) {
     /**
      * A function to assist development only.
