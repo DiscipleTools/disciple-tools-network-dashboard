@@ -56,6 +56,7 @@ function dt_network_dashboard_queries( $type, $args = [] ) {
                   AND $wpdb->postmeta.meta_value = 'network_dashboard'
                 WHERE post_type = 'site_link_system'
                   AND post_status = 'publish'
+                  ORDER BY name ASC
             ", ARRAY_A );
             break;
 

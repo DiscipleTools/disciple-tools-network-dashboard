@@ -64,11 +64,17 @@ class DT_Network_Dashboard_Site_Profile_Metabox {
 
         // get remote count
         $remote_data = DT_Network_Dashboard_Reports::live_stats( $site_post_id, 'locations_list' );
-        $remote_data = json_decode( $remote_data );
+        if ( ! empty( $remote_data ) ) {
+            $remote_data = json_decode( $remote_data );
+            $remote_data_count = count($remote_data);
+        } else {
+            $remote_data_count = 0;
+        }
+
 
         echo '<hr>';
-        echo 'Network Dashboard: ' .  count( $data ) . '<br>';
-        echo 'This site at the other location: ' . count( $remote_data ) . '<br>';
+        echo 'Network Dashboard: ' .  esc_attr( count( $data ) ) . '<br>';
+        echo 'This site at the other location: ' . esc_attr( $remote_data_count ) . '<br>';
 
         ?>
         <p><a onclick="trigger_outstanding_locations()" class="button pointer">Sync Records</a><span id="spinner_sync"></span></p>

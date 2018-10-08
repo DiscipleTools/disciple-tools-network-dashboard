@@ -49,11 +49,14 @@ class DT_Network_Dashboard_UI
      */
     public function menu( $content ) {
         $content .= '
-              <li><a href="'. site_url( '/network/' ) .'#network_dashboard_overview" onclick="show_network_dashboard_overview()">' .  esc_html__( 'Overview' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#network_hero_stats" onclick="show_network_hero_stats()">' .  esc_html__( 'Home' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#network_basics" onclick="show_network_basics()">' .  esc_html__( 'Basic Stats' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#network_critical_path" onclick="show_network_critical_path()">' .  esc_html__( 'Critical Paths' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#report_sync" onclick="show_report_sync()">' .  esc_html__( 'Report Sync' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#network_locations" onclick="show_network_locations()">' .  esc_html__( 'Network Locations' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#network_tree" onclick="show_network_tree()">' .  esc_html__( 'Tree' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#network_map" onclick="show_network_map()">' .  esc_html__( 'Map' ) . '</a></li>
-              <li><a href="'. site_url( '/network/' ) .'#network_side_tree" onclick="show_network_side_tree()">' .  esc_html__( 'Side Tree' ) . '</a></li>
-              <li><a href="'. site_url( '/network/' ) .'#report_sync" onclick="show_report_sync()">' .  esc_html__( 'Report Sync' ) . '</a></li>';
+              ';
         return $content;
     }
 
@@ -75,16 +78,16 @@ class DT_Network_Dashboard_UI
                 'current_user_login' => wp_get_current_user()->user_login,
                 'current_user_id' => get_current_user_id(),
                 'map_key' => dt_get_option( 'map_key' ),
-                'spinner' => '<img src="'. plugin_dir_url( __DIR__ ) . '/spinner.svg" width="12px" />',
-                'spinner_large' => '<img src="'. plugin_dir_url( __DIR__ ) . '/spinner.svg" width="24px" />',
+                'spinner' => '<img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="12px" />',
+                'spinner_large' => '<img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="24px" />',
                 'stats' => [
                     'table' => self::get_location_table(),
                     'tree' => self::get_location_tree(),
                     'map' => self::get_location_map(),
-                    'side_tree' => self::get_location_side_tree(),
-                    'level_tree' => self::get_locations_level_tree(),
+                    'level_tree' => self::get_network_locations_tree(),
                     'report_sync' => dt_network_dashboard_queries( 'site_link_list' ),
                 ],
+                'site_link_list' => dt_network_dashboard_queries( 'site_link_list' ),
                 'translations' => [
                     "sm_title" => __( "Network Dashboard", "dt_zume" ),
                 ]
@@ -163,6 +166,8 @@ class DT_Network_Dashboard_UI
 
         return $chart;
     }
+
+
 
     public static function get_location_side_tree() {
         $table_data = self::query_location_population_groups();
@@ -346,8 +351,119 @@ class DT_Network_Dashboard_UI
         $list .= build_menu( 0, $menu_data, -1 );
 
         return $list;
+    } // @todo remove
+
+    public static function get_network_locations_tree( $partner_id = 'e1b5353532c4aca11cd0' ) {
+        global $wpdb;
+        $query = $wpdb->get_results( $wpdb->prepare( "
+                    SELECT id, parent_id, post_title FROM `wp_10_dt_network_locations` WHERE partner_id = %s
+                ", $partner_id), ARRAY_A );
+        // prepare special array with parent-child relations
+        $menu_data = array(
+            'items' => array(),
+            'parents' => array()
+        );
+        foreach ( $query as $menu_item )
+        {
+            $menu_data['items'][$menu_item['id']] = $menu_item;
+            $menu_data['parents'][$menu_item['parent_id']][] = $menu_item['id'];
+        }
+
+        function build_menu( $parent_id, $menu_data, $gen) {
+            $html = '';
+
+            if (isset( $menu_data['parents'][$parent_id] ))
+            {
+                $html = '<ul class="gen-ul ul-gen-'.$gen.'">';
+                $gen++;
+                foreach ($menu_data['parents'][$parent_id] as $item_id)
+                {
+                    $html .= '<li class="gen-li li-gen-'.$gen.'">';
+                    $html .= '<strong>'. $menu_data['items'][$item_id]['post_title'] . '</strong><br>';
+
+                    $html .= '</li>';
+
+                    // find childitems recursively
+                    $html .= build_menu( $item_id, $menu_data, $gen );
+                }
+                $html .= '</ul>';
+            }
+
+            return $html;
+        }
+
+        $list = '<style>
+                    .gen-ul {
+                        list-style: none;
+                        padding-left:30px;
+                    }
+                    .gen-li {
+                        padding: 25px;
+                        border: 1px solid grey;
+                        margin-top: 10px;
+                        width: 20%;
+                        background: yellowgreen;
+                        border-radius:10px;
+                    }
+                </style>';
+
+        $list .= build_menu( 0, $menu_data, -1 );
+
+        return $list;
     }
 
 
+    public static function load_current_locations() {
+        global $wpdb;
+
+        $query = $wpdb->get_results("
+            SELECT
+                  a.ID as id,
+                  a.post_parent as parent_id,
+                  a.post_title as name
+                FROM $wpdb->posts as a
+                WHERE a.post_status = 'publish'
+                AND a.post_type = 'locations'
+            ", ARRAY_A );
+
+
+        // prepare special array with parent-child relations
+        $menu_data = array(
+            'items' => array(),
+            'parents' => array()
+        );
+
+        foreach ( $query as $menu_item )
+        {
+            $menu_data['items'][$menu_item['id']] = $menu_item;
+            $menu_data['parents'][$menu_item['parent_id']][] = $menu_item['id'];
+        }
+
+        // output the menu
+        return self::build_tree( 0, $menu_data, -1 );
+
+    }
+
+    public static function build_tree( $parent_id, $menu_data, $gen) {
+        $html = '';
+
+        if (isset( $menu_data['parents'][$parent_id] ))
+        {
+            $gen++;
+            foreach ($menu_data['parents'][$parent_id] as $item_id)
+            {
+                if ( $gen >= 1 ) {
+                    for ($i = 0; $i < $gen; $i++ ) {
+                        $html .= '-- ';
+                    }
+                }
+                $html .= '<a href="'. esc_url( admin_url() ) . 'post.php?post=' . esc_attr( $menu_data['items'][$item_id]['id'] ) .'&action=edit">' . esc_attr( $menu_data['items'][$item_id]['name'] ) . '</a><br>';
+
+                // find childitems recursively
+                $html .= self::build_tree( $item_id, $menu_data, $gen );
+            }
+        }
+        return $html;
+    }
 }
 DT_Network_Dashboard_UI::instance();
