@@ -41,7 +41,7 @@ class DT_Network_Dashboard_Reports
         }
     }
 
-    public static function stats( $site_post_id, $type ) {
+    public static function live_stats( $site_post_id, $type ) {
 
         $site = Site_Link_System::get_site_connection_vars( $site_post_id );
         if ( is_wp_error( $site ) ) {
@@ -55,7 +55,7 @@ class DT_Network_Dashboard_Reports
                 'type' => $type,
             ]
         ];
-        $result = wp_remote_get( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network/stats', $args );
+        $result = wp_remote_get( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network/live_stats', $args );
         if ( is_wp_error( $result ) ) {
             return new WP_Error( 'failed_remote_post', $result->get_error_message() );
         } else {
@@ -81,7 +81,7 @@ class DT_Network_Dashboard_Reports
 
         $outstanding_locations = [];
 
-        $remote_data = json_decode( self::stats( $site_post_id, 'locations_list' ) );
+        $remote_data = json_decode( self::live_stats( $site_post_id, 'locations_list' ) );
 
         $dashboard_data = dt_network_dashboard_queries( 'check_sum_list', [ 'site_post_id' => $site_post_id ] );
         ;
@@ -128,7 +128,6 @@ class DT_Network_Dashboard_Reports
             'total_groups' => 0,
             'total_users' => 0,
             'date' => current_time( 'mysql' ),
-            'raw_response' => '',
         ]);
 
         $result = $wpdb->insert( $wpdb->dt_network_reports, [
@@ -137,7 +136,6 @@ class DT_Network_Dashboard_Reports
                 'total_groups' => $args['total_groups'],
                 'total_users' => $args['total_users'],
                 'date' => $args['date'],
-                'raw_response' => $args['raw_response'],
         ]);
 
         if ( ! $result ) {

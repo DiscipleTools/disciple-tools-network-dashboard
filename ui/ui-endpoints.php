@@ -26,7 +26,6 @@ class DT_Network_Dashboard_UI_Endpoints
      * @since     0.1.0
      */
     private static $_instance = null;
-
     /**
      * Main DT_Network_Dashboard_UI_Endpoints Instance
      * Ensures only one instance of DT_Network_Dashboard_UI_Endpoints is loaded or can be loaded.
@@ -63,6 +62,12 @@ class DT_Network_Dashboard_UI_Endpoints
             ]
         );
         register_rest_route(
+            $this->namespace, '/network/ui/live_stats', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'live_stats' ],
+            ]
+        );
+        register_rest_route(
             $this->namespace, '/network/ui/get_network_report', [
                 'methods'  => 'POST',
                 'callback' => [ $this, 'get_network_report' ],
@@ -84,6 +89,20 @@ class DT_Network_Dashboard_UI_Endpoints
         $params = $request->get_params();
         if ( isset( $params['id'] ) && isset( $params['type'] ) ) {
             return DT_Network_Dashboard_Reports::trigger_transfer( $params['id'], $params['type'] );
+        } else {
+            return new WP_Error( __METHOD__, 'Missing parameters.' );
+        }
+    }
+
+    public function live_stats( WP_REST_Request $request ) {
+
+        if ( ! user_can( get_current_user_id(), 'network_dashboard_viewer' ) ) {
+            return new WP_Error( __METHOD__, 'Permission error.' );
+        }
+
+        $params = $request->get_params();
+        if ( isset( $params['id'] ) && isset( $params['type'] ) ) {
+            return DT_Network_Dashboard_Reports::live_stats( $params['id'], $params['type'] );
         } else {
             return new WP_Error( __METHOD__, 'Missing parameters.' );
         }

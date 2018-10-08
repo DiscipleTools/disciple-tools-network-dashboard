@@ -63,7 +63,7 @@ class DT_Network_Dashboard_Site_Profile_Metabox {
         $data = dt_network_dashboard_queries( 'check_sum_list', [ 'site_post_id' => $site_post_id ] );
 
         // get remote count
-        $remote_data = DT_Network_Dashboard_Reports::stats( $site_post_id, 'locations_list' );
+        $remote_data = DT_Network_Dashboard_Reports::live_stats( $site_post_id, 'locations_list' );
         $remote_data = json_decode( $remote_data );
 
         echo '<hr>';

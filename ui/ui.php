@@ -1,11 +1,9 @@
 <?php
 if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
-/**
- * Class DT_Zume_Hooks
- */
-class DT_Network_Dashboard_Hooks
-{
 
+
+class DT_Network_Dashboard_UI
+{
     private static $_instance = null;
 
     public static function instance() {
@@ -15,27 +13,33 @@ class DT_Network_Dashboard_Hooks
         return self::$_instance;
     } // End instance()
 
-    /**
-     * Build hook classes
-     */
     public function __construct() {
-        new DT_Network_Dashboard_UI();
-    }
-}
-DT_Network_Dashboard_Hooks::instance();
 
-/**
- * Empty class for now..
- * Class DT_Zume_Hook_Base
- */
-abstract class DT_Network_Dashboard_Base
-{
-    public function __construct() {
-    }
-}
+        if ( current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' ) ) {
 
-class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
-{
+            add_action( 'dt_top_nav_desktop', [ $this, 'top_nav_desktop' ] );
+            add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_google' ], 10 );
+
+            if ( isset( $_SERVER["SERVER_NAME"] ) ) {
+                $url  = ( !isset( $_SERVER["HTTPS"] ) || @( $_SERVER["HTTPS"] != 'on' ) ) ? 'http://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) ) : 'https://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) );
+                if ( isset( $_SERVER["REQUEST_URI"] ) ) {
+                    $url .= sanitize_text_field( wp_unslash( $_SERVER["REQUEST_URI"] ) );
+                }
+            }
+            $url_path = trim( str_replace( get_site_url(), "", $url ), '/' );
+
+            if ( 'network' === substr( $url_path, '0', 7 ) ) {
+
+                add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ] ); // add custom URL
+                add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 99 );
+
+                if ( 'network' === $url_path ) {
+                    add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
+                }
+            }
+        } // end admin only test
+    }
+
     /**
      * This filter adds a menu item to the metrics
      *
@@ -107,33 +111,6 @@ class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
         wp_enqueue_script( 'google-maps', 'https://maps.googleapis.com/maps/api/js?key=' . dt_get_option( 'map_key' ), array(), null, true );
     }
 
-    public function __construct() {
-
-        if ( current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' ) ) {
-
-            add_action( 'dt_top_nav_desktop', [ $this, 'top_nav_desktop' ] );
-            add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_google' ], 10 );
-
-            if ( isset( $_SERVER["SERVER_NAME"] ) ) {
-                $url  = ( !isset( $_SERVER["HTTPS"] ) || @( $_SERVER["HTTPS"] != 'on' ) ) ? 'http://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) ) : 'https://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) );
-                if ( isset( $_SERVER["REQUEST_URI"] ) ) {
-                    $url .= sanitize_text_field( wp_unslash( $_SERVER["REQUEST_URI"] ) );
-                }
-            }
-            $url_path = trim( str_replace( get_site_url(), "", $url ), '/' );
-
-            if ( 'network' === substr( $url_path, '0', 7 ) ) {
-
-                add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ] ); // add custom URL
-                add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 99 );
-
-                if ( 'network' === $url_path ) {
-                    add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
-                }
-            }
-        } // end admin only test
-    }
-
     public static function get_location_tree() {
         $table_data = self::query_location_population_groups();
 
@@ -200,6 +177,28 @@ class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
         }
 
         return $chart;
+    }
+
+    public static function get_live_stats( $site_post_id, $type ) {
+
+        $site = Site_Link_System::get_site_connection_vars( $site_post_id );
+        if ( is_wp_error( $site ) ) {
+            return new WP_Error( __METHOD__, 'Error creating site connection details.' );
+        }
+
+        $args = [
+            'method' => 'GET',
+            'body' => [
+                'transfer_token' => $site['transfer_token'],
+                'type' => $type,
+            ]
+        ];
+        $result = wp_remote_get( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network/live_stats', $args );
+        if ( is_wp_error( $result ) ) {
+            return new WP_Error( 'failed_remote_post', $result->get_error_message() );
+        } else {
+            return $result['body'];
+        }
     }
 
     public static function query_geoname_list() {
@@ -351,3 +350,4 @@ class DT_Network_Dashboard_UI extends DT_Network_Dashboard_Base
 
 
 }
+DT_Network_Dashboard_UI::instance();

@@ -41,27 +41,52 @@ chartDiv.empty().html(`
         
         `)
 
-    google.charts.load('current', {'packages':['table']});
-    google.charts.setOnLoadCallback(drawTable);
+    let list = wpApiNetworkDashboard.stats.report_sync;
+    jQuery.each(list, function(i, v) {
+        /* Project Totals */
+        let stat_table = jQuery('#stat_table')
 
-    function drawTable() {
-        var data = new google.visualization.DataTable();
-        data.addColumn('string', 'Location');
-        data.addColumn('number', 'Population');
-        data.addColumn('number', 'Groups Needed');
-        data.addColumn('number', 'Active Groups');
-        data.addRows(page.stats.table);
+        stat_table.append( `<p id="stat-`+v.id+`">`+page.spinner_large+`</p>`)
 
-        var table = new google.visualization.Table(document.getElementById('stat_table'));
+        let data = { "id": v.id, "type": 'project_totals' }
+        jQuery.ajax({
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: "application/json; charset=utf-8",
+            dataType: "json",
+            url: wpApiNetworkDashboard.root+'dt/v1/network/ui/live_stats',
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-WP-Nonce', wpApiNetworkDashboard.nonce );
+            },
+        })
+            .done(function (data) {
+                console.log(data)
+                jQuery('#stat-'+v.id).empty().append( '<h3>'+v.name+'</h3>' + JSON.stringify( data ) )
+            })
+            .fail(function (err) {
+                jQuery('#status-'+v.id).empty().append( "error" )
+                console.log("error for " +  v.name );
+                console.log(err);
+            })
+    })
 
-        table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
-    }
 
+    // google.charts.load('current', {'packages':['table']});
+    // google.charts.setOnLoadCallback(drawTable);
+    //
+    // function drawTable( div, stats_table ) {
+    //     let data_table = google.visualization.arrayToDataTable( stats_table )
+    //     var data = new google.visualization.DataTable();
+    //     data.addColumn('string', 'Total Contacts');
+    //     data.addColumn('string', 'Total Groups');
+    //     data.addColumn('string', 'Total Users');
+    //     data.addRows( data_table);
+    //
+    //     var table = new google.visualization.Table(document.getElementById('stat_table'));
+    //
+    //     table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+    // }
 
-chartDiv.append(`<hr style="max-width:100%;"><div><span class="small grey">( stats as of  )</span> 
-            <a onclick="refresh_stats_data( 'show_network_dashboard_overview' ); jQuery('.spinner').show();">Refresh</a>
-            <span class="spinner" style="display: none;"><img src="`+wpApiNetworkDashboard.plugin_uri+`includes/spinner.svg" /></span> 
-            </div>`)
 }
 
 function show_network_tree(){
@@ -133,12 +158,27 @@ function show_network_map(){
         </button>
         </div>
         <hr style="max-width:100%;">
+        <div id="stat_table"></div>
         <div id="chart_div" style="width:100%; height:`+chartHeight+`"></div>
         
         `)
 
-    google.charts.load('current', {packages:["map"]});
+    google.charts.load('current', {packages:["map", 'table']});
     google.charts.setOnLoadCallback(drawChart);
+    google.charts.setOnLoadCallback(drawTable);
+
+    function drawTable() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Location');
+        data.addColumn('number', 'Population');
+        data.addColumn('number', 'Groups Needed');
+        data.addColumn('number', 'Active Groups');
+        data.addRows(page.stats.table);
+
+        var table = new google.visualization.Table(document.getElementById('stat_table'));
+
+        table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+    }
 
     function drawChart() {
         var data = google.visualization.arrayToDataTable(page.stats.map);
