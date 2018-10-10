@@ -1,6 +1,11 @@
-/vendor/*
-vendor/autoload.php
 /install/*.csv
 !gn_world_admin.csv
 /node_modules/*
 /admin/libraries/*
+
+/vendor/bin/
+/vendor/dealerdirect/
+/vendor/squizlabs/
+/vendor/wp-coding-standards/
+
+
