@@ -3,9 +3,13 @@
 /node_modules/*
 /admin/libraries/*
 
-/vendor/bin/
-/vendor/dealerdirect/
-/vendor/squizlabs/
-/vendor/wp-coding-standards/
+/vendor/bin/*
+/vendor/dealerdirect/*
+/vendor/squizlabs/*
+/vendor/wp-coding-standards/*
+
+/ui/amcharts/*
+/ui/amcharts-geodata/*
+
 
 

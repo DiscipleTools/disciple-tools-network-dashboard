@@ -1,3 +1,9 @@
 [submodule "admin/libraries/phpspreadsheet"]
 	path = admin/libraries/phpspreadsheet
 	url = https://github.com/PHPOffice/PhpSpreadsheet.git
+[submodule "ui/amcharts-geodata"]
+	path = ui/amcharts-geodata
+	url = https://github.com/amcharts/amcharts4-geodata.git
+[submodule "ui/amcharts"]
+	path = ui/amcharts
+	url = https://github.com/amcharts/amcharts4.git
