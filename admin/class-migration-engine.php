@@ -23,8 +23,8 @@ class DT_Network_Dashboard_Migration_Engine
         if ( self::$migrations !== null ) {
             return self::$migrations;
         }
-        require_once( plugin_dir_path( __DIR__ ) . "migrations/abstract.php" );
-        $filenames = scandir( plugin_dir_path( __DIR__ ) . "migrations/", SCANDIR_SORT_ASCENDING );
+        require_once( plugin_dir_path( __FILE__ ) . "migrations/abstract.php" );
+        $filenames = scandir( plugin_dir_path( __FILE__ ) . "migrations/", SCANDIR_SORT_ASCENDING );
 
         if ( $filenames === false ) {
             throw new Exception( "Could not scan migrations directory" );
@@ -38,7 +38,7 @@ class DT_Network_Dashboard_Migration_Engine
                     if ( $expected_migration_number !== $got_migration_number ) {
                         throw new Exception( sprintf( "Expected to find migration number %04d", $expected_migration_number ) );
                     }
-                    require_once( plugin_dir_path( __DIR__ ) . "migrations/$filename" );
+                    require_once( plugin_dir_path( __FILE__ ) . "migrations/$filename" );
                     $migration_name = sprintf( "DT_Network_Dashboard_Migration_%04d", $got_migration_number );
                     $rv[] = new $migration_name();
                     $expected_migration_number++;

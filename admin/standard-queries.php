@@ -60,6 +60,22 @@ function dt_network_dashboard_queries( $type, $args = [] ) {
             ", ARRAY_A );
             break;
 
+        case 'location_by_foreign_key':
+            /**
+             * Requires 1 parameter. foreign_key
+             */
+            if ( empty( $args ) || 1 != count( $args ) ) {
+                return new WP_Error( __METHOD__, 'Argument submitted is either empty or not equal to 1.' );
+            }
+            $foreign_key = $args['foreign_key'] ?? $args[0] ?? 0;
+            $results = $wpdb->get_row( $wpdb->prepare( "
+                SELECT * 
+                FROM $wpdb->dt_network_locations 
+                WHERE foreign_key = %s"
+                , $foreign_key
+            ), ARRAY_A );
+            break;
+
         default:
             $results = null;
             break;

@@ -49,7 +49,7 @@ class DT_Network_Dashboard_UI
      */
     public function menu( $content ) {
         $content .= '
-              <li><a href="'. site_url( '/network/' ) .'#network_hero_stats" onclick="show_network_hero_stats()">' .  esc_html__( 'Home' ) . '</a></li>
+              <li><a href="'. site_url( '/network/' ) .'#network_home" onclick="show_network_home()">' .  esc_html__( 'Home' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#network_basics" onclick="show_network_basics()">' .  esc_html__( 'Basic Stats' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#network_critical_path" onclick="show_network_critical_path()">' .  esc_html__( 'Critical Paths' ) . '</a></li>
               <li><a href="'. site_url( '/network/' ) .'#report_sync" onclick="show_report_sync()">' .  esc_html__( 'Report Sync' ) . '</a></li>

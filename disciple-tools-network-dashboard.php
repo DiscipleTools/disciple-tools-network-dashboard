@@ -38,7 +38,7 @@ function dt_network_dashboard() {
         $migration_number = 1;
         try {
 
-            require_once( plugin_dir_path( __FILE__ ) . '/admin/admin/class-migration-engine.php' );
+            require_once( plugin_dir_path( __FILE__ ) . '/admin/class-migration-engine.php' );
             DT_Network_Dashboard_Migration_Engine::migrate( $migration_number );
         } catch ( Throwable $e ) {
             new WP_Error( 'migration_error', 'Migration engine failed to migrate.' );
@@ -127,6 +127,8 @@ class DT_Network_Dashboard {
         require_once( 'reports/reports.php' );
         require_once( 'reports/reports-endpoints.php' );
 
+        require_once( 'admin/geocoder.php' );
+
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );
             require_once( 'admin/metabox-site-profile.php' );
@@ -180,7 +182,7 @@ class DT_Network_Dashboard {
 
         // Check for plugin updates
         if ( ! class_exists( 'Puc_v4_Factory' ) ) {
-            require( $this->admin_path . 'admin/libraries/plugin-update-checker/plugin-update-checker.php' );
+            require( $this->admin_path . 'libraries/plugin-update-checker/plugin-update-checker.php' );
         }
         /**
          * Below is the publicly hosted .json file that carries the version information. This file can be hosted

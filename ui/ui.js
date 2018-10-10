@@ -1,6 +1,6 @@
 jQuery(document).ready(function() {
-    if( ! window.location.hash || '#network_hero_stats' === window.location.hash) {
-        show_network_hero_stats()
+    if( ! window.location.hash || '#network_home' === window.location.hash) {
+        show_network_home()
     }
     if( '#network_basics' === window.location.hash) {
         show_network_basics()
@@ -23,7 +23,7 @@ jQuery(document).ready(function() {
 
 })
 
-function show_network_hero_stats(){
+function show_network_home(){
     "use strict";
     let page = wpApiNetworkDashboard
     console.log(page)

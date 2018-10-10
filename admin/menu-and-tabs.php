@@ -224,6 +224,10 @@ class DT_Network_Dashboard_Tab_General
         <br>
         <!-- End Box -->
         <?php
+        dt_write_log( __METHOD__ );
+        $object =  new DT_Geocoder();
+        $result = $object->parse_location('650fa497faf030e235978c4ffb9159f6');
+        dt_write_log( $result );
     }
 
     public function population_metabox() {
