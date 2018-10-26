@@ -93,6 +93,26 @@ class DT_Network_Dashboard_UI
                 ]
             ]
         );
+
+        wp_enqueue_script( 'amcharts-core', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'amcharts/dist/script/core.js',
+            [], filemtime( plugin_dir_path( __DIR__ ) . 'amcharts/dist/script/core.js' ), true );
+        wp_enqueue_script( 'amcharts-charts', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'amcharts/dist/script/charts.js',
+            [
+                'amcharts-core'
+            ], filemtime( plugin_dir_path( __DIR__ ) . 'amcharts/dist/script/charts.js' ), true );
+        wp_enqueue_script( 'amcharts-maps', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'amcharts/dist/script/maps.js',
+            [
+                'amcharts-core'
+            ], filemtime( plugin_dir_path( __DIR__ ) . 'amcharts/dist/script/maps.js' ), true );
+        wp_enqueue_script( 'amcharts-worldlow', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'amcharts-geodata/dist/script/worldlow.js',
+            [
+                'amcharts-core'
+            ], filemtime( plugin_dir_path( __DIR__ ) . 'amcharts-geodata/dist/script/worldlow.js' ), true );
+        wp_enqueue_script( 'amcharts-theme-animated', trailingslashit( plugin_dir_url( __FILE__ ) ) . 'amcharts/dist/script/themes/animated.js',
+            [
+                'amcharts-core'
+            ], filemtime( plugin_dir_path( __DIR__ ) . 'amcharts/dist/script/themes/animated.js' ), true );
+
     }
 
     public function add_url( $template_for_url ) {

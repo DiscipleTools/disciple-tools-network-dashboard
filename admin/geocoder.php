@@ -29,10 +29,51 @@ class DT_Geocoder
         global $wpdb;
         $location = dt_network_dashboard_queries( 'location_by_foreign_key', [ "foreign_key" => $foreign_key ] );
         dt_write_log( $location );
+
+        // check if lat/lng exists
+        if ( empty( $location['latitude'] ) || empty( $location['longitude'] ) ) {
+
+        }
+
+        if ( ! empty( $location['country_short_name'] ) ) {
+
+        }
+
+        // check for state match
+        if ( ! empty( $location['admin1_short_name'] ) ) {
+
+
+        }
+
+
+        // build by type
+        if ( ! empty( $location['types'] ) ) {
+            switch ( $location['types'] ) {
+                case 'country':
+
+                    break;
+                case 'administrative_area_level_1':
+
+                    break;
+                case 'administrative_area_level_2':
+
+                    break;
+                case 'locality':
+
+                    break;
+                default:
+                    break;
+            }
+
+        }
+
         // check for country match
 
 
-        // check for state match
+
+
+
+
 
         // check for county match
 
