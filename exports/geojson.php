@@ -33,7 +33,7 @@ switch ( $map_type ) {
         break;
 
     case 'state':
-        $geojson = $wpdb->get_results( $wpdb->prepare( "SELECT geoJSON FROM dt_geonames as g JOIN dt_geonames_polygons as gp ON g.geonameid=gp.geonameid WHERE country_code = %s and admin1_code = %s", $value['country_code'], $value['admin1_code'] ), ARRAY_A );
+        $geojson = $wpdb->get_results( $wpdb->prepare( "SELECT geoJSON FROM dt_geonames as g JOIN dt_geonames_polygons_low as gp ON g.geonameid=gp.geonameid WHERE country_code = %s and admin1_code = %s", $value['country_code'], $value['admin1_code'] ), ARRAY_A );
         if ( empty( $geojson ) ) {
             dt_write_log( 'geojson.php: No geojson found for this page id' );
             empty_json();
@@ -42,22 +42,27 @@ switch ( $map_type ) {
 
         ?>{"type": "FeatureCollection","features": [<?php
             $i = 0;
-$html = '';
-foreach ( $geojson as $geometry ) {
-    if ( 0 != $i ) {
-        $html .= ',';
-    }
-    $html .= '{"type": "Feature","geometry": ';
-    $html .= $geometry['geoJSON'];
-    $html .= '}';
-    $i++;
-}
-            echo $html . ']}';?>
+        $html = '';
+        foreach ( $geojson as $geometry ) {
+            if ( 0 != $i ) {
+                $html .= ',';
+            }
+            $html .= '{"type": "Feature","geometry": ';
+            $html .= $geometry['geoJSON'];
+            $html .= '}';
+            $i++;
+        }
+                    echo $html . ']}';?>
         <?php
         /* working : https://dashboard.mu-zume/wp-content/plugins/disciple-tools-network-dashboard/ui/map.php?map=state&value[country_code]=US&value[admin1_code]=CO */
         break;
+
     case 'country':
-        $geojson = $wpdb->get_results( $wpdb->prepare( "SELECT geoJSON FROM dt_geonames as g JOIN dt_geonames_polygons as gp ON g.geonameid=gp.geonameid WHERE country_code = %s and feature_code = 'ADM1' LIMIT 2", $value ), ARRAY_A );
+        $geojson = $wpdb->get_results( $wpdb->prepare( "
+            SELECT geoJSON, population, asciiname as name
+            FROM dt_geonames as g JOIN dt_geonames_polygons as gp ON g.geonameid=gp.geonameid 
+            WHERE country_code = %s 
+              AND feature_code = 'ADM1'", $value ), ARRAY_A );
         if ( empty( $geojson ) ) {
             dt_write_log( 'geojson.php: No geojson found for this page id' );
             empty_json();
@@ -67,18 +72,64 @@ foreach ( $geojson as $geometry ) {
         ?>{"type": "FeatureCollection","features": [<?php
         $i = 0;
         $html = '';
-foreach ( $geojson as $geometry ) {
-    if ( 0 != $i ) {
-        $html .= ',';
-    }
-    $html .= '{"type": "Feature","geometry": ';
-    $html .= $geometry['geoJSON'];
-    $html .= '}';
-    $i++;
-}
+        foreach ( $geojson as $geometry ) {
+            if ( 0 != $i ) {
+                $html .= ',';
+            }
+
+            $html .= '{"type": "Feature","geometry": ';
+            $html .= $geometry['geoJSON'];
+
+            $html .= ',"properties":{';
+            $html .= '"name":' . json_encode( $geometry['name'] ) . ',';
+            $html .= '"population":' . $geometry['population'] . ',';
+            $html .= '"churches":' . rand(10, 100 ); // @todo sample group data
+            $html .= '}';
+
+            $html .= '}';
+            $i++;
+        }
+                echo $html . ']}';
+
+        break;
+
+    case 'country_low':
+        $geojson = $wpdb->get_results( $wpdb->prepare( "
+            SELECT geoJSON, population, asciiname as name
+            FROM dt_geonames as g JOIN dt_geonames_polygons_low as gp ON g.geonameid=gp.geonameid 
+            WHERE country_code = %s 
+              AND feature_code = 'ADM1'", $value ), ARRAY_A );
+        if ( empty( $geojson ) ) {
+            dt_write_log( 'geojson.php: No geojson found for this page id' );
+            empty_json();
+            exit;
+        }
+
+        ?>{"type": "FeatureCollection","features": [<?php
+        $i = 0;
+        $html = '';
+        foreach ( $geojson as $geometry ) {
+            if ( 0 != $i ) {
+                $html .= ',';
+            }
+
+
+            $html .= '{"type": "Feature","geometry": ';
+            $html .= $geometry['geoJSON'];
+
+            $html .= ',"properties":{';
+            $html .= '"name":' . json_encode( $geometry['name'] ) . ',';
+            $html .= '"population":' . $geometry['population'] . ',';
+            $html .= '"churches":' . rand(10, 100 ); // @todo sample group data
+            $html .= '}';
+
+            $html .= '}';
+            $i++;
+        }
         echo $html . ']}';
 
         break;
+
 
     case 'world':
         $geojson = $wpdb->get_results( "SELECT geoJSON FROM dt_geonames_polygons_low", ARRAY_A );
