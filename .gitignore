@@ -1,0 +1,11 @@
+/vendor/*
+/node_modules/*
+
+/admin/libraries/*
+
+/mapping-module/geocoder/*
+/mapping-module/geoPHP/*
+/mapping-module/exports/*
+
+
+
