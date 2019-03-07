@@ -124,10 +124,6 @@ class DT_Network_Dashboard {
         require_once( 'admin/admin-endpoints.php' );
         require_once( 'admin/multisite.php' );
 
-        // load mapping module
-        require_once( 'ui/config-mapping-module.php' ); // custom config filters must preceed mapping module
-        require_once( 'mapping-module/mapping.php' );
-
         // adds charts and metrics to the network tab
         require_once( 'ui/ui-endpoints.php' );
 
