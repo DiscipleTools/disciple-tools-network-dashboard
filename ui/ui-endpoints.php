@@ -127,7 +127,7 @@ class DT_Network_Dashboard_UI
 
         if ( current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' ) ) {
 
-            add_action( 'dt_top_nav_desktop', [ $this, 'top_nav_desktop' ] );
+            add_action( 'dt_top_nav_desktop', [ $this, 'top_nav_desktop' ], 99 );
 
             if ( isset( $_SERVER["SERVER_NAME"] ) ) {
                 $url  = ( !isset( $_SERVER["HTTPS"] ) || @( $_SERVER["HTTPS"] != 'on' ) ) ? 'http://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) ) : 'https://'. sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) );
@@ -139,8 +139,8 @@ class DT_Network_Dashboard_UI
 
             if ( 'network' === substr( $url_path, '0', 7 ) ) {
 
-                add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ] ); // add custom URL
-                add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 99 );
+                add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 ); // add custom URL
+                add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 199 );
 
                 if ( 'network' === $url_path ) {
                     add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
@@ -158,10 +158,10 @@ class DT_Network_Dashboard_UI
      */
     public function menu( $content ) {
         // home
-        $content .= '<li><a href="'. site_url( '/network/' ) .'#network_home" onclick="show_network_home()">' .  esc_html__( 'Home' ) . '</a></li>';
-        $content .= '<li><a href="'. site_url( '/network/' ) .'#sites" onclick="show_sites_list()">' .  esc_html__( 'Sites' ) . '</a></li>';
-        $content .= '<li><a href="'. site_url( '/network/' ) .'#mapping_view" onclick="page_mapping_view()">' .  esc_html__( 'Maps' ) . '</a></li>';
-        $content .= '<li><a href="'. site_url( '/network/' ) .'#mapping_list" onclick="page_mapping_list()">' .  esc_html__( 'Maps List' ) . '</a></li>';
+        $content .= '<li><a href="'. esc_url( site_url( '/network/' ) ) .'#network_home" onclick="show_network_home()">' .  esc_html__( 'Home' ) . '</a></li>';
+        $content .= '<li><a href="'. esc_url( site_url( '/network/' ) ) .'#sites" onclick="show_sites_list()">' .  esc_html__( 'Sites' ) . '</a></li>';
+        $content .= '<li><a href="'. esc_url( site_url( '/network/' ) ) .'#mapping_view" onclick="page_mapping_view()">' .  esc_html__( 'Map' ) . '</a></li>';
+        $content .= '<li><a href="'. esc_url( site_url( '/network/' ) ) .'#mapping_list" onclick="page_mapping_list()">' .  esc_html__( 'List' ) . '</a></li>';
 
         return $content;
     }
@@ -171,56 +171,19 @@ class DT_Network_Dashboard_UI
      */
     public function scripts() {
 
-        // self hosted or publically hosted amcharts scripts
-        if ( get_option( 'dt_network_dashboard_local_amcharts' ) === true ) { // local hosted @todo add checkbox to admin area
+        // Amcharts
+        wp_register_script( 'amcharts-core', 'https://www.amcharts.com/lib/4/core.js', false, '4' );
+        wp_register_script( 'amcharts-charts', 'https://www.amcharts.com/lib/4/charts.js', false, '4' );
+        wp_register_script( 'amcharts-animated', 'https://www.amcharts.com/lib/4/themes/animated.js', false, '4' );
+        wp_register_script( 'amcharts-maps', 'https://www.amcharts.com/lib/4/maps.js', false, '4' );
+        wp_register_script( 'amcharts-maps-world', 'https://www.amcharts.com/lib/4/geodata/worldLow.js', false, '4' );
 
-            wp_enqueue_script( 'amcharts-core',
-                trailingslashit( plugin_dir_url( __FILE__ ) ) . 'amcharts/dist/script/core.js',
-                [],
-                filemtime( plugin_dir_path( __FILE__ ) . 'amcharts4/dist/script/core.js' ),
-            true );
-            wp_enqueue_script( 'amcharts-charts',
-                trailingslashit( plugin_dir_url( __FILE__ ) ) . 'amcharts/dist/script/charts.js',
-                [
-                    'amcharts-core'
-                ],
-                filemtime( plugin_dir_path( __FILE__ ) . 'amcharts4/dist/script/charts.js' ),
-            true );
-            wp_enqueue_script( 'amcharts-maps',
-                trailingslashit( plugin_dir_url( __FILE__ ) ) . 'amcharts/dist/script/maps.js',
-                [
-                    'amcharts-core'
-                ],
-                filemtime( plugin_dir_path( __FILE__ ) . 'amcharts4/dist/script/maps.js' ),
-            true );
-            wp_enqueue_script( 'amcharts-worldlow',
-                trailingslashit( plugin_dir_url( __FILE__ ) ) . 'amcharts-geodata/dist/script/worldlow.js',
-                [
-                    'amcharts-core'
-                ],
-                filemtime( plugin_dir_path( __FILE__ ) . 'geodata/dist/script/worldlow.js' ),
-            true );
-            wp_enqueue_script( 'amcharts-animated',
-                trailingslashit( plugin_dir_url( __FILE__ ) ) . 'amcharts/dist/script/themes/animated.js',
-                [
-                    'amcharts-core'
-                ],
-                filemtime( plugin_dir_path( __FILE__ ) . 'amcharts4/dist/script/themes/animated.js' ),
-            true );
+        // Datatables
+        wp_register_style( 'datatable-css', '//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css', false, '1.10' );
+        wp_enqueue_style( 'datatable-css' );
+        wp_register_script( 'datatable', '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js', false, '1.10' );
 
-        } else { // cdn hosted files
-
-            wp_register_script( 'amcharts-core', 'https://www.amcharts.com/lib/4/core.js', false, '4' );
-            wp_register_script( 'amcharts-charts', 'https://www.amcharts.com/lib/4/charts.js', false, '4' );
-            wp_register_script( 'amcharts-animated', 'https://www.amcharts.com/lib/4/themes/animated.js', false, '4' );
-            wp_register_script( 'amcharts-maps', 'https://www.amcharts.com/lib/4/maps.js', false, '4' );
-            wp_register_script( 'amcharts-maps-world', 'https://www.amcharts.com/lib/4/geodata/worldLow.js', false, '4' );
-
-            wp_register_style( 'datatable-css', '//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css', false, '1.10' );
-            wp_enqueue_style( 'datatable-css' );
-            wp_register_script( 'datatable', '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js', false, '1.10' );
-        }
-
+        // UI script
         wp_enqueue_script( 'dt_network_dashboard_script',
             trailingslashit( plugin_dir_url( __FILE__ ) ) . 'ui.js',
             [
@@ -250,7 +213,7 @@ class DT_Network_Dashboard_UI
                 'sites_list' => $this->get_site_list(),
                 'sites' => $this->get_sites(),
                 'global' => $this->get_global(),
-                'locations' => $this->get_locations(),
+                'locations_list' => $this->get_locations_list(),
                 'translations' => [
                     "sm_title" => __( "Network Dashboard", "dt_network_dashboard" ),
                     "title_site_list" => __( "Sites List", "dt_network_dashboard" ),
@@ -374,6 +337,20 @@ class DT_Network_Dashboard_UI
         return $data;
     }
 
+    public function get_locations_list() {
+        $data = DT_Mapping_Module::instance()->get_world_map_data();
+
+        $available_countries = [1149361];
+
+        foreach ( $data['children'] as $index => $country ) {
+            if ( array_search( $country['geonameid'], $available_countries ) === false ) {
+                unset($data['children'][$index]);
+            }
+        }
+
+        return $data;
+    }
+
     /**
      * Gets an array of the last number of days.
      *
@@ -487,85 +464,6 @@ class DT_Network_Dashboard_UI
 
         return $data;
     }
-
-
-
-    public function get_locations() { // @todo sample data for site based summaries
-        $data = [];
-        for ($i = 100; $i <= 105; $i++) {
-            $data[] = $this->location( $i );
-        }
-        return $data;
-    }
-
-    public function location( $id ) {
-
-        $data = [
-            'countries' => [
-                [
-                    'id' => 'TN',
-                    'name' => 'Tunisia',
-                    'site_name' => '7656789876',
-                    'contacts' => rand( 300, 1000 ),
-                    'groups' => rand( 300, 1000 ),
-                    'value' => 100,
-                    'color' => 'red'
-                ]
-            ],
-            'current_state' => [
-                'active_locations' => rand( 300, 1000 ),
-                'inactive_locations' => rand( 300, 1000 ),
-                'all_locations' => rand( 300, 1000 ),
-            ],
-            'list' => [
-                [
-                    'location_name' => '',
-                    'location_id' => '',
-                    'parent_id' => '',
-                    'geonameid' => '',
-                    'longitude' => '',
-                    'latitude' => '',
-                    'total_contacts' => 0,
-                    'total_groups' => 0,
-                    'total_users' => 0,
-                    'new_contacts' => 0,
-                    'new_groups' => 0,
-                    'new_users' => 0,
-                ],
-                [
-                    'location_name' => '',
-                    'location_id' => '',
-                    'parent_id' => '',
-                    'geonameid' => '',
-                    'longitude' => '',
-                    'latitude' => '',
-                    'total_contacts' => 0,
-                    'total_groups' => 0,
-                    'total_users' => 0,
-                    'new_contacts' => 0,
-                    'new_groups' => 0,
-                    'new_users' => 0,
-                ],
-                [
-                    'location_name' => '',
-                    'location_id' => '',
-                    'parent_id' => '',
-                    'geonameid' => '',
-                    'longitude' => '',
-                    'latitude' => '',
-                    'total_contacts' => 0,
-                    'total_groups' => 0,
-                    'total_users' => 0,
-                    'new_contacts' => 0,
-                    'new_groups' => 0,
-                    'new_users' => 0,
-                ],
-            ],
-        ];
-        return $data;
-    } // @todo sample data
-
-
 
 }
 DT_Network_Dashboard_UI::instance();

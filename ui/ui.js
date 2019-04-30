@@ -1,11 +1,15 @@
 jQuery(document).ready(function() {
     if( ! window.location.hash || '#network_home' === window.location.hash) {
-        console.log(wpApiNetworkDashboard)
         show_network_home()
     }
     if('#sites' === window.location.hash) {
-        console.log(wpApiNetworkDashboard)
         show_sites_list()
+    }
+    if( '#mapping_view' === window.location.hash) {
+        page_mapping_view()
+    }
+    if('#mapping_list' === window.location.hash) {
+        page_mapping_list()
     }
 })
 
@@ -13,6 +17,7 @@ jQuery(document).ready(function() {
  * Home Page
  */
 function show_network_home(){
+    console.log(wpApiNetworkDashboard)
     "use strict";
     let page = wpApiNetworkDashboard
     let chartDiv = jQuery('#chart')
@@ -85,6 +90,7 @@ function show_network_home(){
  * Single Snapshots Page
  */
 function show_network_site( id, name ) {
+    console.log(wpApiNetworkDashboard)
     "use strict";
     if ( id == undefined ) {
         show_network_home()
@@ -994,3 +1000,182 @@ jQuery(document).ready(function() {
 
     }
 })
+
+
+function page_mapping_view() {
+    console.log(DRILLDOWNDATA)
+    "use strict";
+    let chartDiv = jQuery('#chart')
+    chartDiv.empty().html(`
+        
+        <div class="grid-x grid-margin-y">
+            <div class="cell medium-6" id="network_chart_drilldown"></div>
+            <div class="cell medium-6" style="text-align:right;">
+               <strong id="section-title" style="font-size:2em;"></strong><br>
+                <span id="current_level"></span>
+            </div>
+        </div>
+        
+        <hr style="max-width:100%;">
+        
+       <!-- Map -->
+       <div class="grid-x grid-margin-x">
+            <div class="cell medium-10">
+                <div id="map_chart" style="width: 100%;max-height: 700px;height: 100vh;vertical-align: text-top;"></div>
+            </div>
+            <div class="cell medium-2 left-border-grey">
+                <div class="grid-y">
+                    <div class="cell" style="overflow-y: scroll; height:700px; padding:0 .4em;" id="child-list-container">
+                        <div id="minimap"></div><br><br>
+                        <div class="button-group expanded stacked" id="data-type-list">
+                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <hr style="max-width:100%;">
+        
+        <span style="float:right;font-size:.8em;"><a onclick="DRILLDOWN.get_drill_down('map_chart_drilldown')" >return to top level</a></span>
+        <br>
+        `);
+// set the depth of the drill down
+    DRILLDOWNDATA.settings.hide_final_drill_down = true
+    DRILLDOWN.get_drill_down('network_chart_drilldown')
+
+}
+
+window.DRILLDOWN.network_chart_drilldown = function( geonameid ) {
+    console.log('network_chart_drilldown')
+}
+
+
+function page_mapping_list() {
+    console.log(DRILLDOWNDATA)
+    "use strict";
+    let chartDiv = jQuery('#chart')
+    chartDiv.empty().html(`
+        <div class="grid-x grid-margin-x">
+            <div class="cell auto" id="network_list_drilldown"></div>
+            <div class="cell small-1">
+                <span id="spinner" style="display:none;" class="float-right">${DRILLDOWNDATA.settings.spinner_large}</span>
+            </div>
+        </div>
+        
+        <hr style="max-width:100%;">
+        
+        <div id="page-header" style="float:left;">
+            <strong id="section-title" style="font-size:1.5em;"></strong><br>
+            <span id="current_level"></span>
+        </div>
+        
+        <div id="location_list"></div>
+        
+        <hr style="max-width:100%;">
+        
+        <br>
+        <style> /* @todo move these definitions to site style sheet. */
+            #page-header {
+                position:absolute;
+            }
+            @media screen and (max-width : 640px){
+                #page-header {
+                    position:relative;
+                    text-align: center;
+                    width: 100%;
+                }
+            }
+           
+        </style>
+        `);
+
+    // set the depth of the drill down
+    DRILLDOWNDATA.settings.hide_final_drill_down = false
+    DRILLDOWN.get_drill_down('network_list_drilldown')
+}
+
+window.DRILLDOWN.network_list_drilldown = function( geonameid ) {
+    console.log('network_list_drilldown')
+    let map_data = wpApiNetworkDashboard.locations_list
+
+
+    // Place Title
+    let title = jQuery('#section-title')
+    title.empty().html(map_data.self.name)
+
+    // Population Division and Check for Custom Division
+    let pd_settings = DRILLDOWNDATA.settings.population_division
+    let population_division = pd_settings.base
+    if ( ! DRILLDOWN.isEmpty( pd_settings.custom ) ) {
+        jQuery.each( pd_settings.custom, function(i,v) {
+            if ( map_data.self.geonameid === i ) {
+                population_division = v
+            }
+        })
+    }
+
+    // Self Data
+    let self_population = map_data.self.population_formatted
+    jQuery('#current_level').empty().html(`Population: ${self_population}`)
+
+    // Build List
+    let locations = jQuery('#location_list')
+    locations.empty()
+
+    let html = `<table id="country-list-table" class="display">`
+
+    // Header Section
+    html += `<thead><tr><th>Name</th><th>Population</th>`
+
+    /* Additional Columns */
+    if ( DRILLDOWNDATA.data.custom_column_labels ) {
+        jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(i,v) {
+            html += `<th>${v.label}</th>`
+        })
+    }
+    /* End Additional Columns */
+
+    html += `</tr></thead>`
+    // End Header Section
+
+    // Children List Section
+    let sorted_children =  _.sortBy(map_data.children, [function(o) { return o.name; }]);
+
+    html += `<tbody>`
+
+    jQuery.each( sorted_children, function(i, v) {
+        let population = v.population_formatted
+
+        html += `<tr>
+                    <td><strong><a onclick="DRILLDOWN.get_drill_down('network_list_drilldown', ${v.geonameid} )">${v.name}</a></strong></td>
+                    <td>${population}</td>`
+
+        /* Additional Columns */
+        if ( DRILLDOWNDATA.data.custom_column_data[v.geonameid] ) {
+            jQuery.each( DRILLDOWNDATA.data.custom_column_data[v.geonameid], function(ii,vv) {
+                html += `<td><strong>${vv}</strong></td>`
+            })
+        } else {
+            jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii,vv) {
+                html += `<td class="grey">0</td>`
+            })
+        }
+        /* End Additional Columns */
+
+        html += `</tr>`
+
+    })
+    html += `</tbody>`
+    // end Child section
+
+    html += `</table>`
+    locations.append(html)
+
+    jQuery('#country-list-table').DataTable({
+        "paging":   false
+    });
+
+    DRILLDOWN.hide_spinner()
+
+}
+
