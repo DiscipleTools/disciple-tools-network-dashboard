@@ -16,7 +16,7 @@ class DT_Network_Dashboard_Reports
         $data = '';
 
         if ( 'site_locations' === $type ) {
-            $data = dt_network_dashboard_queries( 'check_sum_list', [ 'site_post_id' => $site_post_id ] );
+            $data = DT_Network_Dashboard_Queries::check_sum_list( $site_post_id  );
         }
         if ( 'outstanding_site_locations' === $type ) {
             $data = self::get_outstanding_locations( $site_post_id );
@@ -83,7 +83,7 @@ class DT_Network_Dashboard_Reports
 
         $remote_data = json_decode( self::live_stats( $site_post_id, 'locations_list' ) );
 
-        $dashboard_data = dt_network_dashboard_queries( 'check_sum_list', [ 'site_post_id' => $site_post_id ] );
+        $dashboard_data = DT_Network_Dashboard_Queries::check_sum_list( $site_post_id );
         ;
 
         foreach ( $remote_data as $master ) {

@@ -119,8 +119,8 @@ class DT_Network_Dashboard {
     private function includes() {
 
         require_once( 'admin/permissions.php' );
+        require_once( 'admin/queries.php' );
         require_once( 'admin/multisite-report-post-type.php' );
-        require_once( 'admin/standard-queries.php' );
         require_once( 'admin/customize-site-linking.php' ); // loads capabilities
         require_once( 'admin/admin-endpoints.php' );
         require_once( 'admin/multisite.php' );
@@ -128,6 +128,7 @@ class DT_Network_Dashboard {
         DT_Network_Mapping_Module_Config::instance();
 
         // adds charts and metrics to the network tab
+        require_once( 'ui/ui.php' );
         require_once( 'ui/ui-endpoints.php' );
 
 

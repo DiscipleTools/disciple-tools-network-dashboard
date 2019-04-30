@@ -60,7 +60,7 @@ class DT_Network_Dashboard_Site_Profile_Metabox {
 
     public function get_sync_status( $site_post_id ) {
         // get local count
-        $data = dt_network_dashboard_queries( 'check_sum_list', [ 'site_post_id' => $site_post_id ] );
+        $data = DT_Network_Dashboard_Queries::check_sum_list( $site_post_id );
 
         // get remote count
         $remote_data = DT_Network_Dashboard_Reports::live_stats( $site_post_id, 'locations_list' );

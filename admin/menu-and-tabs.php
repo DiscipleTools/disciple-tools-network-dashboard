@@ -318,7 +318,7 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
             }
         }
         // Get list of sites
-        $sites = dt_network_dashboard_queries( 'site_link_list' );
+        $sites = DT_Network_Dashboard_Queries::site_link_list();
 
         /** Message */
         if ( $message ) {

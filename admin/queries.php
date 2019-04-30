@@ -1,56 +1,47 @@
 <?php
-/**
- * Network Dashboard Queries
- *
- * @param       $type
- * @param array $args
- *
- * @return array|null|object|\WP_Error
- */
 
-function dt_network_dashboard_queries( $type, $args = [] ) {
-    global $wpdb;
+class DT_Network_Dashboard_Queries {
 
-    if ( empty( $type ) ) {
-        return new WP_Error( __METHOD__, 'Required type is missing.' );
-    }
+    public static function check_sum_list( int $site_post_id ) : array {
+        global $wpdb;
 
-    switch ( $type ) {
-
-        case 'check_sum_list':
-
-            if ( ! isset( $args['site_post_id'] ) ) {
-                return new WP_Error( __METHOD__, 'check_sum_list query request was missing the required site_post_id parameter.' );
-            }
-            $site_post_id = $args['site_post_id'];
-            $partner_id = get_post_meta( $site_post_id, 'partner_id', true );
-            $results = $wpdb->get_results( $wpdb->prepare( "
+        $partner_id = get_post_meta( $site_post_id, 'partner_id', true );
+        $results = $wpdb->get_results( $wpdb->prepare( "
                 SELECT foreign_key, check_sum 
                 FROM $wpdb->dt_network_locations 
                 WHERE partner_id = %s
                 ",
-                $partner_id),
+            $partner_id),
             ARRAY_A );
-            break;
 
-        case 'get_report_by_id':
+        if ( empty( $results ) ) {
+            $results = [];
+        }
 
-            if ( ! isset( $args['id'] ) ) {
-                return new WP_Error( __METHOD__, 'check_sum_list query request was missing the required site_post_id parameter.' );
-            }
-            $id = $args['id'];
-            $results = $wpdb->get_results( $wpdb->prepare( "
+        return $results;
+    }
+
+    public static function get_report_by_id( int $id ) : array {
+        global $wpdb;
+        $results = $wpdb->get_results( $wpdb->prepare( "
                 SELECT * 
                 FROM $wpdb->dt_network_reports 
                 WHERE id = %s
                 ",
-                $id
-                ),
-            ARRAY_A);
-            break;
+            $id
+        ), ARRAY_A);
 
-        case 'site_link_list':
-            $results = $wpdb->get_results("
+        if ( empty( $results ) ) {
+            $results = [];
+        }
+
+        return $results;
+    }
+
+    public static function site_link_list() : array {
+        global $wpdb;
+
+        $results = $wpdb->get_results("
                 SELECT 
                   post_title as name, 
                   ID as id
@@ -64,10 +55,18 @@ function dt_network_dashboard_queries( $type, $args = [] ) {
                   ORDER BY name ASC
             ",
             ARRAY_A );
-            break;
 
-        case 'sites_with_snapshots':
-            $results = $wpdb->get_results("
+        if ( empty( $results ) ) {
+            $results = [];
+        }
+
+        return $results;
+    }
+
+    public static function sites_with_snapshots() : array {
+        global $wpdb;
+
+        $results = $wpdb->get_results("
                 SELECT 
                   a.post_title as name, 
                   a.ID as id,
@@ -90,16 +89,30 @@ function dt_network_dashboard_queries( $type, $args = [] ) {
                   ORDER BY name ASC
             ",
             ARRAY_A );
-            break;
 
-        case 'all_multisite_ids':
-            $table = $wpdb->base_prefix . 'blogs';
-            $results = $wpdb->get_col( "SELECT blog_id FROM $table" );
-            break;
+        if ( empty( $results ) ) {
+            $results = [];
+        }
 
-        case 'multisite_and_post_ids':
-            $table = $wpdb->base_prefix . 'blogs';
-            $results = $wpdb->get_results( "
+        return $results;
+    }
+
+    public static function all_multisite_ids() : array {
+        global $wpdb;
+        $table = $wpdb->base_prefix . 'blogs';
+        $results = $wpdb->get_col( "SELECT blog_id FROM $table" );
+
+        if ( empty( $results ) ) {
+            $results = [];
+        }
+
+        return $results;
+    }
+
+    public static function multisite_and_post_ids(): array {
+        global $wpdb;
+        $table = $wpdb->base_prefix . 'blogs';
+        $results = $wpdb->get_results( "
                 SELECT
                   multisite.blog_id as blog_id,
                   postmeta.post_id as post_id
@@ -109,11 +122,18 @@ function dt_network_dashboard_queries( $type, $args = [] ) {
                        AND postmeta.post_id IN ( SELECT ID FROM $wpdb->posts WHERE post_type = 'multisite_reports' AND post_status = 'publish')
             ",
             ARRAY_A );
-            break;
 
-        case 'multisite_snapshots':
-            $assoc_array = [];
-            $results = $wpdb->get_results("
+        if ( empty( $results ) ) {
+            $results = [];
+        }
+
+        return $results;
+    }
+
+    public static function multisite_snapshots() : array {
+        global $wpdb;
+        $assoc_array = [];
+        $results = $wpdb->get_results("
                 SELECT
                   ID as id,
                   blog_id.meta_value as blog_id,
@@ -142,33 +162,37 @@ function dt_network_dashboard_queries( $type, $args = [] ) {
             ",
             ARRAY_A );
 
-            if ( ! empty( $results ) ) {
-                foreach ( $results as $result ) {
-                    $assoc_array[$result['blog_id']] = $result;
-                }
-                return $assoc_array;
+        if ( ! empty( $results ) ) {
+            foreach ( $results as $result ) {
+                $assoc_array[$result['blog_id']] = $result;
             }
-            break;
+            return $assoc_array;
+        }
+        else {
+            return [];
+        }
 
-        case 'location_by_foreign_key':
-            /**
-             * Requires 1 parameter. foreign_key
-             */
-            if ( empty( $args ) || 1 != count( $args ) ) {
-                return new WP_Error( __METHOD__, 'Argument submitted is either empty or not equal to 1.' );
-            }
-            $foreign_key = $args['foreign_key'] ?? $args[0] ?? 0;
-            $results = $wpdb->get_row( $wpdb->prepare( "
+    }
+
+    public static function location_by_foreign_key( $foreign_key ) : array {
+        global $wpdb;
+        $results = $wpdb->get_row( $wpdb->prepare( "
                 SELECT * 
                 FROM $wpdb->dt_network_locations 
                 WHERE foreign_key = %s",
-                $foreign_key
-                ),
-            ARRAY_A );
-            break;
+            $foreign_key
+        ), ARRAY_A );
 
-        case 'query_location_population_groups':
-            $results = $wpdb->get_results("
+        if ( empty( $results ) ) {
+            $results = [];
+        }
+
+        return $results;
+    }
+
+    public static function query_location_population_groups() : array {
+        global $wpdb;
+        $results = $wpdb->get_results("
                 SELECT 
                 t1.ID as id, 
                 t1.post_parent as parent_id, 
@@ -185,10 +209,16 @@ function dt_network_dashboard_queries( $type, $args = [] ) {
             ",
             ARRAY_A );
 
-            break;
+        if ( empty( $results ) ) {
+            $results = [];
+        }
 
-        case 'query_location_data':
-            $results = $wpdb->get_results("
+        return $results;
+    }
+
+    public static function query_location_data() : array {
+        global $wpdb;
+        $results = $wpdb->get_results("
             SELECT 
             t1.ID as id, 
             t1.post_parent as parent_id, 
@@ -203,13 +233,18 @@ function dt_network_dashboard_queries( $type, $args = [] ) {
             ON t1.ID=t2.post_id
             AND t2.meta_key = 'gn_population'
             WHERE post_type = 'locations' AND post_status = 'publish'
-        ",
-            ARRAY_A );
+        ", ARRAY_A );
 
-            break;
+        if ( empty( $results ) ) {
+            $results = [];
+        }
 
-        case 'query_location_latlng':
-            $results = $wpdb->get_results("
+        return $results;
+    }
+
+    public static function query_location_latlng() : array {
+        global $wpdb;
+        $results = $wpdb->get_results("
                 SELECT 
                 t2.meta_value as latitude,
                 t3.meta_value as longitude,
@@ -227,12 +262,11 @@ function dt_network_dashboard_queries( $type, $args = [] ) {
             ",
             ARRAY_A );
 
-            break;
+        if ( empty( $results ) ) {
+            $results = [];
+        }
 
-        default:
-            $results = null;
-            break;
+        return $results;
     }
 
-    return $results;
 }

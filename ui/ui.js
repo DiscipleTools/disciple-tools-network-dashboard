@@ -648,6 +648,7 @@ function load_points_map( div, id ) {
 
 function points_map_chart( div, values ) {
     // Themes begin
+    return;
     am4core.useTheme(am4themes_animated);
     // Create map instance
     var chart = am4core.create( div, am4maps.MapChart);
@@ -992,15 +993,6 @@ function load_site_lists( div ) {
         window.scrollTo(0, 0);
     })
 }
-
-jQuery(document).ready(function() {
-    if (typeof mappingModule != "undefined") {
-        /* these two wrappers test that the mappingModule object is loaded */
-        // console.log(mappingModule)
-
-    }
-})
-
 
 function page_mapping_view() {
     console.log(DRILLDOWNDATA)

@@ -43,7 +43,7 @@ class DT_Get_Sites_SnapShot_Async extends Disciple_Tools_Async_Task {
         dt_save_log( $file, '', false );
 
         // Get list of sites
-        $sites = dt_network_dashboard_queries( 'site_link_list' );
+        $sites = DT_Network_Dashboard_Queries::site_link_list();
 
         $result = [
             'success' => 0,
