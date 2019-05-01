@@ -86,7 +86,7 @@ class DT_Network_Dashboard_UI
                 'datatable'
             ],
             filemtime( plugin_dir_path( __DIR__ ) . 'ui/ui.js' ),
-            true );
+        true );
         wp_localize_script(
             'dt_network_dashboard_script',
             'wpApiNetworkDashboard',
@@ -96,7 +96,7 @@ class DT_Network_Dashboard_UI
                 'nonce' => wp_create_nonce( 'wp_rest' ),
                 'current_user_login' => wp_get_current_user()->user_login,
                 'current_user_id' => get_current_user_id(),
-//                'map_key' => dt_get_option( 'map_key' ),
+            //                'map_key' => dt_get_option( 'map_key' ),
                 'spinner' => ' <img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="12px" />',
                 'spinner_large' => ' <img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="24px" />',
                 'sites_list' => $this->get_site_list(),
@@ -159,7 +159,7 @@ class DT_Network_Dashboard_UI
     }
 
     public function get_site_list() {
-        $sites = DT_Network_Dashboard_Queries::site_link_list();
+        $sites = DT_Network_Dashboard_Queries::sites_with_snapshots();
 
         $new = [];
         if ( ! empty( $sites ) ) {
@@ -168,7 +168,7 @@ class DT_Network_Dashboard_UI
                 if ( ! empty( $snapshot['partner_id'] ) ) {
                     $new[] = [
                         'id' => $snapshot['partner_id'],
-                        'name' => $snapshot['profile']['partner_name'],
+                        'name' => ucwords( $snapshot['profile']['partner_name'] ),
                         'contacts' => $snapshot['contacts']['current_state']['status']['active'],
                         'groups' => $snapshot['groups']['current_state']['total_active'],
                         'users' => $snapshot['users']['current_state']['total_users'],
@@ -185,7 +185,7 @@ class DT_Network_Dashboard_UI
                 if ( ! empty( $snapshot['partner_id'] ) ) {
                     $new[] = [
                         'id' => $snapshot['partner_id'],
-                        'name' => $snapshot['profile']['partner_name'],
+                        'name' => ucwords( $snapshot['profile']['partner_name'] ),
                         'contacts' => $snapshot['contacts']['current_state']['status']['active'],
                         'groups' => $snapshot['groups']['current_state']['total_active'],
                         'users' => $snapshot['users']['current_state']['total_users'],
@@ -244,7 +244,7 @@ class DT_Network_Dashboard_UI
             return [];
         }
 
-        foreach( $sites as $id => $site ) {
+        foreach ( $sites as $id => $site ) {
 
             // list
             foreach ( $site['locations']['list'] as $geonameid => $stats ) {
@@ -301,9 +301,6 @@ class DT_Network_Dashboard_UI
                     }
                 }
             }
-
-
-
         }
 //        dt_write_log($data);
 

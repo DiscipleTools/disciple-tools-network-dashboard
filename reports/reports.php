@@ -16,7 +16,7 @@ class DT_Network_Dashboard_Reports
         $data = '';
 
         if ( 'site_locations' === $type ) {
-            $data = DT_Network_Dashboard_Queries::check_sum_list( $site_post_id  );
+            $data = DT_Network_Dashboard_Queries::check_sum_list( $site_post_id );
         }
         if ( 'outstanding_site_locations' === $type ) {
             $data = self::get_outstanding_locations( $site_post_id );
@@ -122,21 +122,25 @@ class DT_Network_Dashboard_Reports
     public static function insert_report( $args ) {
         global $wpdb;
 
-        $args = wp_parse_args( $args, [
+        $args = wp_parse_args( $args,
+            [
             'partner_id' => null,
             'total_contacts' => 0,
             'total_groups' => 0,
             'total_users' => 0,
             'date' => current_time( 'mysql' ),
-        ]);
+            ]
+        );
 
-        $result = $wpdb->insert( $wpdb->dt_network_reports, [
+        $result = $wpdb->insert( $wpdb->dt_network_reports,
+            [
                 'partner_id' => $args['partner_id'],
                 'total_contacts' => $args['total_contacts'],
                 'total_groups' => $args['total_groups'],
                 'total_users' => $args['total_users'],
                 'date' => $args['date'],
-        ]);
+            ]
+        );
 
         if ( ! $result ) {
             return new WP_Error( __METHOD__, 'Failed to insert report data. ' . $wpdb->last_error );

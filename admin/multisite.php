@@ -90,7 +90,7 @@ function dt_multisite_dashboard_snapshots() {
 
         $snapshot = [];
         foreach ( $site_ids as $id ) {
-            if ( get_blog_option( $id, 'current_theme' ) !== 'Disciple Tools'  ) {
+            if ( get_blog_option( $id, 'current_theme' ) !== 'Disciple Tools' ) {
                 continue;
             }
             $snapshot[$id] = get_blog_option( $id, '_transient_dt_snapshot_report' );

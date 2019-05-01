@@ -11,8 +11,8 @@ class DT_Network_Dashboard_Queries {
                 FROM $wpdb->dt_network_locations 
                 WHERE partner_id = %s
                 ",
-            $partner_id),
-            ARRAY_A );
+        $partner_id),
+        ARRAY_A );
 
         if ( empty( $results ) ) {
             $results = [];
@@ -29,7 +29,8 @@ class DT_Network_Dashboard_Queries {
                 WHERE id = %s
                 ",
             $id
-        ), ARRAY_A);
+        ),
+        ARRAY_A);
 
         if ( empty( $results ) ) {
             $results = [];
@@ -54,7 +55,7 @@ class DT_Network_Dashboard_Queries {
                   AND post_status = 'publish'
                   ORDER BY name ASC
             ",
-            ARRAY_A );
+        ARRAY_A );
 
         if ( empty( $results ) ) {
             $results = [];
@@ -88,7 +89,7 @@ class DT_Network_Dashboard_Queries {
                   AND a.post_status = 'publish'
                   ORDER BY name ASC
             ",
-            ARRAY_A );
+        ARRAY_A );
 
         if ( empty( $results ) ) {
             $results = [];
@@ -121,7 +122,7 @@ class DT_Network_Dashboard_Queries {
                       ON postmeta.meta_value=multisite.blog_id
                        AND postmeta.post_id IN ( SELECT ID FROM $wpdb->posts WHERE post_type = 'multisite_reports' AND post_status = 'publish')
             ",
-            ARRAY_A );
+        ARRAY_A );
 
         if ( empty( $results ) ) {
             $results = [];
@@ -160,7 +161,7 @@ class DT_Network_Dashboard_Queries {
                 WHERE post_type = 'multisite_reports'
                   AND post_status = 'publish'
             ",
-            ARRAY_A );
+        ARRAY_A );
 
         if ( ! empty( $results ) ) {
             foreach ( $results as $result ) {

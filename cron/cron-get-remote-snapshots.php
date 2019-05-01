@@ -94,7 +94,7 @@ class DT_Get_Single_Site_Snapshot extends Disciple_Tools_Async_Task
 
     public function get_site_snapshot() {
         if ( isset( $_POST[0]['site_post_id'] ) ) {
-            dt_get_site_snapshot( $_POST[0]['site_post_id'] );
+            dt_get_site_snapshot( sanitize_key( wp_unslash( $_POST[0]['site_post_id'] ) ) );
         }
         else {
             dt_write_log( __METHOD__ . ' : Failed on post array' );

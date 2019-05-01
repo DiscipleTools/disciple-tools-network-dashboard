@@ -52,7 +52,7 @@
     <exclude name="WordPress.VIP.RestrictedFunctions.user_meta_delete_user_meta" />
     <exclude name="WordPress.VIP.RestrictedVariables.user_meta__wpdb__usermeta" />
     <exclude name="WordPress.NamingConventions.ValidVariableName.NotSnakeCaseMemberVar" />
-    <exclude name="WordPress.VIP.FileSystemWritesDisallow" />
+    <!--<exclude name="WordPress.VIP.FileSystemWritesDisallow" />-->
     <exclude name="WordPress.NamingConventions.PrefixAllGlobals" />
 
     <!-- We currently don't want these rules that WordPress imports: -->

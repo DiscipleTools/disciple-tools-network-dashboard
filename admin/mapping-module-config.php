@@ -174,7 +174,9 @@ class DT_Network_Mapping_Module_Config
         // Drill Down Tool
         wp_enqueue_script( 'mapping-drill-down', get_template_directory_uri() . '/dt-mapping/drill-down.js', [ 'jquery', 'lodash' ], '1.1' );
         wp_localize_script(
-            'mapping-drill-down', 'mappingModule', array(
+            'mapping-drill-down',
+            'mappingModule',
+            array(
                 'mapping_module' => $this->localize_script(),
             )
         );
