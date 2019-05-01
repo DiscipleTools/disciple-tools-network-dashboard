@@ -109,7 +109,7 @@ class DT_Network_Dashboard_Queries {
         return $results;
     }
 
-    public static function multisite_and_post_ids(): array {
+    public static function multisite_and_post_ids(): array { // @todo remove unused?
         global $wpdb;
         $table = $wpdb->base_prefix . 'blogs';
         $results = $wpdb->get_results( "
@@ -130,7 +130,7 @@ class DT_Network_Dashboard_Queries {
         return $results;
     }
 
-    public static function multisite_snapshots() : array {
+    public static function multisite_snapshots() : array { // @todo remove unused?
         global $wpdb;
         $assoc_array = [];
         $results = $wpdb->get_results("
@@ -174,99 +174,5 @@ class DT_Network_Dashboard_Queries {
 
     }
 
-    public static function location_by_foreign_key( $foreign_key ) : array {
-        global $wpdb;
-        $results = $wpdb->get_row( $wpdb->prepare( "
-                SELECT * 
-                FROM $wpdb->dt_network_locations 
-                WHERE foreign_key = %s",
-            $foreign_key
-        ), ARRAY_A );
-
-        if ( empty( $results ) ) {
-            $results = [];
-        }
-
-        return $results;
-    }
-
-    public static function query_location_population_groups() : array {
-        global $wpdb;
-        $results = $wpdb->get_results("
-                SELECT 
-                t1.ID as id, 
-                t1.post_parent as parent_id, 
-                t1.post_title as location,
-                (SELECT post_title FROM $wpdb->posts WHERE ID = t1.post_parent) as parent_name,
-                t2.meta_value as gn_population, 
-                ROUND(t2.meta_value / (SELECT option_value FROM $wpdb->options WHERE option_name = 'dt_network_dashboard_population'), 0 ) as groups_needed,
-                (SELECT count(*) FROM $wpdb->p2p WHERE p2p_to = t1.ID) as groups
-                FROM $wpdb->posts as t1
-                LEFT JOIN $wpdb->postmeta as t2
-                ON t1.ID=t2.post_id
-                AND t2.meta_key = 'gn_population'
-                WHERE post_type = 'locations' AND post_status = 'publish'
-            ",
-            ARRAY_A );
-
-        if ( empty( $results ) ) {
-            $results = [];
-        }
-
-        return $results;
-    }
-
-    public static function query_location_data() : array {
-        global $wpdb;
-        $results = $wpdb->get_results("
-            SELECT 
-            t1.ID as id, 
-            t1.post_parent as parent_id, 
-            t1.post_title as location,
-            (SELECT post_title FROM $wpdb->posts WHERE ID = t1.post_parent) as parent_name,
-            t2.meta_value as gn_population, 
-            ROUND(t2.meta_value / (SELECT option_value FROM $wpdb->options WHERE option_name = 'dt_network_dashboard_population'), 0 ) as groups_needed,
-            (SELECT count(*) FROM $wpdb->p2p WHERE p2p_to = t1.ID) as groups
-            
-            FROM $wpdb->posts as t1
-            LEFT JOIN $wpdb->postmeta as t2
-            ON t1.ID=t2.post_id
-            AND t2.meta_key = 'gn_population'
-            WHERE post_type = 'locations' AND post_status = 'publish'
-        ", ARRAY_A );
-
-        if ( empty( $results ) ) {
-            $results = [];
-        }
-
-        return $results;
-    }
-
-    public static function query_location_latlng() : array {
-        global $wpdb;
-        $results = $wpdb->get_results("
-                SELECT 
-                t2.meta_value as latitude,
-                t3.meta_value as longitude,
-                t1.post_title as location
-                FROM $wpdb->posts as t1
-                LEFT JOIN $wpdb->postmeta as t2
-                ON t1.ID=t2.post_id
-                AND t2.meta_key = 'gn_latitude'
-                LEFT JOIN $wpdb->postmeta as t3
-                ON t1.ID=t3.post_id
-                AND t3.meta_key = 'gn_longitude'
-                WHERE post_type = 'locations' 
-                AND post_status = 'publish'
-                AND post_parent != '0'
-            ",
-            ARRAY_A );
-
-        if ( empty( $results ) ) {
-            $results = [];
-        }
-
-        return $results;
-    }
 
 }

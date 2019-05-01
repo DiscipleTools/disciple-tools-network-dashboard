@@ -108,6 +108,3 @@ class DT_Network_Dashboard_UI_Endpoints
 
 }
 DT_Network_Dashboard_UI_Endpoints::instance();
-
-
-

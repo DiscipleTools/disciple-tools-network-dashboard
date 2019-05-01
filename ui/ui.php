@@ -96,7 +96,7 @@ class DT_Network_Dashboard_UI
                 'nonce' => wp_create_nonce( 'wp_rest' ),
                 'current_user_login' => wp_get_current_user()->user_login,
                 'current_user_id' => get_current_user_id(),
-                'map_key' => dt_get_option( 'map_key' ),
+//                'map_key' => dt_get_option( 'map_key' ),
                 'spinner' => ' <img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="12px" />',
                 'spinner_large' => ' <img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="24px" />',
                 'sites_list' => $this->get_site_list(),
@@ -227,17 +227,151 @@ class DT_Network_Dashboard_UI
     }
 
     public function get_locations_list() {
-        $data = DT_Mapping_Module::instance()->get_world_map_data();
+        $data = [
+                'current_state' => [
+                    'active_countries' => 0,
+                    'active_countries_geonames' => [],
+                    'active_admin1' => 0,
+                    'active_admin1_geonames' => [],
+                    'active_admin2' => 0,
+                    'active_admin2_geonames' => [],
+                ],
+                'list' => [],
+        ];
 
-        $available_countries = [1149361];
-
-        foreach ( $data['children'] as $index => $country ) {
-            if ( array_search( $country['geonameid'], $available_countries ) === false ) {
-                unset($data['children'][$index]);
-            }
+        $sites = $this->get_sites();
+        if ( empty( $sites ) ) {
+            return [];
         }
 
+        foreach( $sites as $id => $site ) {
+
+            // list
+            foreach ( $site['locations']['list'] as $geonameid => $stats ) {
+                if ( ! isset( $data['list'][$geonameid] ) ) {
+                    $data['list'][$geonameid] = $this->location_data_types( true );
+                    $data['list'][$geonameid]['sites'] = $sites[$id]['profile']['partner_name'];
+                } else {
+                    $data['list'][$geonameid]['sites'] .= ', ' . $sites[$id]['profile']['partner_name'];
+                }
+                $data['list'][$geonameid]['contacts'] = (int) $data['list'][$geonameid]['contacts'] + (int) $stats['contacts'] ?? 0;
+                $data['list'][$geonameid]['groups'] = (int) $data['list'][$geonameid]['groups'] + (int) $stats['groups'] ?? 0;
+                $data['list'][$geonameid]['churches'] = (int) $data['list'][$geonameid]['churches'] + (int) $stats['churches'] ?? 0;
+                $data['list'][$geonameid]['users'] = (int) $data['list'][$geonameid]['users'] + (int) $stats['users'] ?? 0;
+                $data['list'][$geonameid][$id] = $sites[$id]['profile']['partner_name'];
+
+            }
+
+
+            // current state
+            if ( ! empty( $site['locations']['current_state']['active_countries_geonames'] ) ) {
+                foreach ( $site['locations']['current_state']['active_countries_geonames'] as $geonameid ) {
+                    $data['current_state']['active_countries_geonames'][$geonameid] = true;
+                }
+            }
+            if ( ! empty( $site['locations']['current_state']['active_admin1_geonames'] ) ) {
+                foreach ( $site['locations']['current_state']['active_admin1_geonames'] as $geonameid ) {
+                    $data['current_state']['active_admin1_geonames'][$geonameid] = true;
+                }
+            }
+            if ( ! empty( $site['locations']['current_state']['active_admin2_geonames'] ) ) {
+                foreach ( $site['locations']['current_state']['active_admin2_geonames'] as $geonameid ) {
+                    $data['current_state']['active_admin2_geonames'][$geonameid] = true;
+                }
+            }
+
+
+            if ( ! empty( $data['current_state']['active_countries_geonames'] ) ) {
+                $data['current_state']['active_countries'] = count( $data['current_state']['active_countries_geonames'] );
+            }
+            if ( ! empty( $data['current_state']['active_admin1_geonames'] ) ) {
+                $data['current_state']['active_admin1'] = count( $data['current_state']['active_admin1_geonames'] );
+            }
+            if ( ! empty( $data['current_state']['active_admin2_geonames'] ) ) {
+                $data['current_state']['active_admin2'] = count( $data['current_state']['active_admin2_geonames'] );
+            }
+
+            // complete list
+            $list_geonames = array_keys( $data['list'] );
+            $geoname_properties = $this->format_geoname_types( Disciple_Tools_Mapping_Queries::get_by_geonameid_list( $list_geonames, true ) );
+            if ( ! empty( $geoname_properties ) ) {
+                foreach ( $geoname_properties as $value ) {
+                    foreach ( $value as $k => $v ) {
+                        $data['list'][$value['geonameid']][$k] = $v;
+                    }
+                }
+            }
+
+
+
+        }
+//        dt_write_log($data);
+
         return $data;
+    }
+
+    public function format_geoname_types( $query ) {
+        if ( ! empty( $query ) || ! is_array( $query ) ) {
+            foreach ( $query as $index => $value ) {
+                if ( isset( $value['geonameid'] ) ) {
+                    $query[$index]['geonameid'] = (int) $value['geonameid'];
+                }
+                if ( isset( $value['population'] ) ) {
+                    $query[$index]['population'] = (int) $value['population'];
+                    $query[$index]['population_formatted'] = number_format( (int) $value['population'] );
+                }
+                if ( isset( $value['latitude'] ) ) {
+                    $query[$index]['latitude'] = (float) $value['latitude'];
+                }
+                if ( isset( $value['longitude'] ) ) {
+                    $query[$index]['longitude'] = (float) $value['longitude'];
+                }
+                if ( isset( $value['parent_id'] ) ) {
+                    $query[$index]['parent_id'] = (float) $value['parent_id'];
+                }
+                if ( isset( $value['country_geonameid'] ) ) {
+                    $query[$index]['country_geonameid'] = (float) $value['country_geonameid'];
+                }
+                if ( isset( $value['admin1_geonameid'] ) ) {
+                    $query[$index]['admin1_geonameid'] = (float) $value['admin1_geonameid'];
+                }
+                if ( isset( $value['admin2_geonameid'] ) ) {
+                    $query[$index]['admin2_geonameid'] = (float) $value['admin2_geonameid'];
+                }
+                if ( isset( $value['admin3_geonameid'] ) ) {
+                    $query[$index]['admin3_geonameid'] = (float) $value['admin3_geonameid'];
+                }
+            }
+        }
+        return $query;
+    }
+
+    /**
+     * NOTE: copy of this function found in network.php:1129
+     * and list provided in snapshot_report: locations: data_types.
+     * But with customization, not sure if this source is reliable.
+     *
+     * @param bool $preset
+     *
+     * @return array
+     */
+    public function location_data_types( $preset = false ) {
+        if ( $preset ) {
+            return [
+                'contacts' => 0,
+                'groups' => 0,
+                'churches' => 0,
+                'users' => 0,
+            ];
+        } else {
+            return [
+                'contacts',
+                'groups',
+                'churches',
+                'users',
+            ];
+        }
+
     }
 
     /**
@@ -338,17 +472,25 @@ class DT_Network_Dashboard_UI
             'total_contacts' => 0,
             'total_groups' => 0,
             'total_users' => 0,
-            'total_countries' => 0, // @todo needs real data
+            'total_countries' => 0,
         ];
         if ( empty( $sites ) ) {
             return [];
         }
 
-        // extract months
         foreach ( $sites as $key => $site ) {
             $data['total_contacts'] = $data['total_contacts'] + $site['contacts']['current_state']['status']['active'];
             $data['total_groups'] = $data['total_groups'] + $site['groups']['current_state']['total_active'];
             $data['total_users'] = $data['total_users'] + $site['users']['current_state']['total_users'];
+
+            if ( ! empty( $site['locations']['current_state']['active_countries_geonames'] ) ) {
+                foreach ( $site['locations']['current_state']['active_countries_geonames'] as $geonameid ) {
+                    $data['countries'][$geonameid] = true;
+                }
+            }
+        }
+        if ( ! empty( $data['countries'] ) ) {
+            $data['total_countries'] = count( $data['countries'] );
         }
 
         return $data;

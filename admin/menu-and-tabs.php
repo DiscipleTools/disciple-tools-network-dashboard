@@ -46,7 +46,6 @@ class DT_Network_Dashboard_Menu {
      */
     public function __construct() {
         add_action( "admin_menu", array( $this, "register_menu" ) );
-        add_action( "admin_head", [ $this, 'header_script' ] );
     } // End __construct()
 
     /**
@@ -69,18 +68,6 @@ class DT_Network_Dashboard_Menu {
         [ $this, 'content' ] );
     }
 
-    public function header_script() {
-        ?>
-        <style>
-            a.pointer { cursor: pointer; }
-        </style>
-        <script>
-            jQuery(document).ready(function(){
-                // add javascript here
-            })
-        </script>
-        <?php
-    }
 
     /**
      * Menu stub. Replaced when Disciple Tools Theme fully loads.
