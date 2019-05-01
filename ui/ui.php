@@ -72,6 +72,12 @@ class DT_Network_Dashboard_UI
         wp_enqueue_style( 'datatable-css' );
         wp_register_script( 'datatable', '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js', false, '1.10' );
 
+        // MapBox
+        wp_register_style( 'mapbox-css', 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css', false, '0.54.0' );
+        wp_enqueue_style( 'mapbox-css' );
+        wp_register_script( 'mapbox', 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js', false, '0.54.0', false );
+
+
         // UI script
         wp_enqueue_script( 'dt_network_dashboard_script',
             trailingslashit( plugin_dir_url( __FILE__ ) ) . 'ui.js',
@@ -83,7 +89,8 @@ class DT_Network_Dashboard_UI
                 'amcharts-animated',
                 'amcharts-maps',
                 'amcharts-maps-world',
-                'datatable'
+                'datatable',
+                'mapbox'
             ],
             filemtime( plugin_dir_path( __DIR__ ) . 'ui/ui.js' ),
         true );
@@ -96,7 +103,6 @@ class DT_Network_Dashboard_UI
                 'nonce' => wp_create_nonce( 'wp_rest' ),
                 'current_user_login' => wp_get_current_user()->user_login,
                 'current_user_id' => get_current_user_id(),
-            //                'map_key' => dt_get_option( 'map_key' ),
                 'spinner' => ' <img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="12px" />',
                 'spinner_large' => ' <img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="24px" />',
                 'sites_list' => $this->get_site_list(),
@@ -110,6 +116,7 @@ class DT_Network_Dashboard_UI
                 ]
             ]
         );
+
     }
 
 
@@ -202,24 +209,24 @@ class DT_Network_Dashboard_UI
         $totals = $this->compile_totals();
         $data = [
             'contacts' => [
-                'total' => $totals['total_contacts'],
+                'total' => $totals['total_contacts'] ?? 0,
                 'added' => [
                     'sixty_days' => $this->compile_by_days( 'contacts' ),
                     'twenty_four_months' => $this->compile_by_months( 'contacts' ),
                 ],
             ],
             'groups' => [
-                'total' => $totals['total_groups'],
+                'total' => $totals['total_groups'] ?? 0,
                 'added' => [
                     'sixty_days' => $this->compile_by_days( 'groups' ),
                     'twenty_four_months' => $this->compile_by_months( 'groups' ),
                 ],
             ],
             'users' => [
-                'total' => $totals['total_users'],
+                'total' => $totals['total_users'] ?? 0,
             ],
             'locations' => [
-                'total_countries' => $totals['total_countries'],
+                'total_countries' => $totals['total_countries'] ?? 0,
             ],
         ];
 

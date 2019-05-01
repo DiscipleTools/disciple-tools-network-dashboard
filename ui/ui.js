@@ -742,19 +742,21 @@ function page_mapping_view() {
     chartDiv.empty().html(`
         
         <div class="grid-x grid-margin-y">
-            <div class="cell medium-6" id="network_chart_drilldown"></div>
+            <div class="cell medium-6" id=""></div>
             <div class="cell medium-6" style="text-align:right;">
                <strong id="section-title" style="font-size:2em;"></strong><br>
-                <span id="current_level"></span>
+                
             </div>
         </div>
         
         <hr style="max-width:100%;">
         
+        
+        
        <!-- Map -->
        <div class="grid-x grid-margin-x">
             <div class="cell medium-10">
-                <div id="map_chart" style="width: 100%;max-height: 700px;height: 100vh;vertical-align: text-top;"></div>
+                <div id="map" style="width: 100%;max-height: 700px;height: 100vh;vertical-align: text-top;"></div>
             </div>
             <div class="cell medium-2 left-border-grey">
                 <div class="grid-y">
@@ -770,17 +772,29 @@ function page_mapping_view() {
         <hr style="max-width:100%;">
         
         <span style="float:right;font-size:.8em;"><a onclick="DRILLDOWN.get_drill_down('map_chart_drilldown')" >return to top level</a></span>
+        
         <br>
         `);
-// set the depth of the drill down
-    DRILLDOWNDATA.settings.hide_final_drill_down = true
-    DRILLDOWN.get_drill_down('network_chart_drilldown')
+
+
+    // mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNjaGFzbSIsImEiOiJjajZyc2poNmEwZTdqMnFuenB0ODI5dWduIn0.6wKrDTf2exQJY-MY7Q1kRQ';
+    // let map = new mapboxgl.Map({
+    //     container: 'map',
+    //     style: 'mapbox://styles/mapbox/streets-v9'
+    // });
+    // mapboxgl.workerUrl = "https://api.tiles.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl-csp-worker.js"
+
+    // mapboxgl.accessToken = 'pk.eyJ1IjoiY2hyaXNjaGFzbSIsImEiOiJjanNsczFtdDQwM3djNDRuMG56eXJvcDRmIn0.vdBOPuShPP3WS4oEbCcDjA';
+    // let map = new mapboxgl.Map({
+    //     container: 'map',
+    //     style: 'mapbox://styles/mapbox/light',
+    //     center: [10,36.3333], // starting position [lng, lat]
+    //     zoom: 5 // starting zoom
+    // });
+
 
 }
 
-window.DRILLDOWN.network_chart_drilldown = function( geonameid ) {
-    console.log('network_chart_drilldown')
-}
 
 
 function page_mapping_list( geonameid ) {
