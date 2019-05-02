@@ -73,9 +73,9 @@ class DT_Network_Dashboard_UI
         wp_register_script( 'datatable', '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js', false, '1.10' );
 
         // MapBox
-        wp_register_style( 'mapbox-css', 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css', false, '0.54.0' );
-        wp_enqueue_style( 'mapbox-css' );
-        wp_register_script( 'mapbox', 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js', false, '0.54.0', false );
+//        wp_register_style( 'mapbox-css', 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.css', false, '0.54.0' );
+//        wp_enqueue_style( 'mapbox-css' );
+//        wp_register_script( 'mapbox', 'https://api.tiles.mapbox.com/mapbox-gl-js/v0.54.0/mapbox-gl.js', false, '0.54.0', false );
 
 
         // UI script
@@ -90,7 +90,7 @@ class DT_Network_Dashboard_UI
                 'amcharts-maps',
                 'amcharts-maps-world',
                 'datatable',
-                'mapbox'
+//                'mapbox'
             ],
             filemtime( plugin_dir_path( __DIR__ ) . 'ui/ui.js' ),
         true );
