@@ -812,32 +812,6 @@ function top_level_map( div ) {
         if ( map_data.children[v.id] !== undefined ) {
             mapData.features[i].properties.geonameid = map_data.children[v.id].geonameid
             mapData.features[i].properties.population = map_data.children[v.id].population
-
-
-            /* custom columns */
-            // if ( DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid] ) {
-            //     /* Note: Amcharts calculates heatmap off last variable. So this section moves selected
-            //     * heatmap variable to the end of the array */
-            //     let focus = DRILLDOWNDATA.settings.heatmap_focus
-            //     jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
-            //         if ( ii !== focus ) {
-            //             mapData.features[i].properties[vv.key] = DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid][ii]
-            //             mapData.features[i].properties.value = mapData.features[i].properties[vv.key]
-            //         }
-            //     })
-            //     jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
-            //         if ( ii === focus ) {
-            //             mapData.features[i].properties[vv.key] = DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid][ii]
-            //             mapData.features[i].properties.value = mapData.features[i].properties[vv.key]
-            //         }
-            //     })
-            // } else {
-            //     jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
-            //         mapData.features[i].properties[vv.key] = 0
-            //         mapData.features[i].properties.value = 0
-            //     })
-            // }
-            /* end custom column */
         }
     })
     chart.geodata = mapData;
@@ -864,13 +838,6 @@ function top_level_map( div ) {
     polygonSeries.tooltip.label.interactionsEnabled = true;
     polygonSeries.tooltip.pointerOrientation = "vertical";
 
-    // polygonSeries.heatRules.push({
-    //     property: "fill",
-    //     target: template,
-    //     min: chart.colors.getIndex(1).brighten(1.5),
-    //     max: chart.colors.getIndex(1).brighten(-0.3)
-    // });
-
     let locations = []
     jQuery.each( wpApiNetworkDashboard.locations_list.list, function(i, v) {
         if ( v.level === 'country' ) {
@@ -895,7 +862,11 @@ function top_level_map( div ) {
     // toolTipContent += `<br>Click to Explore`
     // imageSeriesTemplate.tooltipText = "[bold]{name}[/] \n {sites}";
     toolTipContent = `<strong>{name}</strong><br>
-                            Click to Explore
+                            Population: {population}<br>
+                            Contacts: {contacts}<br>
+                            Groups: {groups}<br>
+                            Churches: {churches}<br>
+                            Workers: {users}<br>
                             `;
     imageSeriesTemplate.tooltipHTML = toolTipContent
 
@@ -932,34 +903,8 @@ function top_level_map( div ) {
     circle.events.on("hit", function(ev) {
         console.log(ev.target.dataItem.dataContext.name)
         console.log(ev.target.dataItem.dataContext.geonameid)
-        console.log(ev.target.dataItem.dataContext)
 
-        // if( map_data.deeper_levels[ev.target.dataItem.dataContext.geonameid] )
-        // {
-
-            // return DRILLDOWN.get_drill_down( 'map_chart_drilldown', ev.target.dataItem.dataContext.geonameid )
-        // }
-
-        var north, south, west, east;
-
-        // Find extreme coordinates for all pre-zoom countries
-        var country = polygonSeries.getPolygonById(ev.target.dataItem.dataContext.id);
-        if (north == undefined || (country.north > north)) {
-            north = country.north;
-        }
-        if (south == undefined || (country.south < south)) {
-            south = country.south;
-        }
-        if (west == undefined || (country.west < west)) {
-            west = country.west;
-        }
-        if (east == undefined || (country.east > east)) {
-            east = country.east;
-        }
-        country.isActive = true
-
-        // Pre-zoom
-        chart.zoomToRectangle(north, east, south, west, 1, true);
+        return DRILLDOWN.get_drill_down( 'map_chart_drilldown', ev.target.dataItem.dataContext.geonameid )
 
     }, this);
 
@@ -983,120 +928,119 @@ function geoname_map( div, geonameid ) {
 
     title.empty()
 
-    jQuery.ajax({
-        type: rest.method,
-        contentType: "application/json; charset=utf-8",
-        data: JSON.stringify( { 'geonameid': geonameid } ),
-        dataType: "json",
-        url: DRILLDOWNDATA.settings.root + rest.namespace + rest.route,
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader('X-WP-Nonce', rest.nonce);
-        },
-    })
-        .done( function( response ) {
+    jQuery.getJSON( DRILLDOWNDATA.settings.mapping_source_url + 'polygons/' + geonameid+'.geojson', function( data ) { // get geojson data
 
-            title.html(response.self.name)
+        // load geojson with additional parameters
+        let mapData = data
 
-            jQuery.getJSON( DRILLDOWNDATA.settings.mapping_source_url + 'polygons/' + geonameid+'.geojson', function( data ) { // get geojson data
+        let coords = []
 
-                // load geojson with additional parameters
-                let mapData = data
+        jQuery.each( mapData.features, function(i, v ) {
+            if ( wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid] !== undefined ) {
 
-                jQuery.each( mapData.features, function(i, v ) {
-                    if ( response.children[mapData.features[i].properties.geonameid] !== undefined ) {
+                mapData.features[i].properties.population = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].population
+                mapData.features[i].properties.contacts = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].contacts
+                mapData.features[i].properties.groups = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].groups
+                mapData.features[i].properties.churches = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].churches
+                mapData.features[i].properties.users = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].users
 
-                        mapData.features[i].properties.population = response.children[mapData.features[i].properties.geonameid].population
+                mapData.features[i].properties.value = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].contacts
 
-                        /* custom columns */
-                        if ( DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid] ) {
-                            /* Note: Amcharts calculates heatmap off last variable. So this section moves selected
-                            * heatmap variable to the end of the array */
-                            let focus = DRILLDOWNDATA.settings.heatmap_focus
-                            jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
-                                if ( ii !== focus ) {
-                                    mapData.features[i].properties[vv.key] = DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid][ii]
-                                    mapData.features[i].properties.value = mapData.features[i].properties[vv.key]
-                                }
-                            })
-                            jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
-                                if ( ii === focus ) {
-                                    mapData.features[i].properties[vv.key] = DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid][ii]
-                                    mapData.features[i].properties.value = mapData.features[i].properties[vv.key]
-                                }
-                            })
-                        } else {
-                            jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
-                                mapData.features[i].properties[vv.key] = 0
-                                mapData.features[i].properties.value = 0
-                            })
-                        }
-                        /* end custom column */
-                    }
-                })
+                /* custom columns */
+                // if ( DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid] ) {
+                //     /* Note: Amcharts calculates heatmap off last variable. So this section moves selected
+                //     * heatmap variable to the end of the array */
+                //     let focus = DRILLDOWNDATA.settings.heatmap_focus
+                //     jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
+                //         if ( ii !== focus ) {
+                //             mapData.features[i].properties[vv.key] = DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid][ii]
+                //             mapData.features[i].properties.value = mapData.features[i].properties[vv.key]
+                //         }
+                //     })
+                //     jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
+                //         if ( ii === focus ) {
+                //             mapData.features[i].properties[vv.key] = DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid][ii]
+                //             mapData.features[i].properties.value = mapData.features[i].properties[vv.key]
+                //         }
+                //     })
+                // } else {
+                //     jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
+                //         mapData.features[i].properties[vv.key] = 0
+                //         mapData.features[i].properties.value = 0
+                //     })
+                // }
+                /* end custom column */
+                coords = {
+                    "latitude": wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].latitude,
+                    "longitude": wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].longitude
+                }
+            }
+        })
 
-                // create polygon series
-                let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
-                polygonSeries.geodata = mapData
-                polygonSeries.useGeodata = true;
+        // create polygon series
+        let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+        polygonSeries.geodata = mapData
+        polygonSeries.useGeodata = true;
 
-                // Configure series tooltip
-                let template = polygonSeries.mapPolygons.template;
+        // Configure series tooltip
+        let template = polygonSeries.mapPolygons.template;
 
-                // create tool tip
-                let toolTipContent = `<strong>{name}</strong><br>
+        // create tool tip
+        let toolTipContent = `<strong>{name}</strong><br>
                             ---------<br>
                             Population: {population}<br>
+                            Contacts: {contacts}<br>
+                            Groups: {groups}<br>
+                            Churches: {churches}<br>
+                            Workers: {users}<br>
                             `;
-                jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vc) {
-                    toolTipContent += vc.label + ': {' + vc.key + '}<br>'
-                })
-                template.tooltipHTML = toolTipContent
+        template.tooltipHTML = toolTipContent
 
-                // Create hover state and set alternative fill color
-                let hs = template.states.create("hover");
-                hs.properties.fill = am4core.color("#3c5bdc");
+        // Create hover state and set alternative fill color
+        let hs = template.states.create("hover");
+        hs.properties.fill = am4core.color("#3c5bdc");
 
 
-                template.propertyFields.fill = "fill";
-                polygonSeries.tooltip.label.interactionsEnabled = true;
-                polygonSeries.tooltip.pointerOrientation = "vertical";
+        template.propertyFields.fill = "fill";
+        polygonSeries.tooltip.label.interactionsEnabled = true;
+        polygonSeries.tooltip.pointerOrientation = "vertical";
 
-                polygonSeries.heatRules.push({
-                    property: "fill",
-                    target: template,
-                    min: chart.colors.getIndex(1).brighten(1.5),
-                    max: chart.colors.getIndex(1).brighten(-0.3)
-                });
+        polygonSeries.heatRules.push({
+            property: "fill",
+            target: template,
+            min: chart.colors.getIndex(1).brighten(1.5),
+            max: chart.colors.getIndex(1).brighten(-0.3)
+        });
 
-                /* Click navigation */
-                template.events.on("hit", function(ev) {
-                    console.log(ev.target.dataItem.dataContext.geonameid)
-                    console.log(ev.target.dataItem.dataContext.name)
+        // Zoom control
+        chart.zoomControl = new am4maps.ZoomControl();
+        var homeButton = new am4core.Button();
+        homeButton.events.on("hit", function(){
+            chart.goHome();
+        });
+        homeButton.icon = new am4core.Sprite();
+        homeButton.padding(7, 5, 7, 5);
+        homeButton.width = 30;
+        homeButton.icon.path = "M16,8 L14,8 L14,16 L10,16 L10,10 L6,10 L6,16 L2,16 L2,8 L0,8 L8,0 L16,8 Z M16,8";
+        homeButton.marginBottom = 10;
+        homeButton.parent = chart.zoomControl;
+        homeButton.insertBefore(chart.zoomControl.plusButton);
 
-                    if( response.deeper_levels[ev.target.dataItem.dataContext.geonameid] )
-                    {
-                        jQuery("select#"+response.self.geonameid+" option[value="+ev.target.dataItem.dataContext.geonameid+"]").attr('selected', true)
-                        return DRILLDOWN.get_drill_down( 'map_chart_drilldown', ev.target.dataItem.dataContext.geonameid )
-                    }
-                }, this);
+        /* Click navigation */
+        template.events.on("hit", function(ev) {
+            console.log(ev.target.dataItem.dataContext.geonameid)
+            console.log(ev.target.dataItem.dataContext.name)
 
-                let coordinates = []
-                coordinates.push({
-                    "latitude": response.self.latitude,
-                    "longitude": response.self.longitude,
-                    "title": response.self.name
-                })
+            return DRILLDOWN.get_drill_down( 'map_chart_drilldown', ev.target.dataItem.dataContext.geonameid )
+        }, this);
 
-                mini_map( 'minimap', coordinates )
+        let coordinates = []
+        coordinates.push(coords)
+        mini_map( 'minimap', coordinates )
 
-            }) // end get geojson
-                .fail(function() {
-                    jQuery('#map_chart').empty().append(`No polygon available.`)
-                })
-        }) // end success statement
-        .fail(function (err) {
-            console.log("error")
-            console.log(err)
+    }) // end get geojson
+        .fail(function() {
+            jQuery('#map_chart').empty().append(`No polygon available.`)
         })
 }
 
