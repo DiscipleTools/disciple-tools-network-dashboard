@@ -33,6 +33,7 @@ class DT_Network_Dashboard_UI
 
                 if ( 'network' === $url_path ) {
                     add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
+                    add_filter( 'dt_mapping_module_data', [ $this, 'filter_mapping_module_data' ], 50, 1 );
                 }
             }
         } // end admin only test
@@ -90,7 +91,6 @@ class DT_Network_Dashboard_UI
                 'amcharts-maps',
                 'amcharts-maps-world',
                 'datatable',
-//                'mapbox'
             ],
             filemtime( plugin_dir_path( __DIR__ ) . 'ui/ui.js' ),
         true );
@@ -119,7 +119,10 @@ class DT_Network_Dashboard_UI
 
     }
 
-
+    public function filter_mapping_module_data( $data ) {
+        $data['custom_column_labels'] = $this->location_data_types();
+        return $data;
+    }
 
     public function add_url( $template_for_url ) {
         $template_for_url['network'] = 'template-metrics.php';
@@ -235,6 +238,7 @@ class DT_Network_Dashboard_UI
 
     public function get_locations_list() {
         $data = [
+                'data_types' => $this->location_data_types(),
                 'current_state' => [
                     'active_countries' => 0,
                     'active_countries_geonames' => [],

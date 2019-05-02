@@ -674,6 +674,15 @@ function points_map_chart( div, values ) {
     circle.strokeWidth = 2;
     circle.nonScaling = true;
 
+    // Click navigation
+    circle.events.on("hit", function(ev) {
+        console.log(ev.target.dataItem.dataContext.name)
+        console.log(ev.target.dataItem.dataContext.geonameid)
+
+        page_mapping_view( ev.target.dataItem.dataContext.geonameid )
+
+    }, this);
+
     if ( 'site-map-div' === div ) {
         circle.tooltipText = "[bold]{name}[/] ";
     } else if ( 'home-map-div' === div ) {
@@ -735,7 +744,7 @@ function load_site_lists( div ) {
     })
 }
 
-function page_mapping_view() {
+function page_mapping_view( geonameid ) {
     console.log(DRILLDOWNDATA)
     console.log(wpApiNetworkDashboard)
     "use strict";
@@ -761,8 +770,7 @@ function page_mapping_view() {
                 <div class="grid-y">
                     <div class="cell" style="overflow-y: scroll; height:700px; padding:0 .4em;" id="child-list-container">
                         <div id="minimap"></div><br><br>
-                        <div class="button-group expanded stacked" id="data-type-list">
-                         </div>
+                        <div class="button-group expanded stacked" id="data-type-list"></div>
                     </div>
                 </div>
             </div>
@@ -778,7 +786,12 @@ function page_mapping_view() {
     // set the depth of the drill down
     DRILLDOWNDATA.settings.hide_final_drill_down = true
     // load drill down
-    DRILLDOWN.get_drill_down('map_chart_drilldown')
+    if ( geonameid ) {
+        DRILLDOWN.get_drill_down('map_chart_drilldown', geonameid )
+    } else {
+        DRILLDOWN.get_drill_down('map_chart_drilldown')
+    }
+
 }
 
 window.DRILLDOWN.map_chart_drilldown = function( geonameid ) {
@@ -867,6 +880,7 @@ function top_level_map( div ) {
                             Groups: {groups}<br>
                             Churches: {churches}<br>
                             Workers: {users}<br>
+                            Sites: {sites}<br>
                             `;
     imageSeriesTemplate.tooltipHTML = toolTipContent
 
@@ -928,119 +942,140 @@ function geoname_map( div, geonameid ) {
 
     title.empty()
 
-    jQuery.getJSON( DRILLDOWNDATA.settings.mapping_source_url + 'polygons/' + geonameid+'.geojson', function( data ) { // get geojson data
+    jQuery.ajax({
+        type: rest.method,
+        contentType: "application/json; charset=utf-8",
+        data: JSON.stringify( { 'geonameid': geonameid } ),
+        dataType: "json",
+        url: DRILLDOWNDATA.settings.root + rest.namespace + rest.route,
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader('X-WP-Nonce', rest.nonce);
+        },
+    })
+        .done( function( response ) {
 
-        // load geojson with additional parameters
-        let mapData = data
+            title.html(response.self.name)
 
-        let coords = []
+            jQuery.getJSON(DRILLDOWNDATA.settings.mapping_source_url + 'polygons/' + geonameid + '.geojson', function (data) { // get geojson data
 
-        jQuery.each( mapData.features, function(i, v ) {
-            if ( wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid] !== undefined ) {
+                // load geojson with additional parameters
+                let mapData = data
 
-                mapData.features[i].properties.population = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].population
-                mapData.features[i].properties.contacts = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].contacts
-                mapData.features[i].properties.groups = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].groups
-                mapData.features[i].properties.churches = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].churches
-                mapData.features[i].properties.users = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].users
+                jQuery.each(mapData.features, function (i, v) {
+                    if (wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid] !== undefined) {
 
-                mapData.features[i].properties.value = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].contacts
 
-                /* custom columns */
-                // if ( DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid] ) {
-                //     /* Note: Amcharts calculates heatmap off last variable. So this section moves selected
-                //     * heatmap variable to the end of the array */
-                //     let focus = DRILLDOWNDATA.settings.heatmap_focus
-                //     jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
-                //         if ( ii !== focus ) {
-                //             mapData.features[i].properties[vv.key] = DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid][ii]
-                //             mapData.features[i].properties.value = mapData.features[i].properties[vv.key]
-                //         }
-                //     })
-                //     jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
-                //         if ( ii === focus ) {
-                //             mapData.features[i].properties[vv.key] = DRILLDOWNDATA.data.custom_column_data[mapData.features[i].properties.geonameid][ii]
-                //             mapData.features[i].properties.value = mapData.features[i].properties[vv.key]
-                //         }
-                //     })
-                // } else {
-                //     jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
-                //         mapData.features[i].properties[vv.key] = 0
-                //         mapData.features[i].properties.value = 0
-                //     })
-                // }
-                /* end custom column */
-                coords = {
-                    "latitude": wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].latitude,
-                    "longitude": wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].longitude
-                }
-            }
-        })
+                        mapData.features[i].properties.population = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].population
 
-        // create polygon series
-        let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
-        polygonSeries.geodata = mapData
-        polygonSeries.useGeodata = true;
+                        jQuery.each( wpApiNetworkDashboard.locations_list.data_types, function( dt, data_type ) {
 
-        // Configure series tooltip
-        let template = polygonSeries.mapPolygons.template;
+                            mapData.features[i].properties[data_type] = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid][data_type]
+                        })
 
-        // create tool tip
-        let toolTipContent = `<strong>{name}</strong><br>
+                        mapData.features[i].properties.sites = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].sites
+
+                        let focus = DRILLDOWNDATA.settings.heatmap_focus
+                        jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
+                            if ( ii !== focus ) {
+                                mapData.features[i].properties.value = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid][vv]
+                            }
+                        })
+                        jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
+                            if ( ii === focus ) {
+                                mapData.features[i].properties.value = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid][vv]
+                            }
+                        })
+
+
+                    }
+                    else if ( response.children[mapData.features[i].properties.geonameid] !== undefined ) {
+                        mapData.features[i].properties.population = response.children[mapData.features[i].properties.geonameid].population
+
+                        jQuery.each( wpApiNetworkDashboard.locations_list.data_types, function( dt, data_type ) {
+                            mapData.features[i].properties[data_type] = 0
+                        })
+                        mapData.features[i].properties.sites = ''
+
+                        mapData.features[i].properties.value = 0
+                    }
+                })
+
+                console.log(response)
+
+                // create polygon series
+                let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+                polygonSeries.geodata = mapData
+                polygonSeries.useGeodata = true;
+
+                // Configure series tooltip
+                let template = polygonSeries.mapPolygons.template;
+
+                // create tool tip
+                let toolTipContent = `<strong>{name}</strong><br>
                             ---------<br>
                             Population: {population}<br>
                             Contacts: {contacts}<br>
                             Groups: {groups}<br>
                             Churches: {churches}<br>
                             Workers: {users}<br>
+                            Sites: {sites}<br>
                             `;
-        template.tooltipHTML = toolTipContent
+                template.tooltipHTML = toolTipContent
 
-        // Create hover state and set alternative fill color
-        let hs = template.states.create("hover");
-        hs.properties.fill = am4core.color("#3c5bdc");
+                // Create hover state and set alternative fill color
+                let hs = template.states.create("hover");
+                hs.properties.fill = am4core.color("#3c5bdc");
 
 
-        template.propertyFields.fill = "fill";
-        polygonSeries.tooltip.label.interactionsEnabled = true;
-        polygonSeries.tooltip.pointerOrientation = "vertical";
+                template.propertyFields.fill = "fill";
+                polygonSeries.tooltip.label.interactionsEnabled = true;
+                polygonSeries.tooltip.pointerOrientation = "vertical";
 
-        polygonSeries.heatRules.push({
-            property: "fill",
-            target: template,
-            min: chart.colors.getIndex(1).brighten(1.5),
-            max: chart.colors.getIndex(1).brighten(-0.3)
-        });
+                polygonSeries.heatRules.push({
+                    property: "fill",
+                    target: template,
+                    min: chart.colors.getIndex(1).brighten(1.5),
+                    max: chart.colors.getIndex(1).brighten(-0.3)
+                });
 
-        // Zoom control
-        chart.zoomControl = new am4maps.ZoomControl();
-        var homeButton = new am4core.Button();
-        homeButton.events.on("hit", function(){
-            chart.goHome();
-        });
-        homeButton.icon = new am4core.Sprite();
-        homeButton.padding(7, 5, 7, 5);
-        homeButton.width = 30;
-        homeButton.icon.path = "M16,8 L14,8 L14,16 L10,16 L10,10 L6,10 L6,16 L2,16 L2,8 L0,8 L8,0 L16,8 Z M16,8";
-        homeButton.marginBottom = 10;
-        homeButton.parent = chart.zoomControl;
-        homeButton.insertBefore(chart.zoomControl.plusButton);
+                // Zoom control
+                chart.zoomControl = new am4maps.ZoomControl();
+                var homeButton = new am4core.Button();
+                homeButton.events.on("hit", function () {
+                    chart.goHome();
+                });
+                homeButton.icon = new am4core.Sprite();
+                homeButton.padding(7, 5, 7, 5);
+                homeButton.width = 30;
+                homeButton.icon.path = "M16,8 L14,8 L14,16 L10,16 L10,10 L6,10 L6,16 L2,16 L2,8 L0,8 L8,0 L16,8 Z M16,8";
+                homeButton.marginBottom = 10;
+                homeButton.parent = chart.zoomControl;
+                homeButton.insertBefore(chart.zoomControl.plusButton);
 
-        /* Click navigation */
-        template.events.on("hit", function(ev) {
-            console.log(ev.target.dataItem.dataContext.geonameid)
-            console.log(ev.target.dataItem.dataContext.name)
+                /* Click navigation */
+                template.events.on("hit", function (ev) {
+                    console.log(ev.target.dataItem.dataContext.geonameid)
+                    console.log(ev.target.dataItem.dataContext.name)
 
-            return DRILLDOWN.get_drill_down( 'map_chart_drilldown', ev.target.dataItem.dataContext.geonameid )
-        }, this);
+                    return DRILLDOWN.get_drill_down('map_chart_drilldown', ev.target.dataItem.dataContext.geonameid)
+                }, this);
 
-        let coordinates = []
-        coordinates.push(coords)
-        mini_map( 'minimap', coordinates )
+                let coordinates = []
+                coordinates.push({
+                    "latitude": response.self.latitude,
+                    "longitude": response.self.longitude,
+                    "title": response.self.name
+                })
+                mini_map('minimap', coordinates)
 
-    }) // end get geojson
-        .fail(function() {
-            jQuery('#map_chart').empty().append(`No polygon available.`)
+            }) // end get geojson
+                .fail(function () {
+                    jQuery('#map_chart').empty().append(`No polygon available.`)
+                })
+        })
+        .fail(function (err) {
+            console.log("error")
+            console.log(err)
         })
 }
 
@@ -1054,7 +1089,7 @@ function data_type_list( div ) {
         if ( i === focus ) {
             hollow = ''
         }
-        list.append(`<a onclick="heatmap_focus_change( ${i}, '${DRILLDOWNDATA.settings.current_map}' )" class="button ${hollow}" id="${v.key}">${v.label}</a>`)
+        list.append(`<a onclick="heatmap_focus_change( ${i}, '${DRILLDOWNDATA.settings.current_map}' )" class="button ${hollow}" id="${v}">${v.charAt(0).toUpperCase() + v.slice(1)}</a>`)
     })
 }
 
@@ -1107,7 +1142,6 @@ function mini_map( div, marker_data ) {
         imageSeriesTemplate.propertyFields.latitude = "latitude";
         imageSeriesTemplate.propertyFields.longitude = "longitude";
     })
-
 }
 
 
