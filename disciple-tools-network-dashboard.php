@@ -196,12 +196,7 @@ class DT_Network_Dashboard {
         $this->token             = 'dt_network_dashboard';
         $this->version             = '0.1';
 
-        $wpdb->dt_geonames = 'dt_geonames';
-        $wpdb->dt_geonames_polygons = 'dt_geonames_polygons';
-        $wpdb->dt_geonames_hierarchy = 'dt_geonames_hierarchy';
-        $wpdb->dt_network_reports = $wpdb->prefix . 'dt_network_reports';
-        $wpdb->dt_network_reportmeta = $wpdb->prefix . 'dt_network_reportmeta';
-        $wpdb->dt_network_locations = $wpdb->prefix . 'dt_network_locations';
+        $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
 
     }
 

@@ -956,7 +956,7 @@ function geoname_map( div, geonameid ) {
 
             title.html(response.self.name)
 
-            jQuery.getJSON(DRILLDOWNDATA.settings.mapping_source_url + 'polygons/' + geonameid + '.geojson', function (data) { // get geojson data
+            jQuery.getJSON(DRILLDOWNDATA.settings.mapping_source_url + 'polygon_collection/' + geonameid + '.geojson', function (data) { // get geojson data
 
                 // load geojson with additional parameters
                 let mapData = data
@@ -1106,7 +1106,7 @@ function heatmap_focus_change( focus_id, current_map ) {
 
 function mini_map( div, marker_data ) {
 
-    jQuery.getJSON( DRILLDOWNDATA.settings.mapping_source_url + 'polygons/world.geojson', function( data ) {
+    jQuery.getJSON( DRILLDOWNDATA.settings.mapping_source_url + 'polygon_collection/world.geojson', function( data ) {
         am4core.useTheme(am4themes_animated);
 
         var chart = am4core.create( div, am4maps.MapChart);
