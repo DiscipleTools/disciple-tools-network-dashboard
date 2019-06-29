@@ -183,6 +183,9 @@ class DT_Network_Mapping_Module_Config
     }
 
     public function localize_script() {
+        if ( ! class_exists( 'DT_Mapping_Module') ) {
+            require_once ( get_template_directory() . 'dt-mapping/mapping.php' );
+        }
         $mapping_module = DT_Mapping_Module::instance()->localize_script();
 
 //        $mapping_module['data'] = []; // @todo add data
