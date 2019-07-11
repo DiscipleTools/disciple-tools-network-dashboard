@@ -677,9 +677,9 @@ function points_map_chart( div, values ) {
     // Click navigation
     circle.events.on("hit", function(ev) {
         console.log(ev.target.dataItem.dataContext.name)
-        console.log(ev.target.dataItem.dataContext.geonameid)
+        console.log(ev.target.dataItem.dataContext.grid_id)
 
-        page_mapping_view( ev.target.dataItem.dataContext.geonameid )
+        page_mapping_view( ev.target.dataItem.dataContext.grid_id )
 
     }, this);
 
@@ -744,7 +744,7 @@ function load_site_lists( div ) {
     })
 }
 
-function page_mapping_view( geonameid ) {
+function page_mapping_view( grid_id ) {
     console.log(DRILLDOWNDATA)
     console.log(wpApiNetworkDashboard)
     "use strict";
@@ -786,24 +786,24 @@ function page_mapping_view( geonameid ) {
     // set the depth of the drill down
     DRILLDOWNDATA.settings.hide_final_drill_down = true
     // load drill down
-    if ( geonameid ) {
-        DRILLDOWN.get_drill_down('map_chart_drilldown', geonameid )
+    if ( grid_id ) {
+        DRILLDOWN.get_drill_down('map_chart_drilldown', grid_id )
     } else {
         DRILLDOWN.get_drill_down('map_chart_drilldown')
     }
 
 }
 
-window.DRILLDOWN.map_chart_drilldown = function( geonameid ) {
-    if ( geonameid !== 'top_map_level' ) { // make sure this is not a top level continent or world request
-        console.log('map_chart_drilldown: geonameid available ' + geonameid )
-        DRILLDOWNDATA.settings.current_map = parseInt(geonameid)
-        geoname_map( 'map_chart', parseInt(geonameid) )
+window.DRILLDOWN.map_chart_drilldown = function( grid_id ) {
+    if ( grid_id !== 'top_map_level' ) { // make sure this is not a top level continent or world request
+        console.log('map_chart_drilldown: grid_id available ' + grid_id )
+        DRILLDOWNDATA.settings.current_map = parseInt(grid_id)
+        geoname_map( 'map_chart', parseInt(grid_id) )
         data_type_list( 'data-type-list' )
 
     }
     else { // top_level maps
-        console.log('map_chart_drilldown: top level ' + geonameid )
+        console.log('map_chart_drilldown: top level ' + grid_id )
         DRILLDOWNDATA.settings.current_map = 'top_map_level'
         top_level_map( 'map_chart' )
         data_type_list( 'data-type-list' )
@@ -823,7 +823,7 @@ function top_level_map( div ) {
     let mapData = am4geodata_worldLow
     jQuery.each( mapData.features, function(i, v ) {
         if ( map_data.children[v.id] !== undefined ) {
-            mapData.features[i].properties.geonameid = map_data.children[v.id].geonameid
+            mapData.features[i].properties.grid_id = map_data.children[v.id].grid_id
             mapData.features[i].properties.population = map_data.children[v.id].population
         }
     })
@@ -916,9 +916,9 @@ function top_level_map( div ) {
     // Click navigation
     circle.events.on("hit", function(ev) {
         console.log(ev.target.dataItem.dataContext.name)
-        console.log(ev.target.dataItem.dataContext.geonameid)
+        console.log(ev.target.dataItem.dataContext.grid_id)
 
-        return DRILLDOWN.get_drill_down( 'map_chart_drilldown', ev.target.dataItem.dataContext.geonameid )
+        return DRILLDOWN.get_drill_down( 'map_chart_drilldown', ev.target.dataItem.dataContext.grid_id )
 
     }, this);
 
@@ -931,12 +931,12 @@ function top_level_map( div ) {
     mini_map( 'minimap', coordinates )
 }
 
-function geoname_map( div, geonameid ) {
+function geoname_map( div, grid_id ) {
     am4core.useTheme(am4themes_animated);
 
     let chart = am4core.create( div, am4maps.MapChart);
     let title = jQuery('#section-title')
-    let rest = DRILLDOWNDATA.settings.endpoints.get_map_by_geonameid_endpoint
+    let rest = DRILLDOWNDATA.settings.endpoints.get_map_by_grid_id_endpoint
 
     chart.projection = new am4maps.projections.Miller(); // Set projection
 
@@ -945,7 +945,7 @@ function geoname_map( div, geonameid ) {
     jQuery.ajax({
         type: rest.method,
         contentType: "application/json; charset=utf-8",
-        data: JSON.stringify( { 'geonameid': geonameid } ),
+        data: JSON.stringify( { 'grid_id': grid_id } ),
         dataType: "json",
         url: DRILLDOWNDATA.settings.root + rest.namespace + rest.route,
         beforeSend: function(xhr) {
@@ -956,40 +956,40 @@ function geoname_map( div, geonameid ) {
 
             title.html(response.self.name)
 
-            jQuery.getJSON(DRILLDOWNDATA.settings.mapping_source_url + 'polygon_collection/' + geonameid + '.geojson', function (data) { // get geojson data
+            jQuery.getJSON(DRILLDOWNDATA.settings.mapping_source_url + 'collection/' + grid_id + '.geojson', function (data) { // get geojson data
 
                 // load geojson with additional parameters
                 let mapData = data
 
                 jQuery.each(mapData.features, function (i, v) {
-                    if (wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid] !== undefined) {
+                    if (wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.grid_id] !== undefined) {
 
 
-                        mapData.features[i].properties.population = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].population
+                        mapData.features[i].properties.population = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.grid_id].population
 
                         jQuery.each( wpApiNetworkDashboard.locations_list.data_types, function( dt, data_type ) {
 
-                            mapData.features[i].properties[data_type] = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid][data_type]
+                            mapData.features[i].properties[data_type] = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.grid_id][data_type]
                         })
 
-                        mapData.features[i].properties.sites = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid].sites
+                        mapData.features[i].properties.sites = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.grid_id].sites
 
                         let focus = DRILLDOWNDATA.settings.heatmap_focus
                         jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
                             if ( ii !== focus ) {
-                                mapData.features[i].properties.value = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid][vv]
+                                mapData.features[i].properties.value = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.grid_id][vv]
                             }
                         })
                         jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
                             if ( ii === focus ) {
-                                mapData.features[i].properties.value = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.geonameid][vv]
+                                mapData.features[i].properties.value = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.grid_id][vv]
                             }
                         })
 
 
                     }
-                    else if ( response.children[mapData.features[i].properties.geonameid] !== undefined ) {
-                        mapData.features[i].properties.population = response.children[mapData.features[i].properties.geonameid].population
+                    else if ( response.children[mapData.features[i].properties.grid_id] !== undefined ) {
+                        mapData.features[i].properties.population = response.children[mapData.features[i].properties.grid_id].population
 
                         jQuery.each( wpApiNetworkDashboard.locations_list.data_types, function( dt, data_type ) {
                             mapData.features[i].properties[data_type] = 0
@@ -1054,10 +1054,10 @@ function geoname_map( div, geonameid ) {
 
                 /* Click navigation */
                 template.events.on("hit", function (ev) {
-                    console.log(ev.target.dataItem.dataContext.geonameid)
+                    console.log(ev.target.dataItem.dataContext.grid_id)
                     console.log(ev.target.dataItem.dataContext.name)
 
-                    return DRILLDOWN.get_drill_down('map_chart_drilldown', ev.target.dataItem.dataContext.geonameid)
+                    return DRILLDOWN.get_drill_down('map_chart_drilldown', ev.target.dataItem.dataContext.grid_id)
                 }, this);
 
                 let coordinates = []
@@ -1069,8 +1069,72 @@ function geoname_map( div, geonameid ) {
                 mini_map('minimap', coordinates)
 
             }) // end get geojson
-                .fail(function () {
-                    jQuery('#map_chart').empty().append(`No polygon available.`)
+                .fail(function() {
+                    // if failed to get multi polygon map, then get boundary map and fill with placemarks
+
+                    jQuery.getJSON( DRILLDOWNDATA.settings.mapping_source_url + 'low/' + grid_id+'.geojson', function( data ) {
+                        // Create map polygon series
+
+                        let polygon = data
+
+                        chart.geodata = polygon;
+
+                        chart.projection = new am4maps.projections.Miller();
+                        let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+                        polygonSeries.useGeodata = true;
+
+
+                        let imageSeries = chart.series.push(new am4maps.MapImageSeries());
+
+                        let locations = []
+                        jQuery.each( DRILLDOWNDATA.data[grid_id].children, function(i, v) {
+                            /* custom columns */
+                            let focus = DRILLDOWNDATA.settings.heatmap_focus
+                            jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
+                                v[vv.key] = _.get( DRILLDOWNDATA.data.custom_column_data, `[${v.grid_id}][${ii}]`, 0 )
+                            })
+
+                            locations.push( v )
+                        } )
+                        imageSeries.data = locations;
+
+
+                        let imageSeriesTemplate = imageSeries.mapImages.template;
+                        let circle = imageSeriesTemplate.createChild(am4core.Circle);
+                        circle.radius = 6;
+                        circle.fill = am4core.color("#3c5bdc");
+                        circle.stroke = am4core.color("#3c5bdc");
+                        circle.strokeWidth = 2;
+                        circle.nonScaling = true;
+
+                        // Click navigation
+                        circle.events.on("hit", function (ev) {
+
+                            return DRILLDOWN.get_drill_down( 'map_chart_drilldown', ev.target.dataItem.dataContext.grid_id )
+
+                        }, this);
+
+                        let circleTipContent = `<strong>{name}</strong><br>
+                            ---------<br>
+                            ${_.escape(translations.population)}: {population}<br>
+                            `;
+                        jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vc) {
+                            circleTipContent += `${_.escape(vc.label)}: {${_.escape( vc.key )}}<br>`
+                        })
+                        circle.tooltipHTML = circleTipContent
+
+                        imageSeries.heatRules.push({
+                            property: "fill",
+                            target: circle,
+                            min: chart.colors.getIndex(1).brighten(1.5),
+                            max: chart.colors.getIndex(1).brighten(-0.3)
+                        });
+
+                        imageSeriesTemplate.propertyFields.latitude = "latitude";
+                        imageSeriesTemplate.propertyFields.longitude = "longitude";
+                        imageSeriesTemplate.nonScaling = true;
+
+                    })
                 })
         })
         .fail(function (err) {
@@ -1106,7 +1170,7 @@ function heatmap_focus_change( focus_id, current_map ) {
 
 function mini_map( div, marker_data ) {
 
-    jQuery.getJSON( DRILLDOWNDATA.settings.mapping_source_url + 'polygon_collection/world.geojson', function( data ) {
+    jQuery.getJSON( DRILLDOWNDATA.settings.mapping_source_url + 'collection/world.geojson', function( data ) {
         am4core.useTheme(am4themes_animated);
 
         var chart = am4core.create( div, am4maps.MapChart);
@@ -1149,7 +1213,7 @@ function mini_map( div, marker_data ) {
 /**
  * List
  */
-function page_mapping_list( geonameid ) {
+function page_mapping_list( grid_id ) {
     "use strict";
     let chartDiv = jQuery('#chart')
     chartDiv.empty().html(`
@@ -1187,8 +1251,8 @@ function page_mapping_list( geonameid ) {
         </style>
         `);
 
-    if ( geonameid ) {
-        network_geoname_list( geonameid )
+    if ( grid_id ) {
+        network_geoname_list( grid_id )
     } else {
         network_location_list()
     }
@@ -1225,7 +1289,7 @@ function network_location_list() {
             let population = v.population_formatted
 
             html += `<tr>
-                    <td><strong><a onclick="network_geoname_list(${v.geonameid})">${v.name}</a></strong></td>
+                    <td><strong><a onclick="network_geoname_list(${v.grid_id})">${v.name}</a></strong></td>
                     <td>${population}</td>`
 
             if ( v.contacts > 0 ) {
@@ -1262,17 +1326,17 @@ function network_location_list() {
     DRILLDOWN.hide_spinner()
 }
 
-function network_geoname_list( geonameid ) {
+function network_geoname_list( grid_id ) {
     DRILLDOWN.show_spinner()
 
     // Find data source before build
-    if ( DRILLDOWNDATA.data[geonameid] === undefined ) {
-        let rest = DRILLDOWNDATA.settings.endpoints.get_map_by_geonameid_endpoint
+    if ( DRILLDOWNDATA.data[grid_id] === undefined ) {
+        let rest = DRILLDOWNDATA.settings.endpoints.get_map_by_grid_id_endpoint
 
         jQuery.ajax({
             type: rest.method,
             contentType: "application/json; charset=utf-8",
-            data: JSON.stringify( { 'geonameid': geonameid } ),
+            data: JSON.stringify( { 'grid_id': grid_id } ),
             dataType: "json",
             url: DRILLDOWNDATA.settings.root + rest.namespace + rest.route,
             beforeSend: function(xhr) {
@@ -1280,8 +1344,8 @@ function network_geoname_list( geonameid ) {
             },
         })
             .done( function( response ) {
-                DRILLDOWNDATA.data[geonameid] = response
-                build_geoname_list( DRILLDOWNDATA.data[geonameid] )
+                DRILLDOWNDATA.data[grid_id] = response
+                build_geoname_list( DRILLDOWNDATA.data[grid_id] )
             })
             .fail(function (err) {
                 console.log("error")
@@ -1290,7 +1354,7 @@ function network_geoname_list( geonameid ) {
             })
 
     } else {
-        build_geoname_list( DRILLDOWNDATA.data[geonameid] )
+        build_geoname_list( DRILLDOWNDATA.data[grid_id] )
     }
 
     // build list
@@ -1302,7 +1366,7 @@ function network_geoname_list( geonameid ) {
         if ( map_data.self.level === 'country' ) {
             level_up.empty().html(`<button class="button small" onclick="network_location_list()">Level Up</button>`)
         } else {
-            level_up.empty().html(`<button class="button small" onclick="network_geoname_list(${map_data.parent.geonameid})">Level Up</button>`)
+            level_up.empty().html(`<button class="button small" onclick="network_geoname_list(${map_data.parent.grid_id})">Level Up</button>`)
         }
 
 
@@ -1315,7 +1379,7 @@ function network_geoname_list( geonameid ) {
         let population_division = pd_settings.base
         if ( ! DRILLDOWN.isEmpty( pd_settings.custom ) ) {
             jQuery.each( pd_settings.custom, function(i,v) {
-                if ( map_data.self.geonameid === i ) {
+                if ( map_data.self.grid_id === i ) {
                     population_division = v
                 }
             })
@@ -1345,25 +1409,25 @@ function network_geoname_list( geonameid ) {
         jQuery.each( sorted_children, function(i, v) {
             let population = v.population_formatted
 
-            html += `<tr><td><strong><a onclick="network_geoname_list(${v.geonameid})">${v.name}</a></strong></td>
+            html += `<tr><td><strong><a onclick="network_geoname_list(${v.grid_id})">${v.name}</a></strong></td>
                         <td>${population}</td>`
 
-            if ( network_data[v.geonameid] ) {
+            if ( network_data[v.grid_id] ) {
                 /* contacts*/
-                if ( network_data[v.geonameid].contacts > 0 ) {
-                    html += `<td><strong>${network_data[v.geonameid].contacts}</strong></td>`
+                if ( network_data[v.grid_id].contacts > 0 ) {
+                    html += `<td><strong>${network_data[v.grid_id].contacts}</strong></td>`
                 } else {
                     html += `<td class="grey">0</td>`
                 }
                 /* groups */
-                if ( network_data[v.geonameid].groups > 0 ) {
-                    html += `<td><strong>${network_data[v.geonameid].groups}</strong></td>`
+                if ( network_data[v.grid_id].groups > 0 ) {
+                    html += `<td><strong>${network_data[v.grid_id].groups}</strong></td>`
                 } else {
                     html += `<td class="grey">0</td>`
                 }
                 /* users */
-                if ( network_data[v.geonameid].users > 0 ) {
-                    html += `<td><strong>${network_data[v.geonameid].users}</strong></td>`
+                if ( network_data[v.grid_id].users > 0 ) {
+                    html += `<td><strong>${network_data[v.grid_id].users}</strong></td>`
                 } else {
                     html += `<td class="grey">0</td>`
                 }

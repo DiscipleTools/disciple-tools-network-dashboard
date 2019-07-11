@@ -258,36 +258,36 @@ class DT_Network_Dashboard_UI
         foreach ( $sites as $id => $site ) {
 
             // list
-            foreach ( $site['locations']['list'] as $geonameid => $stats ) {
-                if ( ! isset( $data['list'][$geonameid] ) ) {
-                    $data['list'][$geonameid] = $this->location_data_types( true );
-                    $data['list'][$geonameid]['sites'] = $sites[$id]['profile']['partner_name'];
+            foreach ( $site['locations']['list'] as $grid_id => $stats ) {
+                if ( ! isset( $data['list'][$grid_id] ) ) {
+                    $data['list'][$grid_id] = $this->location_data_types( true );
+                    $data['list'][$grid_id]['sites'] = $sites[$id]['profile']['partner_name'];
                 } else {
-                    $data['list'][$geonameid]['sites'] .= ', ' . $sites[$id]['profile']['partner_name'];
+                    $data['list'][$grid_id]['sites'] .= ', ' . $sites[$id]['profile']['partner_name'];
                 }
-                $data['list'][$geonameid]['contacts'] = (int) $data['list'][$geonameid]['contacts'] + (int) $stats['contacts'] ?? 0;
-                $data['list'][$geonameid]['groups'] = (int) $data['list'][$geonameid]['groups'] + (int) $stats['groups'] ?? 0;
-                $data['list'][$geonameid]['churches'] = (int) $data['list'][$geonameid]['churches'] + (int) $stats['churches'] ?? 0;
-                $data['list'][$geonameid]['users'] = (int) $data['list'][$geonameid]['users'] + (int) $stats['users'] ?? 0;
-                $data['list'][$geonameid][$id] = $sites[$id]['profile']['partner_name'];
+                $data['list'][$grid_id]['contacts'] = (int) $data['list'][$grid_id]['contacts'] + (int) $stats['contacts'] ?? 0;
+                $data['list'][$grid_id]['groups'] = (int) $data['list'][$grid_id]['groups'] + (int) $stats['groups'] ?? 0;
+                $data['list'][$grid_id]['churches'] = (int) $data['list'][$grid_id]['churches'] + (int) $stats['churches'] ?? 0;
+                $data['list'][$grid_id]['users'] = (int) $data['list'][$grid_id]['users'] + (int) $stats['users'] ?? 0;
+                $data['list'][$grid_id][$id] = $sites[$id]['profile']['partner_name'];
 
             }
 
 
             // current state
             if ( ! empty( $site['locations']['current_state']['active_countries_geonames'] ) ) {
-                foreach ( $site['locations']['current_state']['active_countries_geonames'] as $geonameid ) {
-                    $data['current_state']['active_countries_geonames'][$geonameid] = true;
+                foreach ( $site['locations']['current_state']['active_countries_geonames'] as $grid_id ) {
+                    $data['current_state']['active_countries_geonames'][$grid_id] = true;
                 }
             }
             if ( ! empty( $site['locations']['current_state']['active_admin1_geonames'] ) ) {
-                foreach ( $site['locations']['current_state']['active_admin1_geonames'] as $geonameid ) {
-                    $data['current_state']['active_admin1_geonames'][$geonameid] = true;
+                foreach ( $site['locations']['current_state']['active_admin1_geonames'] as $grid_id ) {
+                    $data['current_state']['active_admin1_geonames'][$grid_id] = true;
                 }
             }
             if ( ! empty( $site['locations']['current_state']['active_admin2_geonames'] ) ) {
-                foreach ( $site['locations']['current_state']['active_admin2_geonames'] as $geonameid ) {
-                    $data['current_state']['active_admin2_geonames'][$geonameid] = true;
+                foreach ( $site['locations']['current_state']['active_admin2_geonames'] as $grid_id ) {
+                    $data['current_state']['active_admin2_geonames'][$grid_id] = true;
                 }
             }
 
@@ -304,11 +304,11 @@ class DT_Network_Dashboard_UI
 
             // complete list
             $list_geonames = array_keys( $data['list'] );
-            $geoname_properties = $this->format_geoname_types( Disciple_Tools_Mapping_Queries::get_by_geonameid_list( $list_geonames, true ) );
+            $geoname_properties = $this->format_geoname_types( Disciple_Tools_Mapping_Queries::get_by_grid_id_list( $list_geonames, true ) );
             if ( ! empty( $geoname_properties ) ) {
                 foreach ( $geoname_properties as $value ) {
                     foreach ( $value as $k => $v ) {
-                        $data['list'][$value['geonameid']][$k] = $v;
+                        $data['list'][$value['grid_id']][$k] = $v;
                     }
                 }
             }
@@ -321,8 +321,8 @@ class DT_Network_Dashboard_UI
     public function format_geoname_types( $query ) {
         if ( ! empty( $query ) || ! is_array( $query ) ) {
             foreach ( $query as $index => $value ) {
-                if ( isset( $value['geonameid'] ) ) {
-                    $query[$index]['geonameid'] = (int) $value['geonameid'];
+                if ( isset( $value['grid_id'] ) ) {
+                    $query[$index]['grid_id'] = (int) $value['grid_id'];
                 }
                 if ( isset( $value['population'] ) ) {
                     $query[$index]['population'] = (int) $value['population'];
@@ -337,17 +337,17 @@ class DT_Network_Dashboard_UI
                 if ( isset( $value['parent_id'] ) ) {
                     $query[$index]['parent_id'] = (float) $value['parent_id'];
                 }
-                if ( isset( $value['country_geonameid'] ) ) {
-                    $query[$index]['country_geonameid'] = (float) $value['country_geonameid'];
+                if ( isset( $value['admin0_grid_id'] ) ) {
+                    $query[$index]['admin0_grid_id'] = (float) $value['admin0_grid_id'];
                 }
-                if ( isset( $value['admin1_geonameid'] ) ) {
-                    $query[$index]['admin1_geonameid'] = (float) $value['admin1_geonameid'];
+                if ( isset( $value['admin1_grid_id'] ) ) {
+                    $query[$index]['admin1_grid_id'] = (float) $value['admin1_grid_id'];
                 }
-                if ( isset( $value['admin2_geonameid'] ) ) {
-                    $query[$index]['admin2_geonameid'] = (float) $value['admin2_geonameid'];
+                if ( isset( $value['admin2_grid_id'] ) ) {
+                    $query[$index]['admin2_grid_id'] = (float) $value['admin2_grid_id'];
                 }
-                if ( isset( $value['admin3_geonameid'] ) ) {
-                    $query[$index]['admin3_geonameid'] = (float) $value['admin3_geonameid'];
+                if ( isset( $value['admin3_grid_id'] ) ) {
+                    $query[$index]['admin3_grid_id'] = (float) $value['admin3_grid_id'];
                 }
             }
         }
@@ -492,8 +492,8 @@ class DT_Network_Dashboard_UI
             $data['total_users'] = $data['total_users'] + $site['users']['current_state']['total_users'];
 
             if ( ! empty( $site['locations']['current_state']['active_countries_geonames'] ) ) {
-                foreach ( $site['locations']['current_state']['active_countries_geonames'] as $geonameid ) {
-                    $data['countries'][$geonameid] = true;
+                foreach ( $site['locations']['current_state']['active_countries_geonames'] as $grid_id ) {
+                    $data['countries'][$grid_id] = true;
                 }
             }
         }
