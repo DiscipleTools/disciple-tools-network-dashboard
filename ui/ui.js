@@ -798,7 +798,7 @@ window.DRILLDOWN.map_chart_drilldown = function( grid_id ) {
     if ( grid_id !== 'top_map_level' ) { // make sure this is not a top level continent or world request
         console.log('map_chart_drilldown: grid_id available ' + grid_id )
         DRILLDOWNDATA.settings.current_map = parseInt(grid_id)
-        geoname_map( 'map_chart', parseInt(grid_id) )
+        location_grid_map( 'map_chart', parseInt(grid_id) )
         data_type_list( 'data-type-list' )
 
     }
@@ -931,7 +931,7 @@ function top_level_map( div ) {
     mini_map( 'minimap', coordinates )
 }
 
-function geoname_map( div, grid_id ) {
+function location_grid_map( div, grid_id ) {
     am4core.useTheme(am4themes_animated);
 
     let chart = am4core.create( div, am4maps.MapChart);
@@ -1252,7 +1252,7 @@ function page_mapping_list( grid_id ) {
         `);
 
     if ( grid_id ) {
-        network_geoname_list( grid_id )
+        network_location_grid_list( grid_id )
     } else {
         network_location_list()
     }
@@ -1289,7 +1289,7 @@ function network_location_list() {
             let population = v.population_formatted
 
             html += `<tr>
-                    <td><strong><a onclick="network_geoname_list(${v.grid_id})">${v.name}</a></strong></td>
+                    <td><strong><a onclick="network_location_grid_list(${v.grid_id})">${v.name}</a></strong></td>
                     <td>${population}</td>`
 
             if ( v.contacts > 0 ) {
@@ -1326,7 +1326,7 @@ function network_location_list() {
     DRILLDOWN.hide_spinner()
 }
 
-function network_geoname_list( grid_id ) {
+function network_location_grid_list( grid_id ) {
     DRILLDOWN.show_spinner()
 
     // Find data source before build
@@ -1345,7 +1345,7 @@ function network_geoname_list( grid_id ) {
         })
             .done( function( response ) {
                 DRILLDOWNDATA.data[grid_id] = response
-                build_geoname_list( DRILLDOWNDATA.data[grid_id] )
+                build_location_grid_list( DRILLDOWNDATA.data[grid_id] )
             })
             .fail(function (err) {
                 console.log("error")
@@ -1354,11 +1354,11 @@ function network_geoname_list( grid_id ) {
             })
 
     } else {
-        build_geoname_list( DRILLDOWNDATA.data[grid_id] )
+        build_location_grid_list( DRILLDOWNDATA.data[grid_id] )
     }
 
     // build list
-    function build_geoname_list( map_data ) {
+    function build_location_grid_list( map_data ) {
         let network_data = wpApiNetworkDashboard.locations_list.list
 
         // Level Up
@@ -1366,7 +1366,7 @@ function network_geoname_list( grid_id ) {
         if ( map_data.self.level === 'country' ) {
             level_up.empty().html(`<button class="button small" onclick="network_location_list()">Level Up</button>`)
         } else {
-            level_up.empty().html(`<button class="button small" onclick="network_geoname_list(${map_data.parent.grid_id})">Level Up</button>`)
+            level_up.empty().html(`<button class="button small" onclick="network_location_grid_list(${map_data.parent.grid_id})">Level Up</button>`)
         }
 
 
@@ -1409,7 +1409,7 @@ function network_geoname_list( grid_id ) {
         jQuery.each( sorted_children, function(i, v) {
             let population = v.population_formatted
 
-            html += `<tr><td><strong><a onclick="network_geoname_list(${v.grid_id})">${v.name}</a></strong></td>
+            html += `<tr><td><strong><a onclick="network_location_grid_list(${v.grid_id})">${v.name}</a></strong></td>
                         <td>${population}</td>`
 
             if ( network_data[v.grid_id] ) {

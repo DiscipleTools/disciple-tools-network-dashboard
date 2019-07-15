@@ -196,7 +196,7 @@ class DT_Network_Dashboard {
         $this->token             = 'dt_network_dashboard';
         $this->version             = '0.1';
 
-        $wpdb->dt_geonames = $wpdb->prefix . 'dt_geonames';
+        $wpdb->dt_location_grids = $wpdb->prefix . 'dt_location_grids';
         $wpdb->dt_location_grid = $wpdb->prefix . 'dt_location_grid';
 
     }

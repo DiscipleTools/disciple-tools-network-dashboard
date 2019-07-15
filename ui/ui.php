@@ -241,11 +241,11 @@ class DT_Network_Dashboard_UI
                 'data_types' => $this->location_data_types(),
                 'current_state' => [
                     'active_countries' => 0,
-                    'active_countries_geonames' => [],
+                    'active_admin0_grid_ids' => [],
                     'active_admin1' => 0,
-                    'active_admin1_geonames' => [],
+                    'active_admin1_grid_ids' => [],
                     'active_admin2' => 0,
-                    'active_admin2_geonames' => [],
+                    'active_admin2_grid_ids' => [],
                 ],
                 'list' => [],
         ];
@@ -275,38 +275,38 @@ class DT_Network_Dashboard_UI
 
 
             // current state
-            if ( ! empty( $site['locations']['current_state']['active_countries_geonames'] ) ) {
-                foreach ( $site['locations']['current_state']['active_countries_geonames'] as $grid_id ) {
-                    $data['current_state']['active_countries_geonames'][$grid_id] = true;
+            if ( ! empty( $site['locations']['current_state']['active_admin0_grid_ids'] ) ) {
+                foreach ( $site['locations']['current_state']['active_admin0_grid_ids'] as $grid_id ) {
+                    $data['current_state']['active_admin0_grid_ids'][$grid_id] = true;
                 }
             }
-            if ( ! empty( $site['locations']['current_state']['active_admin1_geonames'] ) ) {
-                foreach ( $site['locations']['current_state']['active_admin1_geonames'] as $grid_id ) {
-                    $data['current_state']['active_admin1_geonames'][$grid_id] = true;
+            if ( ! empty( $site['locations']['current_state']['active_admin1_grid_ids'] ) ) {
+                foreach ( $site['locations']['current_state']['active_admin1_grid_ids'] as $grid_id ) {
+                    $data['current_state']['active_admin1_grid_ids'][$grid_id] = true;
                 }
             }
-            if ( ! empty( $site['locations']['current_state']['active_admin2_geonames'] ) ) {
-                foreach ( $site['locations']['current_state']['active_admin2_geonames'] as $grid_id ) {
-                    $data['current_state']['active_admin2_geonames'][$grid_id] = true;
+            if ( ! empty( $site['locations']['current_state']['active_admin2_grid_ids'] ) ) {
+                foreach ( $site['locations']['current_state']['active_admin2_grid_ids'] as $grid_id ) {
+                    $data['current_state']['active_admin2_grid_ids'][$grid_id] = true;
                 }
             }
 
 
-            if ( ! empty( $data['current_state']['active_countries_geonames'] ) ) {
-                $data['current_state']['active_countries'] = count( $data['current_state']['active_countries_geonames'] );
+            if ( ! empty( $data['current_state']['active_admin0_grid_ids'] ) ) {
+                $data['current_state']['active_countries'] = count( $data['current_state']['active_admin0_grid_ids'] );
             }
-            if ( ! empty( $data['current_state']['active_admin1_geonames'] ) ) {
-                $data['current_state']['active_admin1'] = count( $data['current_state']['active_admin1_geonames'] );
+            if ( ! empty( $data['current_state']['active_admin1_grid_ids'] ) ) {
+                $data['current_state']['active_admin1'] = count( $data['current_state']['active_admin1_grid_ids'] );
             }
-            if ( ! empty( $data['current_state']['active_admin2_geonames'] ) ) {
-                $data['current_state']['active_admin2'] = count( $data['current_state']['active_admin2_geonames'] );
+            if ( ! empty( $data['current_state']['active_admin2_grid_ids'] ) ) {
+                $data['current_state']['active_admin2'] = count( $data['current_state']['active_admin2_grid_ids'] );
             }
 
             // complete list
-            $list_geonames = array_keys( $data['list'] );
-            $geoname_properties = $this->format_geoname_types( Disciple_Tools_Mapping_Queries::get_by_grid_id_list( $list_geonames, true ) );
-            if ( ! empty( $geoname_properties ) ) {
-                foreach ( $geoname_properties as $value ) {
+            $list_location_grids = array_keys( $data['list'] );
+            $location_grid_properties = $this->format_location_grid_types( Disciple_Tools_Mapping_Queries::get_by_grid_id_list( $list_location_grids, true ) );
+            if ( ! empty( $location_grid_properties ) ) {
+                foreach ( $location_grid_properties as $value ) {
                     foreach ( $value as $k => $v ) {
                         $data['list'][$value['grid_id']][$k] = $v;
                     }
@@ -318,7 +318,7 @@ class DT_Network_Dashboard_UI
         return $data;
     }
 
-    public function format_geoname_types( $query ) {
+    public function format_location_grid_types( $query ) {
         if ( ! empty( $query ) || ! is_array( $query ) ) {
             foreach ( $query as $index => $value ) {
                 if ( isset( $value['grid_id'] ) ) {
@@ -491,8 +491,8 @@ class DT_Network_Dashboard_UI
             $data['total_groups'] = $data['total_groups'] + $site['groups']['current_state']['total_active'];
             $data['total_users'] = $data['total_users'] + $site['users']['current_state']['total_users'];
 
-            if ( ! empty( $site['locations']['current_state']['active_countries_geonames'] ) ) {
-                foreach ( $site['locations']['current_state']['active_countries_geonames'] as $grid_id ) {
+            if ( ! empty( $site['locations']['current_state']['active_admin0_grid_ids'] ) ) {
+                foreach ( $site['locations']['current_state']['active_admin0_grid_ids'] as $grid_id ) {
                     $data['countries'][$grid_id] = true;
                 }
             }
