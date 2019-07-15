@@ -221,7 +221,7 @@ class DT_Network_Dashboard {
          * Also, see the instructions for version updating to understand the steps involved.
          * @see https://github.com/DiscipleTools/disciple-tools-version-control/wiki/How-to-Update-the-Starter-Plugin
          */
-        Puc_v4p5_Factory::buildUpdateChecker(
+        Puc_v4_Factory::buildUpdateChecker(
             'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-network-dashboard-version-control.json',
             __FILE__,
             'disciple-tools-network-dashboard'
