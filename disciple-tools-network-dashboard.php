@@ -210,7 +210,7 @@ class DT_Network_Dashboard {
     private function setup_actions() {
 
         // Check for plugin updates
-        if ( ! class_exists( 'Puc_v4p5_Factory' ) ) {
+        if ( ! class_exists( 'Puc_v4_Factory' ) ) {
             require( get_template_directory() . '/dt-core/libraries/plugin-update-checker/plugin-update-checker.php' );
         }
         /**
