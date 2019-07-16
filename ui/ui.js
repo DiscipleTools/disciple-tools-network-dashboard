@@ -1,3 +1,5 @@
+let translations = window.mappingModule.mapping_module.translations
+
 jQuery(document).ready(function() {
     if( ! window.location.hash || '#network_home' === window.location.hash) {
         show_network_home()
@@ -28,7 +30,9 @@ function show_network_home(){
         <span class="section-header">`+ page.translations.sm_title +`</span>
         
         <hr style="max-width:100%;">
-        <div id="home-map-div" style="width: 100%;max-height: 600px;height: 100vh;"></div>
+        <!--<div id="home-map-div" style="width: 100%;max-height: 600px;height: 100vh;"></div>-->
+        <div class="cell medium-6" id="map_chart_drilldown" style="display:none;"></div>
+        <div id="map_chart" style="width: 100%;max-height: 700px;height: 100vh;vertical-align: text-top;"></div>
         
         <hr style="max-width:100%;">
         
@@ -78,7 +82,10 @@ function show_network_home(){
         
         `);
 
-    load_points_map( 'home-map-div' )
+    // set the depth of the drill down
+    DRILLDOWNDATA.settings.hide_final_drill_down = true
+    // load drill down
+    DRILLDOWN.get_drill_down('map_chart_drilldown')
 
     load_line_chart( 'global-contacts-chart-div', null, 'days', 30 )
     set_buttons('new-contact-buttons', 'c-30-days' )
@@ -1229,7 +1236,7 @@ function page_mapping_list( grid_id ) {
     let chartDiv = jQuery('#chart')
     chartDiv.empty().html(`
         <div class="grid-x grid-margin-x">
-            <div class="cell auto" id="level_up"></div>
+            <div class="cell auto" id="location_list_drilldown"></div>
             <div class="cell small-1">
                 <span id="spinner" style="display:none;" class="float-right"></span>
             </div>
@@ -1262,10 +1269,177 @@ function page_mapping_list( grid_id ) {
         </style>
         `);
 
+    // set the depth of the drill down
+    DRILLDOWNDATA.settings.hide_final_drill_down = false
     if ( grid_id ) {
-        network_location_grid_list( grid_id )
+        // load drill down
+        window.DRILLDOWN.get_drill_down('location_list_drilldown', grid_id )
     } else {
-        network_location_list()
+        // load drill down
+        window.DRILLDOWN.get_drill_down('location_list_drilldown')
+    }
+}
+
+
+window.DRILLDOWN.location_list_drilldown = function( grid_id ) {
+    location_grid_list( 'location_list', grid_id )
+}
+
+function location_grid_list( div, grid_id ) {
+    DRILLDOWN.show_spinner()
+
+    // Find data source before build
+    if ( grid_id === 'top_map_level' ) {
+        let map_data = null
+        let default_map_settings = DRILLDOWNDATA.settings.default_map_settings
+
+        if ( DRILLDOWN.isEmpty( default_map_settings.children ) ) {
+            map_data = DRILLDOWNDATA.data[default_map_settings.parent]
+        }
+        else {
+            if ( default_map_settings.children.length < 2 ) {
+                // single child
+                map_data = DRILLDOWNDATA.data[default_map_settings.children[0]]
+            } else {
+                // multiple child
+                jQuery('#section-title').empty()
+                jQuery('#current_level').empty()
+                jQuery('#location_list').empty().append('Select Location')
+                DRILLDOWN.hide_spinner()
+                return;
+            }
+        }
+
+        // Initialize Location Data
+        if ( map_data === undefined ) {
+            console.log('error getting map_data')
+            return;
+        }
+
+        build_location_grid_list( div, map_data )
+    }
+    else if ( DRILLDOWNDATA.data[grid_id] === undefined ) {
+        let rest = DRILLDOWNDATA.settings.endpoints.get_map_by_grid_id_endpoint
+
+        jQuery.ajax({
+            type: rest.method,
+            contentType: "application/json; charset=utf-8",
+            data: JSON.stringify( { 'grid_id': grid_id } ),
+            dataType: "json",
+            url: DRILLDOWNDATA.settings.root + rest.namespace + rest.route,
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader('X-WP-Nonce', rest.nonce );
+            },
+        })
+            .done( function( response ) {
+                DRILLDOWNDATA.data[grid_id] = response
+                build_location_grid_list( div, DRILLDOWNDATA.data[grid_id] )
+            })
+            .fail(function (err) {
+                console.log("error")
+                console.log(err)
+                DRILLDOWN.hide_spinner()
+            })
+
+    } else {
+        build_location_grid_list( div, DRILLDOWNDATA.data[grid_id] )
+    }
+
+    // build list
+    function build_location_grid_list( div, map_data ) {
+        let network_data = wpApiNetworkDashboard.locations_list.list
+
+
+        // Level Up
+        let level_up = jQuery('#level_up')
+        if ( map_data.self.level === 'country' ) {
+            level_up.empty().html(`<button class="button small" onclick="network_location_list()">Level Up</button>`)
+        } else {
+            level_up.empty().html(`<button class="button small" onclick="network_location_grid_list(${map_data.parent.grid_id})">Level Up</button>`)
+        }
+
+
+        // Place Title
+        let title = jQuery('#section-title')
+        title.empty().html(map_data.self.name)
+
+        // Population Division and Check for Custom Division
+        let pd_settings = DRILLDOWNDATA.settings.population_division
+        let population_division = pd_settings.base
+        if ( ! DRILLDOWN.isEmpty( pd_settings.custom ) ) {
+            jQuery.each( pd_settings.custom, function(i,v) {
+                if ( map_data.self.grid_id === i ) {
+                    population_division = v
+                }
+            })
+        }
+
+        // Self Data
+        let self_population = map_data.self.population_formatted
+        jQuery('#current_level').empty().html(`Population: ${self_population}`)
+
+        // Build List
+        let locations = jQuery('#location_list')
+        locations.empty()
+
+        let html = `<table id="country-list-table" class="display">`
+
+        // Header Section
+        html += `<thead><tr><th>Name</th><th>Population</th><th>Contacts</th><th>Groups</th><th>Workers</th>`
+
+        html += `</tr></thead>`
+        // End Header Section
+
+        // Children List Section
+        let sorted_children =  _.sortBy(map_data.children, [function(o) { return o.name; }]);
+
+        html += `<tbody>`
+
+        jQuery.each( sorted_children, function(i, v) {
+            let population = v.population_formatted
+
+            html += `<tr><td><strong><a onclick="network_location_grid_list(${v.grid_id})">${v.name}</a></strong></td>
+                        <td>${population}</td>`
+
+            if ( network_data[v.grid_id] ) {
+                /* contacts*/
+                if ( network_data[v.grid_id].contacts > 0 ) {
+                    html += `<td><strong>${network_data[v.grid_id].contacts}</strong></td>`
+                } else {
+                    html += `<td class="grey">0</td>`
+                }
+                /* groups */
+                if ( network_data[v.grid_id].groups > 0 ) {
+                    html += `<td><strong>${network_data[v.grid_id].groups}</strong></td>`
+                } else {
+                    html += `<td class="grey">0</td>`
+                }
+                /* users */
+                if ( network_data[v.grid_id].users > 0 ) {
+                    html += `<td><strong>${network_data[v.grid_id].users}</strong></td>`
+                } else {
+                    html += `<td class="grey">0</td>`
+                }
+            } else {
+                html += `<td class="grey">0</td>`
+                html += `<td class="grey">0</td>`
+                html += `<td class="grey">0</td>`
+            }
+
+            html += `</tr>`
+
+        })
+        html += `</tbody>`
+        // end Child section
+
+        html += `</table>`
+        locations.append(html)
+
+        jQuery('#country-list-table').DataTable({
+            "paging":   false
+        });
+
+        DRILLDOWN.hide_spinner()
     }
 }
 
@@ -1335,7 +1509,8 @@ function network_location_list() {
     });
 
     DRILLDOWN.hide_spinner()
-}
+} /* @todo remove*/
+
 
 function network_location_grid_list( grid_id ) {
     DRILLDOWN.show_spinner()
@@ -1464,4 +1639,4 @@ function network_location_grid_list( grid_id ) {
         DRILLDOWN.hide_spinner()
     }
 
-}
+} /* @todo remove */

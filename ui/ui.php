@@ -163,7 +163,7 @@ class DT_Network_Dashboard_UI
             }
         }
 
-        wp_cache_set( 'get_sites', $new ); dt_write_log( $new );
+        wp_cache_set( 'get_sites', $new );
 
         return $new;
     }
