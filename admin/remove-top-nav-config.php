@@ -13,3 +13,7 @@ function dt_remove_top_nav_for_dashboard( $state ) {
     return $state;
 }
 add_filter( 'dt_show_default_top_menu', 'dt_remove_top_nav_for_dashboard', 99, 1 );
+
+add_filter( 'dt_front_page', function() {
+    return home_url( '/network' );
+} );
