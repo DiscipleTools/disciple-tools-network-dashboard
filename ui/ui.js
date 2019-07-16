@@ -13,6 +13,9 @@ jQuery(document).ready(function() {
     }
 })
 
+_ = _ || window.lodash
+let mapFillColor = "rgb(217, 217, 217)"
+
 /**
  * Home Page
  */
@@ -825,6 +828,9 @@ function top_level_map( div ) {
         if ( map_data.children[v.id] !== undefined ) {
             mapData.features[i].properties.grid_id = map_data.children[v.id].grid_id
             mapData.features[i].properties.population = map_data.children[v.id].population
+            if ( mapData.features[i].properties.value === 0 ){
+                mapData.features[i].properties.fill = am4core.color(mapFillColor);
+            }
         }
     })
     chart.geodata = mapData;
@@ -967,6 +973,7 @@ function location_grid_map( div, grid_id ) {
 
                         mapData.features[i].properties.population = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.grid_id].population
 
+
                         jQuery.each( wpApiNetworkDashboard.locations_list.data_types, function( dt, data_type ) {
 
                             mapData.features[i].properties[data_type] = wpApiNetworkDashboard.locations_list.list[mapData.features[i].properties.grid_id][data_type]
@@ -987,6 +994,7 @@ function location_grid_map( div, grid_id ) {
                         })
 
 
+
                     }
                     else if ( response.children[mapData.features[i].properties.grid_id] !== undefined ) {
                         mapData.features[i].properties.population = response.children[mapData.features[i].properties.grid_id].population
@@ -997,6 +1005,9 @@ function location_grid_map( div, grid_id ) {
                         mapData.features[i].properties.sites = ''
 
                         mapData.features[i].properties.value = 0
+                        if ( mapData.features[i].properties.value === 0 ){
+                            mapData.features[i].properties.fill = am4core.color(mapFillColor);
+                        }
                     }
                 })
 

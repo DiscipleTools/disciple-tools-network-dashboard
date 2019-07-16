@@ -126,6 +126,7 @@ class DT_Network_Dashboard {
         require_once( 'admin/multisite.php' );
         require_once( 'admin/mapping-module-config.php' );
         DT_Network_Mapping_Module_Config::instance();
+        require_once( 'admin/remove-top-nav-config.php' );
 
         // adds charts and metrics to the network tab
         require_once( 'ui/ui.php' );

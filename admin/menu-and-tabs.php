@@ -165,6 +165,8 @@ class DT_Network_Dashboard_Tab_General
                     <div id="postbox-container-1" class="postbox-container">
                         <!-- Right Column -->
 
+                        <?php $this->side_box() ?>
+
                         <!-- End Right Column -->
                     </div><!-- postbox-container 1 -->
                     <div id="postbox-container-2" class="postbox-container">
@@ -207,6 +209,53 @@ class DT_Network_Dashboard_Tab_General
 
                     </dl>
 
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function side_box() {
+        if ( isset( $_POST['network_dashboard_nonce'] )
+             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
+             && isset( $_POST['hide_top_nav'] ) ) {
+
+            $selection = sanitize_text_field( wp_unslash( $_POST['hide_top_nav'] ) );
+            if ( $selection === 'hide' ) {
+                update_option( 'dt_hide_top_menu', true, true );
+            }
+            if ( $selection === 'show' ) {
+                delete_option( 'dt_hide_top_menu' );
+            }
+        }
+        $state = get_option( 'dt_hide_top_menu' );
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>Remove Default Nav</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    For appearance, the default top nav of Disciple Tools (i.e. Contacts, Groups, Metrics)
+                    can be hidden for appearance, if you are only using this site as a dashboard and not managing
+                    contacts or groups here locally.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form method="post">
+                        <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
+                        <select name="hide_top_nav">
+                            <option value="show" <?php echo empty($state) ? '' : ' selected'; ?>>Show</option>
+                            <option value="hide" <?php echo ($state) ? ' selected' : ''; ?>>Hide</option>
+                        </select>
+                        <button type="submit" class="button">Update</button>
+                    </form>
                 </td>
             </tr>
             </tbody>
@@ -292,7 +341,7 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
         $message = false;
         if ( isset( $_POST['network_dashboard_nonce'] )
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
-            && $_POST['new-snapshot'] ) {
+            && isset( $_POST['new-snapshot'] ) ) {
 
             dt_save_log( 'remote', '', false );
             dt_save_log( 'remote', 'REFRESH SNAPSHOT', false );
