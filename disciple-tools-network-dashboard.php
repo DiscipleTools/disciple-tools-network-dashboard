@@ -55,7 +55,7 @@ function dt_network_dashboard() {
     }
 
 }
-add_action( 'plugins_loaded', 'dt_network_dashboard' );
+add_action( 'after_setup_theme', 'dt_network_dashboard' );
 
 /**
  * Singleton class for setting up the plugin.
