@@ -644,19 +644,7 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                         </tr>
                         <?php
                     } // end foreach
-                        ?>
-                    <script>
-                        jQuery(document).ready(function($){
-                            <?php
-                            foreach ( $snapshots as $blog_id => $snapshot ) {
-                            ?>
-                            $.get('<?php echo esc_url( get_site_url( $blog_id ) ) ?>', function(){ console.log( 'pinged <?php echo esc_url( get_site_url( $blog_id ) ) ?>')})
-                            <?php
-                            }
-                            ?>
-                        })
-                    </script>
-                <?php
+                       
                 }
                 else {
                     ?>
