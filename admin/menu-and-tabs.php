@@ -417,7 +417,7 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                             </td>
                         </tr>
                         <?php
-                    }
+                    } // end foreach
                 }
                 else {
                     ?>
@@ -624,13 +624,13 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                         ?>
                         <tr>
                             <td>
-                                <?php echo $blog_id ?>
+                                <?php echo esc_html( $blog_id ) ?>
                             </td>
                             <td>
-                                <?php echo '<strong>' . $snapshot['profile']['partner_name'] . '</strong>' ?>
+                                <?php echo '<strong>' . esc_html( $snapshot['profile']['partner_name'] ) . '</strong>' ?>
                             </td>
                             <td>
-                                <?php echo '<a href="'.get_site_url( $blog_id ) .'" target="_blank">' . get_site_url( $blog_id ) . '</a>' ?>
+                                <?php echo '<a href="'. esc_url( get_site_url( $blog_id ) ) .'" target="_blank">' . get_site_url( $blog_id ) . '</a>' ?>
                             </td>
                             <td>
                                 <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
@@ -643,7 +643,20 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                             </td>
                         </tr>
                         <?php
-                    }
+                    } // end foreach
+                        ?>
+                    <script>
+                        jQuery(document).ready(function($){
+                            <?php
+                            foreach ( $snapshots as $blog_id => $snapshot ) {
+                            ?>
+                            $.get('<?php echo esc_url( get_site_url( $blog_id ) ) ?>', function(){ console.log( 'pinged <?php echo esc_url( get_site_url( $blog_id ) ) ?>')})
+                            <?php
+                            }
+                            ?>
+                        })
+                    </script>
+                <?php
                 }
                 else {
                     ?>
