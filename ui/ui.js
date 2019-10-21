@@ -1,6 +1,16 @@
 let translations = window.mappingModule.mapping_module.translations
 
 jQuery(document).ready(function() {
+    if ( window.am4geodata_worldLow === undefined ) {
+        mapUrl = DRILLDOWNDATA.settings.mapping_source_url + 'collection/world.geojson'
+        jQuery.getJSON( mapUrl, function( data ) {
+            window.am4geodata_worldLow = data
+            page_mapping_view()
+        })
+            .fail(function (err) {
+                console.log(`No polygon available.`)
+            })
+    }
     if( ! window.location.hash || '#network_home' === window.location.hash) {
         show_network_home()
     }
@@ -100,7 +110,6 @@ function show_network_home(){
  * Single Snapshots Page
  */
 function show_network_site( id, name ) {
-    console.log(wpApiNetworkDashboard)
     "use strict";
     if ( id == undefined ) {
         show_network_home()
@@ -638,7 +647,7 @@ function load_points_map( div, id ) {
 
         let locations = []
         jQuery.each( wpApiNetworkDashboard.locations_list.list, function(i, v) {
-            if ( v.level === 'country' && v[id] ) {
+            if ( v.level === '-3' && v[id] ) {
                 locations.push( v )
             }
         } )
@@ -649,7 +658,7 @@ function load_points_map( div, id ) {
         //build locations list
         let locations = []
         jQuery.each( wpApiNetworkDashboard.locations_list.list, function(i, v) {
-            if ( v.level === 'country' ) {
+            if ( v.level === '-3' ) {
                 locations.push( v )
             }
         } )
@@ -755,8 +764,6 @@ function load_site_lists( div ) {
 }
 
 function page_mapping_view( grid_id ) {
-    console.log(DRILLDOWNDATA)
-    console.log(wpApiNetworkDashboard)
     "use strict";
     let chartDiv = jQuery('#chart')
     chartDiv.empty().html(`
@@ -821,82 +828,131 @@ window.DRILLDOWN.map_chart_drilldown = function( grid_id ) {
     }
 }
 
-function top_level_map( div ) {
-
-    // load amchart environment
-    am4core.useTheme(am4themes_animated);
-    let chart = am4core.create( div, am4maps.MapChart);
-    chart.projection = new am4maps.projections.Miller(); // Set projection
-
-    // prepare country/child data
-    let map_data = DRILLDOWNDATA.data.world
-    let mapData = am4geodata_worldLow
-    jQuery.each( mapData.features, function(i, v ) {
-        if ( map_data.children[v.id] !== undefined ) {
-            mapData.features[i].properties.grid_id = map_data.children[v.id].grid_id
-            mapData.features[i].properties.population = map_data.children[v.id].population
-            if ( mapData.features[i].properties.value === 0 ){
-                mapData.features[i].properties.fill = am4core.color(mapFillColor);
-            }
-        }
-    })
-    chart.geodata = mapData;
-
-    // set title
-    let title = jQuery('#section-title')
-    title.empty().html(map_data.self.name)
-
-    // initialize polygonseries
+function setCommonMapSettings( chart ) {
     let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
     polygonSeries.exclude = ["AQ","GL"];
     polygonSeries.useGeodata = true;
-
     let template = polygonSeries.mapPolygons.template;
 
     // create tool tip
     let toolTipContent = `<strong>{name}</strong><br>
-                            Population: {population}<br>
+                            ---------<br>
+                            ${_.escape(translations.population)}: {population}<br>
                             `;
+    jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vc) {
+        toolTipContent += `${_.escape(vc)}: {${_.escape( vc )}}<br>`
+    })
 
     template.tooltipHTML = toolTipContent
+
+    // Create hover state and set alternative fill color
+    let hs = template.states.create("hover");
+    hs.properties.fill = am4core.color("#3c5bdc");
 
     template.propertyFields.fill = "fill";
     polygonSeries.tooltip.label.interactionsEnabled = true;
     polygonSeries.tooltip.pointerOrientation = "vertical";
+    template.fill = am4core.color("#FFFFFF");
+    // template.stroke = am4core.color("rgba(89,89,89,0.51)");
 
-    let locations = []
-    jQuery.each( wpApiNetworkDashboard.locations_list.list, function(i, v) {
-        if ( v.level === 'country' ) {
-            locations.push( v )
+    polygonSeries.heatRules.push({
+        property: "fill",
+        target: template,
+        min: chart.colors.getIndex(1).brighten(1.5),
+        max: chart.colors.getIndex(1).brighten(-0.3)
+    });
+    // Zoom control
+    chart.zoomControl = new am4maps.ZoomControl();
+
+    let homeButton = new am4core.Button();
+    homeButton.events.on("hit", function(){
+        chart.goHome();
+    });
+
+    homeButton.icon = new am4core.Sprite();
+    homeButton.padding(7, 5, 7, 5);
+    homeButton.width = 30;
+    homeButton.icon.path = "M16,8 L14,8 L14,16 L10,16 L10,10 L6,10 L6,16 L2,16 L2,8 L0,8 L8,0 L16,8 Z M16,8";
+    homeButton.marginBottom = 10;
+    homeButton.parent = chart.zoomControl;
+    homeButton.insertBefore(chart.zoomControl.plusButton);
+
+
+    /* Click navigation */
+    template.events.on("hit", function(ev) {
+        // if (DRILLDOWNDATA.data[ev.target.dataItem.dataContext.grid_id]) {
+        return DRILLDOWN.get_drill_down('map_chart_drilldown', ev.target.dataItem.dataContext.grid_id)
+        // }
+    }, this);
+}
+
+function setUpData( features, map_data ){
+    jQuery.each( features, function(i, mapFeature ) {
+        let grid_id =  mapFeature.properties.grid_id
+        let locationData =  _.get( map_data, `children[${grid_id}]` ) || _.get(map_data, `children[${mapFeature.id}]`)  || _.get( map_data, `${grid_id}.self` );
+        if ( locationData ) {
+            mapFeature.properties.grid_id = locationData.grid_id
+            mapFeature.properties.population = locationData.population
+            mapFeature.properties.name = locationData.name
+
+            /* custom columns */
+            if ( DRILLDOWNDATA.data.custom_column_data[grid_id] ) {
+                /* Note: Amcharts calculates heatmap off last variable. So this section moves selected
+                * heatmap variable to the end of the array */
+                let focus = DRILLDOWNDATA.settings.heatmap_focus
+                jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
+                    if ( ii !== focus ) {
+                        mapFeature.properties[vv] = DRILLDOWNDATA.data.custom_column_data[grid_id][vv]
+                        mapFeature.properties.value = mapFeature.properties[vv]
+                    }
+                })
+                jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
+                    if ( ii === focus ) {
+                        mapFeature.properties[vv] = DRILLDOWNDATA.data.custom_column_data[grid_id][vv]
+                        mapFeature.properties.value = mapFeature.properties[vv]
+                        if ( mapFeature.properties.value === 0 ){
+                            mapFeature.properties.fill = am4core.color(mapFillColor);
+                        }
+                    }
+                })
+            } else {
+                jQuery.each( DRILLDOWNDATA.data.custom_column_labels, function(ii, vv) {
+                    mapFeature.properties[vv] = 0
+                    mapFeature.properties.value = 0
+                    mapFeature.properties.fill = am4core.color(mapFillColor);
+                })
+            }
+            /* end custom column */
         }
-    } )
+    })
+    return features
+}
 
-    let imageSeries = chart.series.push(new am4maps.MapImageSeries());
-    imageSeries.data = locations;
+function top_level_map( div ) {
 
-    let imageSeriesTemplate = imageSeries.mapImages.template;
-    let circle = imageSeriesTemplate.createChild(am4core.Circle);
-    circle.radius = 13;
-    circle.fill = am4core.color("#8bc34a");
-    circle.stroke = am4core.color("#8bc34a");
-    circle.strokeWidth = 2;
-    circle.nonScaling = true;
+    am4core.useTheme(am4themes_animated);
+    let chart = am4core.create( div, am4maps.MapChart);
+    chart.projection = new am4maps.projections.Miller(); // Set projection
 
-    imageSeriesTemplate.propertyFields.latitude = "latitude";
-    imageSeriesTemplate.propertyFields.longitude = "longitude";
-    imageSeriesTemplate.nonScaling = true;
-    // toolTipContent += `<br>Click to Explore`
-    // imageSeriesTemplate.tooltipText = "[bold]{name}[/] \n {sites}";
-    toolTipContent = `<strong>{name}</strong><br>
-                            Population: {population}<br>
-                            Contacts: {contacts}<br>
-                            Groups: {groups}<br>
-                            Churches: {churches}<br>
-                            Workers: {users}<br>
-                            Sites: {sites}<br>
-                            `;
-    imageSeriesTemplate.tooltipHTML = toolTipContent
+    DRILLDOWNDATA.data.custom_column_labels = wpApiNetworkDashboard.locations_list.data_types
+    DRILLDOWNDATA.data.custom_column_data = wpApiNetworkDashboard.locations_list.list
+    let map_data = DRILLDOWNDATA.data.world
+    let geoJSON = window.am4geodata_worldLow
 
+    let default_map_settings = DRILLDOWNDATA.settings.default_map_settings
+    let mapUrl = ''
+    let top_map_list = DRILLDOWNDATA.data.top_map_list
+    let title = jQuery('#section_title')
+
+    // set title
+    title.empty().html(map_data.self.name)
+
+    // prepare country/child data
+    geoJSON.features = setUpData( geoJSON.features, map_data )
+
+    chart.geodata = geoJSON;
+
+    setCommonMapSettings( chart )
 
     // add slider to chart container in order not to occupy space
     let slider = chart.chartContainer.createChild(am4core.Slider);
@@ -910,31 +966,7 @@ function top_level_map( div ) {
         chart.deltaLongitude = 720 * slider.start;
     })
 
-
-    // Zoom control
-    chart.zoomControl = new am4maps.ZoomControl();
-    var homeButton = new am4core.Button();
-    homeButton.events.on("hit", function(){
-        chart.goHome();
-    });
-    homeButton.icon = new am4core.Sprite();
-    homeButton.padding(7, 5, 7, 5);
-    homeButton.width = 30;
-    homeButton.icon.path = "M16,8 L14,8 L14,16 L10,16 L10,10 L6,10 L6,16 L2,16 L2,8 L0,8 L8,0 L16,8 Z M16,8";
-    homeButton.marginBottom = 10;
-    homeButton.parent = chart.zoomControl;
-    homeButton.insertBefore(chart.zoomControl.plusButton);
-
-
-    // Click navigation
-    circle.events.on("hit", function(ev) {
-        console.log(ev.target.dataItem.dataContext.name)
-        console.log(ev.target.dataItem.dataContext.grid_id)
-
-        return DRILLDOWN.get_drill_down( 'map_chart_drilldown', ev.target.dataItem.dataContext.grid_id )
-
-    }, this);
-
+    // add mini map
     let coordinates = []
     coordinates[0] = {
         "latitude": 0,
@@ -942,6 +974,133 @@ function top_level_map( div ) {
         "title": 'World'
     }
     mini_map( 'minimap', coordinates )
+
+
+    // // load amchart environment
+    // am4core.useTheme(am4themes_animated);
+    // console.log(div);
+    // let chart = am4core.create( div, am4maps.MapChart);
+    // chart.projection = new am4maps.projections.Miller(); // Set projection
+    //
+    // // prepare country/child data
+    // let map_data = DRILLDOWNDATA.data.world
+    // let mapData = am4geodata_worldLow
+    // console.log(DRILLDOWNDATA);
+    //
+    // jQuery.each( mapData.features, function(i, v ) {
+    //     // console.log(i);
+    //     // console.log(map_data.children);
+    //     if ( map_data.children[v.id] !== undefined ) {
+    //         mapData.features[i].properties.grid_id = map_data.children[v.id].grid_id
+    //         mapData.features[i].properties.population = map_data.children[v.id].population
+    //         if ( mapData.features[i].properties.value === 0 ){
+    //             mapData.features[i].properties.fill = am4core.color(mapFillColor);
+    //         }
+    //     }
+    // })
+    // chart.geodata = mapData;
+    // console.log(mapData);
+    //
+    // // set title
+    // let title = jQuery('#section-title')
+    // title.empty().html(map_data.self.name)
+    //
+    // // initialize polygonseries
+    // let polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
+    // polygonSeries.exclude = ["AQ","GL"];
+    // polygonSeries.useGeodata = true;
+    //
+    // let template = polygonSeries.mapPolygons.template;
+    //
+    // // create tool tip
+    // let toolTipContent = `<strong>{name}</strong><br>
+    //                         Population: {population}<br>
+    //                         `;
+    //
+    // template.tooltipHTML = toolTipContent
+    //
+    // template.propertyFields.fill = "fill";
+    // polygonSeries.tooltip.label.interactionsEnabled = true;
+    // polygonSeries.tooltip.pointerOrientation = "vertical";
+    //
+    // let locations = []
+    // jQuery.each( wpApiNetworkDashboard.locations_list.list, function(i, v) {
+    //     if ( v.level === '-3' ) {
+    //         locations.push( v )
+    //     }
+    // } )
+    //
+    // let imageSeries = chart.series.push(new am4maps.MapImageSeries());
+    // imageSeries.data = locations;
+    //
+    // let imageSeriesTemplate = imageSeries.mapImages.template;
+    // let circle = imageSeriesTemplate.createChild(am4core.Circle);
+    // circle.radius = 13;
+    // circle.fill = am4core.color("#8bc34a");
+    // circle.stroke = am4core.color("#8bc34a");
+    // circle.strokeWidth = 2;
+    // circle.nonScaling = true;
+    //
+    // imageSeriesTemplate.propertyFields.latitude = "latitude";
+    // imageSeriesTemplate.propertyFields.longitude = "longitude";
+    // imageSeriesTemplate.nonScaling = true;
+    // // toolTipContent += `<br>Click to Explore`
+    // // imageSeriesTemplate.tooltipText = "[bold]{name}[/] \n {sites}";
+    // toolTipContent = `<strong>{name}</strong><br>
+    //                         Population: {population}<br>
+    //                         Contacts: {contacts}<br>
+    //                         Groups: {groups}<br>
+    //                         Churches: {churches}<br>
+    //                         Workers: {users}<br>
+    //                         Sites: {sites}<br>
+    //                         `;
+    // imageSeriesTemplate.tooltipHTML = toolTipContent
+    //
+    //
+    // // add slider to chart container in order not to occupy space
+    // let slider = chart.chartContainer.createChild(am4core.Slider);
+    // slider.start = .5;
+    // slider.valign = "bottom";
+    // slider.width = 400;
+    // slider.align = "center";
+    // slider.marginBottom = 15;
+    // slider.start = .5;
+    // slider.events.on("rangechanged", () => {
+    //     chart.deltaLongitude = 720 * slider.start;
+    // })
+    //
+    //
+    // // Zoom control
+    // chart.zoomControl = new am4maps.ZoomControl();
+    // var homeButton = new am4core.Button();
+    // homeButton.events.on("hit", function(){
+    //     chart.goHome();
+    // });
+    // homeButton.icon = new am4core.Sprite();
+    // homeButton.padding(7, 5, 7, 5);
+    // homeButton.width = 30;
+    // homeButton.icon.path = "M16,8 L14,8 L14,16 L10,16 L10,10 L6,10 L6,16 L2,16 L2,8 L0,8 L8,0 L16,8 Z M16,8";
+    // homeButton.marginBottom = 10;
+    // homeButton.parent = chart.zoomControl;
+    // homeButton.insertBefore(chart.zoomControl.plusButton);
+
+
+    // // Click navigation
+    // circle.events.on("hit", function(ev) {
+    //     console.log(ev.target.dataItem.dataContext.name)
+    //     console.log(ev.target.dataItem.dataContext.grid_id)
+    //
+    //     return DRILLDOWN.get_drill_down( 'map_chart_drilldown', ev.target.dataItem.dataContext.grid_id )
+    //
+    // }, this);
+    //
+    // let coordinates = []
+    // coordinates[0] = {
+    //     "latitude": 0,
+    //     "longitude": 0,
+    //     "title": 'World'
+    // }
+    // mini_map( 'minimap', coordinates )
 }
 
 function location_grid_map( div, grid_id ) {
@@ -1352,7 +1511,7 @@ function location_grid_list( div, grid_id ) {
 
         // Level Up
         let level_up = jQuery('#level_up')
-        if ( map_data.self.level === 'country' ) {
+        if ( map_data.self.level === '-3' ) {
             level_up.empty().html(`<button class="button small" onclick="network_location_list()">Level Up</button>`)
         } else {
             level_up.empty().html(`<button class="button small" onclick="network_location_grid_list(${map_data.parent.grid_id})">Level Up</button>`)
@@ -1470,7 +1629,7 @@ function network_location_list() {
     html += `<tbody>`
 
     jQuery.each( sorted_children, function(i, v) {
-        if ( v.level === 'country' ) {
+        if ( v.level === '-3' ) {
             let population = v.population_formatted
 
             html += `<tr>
@@ -1549,7 +1708,7 @@ function network_location_grid_list( grid_id ) {
 
         // Level Up
         let level_up = jQuery('#level_up')
-        if ( map_data.self.level === 'country' ) {
+        if ( map_data.self.level === '-3' ) {
             level_up.empty().html(`<button class="button small" onclick="network_location_list()">Level Up</button>`)
         } else {
             level_up.empty().html(`<button class="button small" onclick="network_location_grid_list(${map_data.parent.grid_id})">Level Up</button>`)

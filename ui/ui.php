@@ -66,7 +66,7 @@ class DT_Network_Dashboard_UI
         wp_register_script( 'amcharts-charts', 'https://www.amcharts.com/lib/4/charts.js', false, '4' );
         wp_register_script( 'amcharts-animated', 'https://www.amcharts.com/lib/4/themes/animated.js', false, '4' );
         wp_register_script( 'amcharts-maps', 'https://www.amcharts.com/lib/4/maps.js', false, '4' );
-        wp_register_script( 'amcharts-maps-world', 'https://www.amcharts.com/lib/4/geodata/worldLow.js', false, '4' );
+//        wp_register_script( 'amcharts-maps-world', 'https://www.amcharts.com/lib/4/geodata/worldLow.js', false, '4' );
 
         // Datatables
         wp_register_style( 'datatable-css', '//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css', false, '1.10' );
@@ -81,40 +81,39 @@ class DT_Network_Dashboard_UI
 
         // UI script
         wp_enqueue_script( 'dt_network_dashboard_script',
-            trailingslashit( plugin_dir_url( __FILE__ ) ) . 'ui.js',
-            [
-                'jquery',
-                'jquery-ui-core',
-                'amcharts-core',
-                'amcharts-charts',
-                'amcharts-animated',
-                'amcharts-maps',
-                'amcharts-maps-world',
-                'datatable',
-            ],
-            filemtime( plugin_dir_path( __DIR__ ) . 'ui/ui.js' ),
-        true );
+          trailingslashit( plugin_dir_url( __FILE__ ) ) . 'ui.js',
+          [
+            'jquery',
+            'jquery-ui-core',
+            'amcharts-core',
+            'amcharts-charts',
+            'amcharts-animated',
+            'amcharts-maps',
+            'datatable',
+          ],
+          filemtime( plugin_dir_path( __DIR__ ) . 'ui/ui.js' ),
+          true );
         wp_localize_script(
-            'dt_network_dashboard_script',
-            'wpApiNetworkDashboard',
-            [
-                'root' => esc_url_raw( rest_url() ),
-                'plugin_uri' => plugin_dir_url( __DIR__ ),
-                'nonce' => wp_create_nonce( 'wp_rest' ),
-                'current_user_login' => wp_get_current_user()->user_login,
-                'current_user_id' => get_current_user_id(),
-                'spinner' => ' <img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="12px" />',
-                'spinner_large' => ' <img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="24px" />',
-                'sites_list' => $this->get_site_list(),
-                'sites' => $this->get_sites(),
-                'global' => $this->get_global(),
-                'locations_list' => $this->get_locations_list(),
-                'translations' => [
-                    "sm_title" => __( "Network Dashboard", "dt_network_dashboard" ),
-                    "title_site_list" => __( "Sites List", "dt_network_dashboard" ),
-                    "title_locations" => __( "Locations", "dt_network_dashboard" ),
-                ]
+          'dt_network_dashboard_script',
+          'wpApiNetworkDashboard',
+          [
+            'root' => esc_url_raw( rest_url() ),
+            'plugin_uri' => plugin_dir_url( __DIR__ ),
+            'nonce' => wp_create_nonce( 'wp_rest' ),
+            'current_user_login' => wp_get_current_user()->user_login,
+            'current_user_id' => get_current_user_id(),
+            'spinner' => ' <img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="12px" />',
+            'spinner_large' => ' <img src="'. plugin_dir_url( __DIR__ ) . 'spinner.svg" width="24px" />',
+            'sites_list' => $this->get_site_list(),
+            'sites' => $this->get_sites(),
+            'global' => $this->get_global(),
+            'locations_list' => $this->get_locations_list(),
+            'translations' => [
+              "sm_title" => __( "Network Dashboard", "dt_network_dashboard" ),
+              "title_site_list" => __( "Sites List", "dt_network_dashboard" ),
+              "title_locations" => __( "Locations", "dt_network_dashboard" ),
             ]
+          ]
         );
 
     }
@@ -177,12 +176,12 @@ class DT_Network_Dashboard_UI
                 $snapshot = maybe_unserialize( $site['snapshot'] );
                 if ( ! empty( $snapshot['partner_id'] ) ) {
                     $new[] = [
-                        'id' => $snapshot['partner_id'],
-                        'name' => ucwords( $snapshot['profile']['partner_name'] ),
-                        'contacts' => $snapshot['contacts']['current_state']['status']['active'],
-                        'groups' => $snapshot['groups']['current_state']['total_active'],
-                        'users' => $snapshot['users']['current_state']['total_users'],
-                        'date' => date( 'Y-m-d H:i:s', $snapshot['date'] ),
+                      'id' => $snapshot['partner_id'],
+                      'name' => ucwords( $snapshot['profile']['partner_name'] ),
+                      'contacts' => $snapshot['contacts']['current_state']['status']['active'],
+                      'groups' => $snapshot['groups']['current_state']['total_active'],
+                      'users' => $snapshot['users']['current_state']['total_users'],
+                      'date' => date( 'Y-m-d H:i:s', $snapshot['date'] ),
                     ];
                 }
             }
@@ -194,12 +193,12 @@ class DT_Network_Dashboard_UI
                 $snapshot = maybe_unserialize( $site );
                 if ( ! empty( $snapshot['partner_id'] ) ) {
                     $new[] = [
-                        'id' => $snapshot['partner_id'],
-                        'name' => ucwords( $snapshot['profile']['partner_name'] ),
-                        'contacts' => $snapshot['contacts']['current_state']['status']['active'],
-                        'groups' => $snapshot['groups']['current_state']['total_active'],
-                        'users' => $snapshot['users']['current_state']['total_users'],
-                        'date' => date( 'Y-m-d H:i:s', $snapshot['date'] ),
+                      'id' => $snapshot['partner_id'],
+                      'name' => ucwords( $snapshot['profile']['partner_name'] ),
+                      'contacts' => $snapshot['contacts']['current_state']['status']['active'],
+                      'groups' => $snapshot['groups']['current_state']['total_active'],
+                      'users' => $snapshot['users']['current_state']['total_users'],
+                      'date' => date( 'Y-m-d H:i:s', $snapshot['date'] ),
                     ];
                 }
             }
@@ -211,26 +210,26 @@ class DT_Network_Dashboard_UI
     public function get_global() {
         $totals = $this->compile_totals();
         $data = [
-            'contacts' => [
-                'total' => $totals['total_contacts'] ?? 0,
-                'added' => [
-                    'sixty_days' => $this->compile_by_days( 'contacts' ),
-                    'twenty_four_months' => $this->compile_by_months( 'contacts' ),
-                ],
+          'contacts' => [
+            'total' => $totals['total_contacts'] ?? 0,
+            'added' => [
+              'sixty_days' => $this->compile_by_days( 'contacts' ),
+              'twenty_four_months' => $this->compile_by_months( 'contacts' ),
             ],
-            'groups' => [
-                'total' => $totals['total_groups'] ?? 0,
-                'added' => [
-                    'sixty_days' => $this->compile_by_days( 'groups' ),
-                    'twenty_four_months' => $this->compile_by_months( 'groups' ),
-                ],
+          ],
+          'groups' => [
+            'total' => $totals['total_groups'] ?? 0,
+            'added' => [
+              'sixty_days' => $this->compile_by_days( 'groups' ),
+              'twenty_four_months' => $this->compile_by_months( 'groups' ),
             ],
-            'users' => [
-                'total' => $totals['total_users'] ?? 0,
-            ],
-            'locations' => [
-                'total_countries' => $totals['total_countries'] ?? 0,
-            ],
+          ],
+          'users' => [
+            'total' => $totals['total_users'] ?? 0,
+          ],
+          'locations' => [
+            'total_countries' => $totals['total_countries'] ?? 0,
+          ],
         ];
 
         return $data;
@@ -238,19 +237,20 @@ class DT_Network_Dashboard_UI
 
     public function get_locations_list() {
         $data = [
-                'data_types' => $this->location_data_types(),
-                'current_state' => [
-                    'active_countries' => 0,
-                    'active_admin0_grid_ids' => [],
-                    'active_admin1' => 0,
-                    'active_admin1_grid_ids' => [],
-                    'active_admin2' => 0,
-                    'active_admin2_grid_ids' => [],
-                ],
-                'list' => [],
+          'data_types' => $this->location_data_types(),
+          'current_state' => [
+            'active_countries' => 0,
+            'active_admin0_grid_ids' => [],
+            'active_admin1' => 0,
+            'active_admin1_grid_ids' => [],
+            'active_admin2' => 0,
+            'active_admin2_grid_ids' => [],
+          ],
+          'list' => [],
         ];
 
         $sites = $this->get_sites();
+
         if ( empty( $sites ) ) {
             return [];
         }
@@ -313,7 +313,7 @@ class DT_Network_Dashboard_UI
                 }
             }
         }
-//        dt_write_log($data);
+        dt_write_log($data);
 
         return $data;
     }
@@ -366,17 +366,17 @@ class DT_Network_Dashboard_UI
     public function location_data_types( $preset = false ) {
         if ( $preset ) {
             return [
-                'contacts' => 0,
-                'groups' => 0,
-                'churches' => 0,
-                'users' => 0,
+              'contacts' => 0,
+              'groups' => 0,
+              'churches' => 0,
+              'users' => 0,
             ];
         } else {
             return [
-                'contacts',
-                'groups',
-                'churches',
-                'users',
+              'contacts',
+              'groups',
+              'churches',
+              'users',
             ];
         }
 
@@ -393,8 +393,8 @@ class DT_Network_Dashboard_UI
         $d = [];
         for ($i = 0; $i < $number_of_days; $i++) {
             $d[date( "Y-m-d", strtotime( '-'. $i .' days' ) )] = [
-                'date' => date( "Y-m-d", strtotime( '-'. $i .' days' ) ),
-                'value' => 0,
+              'date' => date( "Y-m-d", strtotime( '-'. $i .' days' ) ),
+              'value' => 0,
             ];
         }
         return $d;
@@ -413,8 +413,8 @@ class DT_Network_Dashboard_UI
         $d = [];
         for ($i = 0; $i < $number_of_months; $i++) {
             $d[date( "Y-m", strtotime( '-'. $i .' months' ) ) . '-01'] = [
-                'date' => date( "Y-m", strtotime( '-'. $i .' months' ) ) . '-01',
-                'value' => 0,
+              'date' => date( "Y-m", strtotime( '-'. $i .' months' ) ) . '-01',
+              'value' => 0,
             ];
         }
         return $d;
@@ -477,10 +477,10 @@ class DT_Network_Dashboard_UI
     public function compile_totals() {
         $sites = $this->get_sites();
         $data = [
-            'total_contacts' => 0,
-            'total_groups' => 0,
-            'total_users' => 0,
-            'total_countries' => 0,
+          'total_contacts' => 0,
+          'total_groups' => 0,
+          'total_users' => 0,
+          'total_countries' => 0,
         ];
         if ( empty( $sites ) ) {
             return [];
