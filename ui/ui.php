@@ -66,7 +66,7 @@ class DT_Network_Dashboard_UI
         wp_register_script( 'amcharts-charts', 'https://www.amcharts.com/lib/4/charts.js', false, '4' );
         wp_register_script( 'amcharts-animated', 'https://www.amcharts.com/lib/4/themes/animated.js', false, '4' );
         wp_register_script( 'amcharts-maps', 'https://www.amcharts.com/lib/4/maps.js', false, '4' );
-        wp_register_script( 'amcharts-maps-world', 'https://www.amcharts.com/lib/4/geodata/worldLow.js', false, '4' );
+//        wp_register_script( 'amcharts-maps-world', 'https://www.amcharts.com/lib/4/geodata/worldLow.js', false, '4' );
 
         // Datatables
         wp_register_style( 'datatable-css', '//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css', false, '1.10' );
@@ -89,7 +89,6 @@ class DT_Network_Dashboard_UI
                 'amcharts-charts',
                 'amcharts-animated',
                 'amcharts-maps',
-                'amcharts-maps-world',
                 'datatable',
             ],
             filemtime( plugin_dir_path( __DIR__ ) . 'ui/ui.js' ),
@@ -251,6 +250,7 @@ class DT_Network_Dashboard_UI
         ];
 
         $sites = $this->get_sites();
+
         if ( empty( $sites ) ) {
             return [];
         }
@@ -313,7 +313,7 @@ class DT_Network_Dashboard_UI
                 }
             }
         }
-//        dt_write_log($data);
+        dt_write_log($data);
 
         return $data;
     }

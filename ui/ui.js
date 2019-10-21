@@ -8,7 +8,18 @@ jQuery(document).ready(function() {
         show_sites_list()
     }
     if( '#mapping_view' === window.location.hash) {
-        page_mapping_view()
+        if ( window.am4geodata_worldLow === undefined ) {
+            mapUrl = DRILLDOWNDATA.settings.mapping_source_url + 'collection/world.geojson'
+            jQuery.getJSON( mapUrl, function( data ) {
+                window.am4geodata_worldLow = data
+                page_mapping_view()
+            })
+                .fail(function (err) {
+                    console.log(`No polygon available.`)
+                })
+        } else {
+            page_mapping_view()
+        }
     }
     if('#mapping_list' === window.location.hash) {
         page_mapping_list()
@@ -638,7 +649,7 @@ function load_points_map( div, id ) {
 
         let locations = []
         jQuery.each( wpApiNetworkDashboard.locations_list.list, function(i, v) {
-            if ( v.level === 'country' && v[id] ) {
+            if ( v.level === '-3' && v[id] ) {
                 locations.push( v )
             }
         } )
@@ -649,7 +660,7 @@ function load_points_map( div, id ) {
         //build locations list
         let locations = []
         jQuery.each( wpApiNetworkDashboard.locations_list.list, function(i, v) {
-            if ( v.level === 'country' ) {
+            if ( v.level === '-3' ) {
                 locations.push( v )
             }
         } )
@@ -866,7 +877,7 @@ function top_level_map( div ) {
 
     let locations = []
     jQuery.each( wpApiNetworkDashboard.locations_list.list, function(i, v) {
-        if ( v.level === 'country' ) {
+        if ( v.level === '-3' ) {
             locations.push( v )
         }
     } )
@@ -1347,12 +1358,14 @@ function location_grid_list( div, grid_id ) {
 
     // build list
     function build_location_grid_list( div, map_data ) {
+        console.log('map_data')
+        console.log(map_data)
         let network_data = wpApiNetworkDashboard.locations_list.list
 
 
         // Level Up
         let level_up = jQuery('#level_up')
-        if ( map_data.self.level === 'country' ) {
+        if ( map_data.self.level === '-3' ) {
             level_up.empty().html(`<button class="button small" onclick="network_location_list()">Level Up</button>`)
         } else {
             level_up.empty().html(`<button class="button small" onclick="network_location_grid_list(${map_data.parent.grid_id})">Level Up</button>`)
@@ -1470,7 +1483,7 @@ function network_location_list() {
     html += `<tbody>`
 
     jQuery.each( sorted_children, function(i, v) {
-        if ( v.level === 'country' ) {
+        if ( v.level === '-3' ) {
             let population = v.population_formatted
 
             html += `<tr>
@@ -1549,7 +1562,7 @@ function network_location_grid_list( grid_id ) {
 
         // Level Up
         let level_up = jQuery('#level_up')
-        if ( map_data.self.level === 'country' ) {
+        if ( map_data.self.level === '-3' ) {
             level_up.empty().html(`<button class="button small" onclick="network_location_list()">Level Up</button>`)
         } else {
             level_up.empty().html(`<button class="button small" onclick="network_location_grid_list(${map_data.parent.grid_id})">Level Up</button>`)
