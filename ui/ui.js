@@ -1,6 +1,16 @@
 let translations = window.mappingModule.mapping_module.translations
 
 jQuery(document).ready(function() {
+    if ( window.am4geodata_worldLow === undefined ) {
+        mapUrl = DRILLDOWNDATA.settings.mapping_source_url + 'collection/world.geojson'
+        jQuery.getJSON( mapUrl, function( data ) {
+            window.am4geodata_worldLow = data
+            page_mapping_view()
+        })
+            .fail(function (err) {
+                console.log(`No polygon available.`)
+            })
+    }
     if( ! window.location.hash || '#network_home' === window.location.hash) {
         show_network_home()
     }
@@ -8,18 +18,7 @@ jQuery(document).ready(function() {
         show_sites_list()
     }
     if( '#mapping_view' === window.location.hash) {
-        if ( window.am4geodata_worldLow === undefined ) {
-            mapUrl = DRILLDOWNDATA.settings.mapping_source_url + 'collection/world.geojson'
-            jQuery.getJSON( mapUrl, function( data ) {
-                window.am4geodata_worldLow = data
-                page_mapping_view()
-            })
-                .fail(function (err) {
-                    console.log(`No polygon available.`)
-                })
-        } else {
-            page_mapping_view()
-        }
+        page_mapping_view()
     }
     if('#mapping_list' === window.location.hash) {
         page_mapping_list()
