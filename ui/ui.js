@@ -5,7 +5,6 @@ jQuery(document).ready(function() {
         mapUrl = DRILLDOWNDATA.settings.mapping_source_url + 'collection/world.geojson'
         jQuery.getJSON( mapUrl, function( data ) {
             window.am4geodata_worldLow = data
-            page_mapping_view()
         })
             .fail(function (err) {
                 console.log(`No polygon available.`)
