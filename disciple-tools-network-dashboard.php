@@ -197,9 +197,13 @@ class DT_Network_Dashboard {
         $this->token             = 'dt_network_dashboard';
         $this->version             = '0.1';
 
-        $wpdb->dt_location_grids = $wpdb->prefix . 'dt_location_grids';
-        $wpdb->dt_location_grid = $wpdb->prefix . 'dt_location_grid';
+        add_filter( 'dt_custom_tables', [ $this, 'add_tables' ] );
+    }
 
+    public function add_tables( $tables ){
+        $tables[] = 'dt_location_grids';
+        $tables[] = 'dt_location_grid';
+        return $tables;
     }
 
     /**
