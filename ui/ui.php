@@ -247,7 +247,7 @@ class DT_Network_Dashboard_UI
                     $custom_column_data[$grid_id] = [];
                     $i = 0;
                     $label_counts = count( $data_types );
-                    while ($i <= $label_counts) {
+                    while ($i <= $label_counts -1 ) {
                         $custom_column_data[$grid_id][$i] = 0;
                         $i++;
                     }
@@ -255,7 +255,7 @@ class DT_Network_Dashboard_UI
                 $custom_column_data[$grid_id][0] = (int) $custom_column_data[$grid_id][0] + (int) $stats['contacts'] ?? 0;
                 $custom_column_data[$grid_id][1] = (int) $custom_column_data[$grid_id][1] + (int) $stats['groups'] ?? 0;
                 $custom_column_data[$grid_id][2] = (int) $custom_column_data[$grid_id][2] + (int) $stats['churches'] ?? 0;
-                $custom_column_data[$grid_id][3] = (int) $custom_column_data[$grid_id][4] + (int) $stats['users'] ?? 0;
+                $custom_column_data[$grid_id][3] = (int) $custom_column_data[$grid_id][3] + (int) $stats['users'] ?? 0;
             }
         }
 
