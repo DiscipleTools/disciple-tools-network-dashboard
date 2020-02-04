@@ -23,7 +23,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  *
  * @since  0.1
  * @access public
- * @return object
+ * @return object|bool
  */
 function dt_network_dashboard() {
     $current_theme = get_option( 'current_theme' );
@@ -49,9 +49,12 @@ function dt_network_dashboard() {
         return DT_Network_Dashboard::get_instance();
     }
     else {
-        add_action( 'admin_notices', 'dt_network_dashboard_admin_notice' );
-        add_action( 'wp_ajax_dismissed_notice_handler', 'dt_network_dashboard_ajax_notice_handler' );
-        return new WP_Error( 'current_theme_not_dt', 'Disciple Tools Theme not active.' );
+        if ( ! is_multisite() ) {
+            add_action('admin_notices', 'dt_network_dashboard_admin_notice');
+            add_action('wp_ajax_dismissed_notice_handler', 'dt_network_dashboard_ajax_notice_handler');
+        }
+
+        return false;
     }
 
 }
