@@ -82,20 +82,14 @@ function dt_multisite_dashboard_snapshots() {
         return [];
     }
 
-    $snapshot = wp_cache_get( 'multisite_dashboard_snapshots' );
+    $site_ids = DT_Network_Dashboard_Queries::all_multisite_ids();
 
-    if ( false === $snapshot ) {
-
-        $site_ids = DT_Network_Dashboard_Queries::all_multisite_ids();
-
-        $snapshot = [];
-        foreach ( $site_ids as $id ) {
-            if ( get_blog_option( $id, 'current_theme' ) !== 'Disciple Tools' ) {
-                continue;
-            }
-            $snapshot[$id] = get_blog_option( $id, '_transient_dt_snapshot_report' );
+    $snapshot = [];
+    foreach ( $site_ids as $id ) {
+        if ( get_blog_option( $id, 'current_theme' ) !== 'Disciple Tools' ) {
+            continue;
         }
-        wp_cache_set( 'multisite_dashboard_snapshots', $snapshot );
+        $snapshot[$id] = get_blog_option( $id, 'dt_snapshot_report' );
     }
 
     return $snapshot;

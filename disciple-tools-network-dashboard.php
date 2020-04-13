@@ -123,7 +123,6 @@ class DT_Network_Dashboard {
 
         require_once( 'admin/permissions.php' );
         require_once( 'admin/queries.php' );
-//        require_once( 'admin/multisite-report-post-type.php' );
         require_once( 'admin/customize-site-linking.php' ); // loads capabilities
         require_once( 'admin/admin-endpoints.php' );
         require_once( 'admin/multisite.php' );
@@ -137,8 +136,8 @@ class DT_Network_Dashboard {
 
 
         // collects reports from other systems
-        require_once( 'reports/reports.php' );
-        require_once( 'reports/reports-endpoints.php' );
+//        require_once( 'reports/reports.php' );
+//        require_once( 'reports/reports-endpoints.php' );
 
         require_once( 'cron/cron-log.php' );
 
@@ -172,7 +171,7 @@ class DT_Network_Dashboard {
 
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );
-            require_once( 'admin/metabox-site-profile.php' );
+//            require_once( 'admin/metabox-site-profile.php' );
 
         }
     }
@@ -200,14 +199,8 @@ class DT_Network_Dashboard {
         $this->token             = 'dt_network_dashboard';
         $this->version             = '0.1';
 
-//        add_filter( 'dt_custom_tables', [ $this, 'add_tables' ] );
     }
 
-//    public function add_tables( $tables ){
-//        $tables[] = 'dt_location_grids';
-//        $tables[] = 'dt_location_grid';
-//        return $tables;
-//    }
 
     /**
      * Sets up main plugin actions and filters.

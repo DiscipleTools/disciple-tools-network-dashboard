@@ -29,7 +29,7 @@ class DT_Network_Dashboard_Site_Profile_Metabox {
         $site_link_system = Site_Link_System::instance();
         $site_link_system->meta_box_content( 'network_dashboard' );
 
-        $this->get_sync_status( $post->ID );
+//        $this->get_sync_status( $post->ID );
     }
 
     public function network_field_filter( $fields ) {
@@ -58,6 +58,7 @@ class DT_Network_Dashboard_Site_Profile_Metabox {
         return $fields;
     }
 
+    /*
     public function get_sync_status( $site_post_id ) {
         // get local count
         $data = DT_Network_Dashboard_Queries::check_sum_list( $site_post_id );
@@ -109,6 +110,6 @@ class DT_Network_Dashboard_Site_Profile_Metabox {
 
         <?php
 
-    }
+    } */
 }
 new DT_Network_Dashboard_Site_Profile_Metabox();
