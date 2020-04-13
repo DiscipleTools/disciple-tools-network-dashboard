@@ -123,7 +123,7 @@ class DT_Network_Dashboard {
 
         require_once( 'admin/permissions.php' );
         require_once( 'admin/queries.php' );
-        require_once( 'admin/multisite-report-post-type.php' );
+//        require_once( 'admin/multisite-report-post-type.php' );
         require_once( 'admin/customize-site-linking.php' ); // loads capabilities
         require_once( 'admin/admin-endpoints.php' );
         require_once( 'admin/multisite.php' );
