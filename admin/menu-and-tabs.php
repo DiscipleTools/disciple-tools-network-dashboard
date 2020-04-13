@@ -474,6 +474,7 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                             $this->process_full_list();
                             $this->main_column();
                             $this->logging_viewer();
+                            dt_write_log( dt_get_multisite_snapshot( 3 ) );
                         } else {
                             $this->not_approved_content();
                         }
@@ -498,7 +499,6 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
             <tbody>
             <tr>
                 <td>
-
                     <p>You are not yet approved to collect reports from the local network. Your network administrator must enable your dashboard to collect reports from this network.</p>
                 </td>
             </tr>
@@ -627,7 +627,7 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                                 <?php echo esc_html( $blog_id ) ?>
                             </td>
                             <td>
-                                <?php echo '<strong>' . esc_html( $snapshot['profile']['partner_name'] ) . '</strong>' ?>
+                                <?php echo '<strong>' . esc_html( $snapshot['profile']['partner_name'] ?? '' ) . '</strong>' ?>
                             </td>
                             <td>
                                 <?php echo '<a href="'. esc_url( get_site_url( $blog_id ) ) .'" target="_blank">' . get_site_url( $blog_id ) . '</a>' ?>

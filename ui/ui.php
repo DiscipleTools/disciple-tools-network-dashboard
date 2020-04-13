@@ -68,7 +68,6 @@ class DT_Network_Dashboard_UI
             trailingslashit( plugin_dir_url( __FILE__ ) ) . 'ui.js',
             [
                 'jquery',
-                'jquery-ui-core',
                 'amcharts-core',
                 'amcharts-charts',
                 'amcharts-animated',
