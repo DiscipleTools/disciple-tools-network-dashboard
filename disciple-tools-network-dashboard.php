@@ -200,14 +200,14 @@ class DT_Network_Dashboard {
         $this->token             = 'dt_network_dashboard';
         $this->version             = '0.1';
 
-        add_filter( 'dt_custom_tables', [ $this, 'add_tables' ] );
+//        add_filter( 'dt_custom_tables', [ $this, 'add_tables' ] );
     }
 
-    public function add_tables( $tables ){
-        $tables[] = 'dt_location_grids';
-        $tables[] = 'dt_location_grid';
-        return $tables;
-    }
+//    public function add_tables( $tables ){
+//        $tables[] = 'dt_location_grids';
+//        $tables[] = 'dt_location_grid';
+//        return $tables;
+//    }
 
     /**
      * Sets up main plugin actions and filters.
