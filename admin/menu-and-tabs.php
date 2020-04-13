@@ -634,7 +634,7 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                             </td>
                             <td>
                                 <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
-                                <?php echo ( ! empty( $snapshot ) ) ? '<div id="blog-'.$blog_id.'" style="display:none;">'.maybe_serialize($snapshot).'</div>' : '&#x2718;' ?>
+                                <?php echo ( ! empty( $snapshot ) ) ? '<div id="blog-'.$blog_id.'" style="display:none;">'.maybe_serialize($snapshot).'</div>' : '<div id="blog-'.$blog_id.'" style="display:none;">'.maybe_serialize($snapshot).'</div>' ?>
                             </td>
                             <td>
                                 <?php echo ( ! empty( $snapshot['date'] ) ) ? date( 'Y-m-d H:i:s', $snapshot['date'] ) : '&#x2718;' ?>
