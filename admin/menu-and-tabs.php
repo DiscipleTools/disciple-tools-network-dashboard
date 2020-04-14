@@ -166,6 +166,7 @@ class DT_Network_Dashboard_Tab_General
                         <!-- Right Column -->
 
                         <?php $this->side_box() ?>
+                        <?php $this->mapbox_status() ?>
 
                         <!-- End Right Column -->
                     </div><!-- postbox-container 1 -->
@@ -256,6 +257,36 @@ class DT_Network_Dashboard_Tab_General
                         </select>
                         <button type="submit" class="button">Update</button>
                     </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function mapbox_status() {
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>Mapbox Upgrade Status</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    The presence of a mapbox key upgrades the mapping features of the network dashboard automatically.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Mapbox Key Installed : <?php echo ( class_exists( 'DT_Mapbox_API' ) && empty( DT_Mapbox_API::get_key() ) ) ? '<span style="color:red;">&#x2718;</span>' : '&#9989;' ; ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <a href="<?php echo esc_url( admin_url() ) ?>admin.php?page=dt_mapping_module&tab=geocoding">Disciple Tools Geocoding Tab</a>
                 </td>
             </tr>
             </tbody>

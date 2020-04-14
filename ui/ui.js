@@ -1,6 +1,9 @@
 _ = _ || window.lodash
 
 jQuery(document).ready(function () {
+    let sidemenu = jQuery('#metrics-sidemenu')
+    sidemenu.prop('data-multi-expand', true)
+
   MAPPINGDATA.data = wpApiNetworkDashboard.locations_list
   if (!window.location.hash || '#network_home'===window.location.hash) {
     show_network_home()
@@ -1008,3 +1011,5 @@ function location_grid_list( div, grid_id ) {
     DRILLDOWN.hide_spinner()
   }
 }
+
+
