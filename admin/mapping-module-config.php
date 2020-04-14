@@ -188,8 +188,6 @@ class DT_Network_Mapping_Module_Config
         }
         $mapping_module = DT_Mapping_Module::instance()->localize_script();
 
-//        $mapping_module['data'] = []; // @todo add data
-
         if ( dt_network_dashboard_denied() ) {
             return [];
         } else {
@@ -199,3 +197,4 @@ class DT_Network_Mapping_Module_Config
     }
 
 }
+DT_Network_Mapping_Module_Config::instance();
