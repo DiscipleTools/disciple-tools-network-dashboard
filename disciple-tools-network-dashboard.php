@@ -131,7 +131,8 @@ class DT_Network_Dashboard {
 
         // adds charts and metrics to the network tab
         require_once( 'ui/ui.php' );
-        require_once( 'ui/ui-endpoints.php' );
+//        require_once( 'ui/ui-endpoints.php' );
+        require_once( 'ui/mapbox-metrics.php' );
 
         require_once( 'cron/cron-log.php' );
 

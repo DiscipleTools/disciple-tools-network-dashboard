@@ -15,7 +15,7 @@ class DT_Dashboard_Mapbox_Metrics {
     public $js_object_name = 'dt_mapbox_metrics'; // This object will be loaded into the metrics.js file by the wp_localize_script.
     public $js_file_name = 'mapbox-metrics.js'; // should be full file name plus extension
     public $permissions = [ 'view_any_contacts', 'view_project_metrics' ];
-    public $namespace = "dt-metrics/mapbox/";
+    public $namespace = "network/mapbox/";
 
     public function __construct() {
 
@@ -139,7 +139,7 @@ class DT_Dashboard_Mapbox_Metrics {
             ]
         );
     }
-    
+
     public function has_permission(){
         $permissions = $this->permissions;
         $pass = count( $permissions ) === 0;
@@ -174,12 +174,7 @@ class DT_Dashboard_Mapbox_Metrics {
             return new WP_Error( __METHOD__, "Invalid post type", [ 'status' => 400 ] );
         }
 
-        $list = [];
-        foreach ( $results as $result ) {
-            $list[$result['grid_id']] = $result;
-        }
-
-        return $list;
+        return $results;
 
     }
 
@@ -414,3 +409,4 @@ class DT_Dashboard_Mapbox_Metrics {
 
 
 }
+new DT_Dashboard_Mapbox_Metrics();

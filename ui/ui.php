@@ -27,7 +27,8 @@ class DT_Network_Dashboard_UI
             $url_path = trim( str_replace( get_site_url(), "", $url ), '/' );
 
             if ('network' === substr( $url_path, '0', 7 )) {
-                add_action( "template_redirect", [ $this, 'url_redirect' ] );
+                add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 ); // add custom URL
+                add_action( "template_redirect", [ $this, 'url_redirect' ], 10 );
                 add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 199 );
 
                 if ('network' === $url_path) {
@@ -43,6 +44,11 @@ class DT_Network_Dashboard_UI
             }
 
         } // end admin only test
+    }
+
+    public function add_url( $template_for_url) {
+        $template_for_url['network'] = 'template-metrics.php';
+        return $template_for_url;
     }
 
     /**

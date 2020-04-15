@@ -55,14 +55,14 @@ class DT_Network_Dashboard_UI_Endpoints
     } // End __construct()
 
     public function add_api_routes() {
-        register_rest_route(
-            $this->namespace,
-            '/network/ui/get_snapshot',
-            [
-                'methods'  => 'POST',
-                'callback' => [ $this, 'get_snapshot' ],
-            ]
-        );
+//        register_rest_route(
+//            $this->namespace,
+//            '/network/ui/get_snapshot',
+//            [
+//                'methods'  => 'POST',
+//                'callback' => [ $this, 'get_snapshot' ],
+//            ]
+//        );
     }
 
     /**

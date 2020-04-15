@@ -505,7 +505,6 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                             $this->process_full_list();
                             $this->main_column();
                             $this->logging_viewer();
-                            dt_write_log( dt_get_multisite_snapshot( 3 ) );
                         } else {
                             $this->not_approved_content();
                         }

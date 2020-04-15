@@ -64,7 +64,7 @@ jQuery(document).ready(function() {
     status_list += `<option value="none"></option>`
 
 
-    makeRequest( "POST", `cluster_geojson`, { post_type: post_type, status: null} , 'dt-metrics/mapbox/' )
+    makeRequest( "POST", `cluster_geojson`, { post_type: post_type, status: null} , 'network/mapbox/' )
       .then(data=>{
         console.log(data)
 
@@ -205,7 +205,7 @@ jQuery(document).ready(function() {
 
         jQuery('#status').on('change', function() {
           window.current_status = jQuery('#status').val()
-          makeRequest( "POST", `cluster_geojson`, { post_type: post_type, status: window.current_status} , 'dt-metrics/mapbox/' )
+          makeRequest( "POST", `cluster_geojson`, { post_type: post_type, status: window.current_status} , 'network/mapbox/' )
             .then(data=> {
               clear_layer()
               load_layer( data )
@@ -352,7 +352,7 @@ jQuery(document).ready(function() {
     })
     status_list += `<option value="none"></option>`
 
-    makeRequest( "POST", `get_grid_list`, { post_type: post_type, status: null} , 'dt-metrics/mapbox/' )
+    makeRequest( "POST", `get_grid_list`, { post_type: post_type, status: null} , 'network/mapbox/' )
       .done(response=>{
         window.user_list = response
         // console.log('LIST')
@@ -362,7 +362,7 @@ jQuery(document).ready(function() {
       console.log( e)
     })
 
-    makeRequest( "POST", `grid_totals`, { post_type: post_type, status: null} , 'dt-metrics/mapbox/' )
+    makeRequest( "POST", `grid_totals`, { post_type: post_type, status: null} , 'network/mapbox/' )
       .done(grid_data=>{
         window.grid_data = grid_data
         // console.log('GRID TOTALS')
@@ -567,7 +567,7 @@ jQuery(document).ready(function() {
           window.current_status = jQuery('#status').val()
 
           // makeRequest( "POST", `grid_totals`, { status: window.current_status }, 'user-management/v1/')
-          makeRequest( "POST", `grid_totals`, { post_type: post_type, status: window.current_status} , 'dt-metrics/mapbox/' )
+          makeRequest( "POST", `grid_totals`, { post_type: post_type, status: window.current_status} , 'network/mapbox/' )
             .done(grid_data=>{
               window.previous_grid_id = 0
               clear_layers()
