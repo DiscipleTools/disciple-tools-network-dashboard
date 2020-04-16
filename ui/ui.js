@@ -31,9 +31,7 @@ function show_network_home() {
     <span class="section-header">` + page.translations.sm_title + `</span>
     
     <hr style="max-width:100%;">
-    <!--<div id="home-map-div" style="width: 100%;max-height: 600px;height: 100vh;"></div>-->
-<!--    <div class="cell medium-6" id="map_chart" style="display:none;"></div>-->
-    <div id="map_chart" style="width: 100%;max-height: 700px;height: 100vh;vertical-align: text-top;"></div>
+    <div id="map_chart" style="width: 100%; max-width:1200px; margin:0 auto; max-height: 700px;height: 100vh;vertical-align: text-top;"></div>
     
     <hr style="max-width:100%;">
     

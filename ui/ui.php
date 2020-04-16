@@ -68,6 +68,13 @@ class DT_Network_Dashboard_UI
             $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_list" onclick="page_mapping_list()">' . esc_html__( 'Location List' ) . '</a></li>';
             $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_view" onclick="mapping_view()">' . esc_html__( 'Hover Map' ) . '</a></li>';
 
+            $content .= '<li><a>' . esc_html__( 'Area Maps' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
+            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#contacts' ) ) . '" onclick="write_area(\'contact_settings\')" >' . esc_html__( 'Contacts' ) . '</a></li>';
+            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#groups' ) ) . '"  onclick="write_area(\'group_settings\')" >' . esc_html__( 'Groups' ) . '</a></li>';
+            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#churches' ) ) . '"  onclick="write_area(\'church_settings\')" >' . esc_html__( 'Churches' ) . '</a></li>';
+            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#users' ) ) . '" onclick="write_area(\'user_settings\')" >' . esc_html__( 'Users' ) . '</a></li>';
+            $content .= '</ul></li>';
+
             $content .= '<li><a>' . esc_html__( 'Cluster Maps' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="cluster">';
             $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/cluster/#contacts' ) ) . '"  onclick="write_cluster(\'contact_settings\')" >' . esc_html__( 'Contacts' ) . '</a></li>';
             $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/cluster/#groups' ) ) . '"  onclick="write_cluster(\'group_settings\')">' . esc_html__( 'Groups' ) . '</a></li>';
@@ -80,11 +87,7 @@ class DT_Network_Dashboard_UI
             $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/points/#users' ) ) . '">' . esc_html__( 'Users' ) . '</a></li>';
             $content .= '</ul></li>';
 
-            $content .= '<li><a>' . esc_html__( 'Area Maps' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#contacts' ) ) . '" >' . esc_html__( 'Contacts' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#groups' ) ) . '">' . esc_html__( 'Groups' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#users' ) ) . '">' . esc_html__( 'Users' ) . '</a></li>';
-            $content .= '</ul></li>';
+
 
         } else {
             $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_view" onclick="mapping_view()">' . esc_html__( 'Map' ) . '</a></li>';
@@ -182,12 +185,22 @@ class DT_Network_Dashboard_UI
                 'contact_settings' => [
                     'post_type' => 'contacts',
                     'title' => __( 'Contacts', "disciple_tools" ),
-                    'status_list' => $contact_fields['overall_status']['default'] ?? []
+                    'status_list' => ['active'=> [ "label" => 'Active' ], 'paused'=> [ "label" => 'Paused' ], 'closed'=> [ "label" => 'Closed' ] ]
                 ],
                 'group_settings' => [
                     'post_type' => 'groups',
                     'title' => __( 'Groups', "disciple_tools" ),
-                    'status_list' => $group_fields['group_status']['default'] ?? []
+                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
+                ],
+                'user_settings' => [
+                    'post_type' => 'users',
+                    'title' => __( 'Users', "disciple_tools" ),
+                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
+                ],
+                'church_settings' => [
+                    'post_type' => 'churches',
+                    'title' => __( 'Churches', "disciple_tools" ),
+                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
                 ]
             ]
         );
@@ -370,35 +383,6 @@ class DT_Network_Dashboard_UI
 
             }
 
-
-//            // current state
-//            if ( !empty( $site['locations']['current_state']['active_admin0_grid_ids'] )) {
-//                foreach ($site['locations']['current_state']['active_admin0_grid_ids'] as $grid_id) {
-//                    $data['current_state']['active_admin0_grid_ids'][$grid_id] = true;
-//                }
-//            }
-//            if ( !empty( $site['locations']['current_state']['active_admin1_grid_ids'] )) {
-//                foreach ($site['locations']['current_state']['active_admin1_grid_ids'] as $grid_id) {
-//                    $data['current_state']['active_admin1_grid_ids'][$grid_id] = true;
-//                }
-//            }
-//            if ( !empty( $site['locations']['current_state']['active_admin2_grid_ids'] )) {
-//                foreach ($site['locations']['current_state']['active_admin2_grid_ids'] as $grid_id) {
-//                    $data['current_state']['active_admin2_grid_ids'][$grid_id] = true;
-//                }
-//            }
-//
-//
-//            if ( !empty( $data['current_state']['active_admin0_grid_ids'] )) {
-//                $data['current_state']['active_countries'] = count( $data['current_state']['active_admin0_grid_ids'] );
-//            }
-//            if ( !empty( $data['current_state']['active_admin1_grid_ids'] )) {
-//                $data['current_state']['active_admin1'] = count( $data['current_state']['active_admin1_grid_ids'] );
-//            }
-//            if ( !empty( $data['current_state']['active_admin2_grid_ids'] )) {
-//                $data['current_state']['active_admin2'] = count( $data['current_state']['active_admin2_grid_ids'] );
-//            }
-//
             // complete list
             $list_location_grids = array_keys( $data['list'] );
             $location_grid_properties = $this->format_location_grid_types( Disciple_Tools_Mapping_Queries::get_by_grid_id_list( $list_location_grids, true ) );

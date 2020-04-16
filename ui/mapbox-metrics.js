@@ -14,10 +14,10 @@ jQuery(document).ready(function() {
   }
     if('/network/mapbox/points/' === window.location.pathname) {
         if( '#contacts' === window.location.hash || ! window.location.hash) {
-            console.log()
+            write_points( 'contact_settings' )
         }
         else if ( '#groups' === window.location.hash) {
-
+            write_points( 'group_settings' )
         }
         else if ( '#users' === window.location.hash) {
 
@@ -31,13 +31,354 @@ jQuery(document).ready(function() {
         else if ( '#groups' === window.location.hash) {
             write_area( 'group_settings' )
         }
-        else if ( '#users' === window.location.hash) {
-
+        else if ( '#churches' === window.location.hash) {
+            write_area( 'church_settings' )
         }
-        // write_cluster('contact_settings' )
+        else if ( '#users' === window.location.hash) {
+            write_area( 'user_settings' )
+        }
     }
 
 })
+
+  function write_points( settings ) {
+      let obj = dtDashboardMapbox
+
+      let post_type = obj[settings].post_type
+      let title = obj[settings].title
+      let status = obj[settings].status_list
+
+      let chart = jQuery('#chart')
+      let spinner = ' <span class="loading-spinner users-spinner active"></span> '
+
+      chart.empty().html(spinner)
+
+      /* build status list */
+      let status_list = `<option value="none" disabled></option>
+                      <option value="none" disabled>Status</option>
+                      <option value="none"></option>
+                      <option value="all" selected>Status - All</option>
+                      <option value="none" disabled>-----</option>
+                      `
+      jQuery.each(status, function(i,v){
+          status_list += `<option value="${i}">${v.label}</option>`
+      })
+      status_list += `<option value="none"></option>`
+
+    chart.empty().html(`
+                <style>
+                    #map-wrapper {
+                        height: ${window.innerHeight - 100}px !important;
+                    }
+                    #map {
+                        height: ${window.innerHeight - 100}px !important;
+                    }
+                    #geocode-details {
+                        height: ${window.innerHeight - 250}px !important;
+                        overflow: scroll;
+                        opacity: 100%;
+                    }
+                    .accordion {
+                        list-style-type:none;
+                    }
+                    .delete-button {
+                        margin-bottom: 0 !important;
+                    }
+                    .add-user-button {
+                        padding-top: 10px;
+                    }
+                </style>
+                <div id="map-wrapper">
+                    <div id='map'></div>
+                    <div id='legend' class='legend'>
+                        <div class="grid-x grid-margin-x grid-padding-x">
+                            <div class="cell small-2 center info-bar-font">
+                                ${title} 
+                            </div>
+                            <div class="cell small-2 center border-left">
+                                <select id="level" class="small" style="width:170px;">
+                                    <option value="none" disabled></option>
+                                    <option value="none" disabled>Zoom Level</option>
+                                    <option value="none"></option>
+                                    <option value="auto" selected>Auto Zoom</option>
+                                    <option value="none" disabled>-----</option>
+                                    <option value="world">World</option>
+                                    <option value="admin0">Country</option>
+                                    <option value="admin1">State</option>
+                                    <option value="none" disabled></option>
+                                </select> 
+                            </div>
+                            <div class="cell small-2 center border-left">
+                                <select id="status" class="small" style="width:170px;">
+                                    ${status_list}
+                                </select> 
+                            </div>
+                            <div class="cell small-5 center border-left info-bar-font">
+                                
+                            </div>
+                            
+                            <div class="cell small-1 center border-left">
+                                <div class="grid-y">
+                                    <div class="cell center" id="admin">World</div>
+                                    <div class="cell center" id="zoom" >0</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="spinner">${spinner}</div>
+                    <div id="cross-hair">&#8982</div>
+                    <div id="geocode-details" class="geocode-details">
+                        ${title}<span class="close-details" style="float:right;"><i class="fi-x"></i></span>
+                        <hr style="margin:10px 5px;">
+                        <div id="geocode-details-content"></div>
+                    </div>
+                </div>
+             `)
+
+
+    mapboxgl.accessToken = obj.map_key;
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [-98, 38.88],
+        minZoom: 1,
+        zoom: 1
+    });
+
+    // disable map rotation using right click + drag
+    map.dragRotate.disable();
+
+    // disable map rotation using touch rotation gesture
+    map.touchZoomRotate.disableRotation();
+
+    // load sources
+    map.on('load', function() {
+        let spinner = jQuery('#spinner')
+        spinner.show()
+
+        makeRequest( "POST", `points_geojson`, { post_type: post_type, status: null} , 'network/mapbox/' )
+            .then(points=>{
+                console.log(points)
+                map.addSource('points', {
+                    'type': 'geojson',
+                    'data': points
+                });
+            })
+        jQuery.get('https://storage.googleapis.com/location-grid-mirror/collection/1.geojson', null, null, 'json')
+            .done(function (geojson) {
+                // console.log(geojson)
+
+                makeRequest( "POST", `grid_totals`, { post_type: post_type, status: null } , 'network/mapbox/' )
+                    .then(country_totals=>{
+
+                        jQuery.each( geojson.features, function(i,v) {
+                            if ( country_totals[geojson.features[i].properties.id] ) {
+                                geojson.features[i].properties.value = parseInt( country_totals[geojson.features[i].properties.id].count )
+                            } else {
+                                geojson.features[i].properties.value = 0
+                            }
+                        })
+
+                        map.addSource('world', {
+                            'type': 'geojson',
+                            'data': geojson
+                        });
+                        map.addLayer({
+                            'id': 'world',
+                            'type': 'fill',
+                            'source': 'world',
+                            'paint': {
+                                'fill-color': [
+                                    'interpolate',
+                                    ['linear'],
+                                    ['get', 'value'],
+                                    0,
+                                    'rgba(0, 0, 0, 0)',
+                                    1,
+                                    '#547df8',
+                                    50,
+                                    '#3754ab',
+                                    100,
+                                    '#22346a'
+                                ],
+                                'fill-opacity': 0.75
+                            }
+                        });
+
+                        spinner.hide()
+                    })
+
+            })
+
+    })
+
+    // cross-hair
+    map.on('zoomstart', function() {
+        jQuery('#cross-hair').show()
+    })
+    map.on('zoomend', function() {
+        jQuery('#cross-hair').hide()
+    })
+    map.on('dragstart', function() {
+        jQuery('#cross-hair').show()
+    })
+    map.on('dragend', function() {
+        jQuery('#cross-hair').hide()
+    })
+
+    window.previous_grid_id = '0'
+    function load_world() {
+        // remove previous layer
+        if ( window.previous_grid_id > '0' && window.previous_grid_id !== '1' ) {
+            map.removeLayer(window.previous_grid_id.toString() + 'line' )
+            map.removeLayer(window.previous_grid_id.toString() + 'points' )
+            map.removeSource( window.previous_grid_id.toString() )
+        }
+        window.previous_grid_id = '0'
+
+        map.setLayoutProperty('world', 'visibility', 'visible');
+    }
+
+
+    // load layer events
+    // zoom
+    map.on('zoomend', function() {
+        let lnglat = map.getCenter()
+        if ( map.getZoom() <= 2 ) {
+            load_world()
+        } else {
+            load_layer( lnglat.lng, lnglat.lat )
+        }
+    } )
+    // drag pan
+    map.on('dragend', function() {
+        let lnglat = map.getCenter()
+        if ( map.getZoom() <= 2 ) {
+            load_world()
+        } else {
+            load_layer( lnglat.lng, lnglat.lat )
+        }
+    } )
+
+    function load_layer( lng, lat ) {
+        let spinner = jQuery('#spinner')
+        spinner.show()
+
+        map.setLayoutProperty('world', 'visibility', 'none');
+
+        // set geocode level
+        let level = 'admin0'
+
+        // standardize longitude
+        if (lng > 180) {
+            lng = lng - 180
+            lng = -Math.abs(lng)
+        } else if (lng < -180) {
+            lng = lng + 180
+            lng = Math.abs(lng)
+        }
+
+        // geocode
+        jQuery.get(obj.theme_uri + 'dt-mapping/location-grid-list-api.php',
+            {
+                type: 'geocode',
+                longitude: lng,
+                latitude: lat,
+                level: level,
+                country_code: null,
+                nonce: obj.nonce
+            }, null, 'json').done(function (data) {
+
+            // default layer to world
+            if ( data.grid_id === undefined ) {
+                load_world()
+            }
+
+            // load layer, if new
+            else if ( window.previous_grid_id !== data.grid_id ) {
+
+                // remove previous layer
+                if ( window.previous_grid_id > 0 && map.getLayer( window.previous_grid_id.toString() + 'line' ) ) {
+                    map.removeLayer(window.previous_grid_id.toString() + 'line' )
+                    map.removeSource( window.previous_grid_id.toString() )
+                    var mapPointsLayer = map.getLayer( window.previous_grid_id.toString() + 'points' );
+                    if(typeof mapPointsLayer !== 'undefined') {
+                        map.removeLayer(window.previous_grid_id.toString() + 'points')
+                    }
+                }
+                window.previous_grid_id = data.grid_id
+
+                // add info to box
+                if (data && data.grid_id !== '1' ) {
+                    jQuery('#data').empty().html(`
+                        <p><strong>${data.name}</strong></p>
+                        `)
+                }
+
+                // add layer
+                var mapLayer = map.getLayer(data.grid_id);
+                if(typeof mapLayer === 'undefined') {
+
+                    // get geojson collection
+                    jQuery.get('https://storage.googleapis.com/location-grid-mirror/low/'+data.grid_id+'.geojson', null, null, 'json')
+                        .done(function (geojson) {
+
+                            // add source
+                            map.addSource(data.grid_id.toString(), {
+                                'type': 'geojson',
+                                'data': geojson
+                            });
+                            // add border lines
+                            map.addLayer({
+                                'id': data.grid_id.toString() + 'line',
+                                'type': 'line',
+                                'source': data.grid_id.toString(),
+                                'paint': {
+                                    'line-color': '#22346a',
+                                    'line-width': 2
+                                }
+                            });
+                            map.addLayer({
+                                id: data.grid_id.toString() + 'points',
+                                type: 'circle',
+                                source: 'points',
+                                paint: {
+                                    'circle-color': '#11b4da',
+                                    'circle-radius':12,
+                                    'circle-stroke-width': 1,
+                                    'circle-stroke-color': '#fff'
+                                },
+                                filter: ["==", data.grid_id.toString(), ["get", "a0"] ]
+                            });
+                            map.on('click', data.grid_id.toString() + 'points', function(e) {
+                                console.log( e.features )
+                                let dataDiv = jQuery('#data')
+                                dataDiv.empty()
+
+                                jQuery.each( e.features, function(i,v) {
+                                    var address = v.properties.l;
+                                    var post_id = v.properties.pid;
+                                    var name = v.properties.n
+
+                                    dataDiv.append(`<p><a href="/trainings/${post_id}">${name}</a><br>${address}</p>`)
+                                })
+
+                            });
+                            map.on('mouseenter', data.grid_id.toString() + 'points', function() {
+                                map.getCanvas().style.cursor = 'pointer';
+                            });
+                            map.on('mouseleave', data.grid_id.toString() + 'points', function() {
+                                map.getCanvas().style.cursor = '';
+                            });
+                        }) // end get geojson collection
+                } // end add layer
+            } // end load new layer
+            spinner.hide()
+        }); // end geocode
+    } // end load section function
+
+
+}
 
   function write_cluster( settings ) {
     let obj = dtDashboardMapbox
@@ -216,11 +557,11 @@ jQuery(document).ready(function() {
           map.removeLayer( 'clusters' )
           map.removeLayer( 'cluster-count' )
           map.removeLayer( 'unclustered-point' )
-          map.removeSource( 'trainings' )
+          map.removeSource( post_type )
         }
 
         function load_layer( geojson ) {
-          map.addSource('trainings', {
+          map.addSource(post_type, {
             type: 'geojson',
             data: geojson,
             cluster: true,
@@ -230,7 +571,7 @@ jQuery(document).ready(function() {
           map.addLayer({
             id: 'clusters',
             type: 'circle',
-            source: 'trainings',
+            source: post_type,
             filter: ['has', 'point_count'],
             paint: {
               'circle-color': [
@@ -256,7 +597,7 @@ jQuery(document).ready(function() {
           map.addLayer({
             id: 'cluster-count',
             type: 'symbol',
-            source: 'trainings',
+            source: post_type,
             filter: ['has', 'point_count'],
             layout: {
               'text-field': '{point_count_abbreviated}',
@@ -267,7 +608,7 @@ jQuery(document).ready(function() {
           map.addLayer({
             id: 'unclustered-point',
             type: 'circle',
-            source: 'trainings',
+            source: post_type,
             filter: ['!', ['has', 'point_count']],
             paint: {
               'circle-color': '#11b4da',
@@ -282,7 +623,7 @@ jQuery(document).ready(function() {
             });
 
             var clusterId = features[0].properties.cluster_id;
-            map.getSource('trainings').getClusterExpansionZoom(
+            map.getSource(post_type).getClusterExpansionZoom(
               clusterId,
               function(err, zoom) {
                 if (err) return;
@@ -352,21 +693,11 @@ jQuery(document).ready(function() {
     })
     status_list += `<option value="none"></option>`
 
-    makeRequest( "POST", `get_grid_list`, { post_type: post_type, status: null} , 'network/mapbox/' )
-      .done(response=>{
-        window.user_list = response
-        // console.log('LIST')
-        // console.log(response)
-      }).catch((e)=>{
-      console.log( 'error in activity')
-      console.log( e)
-    })
-
     makeRequest( "POST", `grid_totals`, { post_type: post_type, status: null} , 'network/mapbox/' )
       .done(grid_data=>{
         window.grid_data = grid_data
-        // console.log('GRID TOTALS')
-        // console.log(grid_data)
+        console.log('GRID TOTALS')
+        console.log(grid_data)
 
         chart.empty().html(`
                 <style>
@@ -431,8 +762,8 @@ jQuery(document).ready(function() {
                     <div id="spinner">${spinner}</div>
                     <div id="cross-hair">&#8982</div>
                     <div id="geocode-details" class="geocode-details">
-                        ${title}<span class="close-details" style="float:right;"><i class="fi-x"></i></span>
-                        <hr style="margin:10px 5px;">
+                        <span class="close-details" style="float:right;"><i class="fi-x"></i></span>
+                        <br>
                         <div id="geocode-details-content"></div>
                     </div>
                 </div>
@@ -727,98 +1058,45 @@ jQuery(document).ready(function() {
           makeRequest('GET', obj.theme_uri + 'dt-mapping/location-grid-list-api.php?type=geocode&longitude='+lng+'&latitude='+lat+'&level='+level+'&nonce='+obj.nonce )
             .done(details=>{
               /* hierarchy list*/
-              content.empty().append(`<ul id="hierarchy-list" class="accordion" data-accordion></ul>`)
-              let list = jQuery('#hierarchy-list')
+              content.empty().append(`<div class="grid-x" id="hierarchy-list"></div>`)
+                let list = jQuery('#hierarchy-list')
               if ( details.admin0_grid_id ) {
-                list.append( `
-                              <li id="admin0_wrapper" class="accordion-item" data-accordion-item>
-                               <a href="#" class="accordion-title">${details.admin0_name} :  <span id="admin0_count">0</span></a>
-                                <div class="accordion-content grid-x" data-tab-content><div id="admin0_list" class="grid-x"></div></div>
-                              </li>
-                            `)
-                let level_list = jQuery('#admin0_list')
-                if ( details.admin0_grid_id in window.user_list ) {
-                  jQuery('#admin0_count').html(window.user_list[details.admin0_grid_id].length)
-                  jQuery.each(window.user_list[details.admin0_grid_id], function(i,v) {
-                    level_list.append(`
-                              <div class="cell align-self-middle" data-id="${v.grid_meta_id}">
-                                <a href="/${post_type}/${v.post_id}">
-                                  ${v.name}
-                                </a>
+                  list.append( `
+                              <div id="admin0_wrapper" class="cell callout center">
+                               <h4>${details.admin0_name}</h4><h4><span id="admin0_count">0</span></h4>
                               </div>
-                              `)
-                  })
+                            `)
+                if ( details.admin0_grid_id in window.grid_data ) {
+                  jQuery('#admin0_count').html(window.grid_data[details.admin0_grid_id].count)
                 }
               }
               if ( details.admin1_grid_id ) {
-                list.append( `
-                              <li id="admin1_wrapper" class="accordion-item" data-accordion-item >
-                                <a href="#" class="accordion-title">${details.admin1_name} : <span id="admin1_count">0</span></a>
-                                <div class="accordion-content" data-tab-content><div id="admin1_list" class="grid-x"></div></div>
-                              </li>
+                  list.append( `
+                              <div class="cell small-6"></div><div class="cell small-6" style="border-left: 1px solid lightgrey"></div>
+                              <div id="admin1_wrapper" class="cell callout center">
+                               <h4>${details.admin1_name}</h4><h4><span id="admin1_count">0</span></h4>
+                              </div>
                             `)
 
-                let level_list = jQuery('#admin1_list')
-                if ( details.admin1_grid_id in window.user_list ) {
-                  jQuery('#admin1_count').html(window.user_list[details.admin1_grid_id].length)
-                  jQuery.each(window.user_list[details.admin1_grid_id], function(i,v) {
-                    level_list.append(`
-                              <div class="cell align-self-middle" data-id="${v.grid_meta_id}">
-                                <a href="/${post_type}/${v.post_id}">
-                                  ${v.name}
-                                </a>
-                              </div>
-                              `)
-                  })
+                if ( details.admin1_grid_id in window.grid_data ) {
+                  jQuery('#admin1_count').html(window.grid_data[details.admin1_grid_id].count)
                 }
               }
               if ( details.admin2_grid_id ) {
-                list.append( `
-                              <li id="admin2_wrapper" class="accordion-item" data-accordion-item>
-                                <a href="#" class="accordion-title">${details.admin2_name} : <span id="admin2_count">0</span></a>
-                                <div class="accordion-content" data-tab-content><div id="admin2_list"  class="grid-x"></div></div>
-                              </li>
+                  list.append( `
+                            <div class="cell small-6"></div><div class="cell small-6" style="border-left: 1px solid lightgrey"></div>
+                              <div id="admin2_wrapper" class="cell callout center">
+                               <h4>${details.admin2_name}</h4><h4><span id="admin2_count">0</span></h4>
+                              </div>
                             `)
 
-                let level_list = jQuery('#admin2_list')
-                if ( details.admin2_grid_id in window.user_list ) {
-                  jQuery('#admin2_count').html(window.user_list[details.admin2_grid_id].length)
-                  jQuery.each(window.user_list[details.admin2_grid_id], function(i,v) {
-                    level_list.append(`
-                              <div class="cell  align-self-middle" data-id="${v.grid_meta_id}">
-                                <a href="/${post_type}/${v.post_id}">
-                                  ${v.name}
-                                </a>
-                              </div>
-                              `)
-                  })
+                if ( details.admin2_grid_id in window.grid_data ) {
+                  jQuery('#admin2_count').html(window.grid_data[details.admin2_grid_id].count)
+
                 }
               }
 
-              jQuery('.accordion-item').last().addClass('is-active')
-              list.foundation()
               /* end hierarchy list */
-
-              jQuery( '.mapbox-delete-button' ).on( "click", function(e) {
-
-                let data = {
-                  location_grid_meta: {
-                    values: [
-                      {
-                        grid_meta_id: e.currentTarget.dataset.id,
-                        delete: true,
-                      }
-                    ]
-                  }
-                }
-
-                let post_id = e.currentTarget.dataset.postid
-
-                API.update_post( 'contacts', post_id, data ).then(function (response) {
-                  jQuery('div[data-id='+e.currentTarget.dataset.id+']').remove()
-                }).catch(err => { console.error(err) })
-
-              });
 
             }); // end geocode
         }
