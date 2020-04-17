@@ -75,6 +75,7 @@ class DT_Network_Dashboard_UI
             $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#users' ) ) . '" onclick="write_area(\'user_settings\')" >' . esc_html__( 'Users' ) . '</a></li>';
             $content .= '</ul></li>';
 
+            /*
             $content .= '<li><a>' . esc_html__( 'Cluster Maps' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="cluster">';
             $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/cluster/#contacts' ) ) . '"  onclick="write_cluster(\'contact_settings\')" >' . esc_html__( 'Contacts' ) . '</a></li>';
             $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/cluster/#groups' ) ) . '"  onclick="write_cluster(\'group_settings\')">' . esc_html__( 'Groups' ) . '</a></li>';
@@ -86,8 +87,7 @@ class DT_Network_Dashboard_UI
             $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/points/#groups' ) ) . '">' . esc_html__( 'Groups' ) . '</a></li>';
             $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/points/#users' ) ) . '">' . esc_html__( 'Users' ) . '</a></li>';
             $content .= '</ul></li>';
-
-
+            */
 
         } else {
             $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_view" onclick="mapping_view()">' . esc_html__( 'Map' ) . '</a></li>';
