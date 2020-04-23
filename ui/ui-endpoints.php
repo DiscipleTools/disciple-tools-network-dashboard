@@ -55,22 +55,14 @@ class DT_Network_Dashboard_UI_Endpoints
     } // End __construct()
 
     public function add_api_routes() {
-        register_rest_route(
-            $this->namespace,
-            '/network/ui/trigger_transfer',
-            [
-                'methods'  => 'POST',
-                'callback' => [ $this, 'trigger_transfer' ],
-            ]
-        );
-        register_rest_route(
-            $this->namespace,
-            '/network/ui/get_snapshot',
-            [
-                'methods'  => 'POST',
-                'callback' => [ $this, 'get_snapshot' ],
-            ]
-        );
+//        register_rest_route(
+//            $this->namespace,
+//            '/network/ui/get_snapshot',
+//            [
+//                'methods'  => 'POST',
+//                'callback' => [ $this, 'get_snapshot' ],
+//            ]
+//        );
     }
 
     /**
@@ -78,20 +70,6 @@ class DT_Network_Dashboard_UI_Endpoints
      *
      * @return array|WP_Error
      */
-    public function trigger_transfer( WP_REST_Request $request ) {
-
-        if ( ! user_can( get_current_user_id(), 'network_dashboard_viewer' ) ) {
-            return new WP_Error( __METHOD__, 'Permission error.' );
-        }
-
-        $params = $request->get_params();
-        if ( isset( $params['id'] ) && isset( $params['type'] ) ) {
-            return DT_Network_Dashboard_Reports::trigger_transfer( $params['id'], $params['type'] );
-        } else {
-            return new WP_Error( __METHOD__, 'Missing parameters.' );
-        }
-    }
-
     public function get_snapshot( WP_REST_Request $request ) {
         if ( ! user_can( get_current_user_id(), 'network_dashboard_viewer' ) ) {
             return new WP_Error( __METHOD__, 'Permission error.' );

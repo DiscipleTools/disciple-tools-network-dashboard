@@ -2,42 +2,42 @@
 
 class DT_Network_Dashboard_Queries {
 
-    public static function check_sum_list( int $site_post_id ) : array {
-        global $wpdb;
+//    public static function check_sum_list( int $site_post_id ) : array {
+//        global $wpdb;
+//
+//        $partner_id = get_post_meta( $site_post_id, 'partner_id', true );
+//        $results = $wpdb->get_results( $wpdb->prepare( "
+//                SELECT foreign_key, check_sum
+//                FROM $wpdb->dt_network_locations
+//                WHERE partner_id = %s
+//                ",
+//        $partner_id),
+//        ARRAY_A );
+//
+//        if ( empty( $results ) ) {
+//            $results = [];
+//        }
+//
+//        return $results;
+//    }
 
-        $partner_id = get_post_meta( $site_post_id, 'partner_id', true );
-        $results = $wpdb->get_results( $wpdb->prepare( "
-                SELECT foreign_key, check_sum 
-                FROM $wpdb->dt_network_locations 
-                WHERE partner_id = %s
-                ",
-        $partner_id),
-        ARRAY_A );
-
-        if ( empty( $results ) ) {
-            $results = [];
-        }
-
-        return $results;
-    }
-
-    public static function get_report_by_id( int $id ) : array {
-        global $wpdb;
-        $results = $wpdb->get_results( $wpdb->prepare( "
-                SELECT * 
-                FROM $wpdb->dt_network_reports 
-                WHERE id = %s
-                ",
-            $id
-        ),
-        ARRAY_A);
-
-        if ( empty( $results ) ) {
-            $results = [];
-        }
-
-        return $results;
-    }
+//    public static function get_report_by_id( int $id ) : array {
+//        global $wpdb;
+//        $results = $wpdb->get_results( $wpdb->prepare( "
+//                SELECT *
+//                FROM $wpdb->dt_network_reports
+//                WHERE id = %s
+//                ",
+//            $id
+//        ),
+//        ARRAY_A);
+//
+//        if ( empty( $results ) ) {
+//            $results = [];
+//        }
+//
+//        return $results;
+//    }
 
     public static function site_link_list() : array {
         global $wpdb;
@@ -87,7 +87,7 @@ class DT_Network_Dashboard_Queries {
                   AND d.meta_key = 'partner_id'
                 WHERE a.post_type = 'site_link_system'
                   AND a.post_status = 'publish'
-                  ORDER BY name ASC
+                  ORDER BY name
             ",
         ARRAY_A );
 

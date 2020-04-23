@@ -128,7 +128,7 @@ function dt_get_multisite_snapshot( $blog_id ) {
         // retry connection in 3 seconds
         sleep( 5 );
         dt_save_log( $file, 'RETRY ID: ' . $blog_id . ' (Payload = FAIL)' );
-        $snapshot = Disciple_Tools_Snapshot_Report::snapshot_report();
+        $snapshot = Disciple_Tools_Snapshot_Report::snapshot_report( true ); // @todo remove true after development
         if ( $snapshot['status'] == 'FAIL' ) {
 
             dt_save_log( $file, 'FAIL ID: ' . $blog_id . ' (Unable to run snapshot report for '.$blog_id.')' );
