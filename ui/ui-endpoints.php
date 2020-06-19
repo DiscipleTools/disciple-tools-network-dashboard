@@ -51,7 +51,7 @@ class DT_Network_Dashboard_UI_Endpoints
     public function __construct() {
         $this->namespace = "dt/v" . intval( $this->version );
         $this->public_namespace = "dt-public/v" . intval( $this->version );
-        add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
+//        add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
     } // End __construct()
 
     public function add_api_routes() {
