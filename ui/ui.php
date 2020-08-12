@@ -32,7 +32,6 @@ class DT_Network_Dashboard_UI
                 add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 199 );
 
                 if ('network' === $url_path) {
-                    dt_write_log('network');
                     add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
                     add_filter( 'dt_mapping_module_data', [ $this, 'filter_mapping_module_data' ], 50, 1 );
                 }

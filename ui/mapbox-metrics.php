@@ -16,7 +16,7 @@ class DT_Dashboard_Mapbox_Metrics  {
     public $sites;
     public $js_file_name = 'mapbox-metrics.js'; // should be full file name plus extension
     public $permissions = [ 'view_any_contacts', 'view_project_metrics' ];
-    public $namespace = "network/mapbox/";
+    public $namespace = "network/mapbox";
 
     private static $_instance = null;
 
@@ -50,7 +50,7 @@ class DT_Dashboard_Mapbox_Metrics  {
     public function add_api_routes() {
 
         register_rest_route(
-            $this->namespace, 'cluster_geojson', [
+            $this->namespace, '/cluster_geojson', [
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'cluster_geojson' ],
@@ -58,7 +58,7 @@ class DT_Dashboard_Mapbox_Metrics  {
             ]
         );
         register_rest_route(
-            $this->namespace, 'grid_totals', [
+            $this->namespace, '/grid_totals', [
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'grid_totals' ],
@@ -66,7 +66,7 @@ class DT_Dashboard_Mapbox_Metrics  {
             ]
         );
         register_rest_route(
-            $this->namespace, 'get_grid_list', [
+            $this->namespace, '/get_grid_list', [
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'get_grid_list' ],
@@ -74,7 +74,7 @@ class DT_Dashboard_Mapbox_Metrics  {
             ]
         );
         register_rest_route(
-            $this->namespace, 'grid_country_totals', [
+            $this->namespace, '/grid_country_totals', [
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'grid_country_totals' ],
@@ -82,7 +82,7 @@ class DT_Dashboard_Mapbox_Metrics  {
             ]
         );
         register_rest_route(
-            $this->namespace, 'points_geojson', [
+            $this->namespace, '/points_geojson', [
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'points_geojson' ],
