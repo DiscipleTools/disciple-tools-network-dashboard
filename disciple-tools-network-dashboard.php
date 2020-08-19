@@ -121,6 +121,12 @@ class DT_Network_Dashboard {
      */
     private function includes() {
 
+        if ( get_option( 'dt_network_enabled' ) ) {
+            require_once( 'v1/network-endpoints.php' );
+        }
+        require_once( 'v1/network.php' );
+        require_once( 'v1/network-queries.php' );
+
         require_once( 'admin/permissions.php' );
         require_once( 'admin/queries.php' );
         require_once( 'admin/customize-site-linking.php' ); // loads capabilities
@@ -166,7 +172,6 @@ class DT_Network_Dashboard {
             }
         }
 
-
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );
         }
@@ -194,6 +199,17 @@ class DT_Network_Dashboard {
         // Admin and settings variables
         $this->token             = 'dt_network_dashboard';
         $this->version             = '0.1';
+
+        // setup partner profile
+        if (!get_option('dt_site_partner_profile')) {
+            $partner_profile = [
+                'partner_name' => get_option('blogname'),
+                'partner_description' => get_option('blogdescription'),
+                'partner_id' => Site_Link_System::generate_token(40),
+                'partner_url' => site_url()
+            ];
+            update_option('dt_site_partner_profile', $partner_profile, true);
+        }
 
     }
 

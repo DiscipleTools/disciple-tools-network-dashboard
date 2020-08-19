@@ -93,10 +93,8 @@ class DT_Network_Dashboard_Menu {
         $link = 'admin.php?page='.$this->token.'&tab=';
 
         if ( dt_multisite_network_dashboard_is_approved() ) {
-            $snapshot_tab = 'Remote Snapshots';
             $approved_multisite = true;
         } else {
-            $snapshot_tab = 'Snapshots';
             $approved_multisite = false;
         }
 
@@ -106,19 +104,20 @@ class DT_Network_Dashboard_Menu {
             <h2 class="nav-tab-wrapper">
                 <a href="<?php echo esc_attr( $link ) . 'general' ?>" class="nav-tab
                 <?php ( $tab == 'general' || ! isset( $tab ) ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
-                    <?php esc_attr_e( 'Overview', 'dt_network_dashboard' ) ?></a>
+                    Local Site Configuration
+                </a>
 
                 <a href="<?php echo esc_attr( $link ) . 'remote-snapshots' ?>" class="nav-tab
                 <?php echo ( $tab == 'remote-snapshots' ) ? 'nav-tab-active' : ''; ?>">
-                    <?php echo $snapshot_tab ?>
+                    Remote Sites
                 </a>
 
                 <?php if ( $approved_multisite ) :  // check if approved multisite dashboard?>
 
-                <a href="<?php echo esc_attr( $link ) . 'multisite-snapshots' ?>" class="nav-tab
-                    <?php echo ( $tab == 'multisite-snapshots' ) ? 'nav-tab-active' : ''; ?>">
-                    <?php echo 'Multisite/Local Snapshots' ?>
-                </a>
+                    <a href="<?php echo esc_attr( $link ) . 'multisite-snapshots' ?>" class="nav-tab
+                        <?php echo ( $tab == 'multisite-snapshots' ) ? 'nav-tab-active' : ''; ?>">
+                        Multisite Sites
+                    </a>
 
                 <?php endif; ?>
 
@@ -158,15 +157,20 @@ class DT_Network_Dashboard_Tab_General
                     <div id="post-body-content">
                         <!-- Main Column -->
 
-                        <?php $this->overview_message() ?>
+
+                        <?php $this->partner_profile_box() ?>
+                        <?php $this->side_box() ?>
+                        <?php $this->admin_site_link_box() ?>
+
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
                     <div id="postbox-container-1" class="postbox-container">
                         <!-- Right Column -->
 
-                        <?php $this->side_box() ?>
                         <?php $this->mapbox_status() ?>
+                        <?php $this->overview_message() ?>
+                        <?php $this->admin_test_send_box() ?>
 
                         <!-- End Right Column -->
                     </div><!-- postbox-container 1 -->
@@ -296,6 +300,166 @@ class DT_Network_Dashboard_Tab_General
         <?php
     }
 
+    public function partner_profile_box()
+    {
+        // process post action
+        if (isset($_POST['partner_profile_form'])
+            && isset($_POST['_wpnonce'])
+            && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'])), 'partner_profile' . get_current_user_id())
+            && isset($_POST['partner_name'])
+            && isset($_POST['partner_description'])
+            && isset($_POST['partner_id'])
+        ) {
+            $partner_profile = [
+                'partner_name' => sanitize_text_field(wp_unslash($_POST['partner_name'])) ?: get_option('blogname'),
+                'partner_description' => sanitize_text_field(wp_unslash($_POST['partner_description'])) ?: get_option('blogdescription'),
+                'partner_id' => sanitize_text_field(wp_unslash($_POST['partner_id'])) ?: Site_Link_System::generate_token(40),
+            ];
+
+            update_option('dt_site_partner_profile', $partner_profile, true);
+        }
+        $partner_profile = get_option('dt_site_partner_profile');
+
+        ?>
+        <!-- Box -->
+        <form method="post">
+            <?php wp_nonce_field('partner_profile' . get_current_user_id()); ?>
+            <table class="widefat striped">
+                <thead>
+                <tr><th>Network Profile</th></tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <table class="widefat">
+                            <tbody>
+                            <tr>
+                                <td><label for="partner_name">Your Group Name</label></td>
+                                <td><input type="text" class="regular-text" name="partner_name"
+                                           id="partner_name"
+                                           value="<?php echo esc_html($partner_profile['partner_name']) ?>"/></td>
+                            </tr>
+                            <tr>
+                                <td><label for="partner_description">Your Group Description</label></td>
+                                <td><input type="text" class="regular-text" name="partner_description"
+                                           id="partner_description"
+                                           value="<?php echo esc_html($partner_profile['partner_description']) ?>"/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><label for="partner_id">Site ID</label></td>
+                                <td><?php echo esc_attr($partner_profile['partner_id']) ?>
+                                    <input type="hidden" class="regular-text" name="partner_id"
+                                           id="partner_id"
+                                           value="<?php echo esc_attr($partner_profile['partner_id']) ?>"/></td>
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <p><br>
+                            <button type="submit" id="partner_profile_form" name="partner_profile_form"
+                                    class="button">Update
+                            </button>
+                        </p>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function admin_test_send_box()
+    {
+        $report = false;
+        if (isset($_POST['test_send_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['test_send_nonce'])), 'test_send_' . get_current_user_id())) {
+            $report = Disciple_Tools_Snapshot_Report::snapshot_report();
+
+        }
+        ?>
+        <table class="widefat striped">
+            <thead>
+                <tr>
+                    <th>Site Links</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <form method="post">
+                            <?php wp_nonce_field('test_send_' . get_current_user_id(), 'test_send_nonce', false, true) ?>
+                            <button type="submit" name="send_test" class="button"><?php esc_html_e('Send Test') ?></button>
+                        </form>
+                        <?php
+                        if ($report) {
+                            echo esc_html(maybe_serialize($report));
+                        }
+                    ?></td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <?php
+    }
+
+    public function admin_site_link_box()
+    {
+        global $wpdb;
+
+        $site_links = $wpdb->get_results("
+        SELECT p.ID, p.post_title, pm.meta_value as type
+            FROM $wpdb->posts as p
+              LEFT JOIN $wpdb->postmeta as pm
+              ON p.ID=pm.post_id
+              AND pm.meta_key = 'type'
+            WHERE p.post_type = 'site_link_system'
+              AND p.post_status = 'publish'
+        ", ARRAY_A);
+
+        ?>
+        <table class="widefat striped">
+            <thead>
+                <tr><th>Site Links</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+        <?php
+
+        if (!is_array($site_links)) {
+            echo 'No site links found. Go to <a href="' . esc_url(admin_url()) . 'edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type."';
+        }
+
+        echo '<h2>Can Send Reports to these Sites</h2>';
+        foreach ($site_links as $site) {
+            if ('network_dashboard_sending' === $site['type'] || 'network_dashboard_both' === $site['type'] ) {
+                echo '<dd><a href="' . esc_url(admin_url()) . 'post.php?post=' . esc_attr($site['ID']) . '&action=edit">' . esc_html($site['post_title']) . '</a></dd>';
+            }
+        }
+
+        echo '<h2>Can Receive Reports from these Sites</h2>';
+        foreach ($site_links as $site) {
+            if ('network_dashboard_receiving' === $site['type'] || 'network_dashboard_both' === $site['type'] ) {
+                echo '<dd><a href="' . esc_url(admin_url()) . 'post.php?post=' . esc_attr($site['ID']) . '&action=edit">' . esc_html($site['post_title']) . '</a></dd>';
+            }
+        }
+
+        echo '<h2>Non-Dashboard Site Links</h2>';
+        foreach ($site_links as $site) {
+            if (!('network_dashboard_sending' === $site['type'] || 'network_dashboard_receiving' === $site['type'] || 'network_dashboard_both' === $site['type'] ) ) {
+                echo '<dd><a href="' . esc_url(admin_url()) . 'post.php?post=' . esc_attr($site['ID']) . '&action=edit">' . esc_html($site['post_title']) . '</a></dd>';
+            }
+        }
+
+        echo '<hr><p style="font-size:.8em;">Note: Network Dashboards are Site Links that have the "Connection Type" of "Network Dashboard Sending".</p>';
+
+        ?>
+        </td></tr></tbody></table><br>
+        <?php
+    }
+
 }
 
 
@@ -307,6 +471,7 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
             <div id="poststuff">
                 <div id="post-body" class="metabox-holder columns-1">
                     <div id="post-body-content">
+
                         <!-- Main Column -->
                         <?php $this->process_full_list() ?>
                         <?php $this->main_column() ?>
