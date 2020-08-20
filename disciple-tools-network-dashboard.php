@@ -1,9 +1,9 @@
 <?php
 /**
  * Plugin Name: Disciple Tools - Network Dashboard
- * Plugin URI: https://github.com/ZumeProject/disciple-tools-network-dashboard
- * Description: Adds network mapping data.
- * Version: 0.1
+ * Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
+ * Description: Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging.
+ * Version: 2.0
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
  * Requires at least: 4.7.0
@@ -121,9 +121,7 @@ class DT_Network_Dashboard {
      */
     private function includes() {
 
-        if ( get_option( 'dt_network_enabled' ) ) {
-            require_once( 'v1/network-endpoints.php' );
-        }
+        require_once( 'v1/network-endpoints.php' );
         require_once( 'v1/network.php' );
         require_once( 'v1/network-queries.php' );
 
@@ -137,7 +135,6 @@ class DT_Network_Dashboard {
 
         // adds charts and metrics to the network tab
         require_once( 'ui/ui.php' );
-//        require_once( 'ui/ui-endpoints.php' );
         require_once( 'ui/mapbox-metrics.php' );
 
         require_once( 'cron/cron-log.php' );
@@ -198,7 +195,7 @@ class DT_Network_Dashboard {
 
         // Admin and settings variables
         $this->token             = 'dt_network_dashboard';
-        $this->version             = '0.1';
+        $this->version             = '2.0';
 
         // setup partner profile
         if (!get_option('dt_site_partner_profile')) {

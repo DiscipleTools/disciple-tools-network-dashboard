@@ -600,11 +600,9 @@ class DT_Network_Dashboard_Tab_Local
                     <div id="post-body-content">
                         <!-- Main Column -->
 
-
                         <?php $this->box_partner_profile() ?>
                         <?php $this->box_top_nav_item() ?>
                         <?php $this->box_mapbox_status() ?>
-
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
