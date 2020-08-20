@@ -14,6 +14,11 @@ if (!defined('ABSPATH')) {
 
 if (!class_exists('Disciple_Tools_Network')) {
 
+    /**
+     * Class Disciple_Tools_Network
+     *
+     * Classe emptied and incorporated to dashboard
+     */
     class Disciple_Tools_Network
     {
 
@@ -27,246 +32,11 @@ if (!class_exists('Disciple_Tools_Network')) {
             return self::$_instance;
         }
 
-        public function __construct()
-        {
-
-//            if (get_option('dt_network_enabled')) {
-
-//                add_filter('site_link_type', [$this, 'site_link_type'], 10, 1);
-//                add_filter('site_link_type_capabilities', [$this, 'site_link_capabilities'], 10, 1);
-
-//            }
-
-//            if (is_admin()) {
-//
-//                // set partner details
-//                if (!get_option('dt_site_partner_profile')) {
-//                    self::create_partner_profile();
-//                }
-//            }
-        }
-
-//        public static function create_partner_profile()
-//        {
-//            $partner_profile = [
-//                'partner_name' => get_option('blogname'),
-//                'partner_description' => get_option('blogdescription'),
-//                'partner_id' => Site_Link_System::generate_token(40),
-//                'partner_url' => site_url(),
-//            ];
-//            update_option('dt_site_partner_profile', $partner_profile, true);
-//            return $partner_profile;
-//        }
-
-        /**
-         * @see /dt-core/admin/menu/tabs/tab-network.php for the page shell
-         */
-        /*
-        public static function admin_network_enable_box()
-        {
-            if (isset($_POST['network_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['network_nonce'])), 'network' . get_current_user_id()) && isset($_POST['network_feature'])) {
-                update_option('dt_network_enabled', (int)sanitize_text_field(wp_unslash($_POST['network_feature'])), true);
-            }
-            $enabled = get_option('dt_network_enabled');
-            ?>
-
-            <form method="post">
-                <?php wp_nonce_field('network' . get_current_user_id(), 'network_nonce', false, true) ?>
-                <label for="network_feature">
-                    <?php esc_html_e('Network Extension') ?>
-                </label>
-                <select name="network_feature" id="network_feature">
-                    <option value="0" <?php echo $enabled ? '' : 'selected' ?>><?php esc_html_e('Disabled') ?></option>
-                    <option value="1" <?php echo $enabled ? 'selected' : '' ?>><?php esc_html_e('Enabled') ?></option>
-                </select>
-                <button type="submit" class="button"><?php esc_html_e('Save') ?></button>
-            </form>
-
-            <?php
-
-        }
-        */
-
-        /*
-        public static function admin_site_link_box()
-        {
-            global $wpdb;
-
-            $site_links = $wpdb->get_results("
-            SELECT p.ID, p.post_title, pm.meta_value as type
-                FROM $wpdb->posts as p
-                  LEFT JOIN $wpdb->postmeta as pm
-                  ON p.ID=pm.post_id
-                  AND pm.meta_key = 'type'
-                WHERE p.post_type = 'site_link_system'
-                  AND p.post_status = 'publish'
-            ", ARRAY_A);
-
-            if (!is_array($site_links)) {
-                echo 'No site links found. Go to <a href="' . esc_url(admin_url()) . 'edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type."';
-            }
-
-            echo '<h2>You are reporting to these Network Dashboards</h2>';
-            foreach ($site_links as $site) {
-                if ('network_dashboard_sending' === $site['type']) {
-                    echo '<dd><a href="' . esc_url(admin_url()) . 'post.php?post=' . esc_attr($site['ID']) . '&action=edit">' . esc_html($site['post_title']) . '</a></dd>';
-                }
-            }
-
-            echo '<h2>Other System Site-to-Site Links</h2>';
-            foreach ($site_links as $site) {
-                if (!('network_dashboard_sending' === $site['type'])) {
-                    echo '<dd><a href="' . esc_url(admin_url()) . 'post.php?post=' . esc_attr($site['ID']) . '&action=edit">' . esc_html($site['post_title']) . '</a></dd>';
-                }
-            }
-
-            echo '<hr><p style="font-size:.8em;">Note: Network Dashboards are Site Links that have the "Connection Type" of "Network Dashboard Sending".</p>';
-        }
-        */
-
-        /*
-        public static function admin_test_send_box()
-        {
-            $report = false;
-            if (isset($_POST['test_send_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['test_send_nonce'])), 'test_send_' . get_current_user_id())) {
-                $report = Disciple_Tools_Snapshot_Report::snapshot_report();
-
-            }
-            ?>
-
-            <form method="post">
-                <?php wp_nonce_field('test_send_' . get_current_user_id(), 'test_send_nonce', false, true) ?>
-                <button type="submit" name="send_test" class="button"><?php esc_html_e('Send Test') ?></button>
-            </form>
-            <?php
-            if ($report) {
-                echo esc_html(maybe_serialize($report));
-            }
-        }
-        */
-
-        /*
-        public static function admin_partner_profile_box()
-        {
-            // process post action
-            if (isset($_POST['partner_profile_form'])
-                && isset($_POST['_wpnonce'])
-                && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'])), 'partner_profile' . get_current_user_id())
-                && isset($_POST['partner_name'])
-                && isset($_POST['partner_description'])
-                && isset($_POST['partner_id'])
-            ) {
-                $partner_profile = [
-                    'partner_name' => sanitize_text_field(wp_unslash($_POST['partner_name'])) ?: get_option('blogname'),
-                    'partner_description' => sanitize_text_field(wp_unslash($_POST['partner_description'])) ?: get_option('blogdescription'),
-                    'partner_id' => sanitize_text_field(wp_unslash($_POST['partner_id'])) ?: Site_Link_System::generate_token(40),
-                ];
-
-                update_option('dt_site_partner_profile', $partner_profile, true);
-            }
-            $partner_profile = get_option('dt_site_partner_profile');
-
-            ?>
-            <!-- Box -->
-            <form method="post">
-                <?php wp_nonce_field('partner_profile' . get_current_user_id()); ?>
-                <table class="widefat striped">
-                    <thead>
-                    <th>Network Profile</th>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td>
-                            <table class="widefat">
-                                <tbody>
-                                <tr>
-                                    <td><label for="partner_name">Your Group Name</label></td>
-                                    <td><input type="text" class="regular-text" name="partner_name"
-                                               id="partner_name"
-                                               value="<?php echo esc_html($partner_profile['partner_name']) ?>"/></td>
-                                </tr>
-                                <tr>
-                                    <td><label for="partner_description">Your Group Description</label></td>
-                                    <td><input type="text" class="regular-text" name="partner_description"
-                                               id="partner_description"
-                                               value="<?php echo esc_html($partner_profile['partner_description']) ?>"/>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><label for="partner_id">Site ID</label></td>
-                                    <td><?php echo esc_attr($partner_profile['partner_id']) ?>
-                                        <input type="hidden" class="regular-text" name="partner_id"
-                                               id="partner_id"
-                                               value="<?php echo esc_attr($partner_profile['partner_id']) ?>"/></td>
-                                </tr>
-                                </tbody>
-                            </table>
-
-                            <p><br>
-                                <button type="submit" id="partner_profile_form" name="partner_profile_form"
-                                        class="button">Update
-                                </button>
-                            </p>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
-            </form>
-            <br>
-            <!-- End Box -->
-            <?php
-        }
-        */
-
-
-//        public function site_link_type($type)
-//        {
-//            $type['network_dashboard_sending'] = __('Network Dashboard Sending');
-//            return $type;
-//        }
-//
-//        public function site_link_capabilities($args)
-//        {
-//            if ('network_dashboard_sending' == $args['connection_type']) {
-//                $args['capabilities'][] = 'network_dashboard_transfer';
-//            }
-//            return $args;
-//        }
+        public function __construct(){}
 
     }
 }
 Disciple_Tools_Network::instance();
-
-
-/**
- * Helper function to get the partner profile id.
- * @return mixed
- */
-if ( ! function_exists( 'dt_get_partner_profile_id') ) {
-    function dt_get_partner_profile_id()
-    {
-        $partner_profile = get_option('dt_site_partner_profile');
-        if (!isset($partner_profile['partner_id'])) {
-            $partner_profile = Disciple_Tools_Network::create_partner_profile();
-        }
-        return $partner_profile['partner_id'];
-    }
-}
-
-/**
- * Helper function to get the partner profile id.
- * @return mixed
- */
-if ( ! function_exists( 'dt_get_partner_profile') ) {
-    function dt_get_partner_profile()
-    {
-        $partner_profile = get_option('dt_site_partner_profile');
-        if (empty($partner_profile)) {
-            $partner_profile = Disciple_Tools_Network::create_partner_profile();
-        }
-        return $partner_profile;
-    }
-}
 
 
 // Begin Schedule daily cron build
@@ -333,7 +103,7 @@ if ( ! class_exists('Disciple_Tools_Snapshot_Report' ) ) {
                 return get_option('dt_snapshot_report');
             }
 
-            $profile = dt_get_partner_profile();
+            $profile = dt_network_site_profile();
 
             $report_data = [
                 'partner_id' => $profile['partner_id'],

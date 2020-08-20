@@ -32,10 +32,10 @@ function dt_get_log_location( $name, $type = null ) {
         mkdir( WP_CONTENT_DIR . '/uploads/network-dashboard/', 0777, true );
     }
     if ( 'url' === $type ) {
-        return set_url_scheme( WP_CONTENT_URL, 'https' ) . '/uploads/network-dashboard/' . md5( dt_get_partner_profile_id() ) . '-' . $name . '.txt';
+        return set_url_scheme( WP_CONTENT_URL, 'https' ) . '/uploads/network-dashboard/' . md5( dt_network_site_id() ) . '-' . $name . '.txt';
     }
     else {
         // default returns path
-        return WP_CONTENT_DIR . '/uploads/network-dashboard/' . md5( dt_get_partner_profile_id() ) . '-' . $name . '.txt';
+        return WP_CONTENT_DIR . '/uploads/network-dashboard/' . md5( dt_network_site_id() ) . '-' . $name . '.txt';
     }
 }

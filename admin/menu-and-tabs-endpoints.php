@@ -83,8 +83,8 @@ class DT_Network_Dashboard_Admin_Endpoints
         spawn_cron();
 
         return true;
-//        return DT_Get_Sites_SnapShot_Async::force_run_action();
     }
+
     public static function remote_snapshot_action(){
         do_action( "dt_get_sites_snapshot" );
     }
