@@ -135,6 +135,11 @@ class DT_Network_Dashboard_Menu {
                     Tutorials
                 </a>
 
+                <a href="<?php echo esc_attr( $link ) . 'test' ?>" class="nav-tab
+                <?php echo ( $tab == 'test' ) ? 'nav-tab-active' : ''; ?>">
+                    Test
+                </a>
+
             </h2>
 
             <?php
@@ -154,6 +159,85 @@ class DT_Network_Dashboard_Menu {
                 case "tutorials":
                     $object = new DT_Network_Dashboard_Tab_Tutorial();
                     $object->content();
+                    break;
+                case "test":
+                    $params = json_encode( [
+                        'transfer_token' => Site_Link_System::create_transfer_token_for_site( Site_Link_System::instance()->get_site_key_by_id(8739) ),
+                        'data' => [
+                            [
+                                'site_id' => hash('sha256', 'site_id1'.rand ( 0 , 19999 )),
+                                'action' => 'action',
+                                'category' => 'ip',
+                                'location_type' => 'ip', // ip, grid, lnglat
+                                'location_value' => '184.96.211.187',
+                                'payload' => [
+                                    'initials' => 'CC',
+                                    'group_size' => '3',
+                                    'country' => 'United States',
+                                    'language' => 'en',
+                                    'note' => 'This is the full note'.time()
+                                ],
+                                'timestamp' => ''
+                            ],
+                            [
+                                'site_id' => hash('sha256', 'site_id5'.rand ( 0 , 19999 )),
+                                'action' => 'action',
+                                'category' => 'grid',
+                                'location_type' => 'grid', // ip, grid, lnglat
+                                'location_value' => '100364508',
+                                'payload' => [
+                                    'initials' => 'CC',
+                                    'group_size' => '3',
+                                    'country' => 'United States',
+                                    'language' => 'en',
+                                    'note' => 'This is the full note'.time()
+                                ],
+                                'timestamp' => ''
+                            ],
+                            [
+                                'site_id' => hash('sha256', 'site_id2'.rand ( 0 , 19999 )),
+                                'action' => 'action',
+                                'category' => 'lnglat',
+                                'location_type' => 'lnglat', // ip, grid, lnglat
+                                'location_value' => [
+                                    'lng' => '-104.968',
+                                    'lat' => '39.7075',
+                                    'level' => 'admin2',
+                                ],
+                                'payload' => [
+                                    'initials' => 'CC',
+                                    'group_size' => '3',
+                                    'country' => 'Slovenia',
+                                    'language' => 'en',
+                                    'note' => 'This is the full note'.time()
+                                ],
+                                'timestamp' => ''
+                            ],
+                            [
+                                'site_id' => hash('sha256', 'site_id3'.rand ( 0 , 19999 )),
+                                'action' => 'action',
+                                'category' => 'complete',
+                                'location_type' => 'complete', // ip, grid, lnglat
+                                'location_value' => [
+                                    'lng' => '-104.968',
+                                    'lat' => '39.7075',
+                                    'level' => 'admin2',
+                                    'label' => 'Denver, Colorado, US',
+                                    'grid_id' => '100364508'
+                                ], // ip, grid, lnglat
+                                'payload' => [
+                                    'initials' => 'CC',
+                                    'group_size' => '3',
+                                    'country' => 'United States',
+                                    'language' => 'en',
+                                    'note' => 'This is the full note'.time()
+                                ],
+                                'timestamp' => ''
+                            ],
+                        ]
+                    ]);
+                    $response = wp_remote_post('https://global.zume.community.local/wp-content/plugins/disciple-tools-network-dashboard/activity/log.php', $params);
+                    dt_write_log( json_decode( $response['body'], true ) );
                     break;
                 default:
                     break;
@@ -603,6 +687,7 @@ class DT_Network_Dashboard_Tab_Local
                         <?php $this->box_partner_profile() ?>
                         <?php $this->box_top_nav_item() ?>
                         <?php $this->box_mapbox_status() ?>
+                        <?php $this->box_ipstack_api_key() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -741,6 +826,10 @@ class DT_Network_Dashboard_Tab_Local
         <br>
         <!-- End Box -->
         <?php
+    }
+
+    public function box_ipstack_api_key(){
+        DT_Ipstack_API::metabox_for_admin();
     }
 
     public function box_partner_profile()
