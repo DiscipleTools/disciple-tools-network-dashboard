@@ -10,7 +10,7 @@ class DT_Network_Dashboard_Site_Profile_Metabox {
         if ( isset( $_GET['post'] ) && 'post.php' === $pagenow ) {
             $post_id = sanitize_key( wp_unslash( $_GET['post'] ) );
 
-            if ( 'network_dashboard' === get_post_meta( $post_id, 'type', true )
+            if ( 'network_dashboard' === substr( get_post_meta( $post_id, 'type', true ), 0, 17 )
                 ) {
                 add_action( 'admin_menu', [ $this, 'meta_box_setup' ], 20 );
                 add_filter( "site_link_fields_settings", [ $this, 'network_field_filter' ], 1, 1 );

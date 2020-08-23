@@ -127,6 +127,8 @@ class DT_Network_Dashboard {
         require_once( 'v1/network.php' );
         require_once( 'v1/network-queries.php' );
 
+        require_once( 'activity/activity-log.php');
+
         require_once( 'admin/permissions.php' );
         require_once( 'admin/queries.php' );
         require_once( 'admin/customize-site-linking.php' ); // loads capabilities
@@ -142,7 +144,6 @@ class DT_Network_Dashboard {
         require_once( 'cron/cron-log.php' );
 
         require_once( 'admin/mapping-module-config.php' );
-
 
         if ( file_exists( get_theme_file_path() . '/dt-core/wp-async-request.php' ) ) {
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
@@ -174,6 +175,7 @@ class DT_Network_Dashboard {
         require_once('admin/menu-and-tabs-endpoints.php');
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );
+            require_once( 'admin/metabox-site-profile.php' );
         }
     }
 

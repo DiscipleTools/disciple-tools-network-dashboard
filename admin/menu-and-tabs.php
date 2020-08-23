@@ -161,84 +161,10 @@ class DT_Network_Dashboard_Menu {
                     $object->content();
                     break;
                 case "test":
-                    $params = json_encode( [
-                        'transfer_token' => Site_Link_System::create_transfer_token_for_site( Site_Link_System::instance()->get_site_key_by_id(8739) ),
-                        'data' => [
-                            [
-                                'site_id' => hash('sha256', 'site_id1'.rand ( 0 , 19999 )),
-                                'action' => 'action',
-                                'category' => 'ip',
-                                'location_type' => 'ip', // ip, grid, lnglat
-                                'location_value' => '184.96.211.187',
-                                'payload' => [
-                                    'initials' => 'CC',
-                                    'group_size' => '3',
-                                    'country' => 'United States',
-                                    'language' => 'en',
-                                    'note' => 'This is the full note'.time()
-                                ],
-                                'timestamp' => ''
-                            ],
-                            [
-                                'site_id' => hash('sha256', 'site_id5'.rand ( 0 , 19999 )),
-                                'action' => 'action',
-                                'category' => 'grid',
-                                'location_type' => 'grid', // ip, grid, lnglat
-                                'location_value' => '100364508',
-                                'payload' => [
-                                    'initials' => 'CC',
-                                    'group_size' => '3',
-                                    'country' => 'United States',
-                                    'language' => 'en',
-                                    'note' => 'This is the full note'.time()
-                                ],
-                                'timestamp' => ''
-                            ],
-                            [
-                                'site_id' => hash('sha256', 'site_id2'.rand ( 0 , 19999 )),
-                                'action' => 'action',
-                                'category' => 'lnglat',
-                                'location_type' => 'lnglat', // ip, grid, lnglat
-                                'location_value' => [
-                                    'lng' => '-104.968',
-                                    'lat' => '39.7075',
-                                    'level' => 'admin2',
-                                ],
-                                'payload' => [
-                                    'initials' => 'CC',
-                                    'group_size' => '3',
-                                    'country' => 'Slovenia',
-                                    'language' => 'en',
-                                    'note' => 'This is the full note'.time()
-                                ],
-                                'timestamp' => ''
-                            ],
-                            [
-                                'site_id' => hash('sha256', 'site_id3'.rand ( 0 , 19999 )),
-                                'action' => 'action',
-                                'category' => 'complete',
-                                'location_type' => 'complete', // ip, grid, lnglat
-                                'location_value' => [
-                                    'lng' => '-104.968',
-                                    'lat' => '39.7075',
-                                    'level' => 'admin2',
-                                    'label' => 'Denver, Colorado, US',
-                                    'grid_id' => '100364508'
-                                ], // ip, grid, lnglat
-                                'payload' => [
-                                    'initials' => 'CC',
-                                    'group_size' => '3',
-                                    'country' => 'United States',
-                                    'language' => 'en',
-                                    'note' => 'This is the full note'.time()
-                                ],
-                                'timestamp' => ''
-                            ],
-                        ]
-                    ]);
-                    $response = wp_remote_post('https://global.zume.community.local/wp-content/plugins/disciple-tools-network-dashboard/activity/log.php', $params);
-                    dt_write_log( json_decode( $response['body'], true ) );
+                    $object = new DT_Network_Dashboard_Tab_Test();
+                    $object->content();
                     break;
+
                 default:
                     break;
             }
@@ -1057,6 +983,125 @@ class DT_Network_Dashboard_Tab_Tutorial
                         <dt>Title</dt>
                         <dd>Content</dd>
                     </dl>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function sidebar() {
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>Outline</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+}
+
+/**
+ * Class DT_Network_Dashboard_Tab_Tutorial
+ */
+class DT_Network_Dashboard_Tab_Test
+{
+    public function content() {
+        ?>
+        <div class="wrap">
+            <div id="poststuff">
+                <div id="post-body" class="metabox-holder columns-2">
+                    <div id="post-body-content">
+                        <!-- Main Column -->
+
+                        <?php $this->main() ?>
+
+                        <!-- End Main Column -->
+                    </div><!-- end post-body-content -->
+                    <div id="postbox-container-1" class="postbox-container">
+                        <!-- Right Column -->
+
+                        <?php $this->sidebar() ?>
+
+                        <!-- End Right Column -->
+                    </div><!-- postbox-container 1 -->
+                    <div id="postbox-container-2" class="postbox-container">
+                    </div><!-- postbox-container 2 -->
+                </div><!-- post-body meta box container -->
+            </div><!--poststuff end -->
+        </div><!-- wrap end -->
+        <?php
+    }
+
+    public function main() {
+        ?>
+        <style>dt { font-weight:bold;}</style>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>Test</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <?php
+                    $sites = Site_Link_System::get_list_of_sites_by_type(['network_dashboard_both', 'network_dashboard_sending'], 'post_ids');
+
+                    foreach( $sites as $site ) {
+                        $site_vars = Site_Link_System::get_site_connection_vars( $site );
+                        $args = [
+                            'method' => 'POST',
+                            'body' => [
+                                'transfer_token' => $site_vars['transfer_token'],
+                                'data' => [
+                                    [
+                                        'site_id' => dt_network_site_id(),
+                                        'action' => 'action',
+                                        'category' => 'complete',
+                                        'location_type' => 'complete', // ip, grid, lnglat
+                                        'location_value' => [
+                                            'lng' => '-104.968',
+                                            'lat' => '39.7075',
+                                            'level' => 'admin2',
+                                            'label' => 'Denver, Colorado, US',
+                                            'grid_id' => '100364508'
+                                        ], // ip, grid, lnglat
+                                        'payload' => [
+                                            'initials' => 'CC',
+                                            'group_size' => '3',
+                                            'country' => 'United States',
+                                            'language' => 'en',
+                                            'note' => 'This is the full note'.time()
+                                        ],
+                                        'timestamp' => ''
+                                    ],
+                                ]
+                            ]
+                        ];
+                        $response = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-content/plugins/disciple-tools-network-dashboard/activity/log.php', $args );
+                        DT_Network_Activity_Log::insert_log( $args['body']['data']);
+
+                        dt_write_log('remote post');
+                        if ( ! is_wp_error( $response ) ) {
+                            dt_write_log( json_decode( $response['body'], true ) );
+                        } else {
+                            dt_write_log($response);
+                            dt_write_log($site_vars);
+                        }
+                    }
+                    ?>
                 </td>
             </tr>
             </tbody>

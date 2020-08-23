@@ -1,6 +1,7 @@
 <?php
 
-class DT_Network_Activity_Log {
+
+class DT_Network_Activity_Log_Old {
     public $token = 'movement_log';
     public $title = 'Movement Log';
     public $permissions = 'manage_option';
