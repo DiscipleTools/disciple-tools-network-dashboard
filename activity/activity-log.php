@@ -1,16 +1,66 @@
 <?php
+if ( ! defined('ABSPATH')) {
+    exit;
+}
 
 class DT_Network_Activity_Log {
-    public static function recursive_sanitize_text_field( array $array ) : array {
-        foreach ( $array as $key => &$value ) {
-            if ( is_array( $value ) ) {
-                $value = self::recursive_sanitize_text_field($value);
-            }
-            else {
-                $value = sanitize_text_field( wp_unslash( $value ) );
+
+    /**
+     * Post Activity Log
+     * 
+     * @param $data
+     *
+     * @example
+     * $data = [
+            [
+                'site_id' => dt_network_site_id(),
+                'action' => 'action',
+                'category' => 'complete',
+                'location_type' => 'complete', // ip, grid, lnglat
+                'location_value' => [
+                    'lng' => '-104.968',
+                    'lat' => '39.7075',
+                    'level' => 'admin2',
+                    'label' => 'Denver, Colorado, US',
+                    'grid_id' => '100364508'
+                ], // ip, grid, lnglat
+                'payload' => [
+                    'initials' => 'CC',
+                    'group_size' => '3',
+                    'country' => 'United States',
+                    'language' => 'en',
+                    'note' => 'This is the full note'.time()
+                ],
+                'timestamp' => time()
+            ]
+        ];
+     */
+    public static function post_activity( $data ) {
+
+        $sites = Site_Link_System::get_list_of_sites_by_type(['network_dashboard_both', 'network_dashboard_sending'], 'post_ids');
+
+        foreach( $sites as $site ) {
+
+            $site_vars = Site_Link_System::get_site_connection_vars( $site );
+
+            $args = [
+                'method' => 'POST',
+                'body' => [
+                    'transfer_token' => $site_vars['transfer_token'],
+                    'data' => $data
+                ]
+            ];
+            $response = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-content/plugins/disciple-tools-network-dashboard/activity/log.php', $args );
+            DT_Network_Activity_Log::insert_log( $data );
+
+            dt_write_log('remote post');
+            if ( ! is_wp_error( $response ) ) {
+                dt_write_log( json_decode( $response['body'], true ) );
+            } else {
+                dt_write_log($response);
+                dt_write_log($site_vars);
             }
         }
-        return $array;
     }
 
     public static function insert_log( $data_array ) {
@@ -30,8 +80,6 @@ class DT_Network_Activity_Log {
         $process_status['start'] = microtime(true); // @todo remove after development
 
         foreach( $data_array as $activity ) {
-
-            global $wpdb;
 
             $data = [
                 'site_id' => '',
@@ -342,5 +390,17 @@ class DT_Network_Activity_Log {
         $process_status['stop'] = microtime(true); // @todo remove after development
 
         return $process_status;
+    }
+
+    public static function recursive_sanitize_text_field( array $array ) : array {
+        foreach ( $array as $key => &$value ) {
+            if ( is_array( $value ) ) {
+                $value = self::recursive_sanitize_text_field($value);
+            }
+            else {
+                $value = sanitize_text_field( wp_unslash( $value ) );
+            }
+        }
+        return $array;
     }
 }

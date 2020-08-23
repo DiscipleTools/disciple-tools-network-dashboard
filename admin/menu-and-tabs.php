@@ -1057,50 +1057,31 @@ class DT_Network_Dashboard_Tab_Test
             <tr>
                 <td>
                     <?php
-                    $sites = Site_Link_System::get_list_of_sites_by_type(['network_dashboard_both', 'network_dashboard_sending'], 'post_ids');
+                    $data = [
+                        [
+                            'site_id' => dt_network_site_id(),
+                            'action' => 'action',
+                            'category' => 'complete',
+                            'location_type' => 'complete', // ip, grid, lnglat
+                            'location_value' => [
+                                'lng' => '-104.968',
+                                'lat' => '39.7075',
+                                'level' => 'admin2',
+                                'label' => 'Denver, Colorado, US',
+                                'grid_id' => '100364508'
+                            ], // ip, grid, lnglat
+                            'payload' => [
+                                'initials' => 'CC',
+                                'group_size' => '3',
+                                'country' => 'United States',
+                                'language' => 'en',
+                                'note' => 'This is the full note'.time()
+                            ],
+                            'timestamp' => time()
+                        ]
+                    ];
+                    DT_Network_Activity_Log::post_activity($data);
 
-                    foreach( $sites as $site ) {
-                        $site_vars = Site_Link_System::get_site_connection_vars( $site );
-                        $args = [
-                            'method' => 'POST',
-                            'body' => [
-                                'transfer_token' => $site_vars['transfer_token'],
-                                'data' => [
-                                    [
-                                        'site_id' => dt_network_site_id(),
-                                        'action' => 'action',
-                                        'category' => 'complete',
-                                        'location_type' => 'complete', // ip, grid, lnglat
-                                        'location_value' => [
-                                            'lng' => '-104.968',
-                                            'lat' => '39.7075',
-                                            'level' => 'admin2',
-                                            'label' => 'Denver, Colorado, US',
-                                            'grid_id' => '100364508'
-                                        ], // ip, grid, lnglat
-                                        'payload' => [
-                                            'initials' => 'CC',
-                                            'group_size' => '3',
-                                            'country' => 'United States',
-                                            'language' => 'en',
-                                            'note' => 'This is the full note'.time()
-                                        ],
-                                        'timestamp' => ''
-                                    ],
-                                ]
-                            ]
-                        ];
-                        $response = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-content/plugins/disciple-tools-network-dashboard/activity/log.php', $args );
-                        DT_Network_Activity_Log::insert_log( $args['body']['data']);
-
-                        dt_write_log('remote post');
-                        if ( ! is_wp_error( $response ) ) {
-                            dt_write_log( json_decode( $response['body'], true ) );
-                        } else {
-                            dt_write_log($response);
-                            dt_write_log($site_vars);
-                        }
-                    }
                     ?>
                 </td>
             </tr>

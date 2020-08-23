@@ -3,7 +3,6 @@
 if (defined('ABSPATH')) {
     exit;
 }
-require_once('activity-log.php');
 
 function _dt_network_doing_it_wrong( string $message ) {
     header('Content-type: application/json');
@@ -45,6 +44,8 @@ require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-includes/meta.php'; //@phpcs:ignor
 if (!defined('WP_CONTENT_URL')) {
     define('WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
 }
+
+require_once('activity-log.php');
 
 $mapping_path = ABSPATH . 'wp-content/themes/disciple-tools-theme/dt-mapping/';
 if (file_exists($mapping_path . 'geocode-api/location-grid-geocoder.php')) {
