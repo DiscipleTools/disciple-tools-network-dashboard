@@ -5,14 +5,6 @@ if ( !defined( 'ABSPATH' ) ) {
 
 
 class DT_Dashboard_Mapbox_Metrics  {
-
-    //slug and titile of the top menu folder
-//    public $base_slug = 'mapbox'; // lowercase
-//    public $base_title = "Mapping";
-
-//    public $slugs;
-//    public $title = 'Map';
-//    public $js_object_name = 'dt_mapbox_metrics'; // This object will be loaded into the metrics.js file by the wp_localize_script.
     public $sites;
     public $js_file_name = 'mapbox-metrics.js'; // should be full file name plus extension
     public $permissions = [ 'view_any_contacts', 'view_project_metrics' ];

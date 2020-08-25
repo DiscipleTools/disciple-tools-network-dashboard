@@ -7,7 +7,7 @@ class DT_Network_Activity_Log {
 
     /**
      * Post Activity Log
-     * 
+     *
      * @param $data
      *
      * @example
@@ -40,25 +40,26 @@ class DT_Network_Activity_Log {
         $sites = Site_Link_System::get_list_of_sites_by_type(['network_dashboard_both', 'network_dashboard_sending'], 'post_ids');
 
         foreach( $sites as $site ) {
+            if ( 'yes' === get_post_meta( $site, 'send_activity_log', true ) ) {
+                $site_vars = Site_Link_System::get_site_connection_vars( $site );
 
-            $site_vars = Site_Link_System::get_site_connection_vars( $site );
+                $args = [
+                    'method' => 'POST',
+                    'body' => [
+                        'transfer_token' => $site_vars['transfer_token'],
+                        'data' => $data
+                    ]
+                ];
+                $response = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-content/plugins/disciple-tools-network-dashboard/activity/log.php', $args );
+                DT_Network_Activity_Log::insert_log( $data );
 
-            $args = [
-                'method' => 'POST',
-                'body' => [
-                    'transfer_token' => $site_vars['transfer_token'],
-                    'data' => $data
-                ]
-            ];
-            $response = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-content/plugins/disciple-tools-network-dashboard/activity/log.php', $args );
-            DT_Network_Activity_Log::insert_log( $data );
-
-            dt_write_log('remote post');
-            if ( ! is_wp_error( $response ) ) {
-                dt_write_log( json_decode( $response['body'], true ) );
-            } else {
-                dt_write_log($response);
-                dt_write_log($site_vars);
+                dt_write_log('remote post');
+                if ( ! is_wp_error( $response ) ) {
+                    dt_write_log( json_decode( $response['body'], true ) );
+                } else {
+                    dt_write_log($response);
+                    dt_write_log($site_vars);
+                }
             }
         }
     }

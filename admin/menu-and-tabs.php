@@ -130,6 +130,11 @@ class DT_Network_Dashboard_Menu {
                     Local Site
                 </a>
 
+                <a href="<?php echo esc_attr( $link ) . 'activity' ?>" class="nav-tab
+                <?php echo ( $tab == 'activity' ) ? 'nav-tab-active' : ''; ?>">
+                    Activity
+                </a>
+
                 <a href="<?php echo esc_attr( $link ) . 'tutorials' ?>" class="nav-tab
                 <?php echo ( $tab == 'tutorials' ) ? 'nav-tab-active' : ''; ?>">
                     Tutorials
@@ -154,6 +159,10 @@ class DT_Network_Dashboard_Menu {
                     break;
                 case "local-site":
                     $object = new DT_Network_Dashboard_Tab_Local();
+                    $object->content();
+                    break;
+                case "activity":
+                    $object = new DT_Network_Dashboard_Tab_Activity();
                     $object->content();
                     break;
                 case "tutorials":
@@ -612,6 +621,7 @@ class DT_Network_Dashboard_Tab_Local
 
                         <?php $this->box_partner_profile() ?>
                         <?php $this->box_top_nav_item() ?>
+                        <?php $this->box_site_link() ?>
                         <?php $this->box_mapbox_status() ?>
                         <?php $this->box_ipstack_api_key() ?>
 
@@ -621,7 +631,6 @@ class DT_Network_Dashboard_Tab_Local
                         <!-- Right Column -->
 
                         <?php $this->overview_message() ?>
-                        <?php $this->box_site_link() ?>
                         <?php $this->box_send_text() ?>
 
                         <!-- End Right Column -->
@@ -929,6 +938,174 @@ class DT_Network_Dashboard_Tab_Local
             </tbody>
         </table>
         <br>
+        <?php
+    }
+}
+
+
+/**
+ * Class DT_Network_Dashboard_Tab_Activity
+ */
+class DT_Network_Dashboard_Tab_Activity
+{
+    public function content() {
+        ?>
+        <form method="post">
+            <?php wp_nonce_field( 'activity'. get_current_user_id(), 'activity-nonce') ?>
+            <div class="wrap">
+                <div id="poststuff">
+                    <div id="post-body" class="metabox-holder columns-2">
+                        <div id="post-body-content">
+                            <!-- Main Column -->
+
+                            <?php $this->box_site_link()?>
+                            <?php //$this->main() ?>
+
+                            <!-- End Main Column -->
+                        </div><!-- end post-body-content -->
+                        <div id="postbox-container-1" class="postbox-container">
+                            <!-- Right Column -->
+
+                            <?php $this->sidebar_update_settings() ?>
+                            <?php $this->sidebar() ?>
+
+                            <!-- End Right Column -->
+                        </div><!-- postbox-container 1 -->
+                        <div id="postbox-container-2" class="postbox-container">
+                        </div><!-- postbox-container 2 -->
+                    </div><!-- post-body meta box container -->
+                </div><!--poststuff end -->
+            </div><!-- wrap end -->
+        </form>
+        <?php
+    }
+
+    public function box_site_link()
+    {
+        if ( isset( $_POST['activity-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['activity-nonce'] ) ), 'activity'. get_current_user_id() ) ) {
+//            dt_write_log($_POST);
+            if ( isset( $_POST['activity_log'] ) && ! empty( $_POST['activity_log'] ) && is_array( $_POST['activity_log'] ) ) {
+                foreach($_POST['activity_log'] as $i => $v ) {
+                    update_post_meta( sanitize_text_field( wp_unslash( $i ) ), 'send_activity_log',  sanitize_text_field( wp_unslash( $v ) ) );
+                }
+            }
+        }
+        global $wpdb;
+
+        $site_links = $wpdb->get_results("
+        SELECT p.ID, p.post_title, pm.meta_value as type, pa.meta_value as send_activity_log
+            FROM $wpdb->posts as p
+              LEFT JOIN $wpdb->postmeta as pm ON p.ID=pm.post_id AND pm.meta_key = 'type'
+              LEFT JOIN $wpdb->postmeta as pa ON p.ID=pa.post_id AND pa.meta_key = 'send_activity_log'
+            WHERE p.post_type = 'site_link_system'
+              AND p.post_status = 'publish'
+              AND ( pm.meta_value = 'network_dashboard_both' OR pm.meta_value = 'network_dashboard_sending' )
+        ", ARRAY_A);
+//        dt_write_log($site_links);
+
+        // @todo Add strategy for sending to multisite and saving to multisite
+
+        ?>
+        <?php
+        if (!is_array($site_links)) :
+            ?>
+            No site links found. Go to <a href="<?php echo esc_url(admin_url()) ?>edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type.
+        <?php
+        else :
+            ?>
+            <table class="widefat striped">
+                <thead>
+                <tr>
+                    <td style="width:300px;">Available Sites to Send Activity Logs</td>
+                    <td>Send Activity</td>
+                </tr>
+                </thead>
+                <tbody>
+                <?php
+                foreach ($site_links as $site) {
+                    if ('network_dashboard_sending' === $site['type'] || 'network_dashboard_both' === $site['type'] ) {
+                        ?>
+                        <tr><td><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['ID']) ?>&action=edit"><?php echo esc_html($site['post_title']) ?></a></td>
+                            <td><input type="radio" name="activity_log[<?php echo esc_attr($site['ID']) ?>]" value="yes" <?php echo ($site['send_activity_log'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="activity_log[<?php echo esc_attr($site['ID']) ?>]" value="no" <?php echo ($site['send_activity_log'] === 'yes' ) ? '' : 'checked' ?>/> No</td></tr>
+                        <?php
+                    }
+                }
+                ?>
+                </tbody>
+            </table>
+        <?php
+        endif;
+        ?>
+        <br>
+        <?php
+    }
+
+    public function main() {
+        ?>
+        <style>dt { font-weight:bold;}</style>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>Activity</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <dl>
+                        <dt>Title</dt>
+                        <dd>Content</dd>
+
+                        <dt>Title</dt>
+                        <dd>Content</dd>
+                    </dl>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function sidebar() {
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>Notes</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    Enable these site connections for
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function sidebar_update_settings() {
+        ?>
+        <!-- Box -->
+        <table class="widefat">
+            <thead>
+            <tr><td>Update Configuration</td></tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <form method="post">
+                        <button type="submit" class="button">Update</button><br>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
         <?php
     }
 }

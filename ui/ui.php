@@ -40,6 +40,11 @@ class DT_Network_Dashboard_UI
                     add_action( 'wp_enqueue_scripts', [ $this, 'mapbox_scripts' ], 99 );
                     require_once ('mapbox-metrics.php');
                 }
+
+                if ('network/activity' === substr( $url_path, '0', 16 )) {
+                    add_action( 'wp_enqueue_scripts', [ $this, 'activity_scripts' ], 99 );
+                    require_once ('activity-metrics.php');
+                }
             }
 
         } // end admin only test
@@ -47,6 +52,7 @@ class DT_Network_Dashboard_UI
 
     public function add_url( $template_for_url) {
         $template_for_url['network'] = 'template-metrics.php';
+        $template_for_url['network/activity/livefeed'] = 'template-metrics.php';
         return $template_for_url;
     }
 
@@ -60,11 +66,19 @@ class DT_Network_Dashboard_UI
     public function menu( $content) {
         // home
         $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#network_home" onclick="show_network_home()">' . esc_html__( 'Home' ) . '</a></li>';
-        $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#sites" onclick="show_sites_list()">' . esc_html__( 'Sites' ) . '</a></li>';
+
+
+        $content .= '<li><a>' . esc_html__( 'Recent Activity' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
+        $content .= '<li><a href="' . esc_url( site_url( '/network/activity/livefeed' ) ) . '" onclick="" >' . esc_html__( 'Live Feed' ) . '</a></li>';
+        $content .= '<li><a href="' . esc_url( site_url( '/network/activity/map' ) ) . '"  onclick="" >' . esc_html__( 'Map' ) . '</a></li>';
+        $content .= '<li><a href="' . esc_url( site_url( '/network/activity/stats' ) ) . '"  onclick="" >' . esc_html__( 'Stats' ) . '</a></li>';
+        $content .= '</ul></li>';
+
+        $content .= '<li><a>' . esc_html__( 'Cumulative Reports' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
 
         if ( DT_Mapbox_API::get_key() ) {
 
-            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_list" onclick="page_mapping_list()">' . esc_html__( 'Location List' ) . '</a></li>';
+
             $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_view" onclick="mapping_view()">' . esc_html__( 'Hover Map' ) . '</a></li>';
 
             $content .= '<li><a>' . esc_html__( 'Area Maps' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
@@ -74,24 +88,15 @@ class DT_Network_Dashboard_UI
             $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#users' ) ) . '" onclick="write_area(\'user_settings\')" >' . esc_html__( 'Users' ) . '</a></li>';
             $content .= '</ul></li>';
 
-            /*
-            $content .= '<li><a>' . esc_html__( 'Cluster Maps' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="cluster">';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/cluster/#contacts' ) ) . '"  onclick="write_cluster(\'contact_settings\')" >' . esc_html__( 'Contacts' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/cluster/#groups' ) ) . '"  onclick="write_cluster(\'group_settings\')">' . esc_html__( 'Groups' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/cluster/#users' ) ) . '">' . esc_html__( 'Users' ) . '</a></li>';
-            $content .= '</ul></li>';
-
-            $content .= '<li><a>' . esc_html__( 'Points Maps' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="points">';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/points/#contacts' ) ) . '" >' . esc_html__( 'Contacts' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/points/#groups' ) ) . '">' . esc_html__( 'Groups' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/points/#users' ) ) . '">' . esc_html__( 'Users' ) . '</a></li>';
-            $content .= '</ul></li>';
-            */
+            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_list" onclick="page_mapping_list()">' . esc_html__( 'Location List' ) . '</a></li>';
 
         } else {
             $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_view" onclick="mapping_view()">' . esc_html__( 'Map' ) . '</a></li>';
             $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_list" onclick="page_mapping_list()">' . esc_html__( 'List' ) . '</a></li>';
         }
+        $content .= '</ul></li>';
+
+        $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#sites" onclick="show_sites_list()">' . esc_html__( 'Individual Reports' ) . '</a></li>';
 
         return $content;
     }
@@ -170,6 +175,57 @@ class DT_Network_Dashboard_UI
         wp_localize_script(
             'dt_network_dashboard_mapbox',
             'dtDashboardMapbox',
+            [
+                'root' => esc_url_raw( rest_url() ),
+                'plugin_uri' => plugin_dir_url( __DIR__ ),
+                'theme_uri' => trailingslashit( get_stylesheet_directory_uri() ),
+                'nonce' => wp_create_nonce( 'wp_rest' ),
+                'current_user_id' => get_current_user_id(),
+                'map_key' => DT_Mapbox_API::get_key(),
+                "spinner_url" => get_stylesheet_directory_uri() . '/spinner.svg',
+                "translations" => array(
+                    'add' => __( 'add', 'disciple-tools' )
+                ),
+                'contact_settings' => [
+                    'post_type' => 'contacts',
+                    'title' => __( 'Contacts', "disciple_tools" ),
+                    'status_list' => ['active'=> [ "label" => 'Active' ], 'paused'=> [ "label" => 'Paused' ], 'closed'=> [ "label" => 'Closed' ] ]
+                ],
+                'group_settings' => [
+                    'post_type' => 'groups',
+                    'title' => __( 'Groups', "disciple_tools" ),
+                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
+                ],
+                'user_settings' => [
+                    'post_type' => 'users',
+                    'title' => __( 'Users', "disciple_tools" ),
+                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
+                ],
+                'church_settings' => [
+                    'post_type' => 'churches',
+                    'title' => __( 'Churches', "disciple_tools" ),
+                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
+                ]
+            ]
+        );
+    }
+    public function activity_scripts() {
+
+        DT_Mapbox_API::load_mapbox_header_scripts();
+
+        wp_enqueue_script('dt_network_dashboard_activity',
+            trailingslashit( plugin_dir_url( __FILE__ ) ) . 'activity-metrics.js',
+            [
+                'jquery',
+                'mapbox-gl',
+                'shared-functions',
+            ],
+            filemtime( plugin_dir_path( __DIR__ ) . 'ui/activity-metrics.js' ),
+            true);
+
+        wp_localize_script(
+            'dt_network_dashboard_activity',
+            'dtDashboardActivity',
             [
                 'root' => esc_url_raw( rest_url() ),
                 'plugin_uri' => plugin_dir_url( __DIR__ ),
