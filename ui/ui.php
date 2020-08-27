@@ -74,7 +74,7 @@ class DT_Network_Dashboard_UI
         $content .= '<li><a href="' . esc_url( site_url( '/network/activity/stats' ) ) . '"  onclick="" >' . esc_html__( 'Stats' ) . '</a></li>';
         $content .= '</ul></li>';
 
-        $content .= '<li><a>' . esc_html__( 'Cumulative Reports' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
+        $content .= '<li><a>' . esc_html__( 'Collective Reports' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
 
         if ( DT_Mapbox_API::get_key() ) {
 
@@ -148,7 +148,7 @@ class DT_Network_Dashboard_UI
                 'locations_list' => $this->get_locations_list(),
                 'translations' => [
                     "sm_title" => __( "Network Dashboard", "dt_network_dashboard" ),
-                    "title_site_list" => __( "Sites List", "dt_network_dashboard" ),
+                    "title_site_list" => __( "Individual Reports", "dt_network_dashboard" ),
                     "title_locations" => __( "Locations", "dt_network_dashboard" ),
                 ]
             ]
@@ -232,30 +232,29 @@ class DT_Network_Dashboard_UI
                 'theme_uri' => trailingslashit( get_stylesheet_directory_uri() ),
                 'nonce' => wp_create_nonce( 'wp_rest' ),
                 'current_user_id' => get_current_user_id(),
-                'map_key' => DT_Mapbox_API::get_key(),
                 "spinner_url" => get_stylesheet_directory_uri() . '/spinner.svg',
-                "translations" => array(
-                    'add' => __( 'add', 'disciple-tools' )
-                ),
-                'contact_settings' => [
-                    'post_type' => 'contacts',
-                    'title' => __( 'Contacts', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'paused'=> [ "label" => 'Paused' ], 'closed'=> [ "label" => 'Closed' ] ]
+                'translations' => [
+                    'title' => __( "Mapping", "disciple_tools" ),
+                    'refresh_data' => __( "Refresh Cached Data", "disciple_tools" ),
+                    'population' => __( "Population", "disciple_tools" ),
+                    'name' => __( "Name", "disciple_tools" ),
+                    'status' => __( "Status", "disciple_tools" ),
+                    'status_all' => __( "Status - All", "disciple_tools" ),
+                    'zoom_level' => __( "Zoom Level", "disciple_tools" ),
+                    'auto_zoom' => __( "Auto Zoom", "disciple_tools" ),
+                    'world' => __( "World", "disciple_tools" ),
+                    'country' => __( "Country", "disciple_tools" ),
+                    'state' => __( "State", "disciple_tools" ),
+                    'view_record' => __( "View Record", "disciple_tools" ),
+                    'assigned_to' => __( "Assigned To", "disciple_tools" ),
                 ],
-                'group_settings' => [
-                    'post_type' => 'groups',
-                    'title' => __( 'Groups', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
-                ],
-                'user_settings' => [
-                    'post_type' => 'users',
-                    'title' => __( 'Users', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
-                ],
-                'church_settings' => [
-                    'post_type' => 'churches',
-                    'title' => __( 'Churches', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
+                'settings' => [
+                    'map_key' => DT_Mapbox_API::get_key(),
+                    'map_mirror' => dt_get_location_grid_mirror( true ),
+                    'rest_base_url' => "network/activity",
+                    'points_rest_url' => '/points_geojson',
+                    'livefeed_rest_url' => '/livefeed',
+                    'site_profile' => dt_network_site_profile()
                 ]
             ]
         );

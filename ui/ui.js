@@ -99,7 +99,7 @@ function show_sites_list() {
   let page = wpApiNetworkDashboard
   let chartDiv = jQuery('#chart')
   chartDiv.empty().html(`
-        <span class="section-header">` + page.translations.sm_title + `</span>
+        <span class="section-header">` + page.translations.title_site_list + `</span>
         
         <hr style="max-width:100%;">
         
@@ -716,7 +716,7 @@ function load_site_lists(div) {
     <table id="site-table" class="display" data-order='[[ 1, "asc" ]]' data-page-length='25'>
       <thead>
         <th>ID</th>
-        <th>Name</th>
+        <th>Site</th>
         <th>Contacts</th>
         <th>Groups</th>
         <th>Users</th>

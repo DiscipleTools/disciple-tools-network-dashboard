@@ -128,6 +128,7 @@ class DT_Network_Dashboard {
         require_once( 'v1/network-queries.php' );
 
         require_once( 'activity/activity-log.php');
+        require_once( 'activity/hooks.php');
 
         require_once( 'admin/permissions.php' );
         require_once( 'admin/queries.php' );
@@ -204,7 +205,7 @@ class DT_Network_Dashboard {
         $this->version             = '2.0';
 
         global $wpdb;
-        $wpdb->movement_log = 'movement_log';
+        $wpdb->dt_movement_log = $wpdb->prefix . 'dt_movement_log';
 
     }
 
