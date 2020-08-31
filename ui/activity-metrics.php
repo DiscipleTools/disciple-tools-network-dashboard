@@ -77,9 +77,17 @@ class DT_Dashboard_Activity_Metrics  {
         $features = [];
         foreach ( $results as $result ) {
             $payload = maybe_unserialize( $result['payload']);
+
+            if ( $result['timestamp'] > strtotime('-24 hour') ) {
+                $time = self::time_elapsed_string('@'.$result['timestamp']);
+            }
+            else {
+                $time = date( 'D g:i a', $result['timestamp']);
+            }
+
             $features[] = [
                 'timestamp' => $result['timestamp'],
-                'message' => 'Pray Now! ' . $payload['note'],
+                'message' => '<strong>' . $time . '</strong>' . ' Pray Now! ' . $payload['note'],
                 'site_id' => $result['site_id']
             ];
         }
