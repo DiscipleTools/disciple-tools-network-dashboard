@@ -13,6 +13,9 @@ class DT_Network_Dashboard_UI
     } // End instance()
 
     public function __construct() {
+        if ( ! current_user_can( 'manage_options' ) ) {
+            return false; // @todo development restriction, remove for production.
+        }
 
         if (current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' )) {
 
