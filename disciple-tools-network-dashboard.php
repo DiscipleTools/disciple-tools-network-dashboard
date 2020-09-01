@@ -123,6 +123,8 @@ class DT_Network_Dashboard {
 
         require_once( 'admin/functions.php' );
         require_once( 'admin/site-profile.php' );
+        require_once( 'admin/wp-async-request.php' );
+
 
         require_once( 'v1/network-endpoints.php' );
         require_once( 'v1/network.php' );
