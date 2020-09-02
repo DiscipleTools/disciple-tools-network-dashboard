@@ -65,12 +65,6 @@ if (file_exists($theme_path . 'dt-core/admin/site-link-post-type.php')) {
     _dt_network_doing_it_wrong('did not find site linking file');
 }
 
-dt_write_log('post');
-dt_write_log($_POST);
-
-// add dt database tables
-
-
 $params = $_POST;
 
 // Validate Transfer Token
