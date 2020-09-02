@@ -194,6 +194,7 @@ class DT_Network_Activity_Log {
                         $data['label'] = $region . ( ! empty( $region ) ? ", " : "" ) . $country;
                     }
                     $data['payload']['country'] = $country;
+                    $data['payload']['unique_id'] = hash( 'sha256', $ip_address ); // required so that same activity from same location but different people does not count as duplicate.
 
                     // set grid id
                     if ( ! empty( $data['lng'] ) || ! empty( $data['lat'] ) ) {
