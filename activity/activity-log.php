@@ -336,11 +336,9 @@ class DT_Network_Activity_Log {
                     continue 2;
             }
 
-            $data['payload'] = serialize( $activity['payload'] );
-
+            $data['payload'] = serialize( $data['payload'] );
 
             $data['hash'] = hash('sha256', serialize( $data ) );
-
 
             $data['timestamp'] = ( empty( $params['timestamp'] ) ) ? time() : $params['timestamp'];
 
