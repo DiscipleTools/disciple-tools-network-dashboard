@@ -154,6 +154,7 @@ class DT_Network_Activity_Log {
             // PREPARE LOCATION DATA
             switch ( $location_type ) {
                 case 'ip':  /* @param string expects string containing ip address */
+                    $data['payload']['location_type'] = 'ip';
 
                     // validate expected fields
                     if ( ! ( isset( $activity['location_value'] ) && ! empty( $activity['location_value'] ) && ! is_array( $activity['location_value'] ) ) ) {
@@ -205,6 +206,7 @@ class DT_Network_Activity_Log {
 
                     break;
                 case 'grid':  /* @param string  expects string containing grid_id */
+                    $data['payload']['location_type'] = 'grid';
 
                     // validate expected fields
                     if ( ! ( isset( $activity['location_value'] ) && ! empty( $activity['location_value'] ) ) ) {
@@ -239,10 +241,14 @@ class DT_Network_Activity_Log {
                                 break;
                         }
                         $data['label'] = $label;
+
+                        $data['payload']['country'] = $grid_response['admin0_name'];
+
                     }
 
                     break;
                 case 'lnglat': /* @param array expects associative array containing (lng, lat, level) strings */
+                    $data['payload']['location_type'] = 'lnglat';
 
                     // validate expected fields
                     if ( ! (
@@ -263,32 +269,40 @@ class DT_Network_Activity_Log {
                     $data['lat'] = sanitize_text_field( wp_unslash( $activity['location_value']['lat'] ) );
                     $data['level'] = sanitize_text_field( wp_unslash( $activity['location_value']['level'] ) );
 
+                    if ( isset( $activity['location_value']['label'] ) && ! empty( $activity['location_value']['label'] ) ) {
+                        $data['label'] = sanitize_text_field( wp_unslash( $activity['location_value']['label'] ) );
+                    }
+
                     $geocoder = new Location_Grid_Geocoder();
                     $grid_response = $geocoder->get_grid_id_by_lnglat( $data['lng'], $data['lat'], null, $data['level'] );
                     if ( ! empty( $grid_response ) ) {
                         $data['level'] = $grid_response['level_name'];
                         $data['grid_id'] = $grid_response['grid_id'];
+                        $data['payload']['country'] = $grid_response['admin0_name'];
 
-                        switch ($grid_response['level_name']) {
-                            case 'admin5':
-                            case 'admin4':
-                            case 'admin3':
-                            case 'admin2':
-                                $label = $grid_response['name'] . ', ' . $grid_response['admin1_name'] . ', '. $grid_response['country_code'];
-                                break;
-                            case 'admin1':
-                                $label = $grid_response['name'] . ', ' . $grid_response['country_code'];
-                                break;
-                            case 'admin0':
-                            default:
-                                $label = $grid_response['admin0_name'];
-                                break;
+                        if ( empty( $data['label'] ) ) {
+                            switch ($grid_response['level_name']) {
+                                case 'admin5':
+                                case 'admin4':
+                                case 'admin3':
+                                case 'admin2':
+                                    $label = $grid_response['name'] . ', ' . $grid_response['admin1_name'] . ', '. $grid_response['country_code'];
+                                    break;
+                                case 'admin1':
+                                    $label = $grid_response['name'] . ', ' . $grid_response['country_code'];
+                                    break;
+                                case 'admin0':
+                                default:
+                                    $label = $grid_response['admin0_name'];
+                                    break;
+                            }
+                            $data['label'] = $label;
                         }
-                        $data['label'] = $label;
                     }
 
                     break;
                 case 'complete': /* @param array expects array with (lng, lat, level, label, grid_id) strings */
+                    $data['payload']['location_type'] = 'complete';
 
                     // validate expected fields
                     if ( ! (
