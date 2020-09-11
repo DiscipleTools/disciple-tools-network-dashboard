@@ -402,7 +402,7 @@ class DT_Network_Activity_Log {
                 $data['hash']
             ) );
 
-            self::build_meta( $wpdb->insert_id, $payload, true );
+//            self::build_meta( $wpdb->insert_id, $payload, true ); // @todo evaluating strategy
 
             $process_status[] = 'Success: Created id ' . $wpdb->insert_id;
         }
