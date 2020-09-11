@@ -2,7 +2,7 @@
 
 add_action('dt_network_dashboard_external_cron', 'dt_activity_log_payload_check' );
 /**
- * Checks if all the payload elements are translated into meta records. 
+ * Checks if all the payload elements are translated into meta records.
  */
 function dt_activity_log_payload_check(){
     $process_status = [];

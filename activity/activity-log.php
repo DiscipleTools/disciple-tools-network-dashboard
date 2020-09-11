@@ -402,12 +402,12 @@ class DT_Network_Activity_Log {
                 $data['hash']
             ) );
 
-            self::build_meta( $wpdb->insert_id, $payload, true );
+//            self::build_meta( $wpdb->insert_id, $payload, true ); // @todo still in performance testing
 
             $process_status[] = 'Success: Created id ' . $wpdb->insert_id;
         }
 
-        $process_status['stop'] = microtime(true); // @todo remove after development
+        $process_status['stop'] = microtime(true); 
 
         return $process_status;
     }
