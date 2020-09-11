@@ -38,10 +38,9 @@ function dt_network_dashboard() {
          *      Note: this migration is for the Network Dashboard plugin. The migration for the mapping module
          *      is handled inside the /mapping-module/mapping.php file and migrations engine.
          */
-        $migration_number = 2;
         try {
             require_once( plugin_dir_path( __FILE__ ) . '/admin/class-migration-engine.php' );
-            DT_Network_Dashboard_Migration_Engine::migrate( $migration_number );
+            DT_Network_Dashboard_Migration_Engine::migrate( DT_Network_Dashboard_Migration_Engine::$migration_number );
         } catch ( Throwable $e ) {
             new WP_Error( 'migration_error', 'Migration engine failed to migrate.' );
         }
@@ -132,6 +131,7 @@ class DT_Network_Dashboard {
 
         require_once( 'activity/activity-log.php');
         require_once( 'activity/hooks.php');
+        require_once( 'activity/cron-action.php');
 
         require_once( 'admin/permissions.php' );
         require_once( 'admin/queries.php' );
@@ -209,6 +209,7 @@ class DT_Network_Dashboard {
 
         global $wpdb;
         $wpdb->dt_movement_log = $wpdb->prefix . 'dt_movement_log';
+        $wpdb->dt_movement_log_meta = $wpdb->prefix . 'dt_movement_log_meta';
 
     }
 
