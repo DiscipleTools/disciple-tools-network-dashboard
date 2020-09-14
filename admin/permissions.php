@@ -13,7 +13,7 @@
 function dt_network_dashboard_denied( $type = null ): bool {
 
     switch ( $type ) {
-        // add other cases if necissary
+        // add other cases if necessary
         default:
             if ( current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' ) ) {
                 return false;

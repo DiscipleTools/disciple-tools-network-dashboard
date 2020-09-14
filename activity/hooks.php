@@ -97,6 +97,31 @@ class DT_Network_Activity_Hooks {
         $this->process_log( $args );
     }
 
+    public function new_item_reported( $args ){
+        // new seeker contact added
+
+        // new profession of faith
+
+        // new baptism reported
+
+        // new group reported
+
+        // new church reported
+
+        // new disciple generation reported
+
+        // new group generation reported
+
+        // new baptism generation reported
+
+        // new gospel share reported
+
+    }
+
+    public function ongoing_meeting_reported( $args ){
+        //
+    }
+
     public function process_log( $args ){
         /*
          Array
