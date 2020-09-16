@@ -70,19 +70,18 @@ class DT_Network_Dashboard_UI
         // home
         $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#network_home" onclick="show_network_home()">' . esc_html__( 'Home' ) . '</a></li>';
 
-
         $content .= '<li><a>' . esc_html__( 'Recent Activity' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
         $content .= '<li><a href="' . esc_url( site_url( '/network/activity/livefeed' ) ) . '" onclick="" >' . esc_html__( 'Live Feed' ) . '</a></li>';
         $content .= '<li><a href="' . esc_url( site_url( '/network/activity/map' ) ) . '"  onclick="" >' . esc_html__( 'Map' ) . '</a></li>';
         $content .= '<li><a href="' . esc_url( site_url( '/network/activity/stats' ) ) . '"  onclick="" >' . esc_html__( 'Stats' ) . '</a></li>';
         $content .= '</ul></li>';
 
-        $content .= '<li><a>' . esc_html__( 'Collective Reports' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
+        $content .= '<li><a>' . esc_html__( 'Network Reports' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
+            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#network_home" onclick="show_network_home()">' . esc_html__( 'Overview' ) . '</a></li>';
+            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_view" onclick="mapping_view()">' . esc_html__( 'Hover Map' ) . '</a></li>';
+            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_list" onclick="page_mapping_list()">' . esc_html__( 'Location List' ) . '</a></li>';
 
         if ( DT_Mapbox_API::get_key() ) {
-
-
-            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_view" onclick="mapping_view()">' . esc_html__( 'Hover Map' ) . '</a></li>';
 
             $content .= '<li><a>' . esc_html__( 'Area Maps' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
             $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#contacts' ) ) . '" onclick="write_area(\'contact_settings\')" >' . esc_html__( 'Contacts' ) . '</a></li>';
@@ -91,15 +90,10 @@ class DT_Network_Dashboard_UI
             $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#users' ) ) . '" onclick="write_area(\'user_settings\')" >' . esc_html__( 'Users' ) . '</a></li>';
             $content .= '</ul></li>';
 
-            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_list" onclick="page_mapping_list()">' . esc_html__( 'Location List' ) . '</a></li>';
-
-        } else {
-            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_view" onclick="mapping_view()">' . esc_html__( 'Map' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_list" onclick="page_mapping_list()">' . esc_html__( 'List' ) . '</a></li>';
         }
         $content .= '</ul></li>';
 
-        $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#sites" onclick="show_sites_list()">' . esc_html__( 'Individual Reports' ) . '</a></li>';
+        $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#sites" onclick="show_sites_list()">' . esc_html__( 'Site Reports' ) . '</a></li>';
 
         return $content;
     }

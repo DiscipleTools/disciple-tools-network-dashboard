@@ -11,10 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 class DT_Network_Multisite_Cron_Scheduler {
 
     public function __construct() {
-        if ( ! wp_next_scheduled( 'get-multisite-snapshot' ) ) {
-            wp_schedule_event( strtotime( 'tomorrow 2am' ), 'daily', 'get-multisite-snapshot' );
+        if ( ! wp_next_scheduled( 'dt_get_multisite_snapshot' ) ) {
+            wp_schedule_event( strtotime( 'tomorrow 2am' ), 'daily', 'dt_get_multisite_snapshot' );
         }
-        add_action( 'get-multisite-snapshot', [ $this, 'action' ] );
+        add_action( 'dt_get_multisite_snapshot', [ $this, 'action' ] );
     }
 
     public static function action(){

@@ -77,9 +77,9 @@ class DT_Network_Dashboard_Admin_Endpoints
         if ( ! user_can( get_current_user_id(), 'manage_options' ) ) {
             return new WP_Error( __METHOD__, 'Permission Error' );
         }
-        add_action( 'get-sites-snapshot', [ $this, 'remote_snapshot_action' ] );
+        add_action( 'dt_get_sites_snapshot', [ $this, 'remote_snapshot_action' ] );
 
-        wp_schedule_single_event( time(), 'get-sites-snapshot' );
+        wp_schedule_single_event( time(), 'dt_get_sites_snapshot' );
         spawn_cron();
 
         return true;
@@ -94,9 +94,9 @@ class DT_Network_Dashboard_Admin_Endpoints
             return new WP_Error( __METHOD__, 'Permission Error' );
         }
 
-        add_action( 'get-multisite-snapshot', [ $this, 'multisite_action' ] );
+        add_action( 'dt_get_multisite_snapshot', [ $this, 'multisite_action' ] );
 
-        wp_schedule_single_event( time(), 'get-multisite-snapshot' );
+        wp_schedule_single_event( time(), 'dt_get_multisite_snapshot' );
         spawn_cron();
 
         return true;

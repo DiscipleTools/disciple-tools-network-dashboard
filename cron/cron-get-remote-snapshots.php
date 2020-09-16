@@ -11,10 +11,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 class DT_Network_Cron_Scheduler {
 
     public function __construct() {
-        if ( ! wp_next_scheduled( 'get-sites-snapshot' ) ) {
-            wp_schedule_event( strtotime( 'tomorrow 1am' ), 'daily', 'get-sites-snapshot' );
+        if ( ! wp_next_scheduled( 'dt_get_sites_snapshot' ) ) {
+            wp_schedule_event( strtotime( 'tomorrow 1am' ), 'daily', 'dt_get_sites_snapshot' );
         }
-        add_action( 'get-sites-snapshot', [ $this, 'action' ] );
+        add_action( 'dt_get_sites_snapshot', [ $this, 'action' ] );
     }
 
     public static function action(){

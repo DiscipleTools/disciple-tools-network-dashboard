@@ -135,16 +135,15 @@ class DT_Network_Dashboard_Menu {
                     Activity
                 </a>
 
+                <a href="<?php echo esc_attr( $link ) . 'cron' ?>" class="nav-tab
+                <?php echo ( $tab == 'cron' ) ? 'nav-tab-active' : ''; ?>">
+                    Cron
+                </a>
+
                 <a href="<?php echo esc_attr( $link ) . 'tutorials' ?>" class="nav-tab
                 <?php echo ( $tab == 'tutorials' ) ? 'nav-tab-active' : ''; ?>">
                     Tutorials
                 </a>
-
-                <a href="<?php echo esc_attr( $link ) . 'test' ?>" class="nav-tab
-                <?php echo ( $tab == 'test' ) ? 'nav-tab-active' : ''; ?>">
-                    Test
-                </a>
-
             </h2>
 
             <?php
@@ -169,11 +168,10 @@ class DT_Network_Dashboard_Menu {
                     $object = new DT_Network_Dashboard_Tab_Tutorial();
                     $object->content();
                     break;
-                case "test":
-                    $object = new DT_Network_Dashboard_Tab_Test();
+                case "cron":
+                    $object = new DT_Network_Dashboard_Tab_Cron();
                     $object->content();
                     break;
-
                 default:
                     break;
             }
@@ -620,10 +618,11 @@ class DT_Network_Dashboard_Tab_Local
                         <!-- Main Column -->
 
                         <?php $this->box_partner_profile() ?>
-                        <?php $this->box_top_nav_item() ?>
                         <?php $this->box_site_link() ?>
+                        <?php $this->box_external_cron() ?>
                         <?php $this->box_mapbox_status() ?>
                         <?php $this->box_ipstack_api_key() ?>
+                        <?php $this->box_top_nav_item() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -684,6 +683,54 @@ class DT_Network_Dashboard_Tab_Local
         <?php
     }
 
+    public function box_external_cron() {
+        if ( isset( $_POST['external_cron_nonce'] )
+            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['external_cron_nonce'] ) ), 'external_cron_' . get_current_user_id() )
+            && isset( $_POST['external_cron'] ) ) {
+
+            $selection = sanitize_text_field( wp_unslash( $_POST['external_cron'] ) );
+            if ( $selection === 'hide' ) {
+                update_option( 'dt_hide_top_menu', true, true );
+            }
+            if ( $selection === 'show' ) {
+                delete_option( 'dt_hide_top_menu' );
+            }
+        }
+        $state = get_option( 'dt_hide_top_menu' );
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <tr>
+                <th>External Cron Service</th>
+            </tr>
+            </thead>
+            <tbody>
+
+            <tr>
+                <td>
+                    <form method="post">
+                        <?php wp_nonce_field( 'external_cron_' . get_current_user_id(), 'external_cron_nonce' ) ?>
+                        <select name="external_cron">
+                            <option value="no" <?php echo empty($state) ? '' : ' selected'; ?>>Not Enabled</option>
+                            <option value="yes" <?php echo ($state) ? ' selected' : ''; ?>>Enabled</option>
+                        </select>
+                        <button type="submit" class="button">Update</button>
+                    </form>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    URL for HTTPS Request form CRON Service: <code><?php echo esc_url( site_url() ) . '/wp-content/plugins/disciple-tools-network-dashboard/cron/cron.php' ?></code>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
     public function box_top_nav_item() {
         if ( isset( $_POST['network_dashboard_nonce'] )
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
@@ -703,7 +750,7 @@ class DT_Network_Dashboard_Tab_Local
         <table class="widefat striped">
             <thead>
             <tr>
-                <th>Topbar "Network" Menu Item</th>
+                <th>Hide Top Nav Except "Network"</th>
             </tr>
             </thead>
             <tbody>
@@ -1113,6 +1160,206 @@ class DT_Network_Dashboard_Tab_Activity
 /**
  * Class DT_Network_Dashboard_Tab_Tutorial
  */
+class DT_Network_Dashboard_Tab_Cron
+{
+    public function content() {
+        ?>
+        <div class="wrap">
+            <div id="poststuff">
+                <div id="post-body" class="metabox-holder columns-2">
+                    <div id="post-body-content">
+                        <!-- Main Column -->
+
+                        <?php $this->box_cron_settings() ?>
+                        <?php $this->box_cron_setup(); ?>
+                        <?php $this->box_cron_list(); ?>
+
+                        <!-- End Main Column -->
+                    </div><!-- end post-body-content -->
+                    <div id="postbox-container-1" class="postbox-container">
+                        <!-- Right Column -->
+
+                        <?php $this->sidebar() ?>
+
+                        <!-- End Right Column -->
+                    </div><!-- postbox-container 1 -->
+                    <div id="postbox-container-2" class="postbox-container">
+                    </div><!-- postbox-container 2 -->
+                </div><!-- post-body meta box container -->
+            </div><!--poststuff end -->
+        </div><!-- wrap end -->
+        <?php
+    }
+
+    public function box_cron_settings() {
+        if ( isset( $_POST['network_dashboard_nonce'] )
+            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
+            && isset( $_POST['hide_top_nav'] ) ) {
+
+            $selection = sanitize_text_field( wp_unslash( $_POST['hide_top_nav'] ) );
+            if ( $selection === 'hide' ) {
+                update_option( 'dt_hide_top_menu', true, true );
+            }
+            if ( $selection === 'show' ) {
+                delete_option( 'dt_hide_top_menu' );
+            }
+        }
+        $state = get_option( 'dt_hide_top_menu' );
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <tr>
+                <th>Network Dashboard Cron Frequency</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <form method="post">
+                        <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
+                        <select name="hide_top_nav">
+                            <option value="show" <?php echo empty($state) ? '' : ' selected'; ?>>Show</option>
+                            <option value="hide" <?php echo ($state) ? ' selected' : ''; ?>>Hide</option>
+                        </select>
+                        <button type="submit" class="button">Update</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function box_cron_setup() {
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>External Cron Setup</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <p><strong>EXPLANATION</strong><br></p>
+                    Wordpress/Disciple.Tools Cron System depends on visits to trigger background processes. If the site is not visited regularly
+                    like a normal website would be, it is possible to use an external cron service to call the site regularly and trigger these
+                    background tasks. If the Network Dashboard is configured for frequent collections in the section above and you notice
+                    these services not running when expected, you can schedule an external cron service to connect to the site on a regular basis.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>SERVICES</strong></p>
+                    <ul>
+                        <li><a href="https://cron-job.org/en/">Cron-Job.org</a></li>
+                        <li><a href="https://www.easycron.com/">EasyCron</a></li>
+                        <li><a href="https://cronless.com/">Cronless</a></li>
+                        <li>Or Google "free cron services"</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>CRON URL</strong><br></p>
+                    <code><?php echo esc_url( site_url() ) . '/wp-cron.php' ?></code>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function box_cron_list() {
+        $cron_list = _get_cron_array();
+        dt_write_log($cron_list);
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <tr>
+                <th>External Cron Setup</th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach( $cron_list as $time => $time_array ){
+                foreach( $time_array as $token => $token_array ){
+                    if ( 'dt_' === substr( $token, 0, 3 ) ){
+                        foreach( $token_array as $key => $items ) {
+                        ?>
+                        <tr>
+                            <td>
+                                <?php echo date( 'Y-m-d H:i:s', $time  )?><br>
+                                <?php echo $time?>
+                            </td>
+                            <td>
+                                <?php echo $token ?>
+                            </td>
+                            <td>
+                                <?php echo $key ?>
+                            </td>
+                            <td>
+                                <?php echo  $items['schedule'] ?? '' ?><br>
+                                <?php echo   isset($items['interval']) ? $items['interval'] / 60 . ' minutes' : '' ?><br>
+                                <?php echo   ! empty($items['args']) ? serialize( $items['args'] ) : '' ?><br>
+                            </td>
+                        </tr>
+                        <?php
+                        }
+                    }
+                }
+            }
+            ?>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function sidebar() {
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>What is CRON?</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    Cron is a time based task often scheduled to occur at regular times. You can have some tasks in a software run instantly, while others might build up and be run at a certain time.
+                    The Network Dashboard collects snapshots from remote sites in this time based way. Because these are processor intensive tasks/queries we do not run them instantly, so as to protect the performance of the
+                    Disciple.Tools system.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Although it is not required, if there are concerns about the timely distribution of posts/messages/emails or collection of snapshots, then it is very simple
+                    to add an external cron service.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+}
+
+/**
+ * Class DT_Network_Dashboard_Tab_Tutorial
+ */
 class DT_Network_Dashboard_Tab_Tutorial
 {
     public function content() {
@@ -1190,103 +1437,5 @@ class DT_Network_Dashboard_Tab_Tutorial
     }
 }
 
-/**
- * Class DT_Network_Dashboard_Tab_Tutorial
- */
-class DT_Network_Dashboard_Tab_Test
-{
-    public function content() {
-        ?>
-        <div class="wrap">
-            <div id="poststuff">
-                <div id="post-body" class="metabox-holder columns-2">
-                    <div id="post-body-content">
-                        <!-- Main Column -->
 
-                        <?php $this->main() ?>
-
-                        <!-- End Main Column -->
-                    </div><!-- end post-body-content -->
-                    <div id="postbox-container-1" class="postbox-container">
-                        <!-- Right Column -->
-
-                        <?php $this->sidebar() ?>
-
-                        <!-- End Right Column -->
-                    </div><!-- postbox-container 1 -->
-                    <div id="postbox-container-2" class="postbox-container">
-                    </div><!-- postbox-container 2 -->
-                </div><!-- post-body meta box container -->
-            </div><!--poststuff end -->
-        </div><!-- wrap end -->
-        <?php
-    }
-
-    public function main() {
-        ?>
-        <style>dt { font-weight:bold;}</style>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <th>Test</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <?php
-                    $data = [
-                        [
-                            'site_id' => dt_network_site_id(),
-                            'action' => 'action',
-                            'category' => 'complete',
-                            'location_type' => 'complete', // ip, grid, lnglat
-                            'location_value' => [
-                                'lng' => '-104.968',
-                                'lat' => '39.7075',
-                                'level' => 'admin2',
-                                'label' => 'Denver, Colorado, US',
-                                'grid_id' => '100364508'
-                            ], // ip, grid, lnglat
-                            'payload' => [
-                                'initials' => 'CC',
-                                'group_size' => '3',
-                                'country' => 'United States',
-                                'language' => 'en',
-                                'note' => 'This is the full note'.time()
-                            ],
-                            'timestamp' => time()
-                        ]
-                    ];
-                    DT_Network_Activity_Log::post_activity($data);
-
-                    ?>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function sidebar() {
-        ?>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <th>Outline</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-}
 

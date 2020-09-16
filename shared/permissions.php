@@ -23,3 +23,10 @@ function dt_network_dashboard_denied( $type = null ): bool {
     return true;
 
 }
+
+function dt_network_dashboard_has_permission(){
+    if ( current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' ) ) {
+        return true;
+    }
+    return false;
+}

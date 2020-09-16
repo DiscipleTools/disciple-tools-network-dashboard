@@ -120,35 +120,35 @@ class DT_Network_Dashboard {
      */
     private function includes() {
 
-        require_once( 'admin/functions.php' );
-        require_once( 'admin/site-profile.php' );
-        require_once( 'admin/wp-async-request.php' );
+        // SHARED RESOURCES
+        require_once('shared/permissions.php');
+        require_once('shared/site-profile.php');
+        require_once('shared/wp-async-request.php');
+        require_once('shared/customize-site-linking.php'); // loads capabilities
+        require_once('shared/remove-top-nav-config.php');
 
+        require_once( 'network/queries.php' );
+        require_once( 'network/multisite.php' );
 
-        require_once( 'v1/network-endpoints.php' );
-        require_once( 'v1/network.php' );
-        require_once( 'v1/network-queries.php' );
+        require_once( 'local/network-endpoints.php' );
+        require_once( 'local/network.php' );
+        require_once( 'local/network-queries.php' );
 
         require_once( 'activity/activity-log.php');
         require_once( 'activity/hooks.php');
         require_once( 'activity/cron-action.php');
 
-        require_once( 'admin/permissions.php' );
-        require_once( 'admin/queries.php' );
-        require_once( 'admin/customize-site-linking.php' ); // loads capabilities
 
-        require_once( 'admin/multisite.php' );
 
-        require_once( 'admin/remove-top-nav-config.php' );
-
-        // adds charts and metrics to the network tab
+        // UI METRICS FOR NETWORK TAB
         require_once( 'ui/ui.php' );
         require_once( 'ui/mapbox-metrics.php' );
         require_once( 'ui/activity-metrics.php' );
+        require_once( 'ui/mapping-module-config.php' );
 
+
+        // CRON
         require_once( 'cron/cron-log.php' );
-
-        require_once( 'admin/mapping-module-config.php' );
 
         if ( file_exists( get_theme_file_path() . '/dt-core/wp-async-request.php' ) ) {
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
@@ -180,7 +180,7 @@ class DT_Network_Dashboard {
         require_once('admin/menu-and-tabs-endpoints.php');
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );
-            require_once( 'admin/metabox-site-profile.php' );
+            require_once('admin/metabox-site-profile.php');
         }
     }
 
@@ -253,7 +253,11 @@ class DT_Network_Dashboard {
      * @return void
      */
     public static function deactivation() {
-        delete_option( 'dismissed-dt-starter' );
+        delete_option( 'dismissed-dt-network-dashboard' );
+
+//        // delete cron jobs
+//        $timestamp = wp_next_scheduled( 'bl_cron_hook' );
+//        wp_unschedule_event( $timestamp, 'bl_cron_hook' );
     }
 
     /**
