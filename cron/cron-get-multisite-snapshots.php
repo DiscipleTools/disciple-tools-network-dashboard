@@ -10,21 +10,37 @@ if ( ! defined( 'ABSPATH' ) ) {
  */
 class DT_Network_Multisite_Cron_Scheduler {
 
+    public static $token = 'dt_network_dashboard_collect_multisite';
+
     public function __construct() {
-        if ( ! wp_next_scheduled( 'dt_get_multisite_snapshot' ) ) {
-            wp_schedule_event( strtotime( 'tomorrow 2am' ), 'daily', 'dt_get_multisite_snapshot' );
+
+        $crons = DT_Network_Dashboard_Cron::get_crons();
+        if ( isset( $crons[self::$token])){
+
+            $cron = $crons[self::$token];
+            if ( ! wp_next_scheduled( self::$token ) ) {
+
+                $schedules = wp_get_schedules();
+                if ( isset( $schedules[$cron['recurrence']] ) ){
+                    $time = time() + $schedules[$cron['recurrence']]['interval'];
+                } else {
+                    $time = strtotime( 'tomorrow 2am' );
+                }
+
+                wp_schedule_event( $time, $cron['recurrence'], self::$token );
+            }
+            add_action( self::$token, [ $this, 'action' ] );
         }
-        add_action( 'dt_get_multisite_snapshot', [ $this, 'action' ] );
     }
 
     public static function action(){
-        do_action( "dt_get_multisite_snapshot" );
+        do_action( self::$token );
     }
 }
 
 class DT_Get_Network_Multisite_SnapShot_Async extends Disciple_Tools_Async_Task {
 
-    protected $action = 'dt_get_multisite_snapshot';
+    protected $action = 'dt_network_dashboard_collect_multisite';
 
     protected function prepare_data( $data ) {
         return $data;
@@ -87,7 +103,7 @@ class DT_Get_Single_Multisite_Snapshot extends Disciple_Tools_Async_Task
     public function get_multisite_snapshot() {
 
         if ( isset( $_POST[0]['blog_id'] ) ) {
-            dt_get_multisite_snapshot( $_POST[0]['blog_id'] );
+            dt_network_dashboard_collect_multisite( $_POST[0]['blog_id'] );
         }
         else {
             dt_write_log( __METHOD__ . ' : Failed on post array' );
@@ -116,19 +132,19 @@ add_action( 'init', 'dt_load_async_multisite_snapshot' );
  *
  * @return bool
  */
-function dt_get_multisite_snapshot( $blog_id ) {
+function dt_network_dashboard_collect_multisite( $blog_id ) {
 
     $file = 'multisite';
     dt_save_log( $file, 'START ID: ' . $blog_id );
 
     switch_to_blog( $blog_id );
 
-    $snapshot = Disciple_Tools_Snapshot_Report::snapshot_report( true );
+    $snapshot = DT_Network_Dashboard_Snapshot_Report::snapshot_report( true );
     if ( $snapshot['status'] == 'FAIL' ) {
         // retry connection in 3 seconds
         sleep( 5 );
         dt_save_log( $file, 'RETRY ID: ' . $blog_id . ' (Payload = FAIL)' );
-        $snapshot = Disciple_Tools_Snapshot_Report::snapshot_report( true ); // @todo remove true after development
+        $snapshot = DT_Network_Dashboard_Snapshot_Report::snapshot_report( true ); // @todo remove true after development
         if ( $snapshot['status'] == 'FAIL' ) {
 
             dt_save_log( $file, 'FAIL ID: ' . $blog_id . ' (Unable to run snapshot report for '.$blog_id.')' );

@@ -9,14 +9,18 @@ class DT_Network_Dashboard_Queries {
                 SELECT 
                   post_title as name, 
                   ID as id
-                FROM $wpdb->posts
-                JOIN $wpdb->postmeta
-                  ON $wpdb->posts.ID=$wpdb->postmeta.post_id
-                  AND $wpdb->postmeta.meta_key = 'type'
-                  AND $wpdb->postmeta.meta_value LIKE 'network_dashboard%'
-                WHERE post_type = 'site_link_system'
-                  AND post_status = 'publish'
-                  ORDER BY name ASC
+                FROM $wpdb->posts as p
+                JOIN $wpdb->postmeta as pm
+                  ON p.ID=pm.post_id
+					AND pm.meta_key = 'type'
+				LEFT JOIN $wpdb->postmeta as pm2
+                  ON p.ID=pm2.post_id
+					AND pm2.meta_key = 'non_wp' 
+                  WHERE p.post_type = 'site_link_system'
+                  AND p.post_status = 'publish'
+                  AND ( pm.meta_value = 'network_dashboard_both'
+                  OR pm.meta_value = 'network_dashboard_receiving' )
+                    AND pm2.meta_value != '1'
             ",
         ARRAY_A );
 
@@ -25,6 +29,30 @@ class DT_Network_Dashboard_Queries {
         }
 
         return $results;
+    }
+
+    public static function has_sites_for_collection() : int {
+        global $wpdb;
+
+        $results = $wpdb->get_var("
+                SELECT 
+                  count(id)
+                FROM $wpdb->posts as p
+                JOIN $wpdb->postmeta as pm
+                  ON p.ID=pm.post_id
+					AND pm.meta_key = 'type'
+				LEFT JOIN $wpdb->postmeta as pm2
+                  ON p.ID=pm2.post_id
+					AND pm2.meta_key = 'non_wp' 
+                  WHERE p.post_type = 'site_link_system'
+                  AND p.post_status = 'publish'
+                  AND ( pm.meta_value = 'network_dashboard_both'
+                  OR pm.meta_value = 'network_dashboard_receiving' )
+                    AND pm2.meta_value != '1'
+            ");
+
+        return $results;
+
     }
 
     public static function sites_with_snapshots() : array {
@@ -40,7 +68,9 @@ class DT_Network_Dashboard_Queries {
                 JOIN $wpdb->postmeta as b
                   ON a.ID=b.post_id
                   AND b.meta_key = 'type'
-                  AND b.meta_value LIKE 'network_dashboard%'
+                JOIN $wpdb->postmeta as pm2
+                  ON p.ID=pm2.post_id
+					AND pm2.meta_key = 'non_wp' AND pm2.meta_value = '1'
                 JOIN $wpdb->postmeta as c
                   ON a.ID=c.post_id
                   AND c.meta_key = 'snapshot'
@@ -50,6 +80,8 @@ class DT_Network_Dashboard_Queries {
                   AND d.meta_key = 'partner_id'
                 WHERE a.post_type = 'site_link_system'
                   AND a.post_status = 'publish'
+                    AND ( b.meta_value = 'network_dashboard_both'
+                  OR b.meta_value = 'network_dashboard_receiving' )
                   ORDER BY name
             ",
         ARRAY_A );

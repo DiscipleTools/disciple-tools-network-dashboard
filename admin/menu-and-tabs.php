@@ -132,7 +132,7 @@ class DT_Network_Dashboard_Menu {
 
                 <a href="<?php echo esc_attr( $link ) . 'activity' ?>" class="nav-tab
                 <?php echo ( $tab == 'activity' ) ? 'nav-tab-active' : ''; ?>">
-                    Activity
+                    Send Activity
                 </a>
 
                 <a href="<?php echo esc_attr( $link ) . 'cron' ?>" class="nav-tab
@@ -619,7 +619,6 @@ class DT_Network_Dashboard_Tab_Local
 
                         <?php $this->box_partner_profile() ?>
                         <?php $this->box_site_link() ?>
-                        <?php $this->box_external_cron() ?>
                         <?php $this->box_mapbox_status() ?>
                         <?php $this->box_ipstack_api_key() ?>
                         <?php $this->box_top_nav_item() ?>
@@ -683,53 +682,7 @@ class DT_Network_Dashboard_Tab_Local
         <?php
     }
 
-    public function box_external_cron() {
-        if ( isset( $_POST['external_cron_nonce'] )
-            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['external_cron_nonce'] ) ), 'external_cron_' . get_current_user_id() )
-            && isset( $_POST['external_cron'] ) ) {
 
-            $selection = sanitize_text_field( wp_unslash( $_POST['external_cron'] ) );
-            if ( $selection === 'hide' ) {
-                update_option( 'dt_hide_top_menu', true, true );
-            }
-            if ( $selection === 'show' ) {
-                delete_option( 'dt_hide_top_menu' );
-            }
-        }
-        $state = get_option( 'dt_hide_top_menu' );
-        ?>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <tr>
-                <th>External Cron Service</th>
-            </tr>
-            </thead>
-            <tbody>
-
-            <tr>
-                <td>
-                    <form method="post">
-                        <?php wp_nonce_field( 'external_cron_' . get_current_user_id(), 'external_cron_nonce' ) ?>
-                        <select name="external_cron">
-                            <option value="no" <?php echo empty($state) ? '' : ' selected'; ?>>Not Enabled</option>
-                            <option value="yes" <?php echo ($state) ? ' selected' : ''; ?>>Enabled</option>
-                        </select>
-                        <button type="submit" class="button">Update</button>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    URL for HTTPS Request form CRON Service: <code><?php echo esc_url( site_url() ) . '/wp-content/plugins/disciple-tools-network-dashboard/cron/cron.php' ?></code>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
 
     public function box_top_nav_item() {
         if ( isset( $_POST['network_dashboard_nonce'] )
@@ -889,7 +842,7 @@ class DT_Network_Dashboard_Tab_Local
     {
         $report = false;
         if (isset($_POST['test_send_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['test_send_nonce'])), 'test_send_' . get_current_user_id())) {
-            $report = Disciple_Tools_Snapshot_Report::snapshot_report();
+            $report = DT_Network_Dashboard_Snapshot_Report::snapshot_report();
 
         }
         ?>
@@ -1006,7 +959,6 @@ class DT_Network_Dashboard_Tab_Activity
                             <!-- Main Column -->
 
                             <?php $this->box_site_link()?>
-                            <?php //$this->main() ?>
 
                             <!-- End Main Column -->
                         </div><!-- end post-body-content -->
@@ -1163,6 +1115,7 @@ class DT_Network_Dashboard_Tab_Activity
 class DT_Network_Dashboard_Tab_Cron
 {
     public function content() {
+        DT_Network_Dashboard_Snapshot_Report::snapshot_report();
         ?>
         <div class="wrap">
             <div id="poststuff">
@@ -1170,9 +1123,10 @@ class DT_Network_Dashboard_Tab_Cron
                     <div id="post-body-content">
                         <!-- Main Column -->
 
-                        <?php $this->box_cron_settings() ?>
-                        <?php $this->box_cron_setup(); ?>
-                        <?php $this->box_cron_list(); ?>
+                        <?php $this->box_external_cron();  ?>
+
+                        <?php DT_Network_Dashboard_Cron::admin_metabox_cron_settings() ?>
+                        <?php DT_Network_Dashboard_Cron::admin_metabox_cron_list() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -1191,12 +1145,12 @@ class DT_Network_Dashboard_Tab_Cron
         <?php
     }
 
-    public function box_cron_settings() {
-        if ( isset( $_POST['network_dashboard_nonce'] )
-            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
-            && isset( $_POST['hide_top_nav'] ) ) {
+    public function box_external_cron() {
+        if ( isset( $_POST['external_cron_nonce'] )
+            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['external_cron_nonce'] ) ), 'external_cron_' . get_current_user_id() )
+            && isset( $_POST['external_cron'] ) ) {
 
-            $selection = sanitize_text_field( wp_unslash( $_POST['hide_top_nav'] ) );
+            $selection = sanitize_text_field( wp_unslash( $_POST['external_cron'] ) );
             if ( $selection === 'hide' ) {
                 update_option( 'dt_hide_top_menu', true, true );
             }
@@ -1210,117 +1164,28 @@ class DT_Network_Dashboard_Tab_Cron
         <table class="widefat striped">
             <thead>
             <tr>
-                <th>Network Dashboard Cron Frequency</th>
+                <th>External Cron Service</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <td>
 
-                </td>
-            </tr>
             <tr>
                 <td>
                     <form method="post">
-                        <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
-                        <select name="hide_top_nav">
-                            <option value="show" <?php echo empty($state) ? '' : ' selected'; ?>>Show</option>
-                            <option value="hide" <?php echo ($state) ? ' selected' : ''; ?>>Hide</option>
+                        <?php wp_nonce_field( 'external_cron_' . get_current_user_id(), 'external_cron_nonce' ) ?>
+                        <select name="external_cron">
+                            <option value="no" <?php echo empty($state) ? '' : ' selected'; ?>>Not Enabled</option>
+                            <option value="yes" <?php echo ($state) ? ' selected' : ''; ?>>Enabled</option>
                         </select>
                         <button type="submit" class="button">Update</button>
                     </form>
                 </td>
             </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function box_cron_setup() {
-        ?>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <th>External Cron Setup</th>
-            </thead>
-            <tbody>
             <tr>
                 <td>
-                    <p><strong>EXPLANATION</strong><br></p>
-                    Wordpress/Disciple.Tools Cron System depends on visits to trigger background processes. If the site is not visited regularly
-                    like a normal website would be, it is possible to use an external cron service to call the site regularly and trigger these
-                    background tasks. If the Network Dashboard is configured for frequent collections in the section above and you notice
-                    these services not running when expected, you can schedule an external cron service to connect to the site on a regular basis.
+                    URL for HTTPS Request form CRON Service: <code><?php echo esc_url( site_url() ) . '/wp-content/plugins/disciple-tools-network-dashboard/cron/cron.php' ?></code>
                 </td>
             </tr>
-            <tr>
-                <td>
-                    <p><strong>SERVICES</strong></p>
-                    <ul>
-                        <li><a href="https://cron-job.org/en/">Cron-Job.org</a></li>
-                        <li><a href="https://www.easycron.com/">EasyCron</a></li>
-                        <li><a href="https://cronless.com/">Cronless</a></li>
-                        <li>Or Google "free cron services"</li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>CRON URL</strong><br></p>
-                    <code><?php echo esc_url( site_url() ) . '/wp-cron.php' ?></code>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function box_cron_list() {
-        $cron_list = _get_cron_array();
-        dt_write_log($cron_list);
-        ?>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <tr>
-                <th>External Cron Setup</th>
-                <th></th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            foreach( $cron_list as $time => $time_array ){
-                foreach( $time_array as $token => $token_array ){
-                    if ( 'dt_' === substr( $token, 0, 3 ) ){
-                        foreach( $token_array as $key => $items ) {
-                        ?>
-                        <tr>
-                            <td>
-                                <?php echo date( 'Y-m-d H:i:s', $time  )?><br>
-                                <?php echo $time?>
-                            </td>
-                            <td>
-                                <?php echo $token ?>
-                            </td>
-                            <td>
-                                <?php echo $key ?>
-                            </td>
-                            <td>
-                                <?php echo  $items['schedule'] ?? '' ?><br>
-                                <?php echo   isset($items['interval']) ? $items['interval'] / 60 . ' minutes' : '' ?><br>
-                                <?php echo   ! empty($items['args']) ? serialize( $items['args'] ) : '' ?><br>
-                            </td>
-                        </tr>
-                        <?php
-                        }
-                    }
-                }
-            }
-            ?>
             </tbody>
         </table>
         <br>
@@ -1347,6 +1212,32 @@ class DT_Network_Dashboard_Tab_Cron
                 <td>
                     Although it is not required, if there are concerns about the timely distribution of posts/messages/emails or collection of snapshots, then it is very simple
                     to add an external cron service.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>EXPLANATION</strong><br></p>
+                    Wordpress/Disciple.Tools Cron System depends on visits to trigger background processes. If the site is not visited regularly
+                    like a normal website would be, it is possible to use an external cron service to call the site regularly and trigger these
+                    background tasks. If the Network Dashboard is configured for frequent collections in the section above and you notice
+                    these services not running when expected, you can schedule an external cron service to connect to the site on a regular basis.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>SERVICES</strong></p>
+                    <ul>
+                        <li><a href="https://cron-job.org/en/">Cron-Job.org</a></li>
+                        <li><a href="https://www.easycron.com/">EasyCron</a></li>
+                        <li><a href="https://cronless.com/">Cronless</a></li>
+                        <li>Or Google "free cron services"</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>CRON URL</strong><br></p>
+                    <code><?php echo esc_url( site_url() ) . '/wp-cron.php' ?></code>
                 </td>
             </tr>
             </tbody>

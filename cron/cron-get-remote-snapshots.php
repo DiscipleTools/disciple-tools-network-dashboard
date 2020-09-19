@@ -4,27 +4,60 @@ if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly
 
+add_filter( 'dt_network_dashboard_register_cron', 'dt_network_dashboard_collect_remote_cron', 10, 1 );
+function dt_network_dashboard_collect_remote_cron( $crons ){
+    if ( ! DT_Network_Dashboard_Queries::has_sites_for_collection() ){
+        return $crons;
+    }
+
+    $crons['dt_network_dashboard_collect_remote'] = [
+        'recurrence' => 'twicedaily',
+        'display' => 'Collect Remote Sites',
+        'description' => 'Collects remote snapshot of statistics',
+    ];
+    return $crons;
+}
+
 
 /**
  * Class Disciple_Tools_Update_Needed
  */
 class DT_Network_Cron_Scheduler {
 
+    public static $token = 'dt_network_dashboard_collect_remote';
+
     public function __construct() {
-        if ( ! wp_next_scheduled( 'dt_get_sites_snapshot' ) ) {
-            wp_schedule_event( strtotime( 'tomorrow 1am' ), 'daily', 'dt_get_sites_snapshot' );
+        if ( ! DT_Network_Dashboard_Queries::has_sites_for_collection() ){// test if there are any site links to collect, if not don't schedule
+            return;
         }
-        add_action( 'dt_get_sites_snapshot', [ $this, 'action' ] );
+
+        $crons = DT_Network_Dashboard_Cron::get_crons();
+        if ( isset( $crons[self::$token])){
+
+            $cron = $crons[self::$token];
+            if ( ! wp_next_scheduled( self::$token ) ) {
+
+                $schedules = wp_get_schedules();
+                if ( isset( $schedules[$cron['recurrence']] ) ){
+                    $time = time() + $schedules[$cron['recurrence']]['interval'];
+                } else {
+                    $time = strtotime( '+1 hour' );
+                }
+
+                wp_schedule_event( $time, $cron['recurrence'], self::$token );
+            }
+            add_action( self::$token, [ $this, 'action' ] );
+        }
     }
 
     public static function action(){
-        do_action( "dt_get_sites_snapshot" );
+        do_action( self::$token );
     }
 }
 
 class DT_Get_Sites_SnapShot_Async extends Disciple_Tools_Async_Task {
 
-    protected $action = 'dt_get_sites_snapshot';
+    protected $action = 'dt_network_dashboard_collect_remote';
 
     protected function prepare_data( $data ) {
         return $data;
@@ -148,12 +181,12 @@ function dt_get_site_snapshot( $site_post_id ) {
             'transfer_token' => $site['transfer_token'],
         ]
     ];
-    $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network/live_stats', $args );
+    $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/live_stats', $args );
     if ( is_wp_error( $result ) ) {
         // retry connection in 3 seconds
         sleep( 10 );
         dt_save_log( $file, 'RETRY ID: ' . $site_post_id . ' (WP_Remote_Post Error)' );
-        $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network/live_stats', $args );
+        $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/live_stats', $args );
     }
     if ( is_wp_error( $result ) ) {
         update_post_meta( $site_post_id, 'snapshot_fail', maybe_serialize( $result ) );
@@ -168,7 +201,7 @@ function dt_get_site_snapshot( $site_post_id ) {
         // retry connection in 3 seconds
         sleep( 10 );
         dt_save_log( $file, 'RETRY ID: ' . $site_post_id . ' (Payload = FAIL)' );
-        $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network/live_stats', $args );
+        $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/live_stats', $args );
         if ( is_wp_error( $result ) ) {
             update_post_meta( $site_post_id, 'snapshot_fail', maybe_serialize( $result ) );
 

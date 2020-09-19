@@ -130,14 +130,14 @@ class DT_Network_Dashboard {
         require_once( 'network/queries.php' );
         require_once( 'network/multisite.php' );
 
-        require_once( 'local/network-endpoints.php' );
-        require_once( 'local/network.php' );
-        require_once( 'local/network-queries.php' );
+        require_once('local/snapshot-endpoints.php');
+        require_once('local/snapshot.php');
+
+        require_once('local/snapshot-queries.php');
 
         require_once( 'activity/activity-log.php');
         require_once( 'activity/hooks.php');
         require_once( 'activity/cron-action.php');
-
 
 
         // UI METRICS FOR NETWORK TAB
@@ -150,9 +150,15 @@ class DT_Network_Dashboard {
         // CRON
         require_once( 'cron/cron-log.php' );
 
+
         if ( file_exists( get_theme_file_path() . '/dt-core/wp-async-request.php' ) ) {
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
             require_once( get_theme_file_path() . '/dt-core/admin/site-link-post-type.php' ); // must load before cron
+            require_once('cron/cron-utilities.php');
+
+            require_once('local/snapshot-cron.php');
+
+
             require_once( 'cron/cron-get-remote-snapshots.php' );
 
             new DT_Network_Cron_Scheduler();
