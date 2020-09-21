@@ -148,7 +148,6 @@ class DT_Network_Dashboard {
             require_once( get_theme_file_path() . '/dt-core/admin/site-link-post-type.php' ); // must load before cron
 
             require_once( 'cron/cron-log.php' );
-            require_once( 'cron/cron-admin.php');
             require_once( 'cron/cron-1-build-snapshot.php' );
             if ( dt_is_current_multisite_dashboard_approved() ) { // load if approved for multisite collection
                 require_once('cron/cron-2-build-multisite-snapshot.php');

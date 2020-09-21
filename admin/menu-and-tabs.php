@@ -1123,17 +1123,15 @@ class DT_Network_Dashboard_Tab_Cron
                     <div id="post-body-content">
                         <!-- Main Column -->
 
-                        <?php $this->box_external_cron();  ?>
 
-                        <?php DT_Network_Dashboard_Cron::admin_metabox_cron_settings() ?>
-                        <?php DT_Network_Dashboard_Cron::admin_metabox_cron_list() ?>
+                        <?php $this->metabox_cron_list() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
                     <div id="postbox-container-1" class="postbox-container">
                         <!-- Right Column -->
 
-                        <?php $this->sidebar() ?>
+                        <?php $this->box_instructions() ?>
 
                         <!-- End Right Column -->
                     </div><!-- postbox-container 1 -->
@@ -1145,55 +1143,80 @@ class DT_Network_Dashboard_Tab_Cron
         <?php
     }
 
-    public function box_external_cron() {
-        if ( isset( $_POST['external_cron_nonce'] )
-            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['external_cron_nonce'] ) ), 'external_cron_' . get_current_user_id() )
-            && isset( $_POST['external_cron'] ) ) {
+    public function metabox_cron_list() {
 
-            $selection = sanitize_text_field( wp_unslash( $_POST['external_cron'] ) );
-            if ( $selection === 'hide' ) {
-                update_option( 'dt_hide_top_menu', true, true );
-            }
-            if ( $selection === 'show' ) {
-                delete_option( 'dt_hide_top_menu' );
-            }
+        if ( isset( $_POST['cron_run_nonce'] )
+            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['cron_run_nonce'] ) ), 'cron_run_' . get_current_user_id() )
+            && isset( $_POST['run_now'] ) ) {
+
+            dt_write_log($_POST);
+
+            $hook = sanitize_text_field( wp_unslash( $_POST['run_now'] ) );
+            $timestamp = wp_next_scheduled( $hook );
+            wp_unschedule_event( $timestamp, $hook );
+
+            // @todo push a run
+
         }
-        $state = get_option( 'dt_hide_top_menu' );
+        $cron_list = _get_cron_array();
         ?>
         <!-- Box -->
+
         <table class="widefat striped">
             <thead>
             <tr>
-                <th>External Cron Service</th>
+                <th>External Cron Schedule</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
             </tr>
             </thead>
             <tbody>
-
-            <tr>
-                <td>
-                    <form method="post">
-                        <?php wp_nonce_field( 'external_cron_' . get_current_user_id(), 'external_cron_nonce' ) ?>
-                        <select name="external_cron">
-                            <option value="no" <?php echo empty($state) ? '' : ' selected'; ?>>Not Enabled</option>
-                            <option value="yes" <?php echo ($state) ? ' selected' : ''; ?>>Enabled</option>
-                        </select>
-                        <button type="submit" class="button">Update</button>
-                    </form>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    URL for HTTPS Request form CRON Service: <code><?php echo esc_url( site_url() ) . '/wp-content/plugins/disciple-tools-network-dashboard/cron/cron.php' ?></code>
-                </td>
-            </tr>
+            <?php
+            foreach( $cron_list as $time => $time_array ){
+                foreach( $time_array as $token => $token_array ){
+                    if ( 'dt_' === substr( $token, 0, 3 ) ){
+                        foreach( $token_array as $key => $items ) {
+                            ?>
+                            <tr>
+                                <td>
+                                    <?php echo 'Next event in ' . round( ( $time - time() ) / 60 / 60 , 1) . ' hours' ?><br>
+                                    <?php echo date( 'Y-m-d H:i:s', $time  )?><br>
+                                </td>
+                                <td>
+                                    <?php echo $token ?>
+                                </td>
+                                <td>
+                                    <?php echo $key ?>
+                                </td>
+                                <td>
+                                    <?php echo $items['schedule'] ?? '' ?><br>
+                                    Every <?php echo isset($items['interval']) ? $items['interval'] / 60 . ' minutes' : '' ?><br>
+                                    <?php echo ! empty($items['args']) ? serialize( $items['args'] ) : '' ?><br>
+                                </td>
+                                <td>
+                                    <form method="post">
+                                        <?php wp_nonce_field( 'cron_run_' . get_current_user_id(), 'cron_run_nonce' ) ?>
+                                        <button type="submit" name="run_now" value="<?php echo $token ?>" class="button">Delete and Respawn</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                }
+            }
+            ?>
             </tbody>
         </table>
+
         <br>
         <!-- End Box -->
         <?php
     }
 
-    public function sidebar() {
+    public function box_instructions() {
         ?>
         <!-- Box -->
         <table class="widefat striped">
