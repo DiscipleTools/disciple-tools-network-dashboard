@@ -121,12 +121,15 @@ class DT_Network_Dashboard {
     private function includes() {
 
         // SHARED RESOURCES
+        require_once( 'shared/endpoints-base.php' );
         require_once( 'shared/permissions.php' );
         require_once( 'shared/site-profile.php' );
         require_once( 'shared/wp-async-request.php' );
         require_once( 'shared/customize-site-linking.php' ); // loads capabilities
         require_once( 'shared/remove-top-nav-config.php' );
-        require_once( 'shared/queries.php' );
+
+        require_once('network/queries.php');
+        require_once('network/endpoints.php');
 
         require_once('local-snapshot/snapshot-endpoints.php');
         require_once('local-snapshot/snapshot-report.php');
@@ -145,7 +148,6 @@ class DT_Network_Dashboard {
         // CRON
         if ( file_exists( get_theme_file_path() . '/dt-core/wp-async-request.php' ) ) {
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
-            require_once( get_theme_file_path() . '/dt-core/admin/site-link-post-type.php' ); // must load before cron
 
             require_once( 'cron/cron-log.php' );
             require_once( 'cron/cron-1-build-snapshot.php' );
@@ -173,16 +175,9 @@ class DT_Network_Dashboard {
      * @return void
      */
     private function setup() {
-        global $wpdb;
         // Main plugin directory path and URI.
         $this->dir_path     = trailingslashit( plugin_dir_path( __FILE__ ) );
         $this->dir_uri      = trailingslashit( plugin_dir_url( __FILE__ ) );
-
-        // Plugin directory paths.
-        $this->admin_path      = trailingslashit( $this->dir_path . 'admin' );
-
-        // Plugin directory URIs.
-        $this->img_uri      = trailingslashit( $this->dir_uri . 'img' );
 
         // Admin and settings variables
         $this->token          = 'dt_network_dashboard';
@@ -191,6 +186,11 @@ class DT_Network_Dashboard {
         global $wpdb;
         $wpdb->dt_movement_log = $wpdb->prefix . 'dt_movement_log';
         $wpdb->dt_movement_log_meta = $wpdb->prefix . 'dt_movement_log_meta';
+
+        if ( ! class_exists( 'Site_Link_System' ) ){
+            require_once( get_theme_file_path() . '/dt-core/admin/site-link-post-type.php' );
+        }
+
 
     }
 

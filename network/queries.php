@@ -31,6 +31,31 @@ class DT_Network_Dashboard_Queries {
         return $results;
     }
 
+    public static function get_site_id_from_partner_id( $partner_id ) : int {
+        global $wpdb;
+
+        $results = $wpdb->get_var($wpdb->prepare( "
+                SELECT 
+                  pm.post_id as site_post_id
+                FROM $wpdb->posts as p
+                JOIN $wpdb->postmeta as pm
+                  ON p.ID=pm.post_id
+					AND pm.meta_key = 'partner_id'
+				WHERE p.post_type = 'site_link_system'
+                  AND p.post_status = 'publish'
+                  AND pm.meta_value = %s", $partner_id)  );
+
+        if ( empty( $results ) ) {
+            $results = 0;
+        }
+
+        return $results;
+    }
+
+
+
+
+
     public static function has_sites_for_collection() : int {
         global $wpdb;
 

@@ -14,11 +14,8 @@ if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
  * Class DT_Network_Dashboard_Snapshot_Endpoints
  */
 
-class DT_Network_Dashboard_Snapshot_Endpoints
+class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpoints_Base
 {
-
-    private $version = 1;
-    private $namespace;
 
     /**
      * DT_Network_Dashboard_Snapshot_Endpoints The single instance of DT_Network_Dashboard_Snapshot_Endpoints.
@@ -41,7 +38,6 @@ class DT_Network_Dashboard_Snapshot_Endpoints
         if ( is_null( self::$_instance ) ) {
             self::$_instance = new self();
         }
-
         return self::$_instance;
     } // End instance()
 
@@ -52,8 +48,7 @@ class DT_Network_Dashboard_Snapshot_Endpoints
      * @since   0.1.0
      */
     public function __construct() {
-        $this->namespace = "dt/v" . intval( $this->version );
-        $this->public_namespace = "dt-public/v" . intval( $this->version );
+        parent::__construct();
 
         add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
     } // End __construct()
@@ -65,6 +60,7 @@ class DT_Network_Dashboard_Snapshot_Endpoints
                 'callback' => [ $this, 'live_stats' ],
             ]
         );
+
     }
 
     public function live_stats( WP_REST_Request $request ) {
@@ -77,41 +73,6 @@ class DT_Network_Dashboard_Snapshot_Endpoints
         }
 
         return DT_Network_Dashboard_Snapshot_Report::snapshot_report();
-    }
-
-    /**
-     * Process the standard security checks on an api request to network endpoints.
-     * @param \WP_REST_Request $request
-     *
-     * @return array|\WP_Error
-     */
-    public function process_token( WP_REST_Request $request ) {
-
-        $params = $request->get_params();
-
-        // required token parameter challenge
-        if ( ! isset( $params['transfer_token'] ) ) {
-            return new WP_Error( __METHOD__, 'Missing parameters.' );
-        }
-
-        $valid_token = Site_Link_System::verify_transfer_token( $params['transfer_token'] );
-
-        // required valid token challenge
-        if ( ! $valid_token ) {
-            dt_write_log( $valid_token );
-            return new WP_Error( __METHOD__, 'Invalid transfer token' );
-        }
-        // required permission challenge (that this token comes from an approved network report site link)
-//        if ( ! ( current_user_can( 'network_dashboard_sending' ) || current_user_can( 'network_dashboard_receiving' ) || current_user_can( 'network_dashboard_both' ) ) ) {
-//            return new WP_Error( __METHOD__, 'Network report permission error.' );
-//        }
-
-        // Add post id for site to site link
-        $decrypted_key = Site_Link_System::decrypt_transfer_token( $params['transfer_token'] );
-        $keys = Site_Link_System::get_site_keys();
-        $params['site_post_id'] = $keys[$decrypted_key]['post_id'];
-
-        return $params;
     }
 
 }
