@@ -3,7 +3,6 @@
  * Scheduled Cron Service
  */
 
-
 // Load Scheduler
 new DT_Network_Multisite_Cron_Scheduler();
 try {

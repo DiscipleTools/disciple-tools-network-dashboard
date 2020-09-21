@@ -14,10 +14,10 @@ on a normal Disciple Tools system.
 Cron | Cron Name |  Collection Pattern | |
  --- | --- | --- | --- | 
  Remote Build Snapshot | dt_network_dashboard_build_snapshot | Daily | 01:00 | 
- Multisite Build Snapshots | | Daily | 02:00 | 
- Remote Sites Trigger | | Daily | 03:00 |
- Remote Snapshot Push | | Daily | 04:00 + sec |
- DTND Collection Un-submitted Sites | | Daily | 05:00 |
+ Multisite Build Snapshots | dt_network_dashboard_collect_multisite_snapshots | Daily | 02:00 | 
+ Remote Snapshot Push | dt_network_dashboard_push_snapshot | Daily | 03:00  |
+ Remote Sites Trigger | dt_network_dashboard_trigger_sites | Daily | 04:00 |
+ DTND Collection Un-submitted Sites |dt_network_dashboard_collect_remote_sites| Daily | 05:00 |
  Remote Transfer Health Check |  | Hourly |
  
 

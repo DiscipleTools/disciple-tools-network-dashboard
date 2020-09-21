@@ -149,13 +149,14 @@ class DT_Network_Dashboard {
 
             require_once( 'cron/cron-log.php' );
             require_once( 'cron/cron-admin.php');
-            require_once( 'cron/cron-build-snapshot.php' );
-            require_once( 'cron/cron-get-remote-snapshots.php' );
-
-            // load if approved for multisite collection
-            if ( dt_is_current_multisite_dashboard_approved() ) {
-                require_once('cron/cron-build-multisite-snapshot.php');
+            require_once( 'cron/cron-1-build-snapshot.php' );
+            if ( dt_is_current_multisite_dashboard_approved() ) { // load if approved for multisite collection
+                require_once('cron/cron-2-build-multisite-snapshot.php');
             }
+            require_once( 'cron/cron-3-push-snapshot.php' );
+            require_once( 'cron/cron-4-trigger-remote-sites.php' );
+            require_once( 'cron/cron-5-collect-remote-sites.php' );
+
         }
 
         require_once( 'admin/menu-and-tabs-endpoints.php' );
