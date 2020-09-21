@@ -39,7 +39,7 @@ class DT_Network_Dashboard_Snapshot_Report
                 ],
                 'baptisms' => [
                     'current_state' => [
-                        'all_baptisms' => Disciple_Tools_Network_Queries::total_baptisms(),
+                        'all_baptisms' => DT_Network_Dashboard_Snapshot_Queries::total_baptisms(),
                     ],
                     'added' => [
                         'sixty_days' => self::counted_by_day('baptisms'),
@@ -142,7 +142,7 @@ class DT_Network_Dashboard_Snapshot_Report
         // Add
         $data['status'] = self::get_contacts_status();
 
-        $data['all_contacts'] = Disciple_Tools_Network_Queries::all_contacts();
+        $data['all_contacts'] = DT_Network_Dashboard_Snapshot_Queries::all_contacts();
 
         return $data;
     }
@@ -164,7 +164,7 @@ class DT_Network_Dashboard_Snapshot_Report
         $data = [];
         $contact_fields = Disciple_Tools_Contact_Post_Type::instance()->get_custom_fields_settings();
         $status_defaults = $contact_fields['overall_status']['default'];
-        $current_state = Disciple_Tools_Network_Queries::contacts_current_state();
+        $current_state = DT_Network_Dashboard_Snapshot_Queries::contacts_current_state();
         foreach ($status_defaults as $key => $status) {
             $data[$key] = 0;
             foreach ($current_state as $state) {
@@ -185,16 +185,16 @@ class DT_Network_Dashboard_Snapshot_Report
 
         switch ($type) {
             case 'groups':
-                $dates = Disciple_Tools_Network_Queries::counted_by_day('created', 'groups');
+                $dates = DT_Network_Dashboard_Snapshot_Queries::counted_by_day('created', 'groups');
                 break;
             case 'logged_in':
-                $dates = Disciple_Tools_Network_Queries::counted_by_day('logged_in', 'user');
+                $dates = DT_Network_Dashboard_Snapshot_Queries::counted_by_day('logged_in', 'user');
                 break;
             case 'baptisms':
-                $dates = Disciple_Tools_Network_Queries::baptisms_counted_by_day();
+                $dates = DT_Network_Dashboard_Snapshot_Queries::baptisms_counted_by_day();
                 break;
             default: // contacts
-                $dates = Disciple_Tools_Network_Queries::counted_by_day('created', 'contacts');
+                $dates = DT_Network_Dashboard_Snapshot_Queries::counted_by_day('created', 'contacts');
                 break;
         }
 
@@ -235,16 +235,16 @@ class DT_Network_Dashboard_Snapshot_Report
 
         switch ($type) {
             case 'groups':
-                $dates = Disciple_Tools_Network_Queries::counted_by_month('created', 'groups');
+                $dates = DT_Network_Dashboard_Snapshot_Queries::counted_by_month('created', 'groups');
                 break;
             case 'logged_in':
-                $dates = Disciple_Tools_Network_Queries::counted_by_month('logged_in', 'user');
+                $dates = DT_Network_Dashboard_Snapshot_Queries::counted_by_month('logged_in', 'user');
                 break;
             case 'baptisms':
-                $dates = Disciple_Tools_Network_Queries::baptisms_counted_by_month();
+                $dates = DT_Network_Dashboard_Snapshot_Queries::baptisms_counted_by_month();
                 break;
             default: // contacts
-                $dates = Disciple_Tools_Network_Queries::counted_by_month('created', 'contacts');
+                $dates = DT_Network_Dashboard_Snapshot_Queries::counted_by_month('created', 'contacts');
                 break;
         }
 
@@ -280,7 +280,7 @@ class DT_Network_Dashboard_Snapshot_Report
     public static function user_logins_last_thirty_days()
     {
 
-        $active = Disciple_Tools_Network_Queries::user_logins_last_thirty_days();
+        $active = DT_Network_Dashboard_Snapshot_Queries::user_logins_last_thirty_days();
 
         $total_users = count_users();
 
@@ -376,7 +376,7 @@ class DT_Network_Dashboard_Snapshot_Report
         ];
 
         // Add types and status
-        $types_and_status = Disciple_Tools_Network_Queries::groups_types_and_status();
+        $types_and_status = DT_Network_Dashboard_Snapshot_Queries::groups_types_and_status();
         foreach ($types_and_status as $value) {
             $value['type'] = str_replace('-', '_', $value['type']);
 
@@ -387,7 +387,7 @@ class DT_Network_Dashboard_Snapshot_Report
             }
         }
 
-        $data['all'] = Disciple_Tools_Network_Queries::all_groups();
+        $data['all'] = DT_Network_Dashboard_Snapshot_Queries::all_groups();
 
         return $data;
     }
@@ -396,7 +396,7 @@ class DT_Network_Dashboard_Snapshot_Report
     {
         $data = [];
 
-        $types_and_status = Disciple_Tools_Network_Queries::groups_types_and_status();
+        $types_and_status = DT_Network_Dashboard_Snapshot_Queries::groups_types_and_status();
 
         $keyed = [];
         foreach ($types_and_status as $status) {
@@ -457,7 +457,7 @@ class DT_Network_Dashboard_Snapshot_Report
         }
 
         // get results
-        $practicing = Disciple_Tools_Network_Queries::group_health();
+        $practicing = DT_Network_Dashboard_Snapshot_Queries::group_health();
 
         // build keyed practicing
         foreach ($practicing as $value) {
@@ -465,7 +465,7 @@ class DT_Network_Dashboard_Snapshot_Report
         }
 
         // get total number
-        $total_groups = Disciple_Tools_Network_Queries::groups_churches_total(); // total groups and churches
+        $total_groups = DT_Network_Dashboard_Snapshot_Queries::groups_churches_total(); // total groups and churches
 
         // add real numbers and prepare array
         foreach ($labels as $key => $label) {
@@ -723,7 +723,7 @@ class DT_Network_Dashboard_Snapshot_Report
             'active_admin2_grid_ids' => [],
         ];
 
-        $results = Disciple_Tools_Network_Queries::locations_current_state();
+        $results = DT_Network_Dashboard_Snapshot_Queries::locations_current_state();
         if (!empty($results['active_countries'])) {
             $data['active_countries'] = (int)$results['active_countries'];
         }

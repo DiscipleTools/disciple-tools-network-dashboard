@@ -1,7 +1,7 @@
 <?php
 
-if ( ! class_exists( 'Disciple_Tools_Network_Queries' ) ) {
-    class Disciple_Tools_Network_Queries {
+if ( ! class_exists( 'DT_Network_Dashboard_Snapshot_Queries' ) ) {
+    class DT_Network_Dashboard_Snapshot_Queries {
 
         public static function contacts_current_state() : array  {
             global $wpdb;

@@ -121,24 +121,21 @@ class DT_Network_Dashboard {
     private function includes() {
 
         // SHARED RESOURCES
-        require_once('shared/permissions.php');
-        require_once('shared/site-profile.php');
-        require_once('shared/wp-async-request.php');
-        require_once('shared/customize-site-linking.php'); // loads capabilities
-        require_once('shared/remove-top-nav-config.php');
+        require_once( 'shared/permissions.php' );
+        require_once( 'shared/site-profile.php' );
+        require_once( 'shared/wp-async-request.php' );
+        require_once( 'shared/customize-site-linking.php' ); // loads capabilities
+        require_once( 'shared/remove-top-nav-config.php' );
+        require_once( 'shared/queries.php' );
 
-        require_once( 'network/queries.php' );
-        require_once( 'network/multisite.php' );
+        require_once('multisite/multisite-access-functions.php');
 
-        require_once('local/snapshot-endpoints.php');
-        require_once('local/snapshot.php');
-
-        require_once('local/snapshot-queries.php');
+        require_once('local-snapshot/snapshot-endpoints.php');
+        require_once('local-snapshot/snapshot-report.php');
+        require_once('local-snapshot/snapshot-queries.php');
 
         require_once( 'activity/activity-log.php');
         require_once( 'activity/hooks.php');
-        require_once( 'activity/cron-action.php');
-
 
         // UI METRICS FOR NETWORK TAB
         require_once( 'ui/ui.php' );
@@ -149,40 +146,24 @@ class DT_Network_Dashboard {
 
         // CRON
         if ( file_exists( get_theme_file_path() . '/dt-core/wp-async-request.php' ) ) {
-            require_once( 'cron/cron-log.php' );
-
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
             require_once( get_theme_file_path() . '/dt-core/admin/site-link-post-type.php' ); // must load before cron
-            require_once('cron/cron-utilities.php');
 
-            require_once('cron/cron-snapshot.php');
-
+            require_once( 'cron/cron-log.php' );
+            require_once('cron/cron-admin.php');
+            require_once( 'cron/cron-build-snapshot.php' );
             require_once( 'cron/cron-get-remote-snapshots.php' );
-
-//            new DT_Network_Cron_Scheduler();
-//            try {
-//                new DT_Get_Sites_SnapShot_Async();
-//            } catch ( Exception $e ) {
-//                dt_write_log( $e );
-//            }
 
             // load if approved for multisite collection
             if ( dt_is_current_multisite_dashboard_approved() ) {
                 require_once( 'cron/cron-get-multisite-snapshots.php' );
-
-//                new DT_Network_Multisite_Cron_Scheduler();
-//                try {
-//                    new DT_Get_Network_Multisite_SnapShot_Async();
-//                } catch ( Exception $e ) {
-//                    dt_write_log( $e );
-//                }
             }
         }
 
-        require_once('admin/menu-and-tabs-endpoints.php');
+        require_once( 'admin/menu-and-tabs-endpoints.php' );
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );
-            require_once('admin/metabox-site-profile.php');
+            require_once( 'admin/metabox-site-profile.php' );
         }
     }
 
@@ -206,8 +187,8 @@ class DT_Network_Dashboard {
         $this->img_uri      = trailingslashit( $this->dir_uri . 'img' );
 
         // Admin and settings variables
-        $this->token             = 'dt_network_dashboard';
-        $this->version             = '2.0';
+        $this->token          = 'dt_network_dashboard';
+        $this->version        = '2.0';
 
         global $wpdb;
         $wpdb->dt_movement_log = $wpdb->prefix . 'dt_movement_log';
@@ -270,7 +251,8 @@ class DT_Network_Dashboard {
      * @return void
      */
     public function i18n() {
-        load_plugin_textdomain( 'dt_network_dashboard', false, trailingslashit( dirname( plugin_basename( __FILE__ ) ) ). 'languages' );
+        load_plugin_textdomain( 'dt_network_dashboard', false,
+            trailingslashit( dirname( plugin_basename( __FILE__ ) ) ). 'languages' );
     }
 
     /**
