@@ -3,66 +3,66 @@
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
 } // Exit if accessed directly
-
-add_filter( 'dt_network_dashboard_register_cron', 'dt_network_dashboard_collect_remote_cron', 10, 1 );
-function dt_network_dashboard_collect_remote_cron( $crons ){
-    if ( ! DT_Network_Dashboard_Queries::has_sites_for_collection() ){
-        return $crons;
-    }
-
-    $crons['dt_network_dashboard_collect_remote'] = [
-        'recurrence' => 'twicedaily',
-        'display' => 'Collect Remote Sites',
-        'description' => 'Collects remote snapshot of statistics',
-    ];
-    return $crons;
-}
-
-
-
-new DT_Network_Cron_Scheduler();
-try {
-    new DT_Get_Sites_SnapShot_Async();
-} catch ( Exception $e ) {
-    dt_write_log( $e );
-}
-
-
-/**
- * Class Disciple_Tools_Update_Needed
- */
-class DT_Network_Cron_Scheduler {
-
-    public static $token = 'dt_network_dashboard_collect_remote';
-
-    public function __construct() {
-        if ( ! DT_Network_Dashboard_Queries::has_sites_for_collection() ){// test if there are any site links to collect, if not don't schedule
-            return;
-        }
-
-        $crons = DT_Network_Dashboard_Cron::get_crons();
-        if ( isset( $crons[self::$token])){
-
-            $cron = $crons[self::$token];
-            if ( ! wp_next_scheduled( self::$token ) ) {
-
-                $schedules = wp_get_schedules();
-                if ( isset( $schedules[$cron['recurrence']] ) ){
-                    $time = time() + $schedules[$cron['recurrence']]['interval'];
-                } else {
-                    $time = strtotime( '+1 hour' );
-                }
-
-                wp_schedule_event( $time, $cron['recurrence'], self::$token );
-            }
-            add_action( self::$token, [ $this, 'action' ] );
-        }
-    }
-
-    public static function action(){
-        do_action( self::$token );
-    }
-}
+//
+//add_filter( 'dt_network_dashboard_register_cron', 'dt_network_dashboard_collect_remote_cron', 10, 1 );
+//function dt_network_dashboard_collect_remote_cron( $crons ){
+//    if ( ! DT_Network_Dashboard_Queries::has_sites_for_collection() ){
+//        return $crons;
+//    }
+//
+//    $crons['dt_network_dashboard_collect_remote'] = [
+//        'recurrence' => 'twicedaily',
+//        'display' => 'Collect Remote Sites',
+//        'description' => 'Collects remote snapshot of statistics',
+//    ];
+//    return $crons;
+//}
+//
+//
+//
+//new DT_Network_Cron_Scheduler();
+//try {
+//    new DT_Get_Sites_SnapShot_Async();
+//} catch ( Exception $e ) {
+//    dt_write_log( $e );
+//}
+//
+//
+///**
+// * Class Disciple_Tools_Update_Needed
+// */
+//class DT_Network_Cron_Scheduler {
+//
+//    public static $token = 'dt_network_dashboard_collect_remote';
+//
+//    public function __construct() {
+//        if ( ! DT_Network_Dashboard_Queries::has_sites_for_collection() ){// test if there are any site links to collect, if not don't schedule
+//            return;
+//        }
+//
+//        $crons = DT_Network_Dashboard_Cron::get_crons();
+//        if ( isset( $crons[self::$token])){
+//
+//            $cron = $crons[self::$token];
+//            if ( ! wp_next_scheduled( self::$token ) ) {
+//
+//                $schedules = wp_get_schedules();
+//                if ( isset( $schedules[$cron['recurrence']] ) ){
+//                    $time = time() + $schedules[$cron['recurrence']]['interval'];
+//                } else {
+//                    $time = strtotime( '+1 hour' );
+//                }
+//
+//                wp_schedule_event( $time, $cron['recurrence'], self::$token );
+//            }
+//            add_action( self::$token, [ $this, 'action' ] );
+//        }
+//    }
+//
+//    public static function action(){
+//        do_action( self::$token );
+//    }
+//}
 
 class DT_Get_Sites_SnapShot_Async extends Disciple_Tools_Async_Task {
 

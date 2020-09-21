@@ -17,22 +17,22 @@ class DT_Network_Dashboard_Cron_Snapshot_Scheduler
 
     public function __construct()
     {
-        if (!wp_next_scheduled('dt_load_snapshot_report')) {
-            wp_schedule_event(strtotime('tomorrow 1am'), 'twicedaily', 'dt_load_snapshot_report');
+        if (!wp_next_scheduled('dt_network_dashboard_build_snapshot')) {
+            wp_schedule_event(strtotime('tomorrow 1am'), 'daily', 'dt_network_dashboard_build_snapshot');
         }
-        add_action('dt_load_snapshot_report', [$this, 'action']);
+        add_action('dt_network_dashboard_build_snapshot', [$this, 'action']);
     }
 
     public static function action()
     {
-        do_action("dt_load_snapshot_report");
+        do_action("dt_network_dashboard_build_snapshot");
     }
 }
 
 class DT_Network_Dashboard_Cron_Snapshot_Async extends Disciple_Tools_Async_Task
 {
 
-    protected $action = 'dt_load_snapshot_report';
+    protected $action = 'dt_network_dashboard_build_snapshot';
 
     protected function prepare_data($data)
     {
