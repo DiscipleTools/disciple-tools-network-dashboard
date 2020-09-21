@@ -104,4 +104,26 @@ class DT_Network_Dashboard_Queries {
 
         return $results;
     }
+
+    public static function multisite_snapshots() {
+        if ( ! dt_is_current_multisite_dashboard_approved() ) {
+            return [];
+        }
+
+        $site_ids = self::all_multisite_ids();
+
+        $snapshot = [];
+        foreach ( $site_ids as $id ) {
+            if ( get_blog_option( $id, 'current_theme' ) !== 'Disciple Tools' ) {
+                continue;
+            }
+            $snapshot[$id] = get_blog_option( $id, 'dt_snapshot_report' );
+        }
+
+        return $snapshot;
+    }
+}
+
+function dt_multisite_dashboard_snapshots() {
+    return DT_Network_Dashboard_Queries::multisite_snapshots();
 }

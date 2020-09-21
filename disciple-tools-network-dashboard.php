@@ -128,8 +128,6 @@ class DT_Network_Dashboard {
         require_once( 'shared/remove-top-nav-config.php' );
         require_once( 'shared/queries.php' );
 
-        require_once('multisite/multisite-access-functions.php');
-
         require_once('local-snapshot/snapshot-endpoints.php');
         require_once('local-snapshot/snapshot-report.php');
         require_once('local-snapshot/snapshot-queries.php');

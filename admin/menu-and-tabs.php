@@ -84,7 +84,7 @@ class DT_Network_Dashboard_Menu {
             wp_die( esc_attr__( 'You do not have sufficient permissions to access this page.' ) );
         }
 
-        if ( dt_multisite_network_dashboard_is_approved() ) {
+        if ( dt_network_dashboard_multisite_is_approved() ) {
             $approved_multisite = true;
         } else {
             $approved_multisite = false;
