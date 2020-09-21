@@ -19,6 +19,15 @@ function dt_network_dashboard_collect_remote_cron( $crons ){
 }
 
 
+
+new DT_Network_Cron_Scheduler();
+try {
+    new DT_Get_Sites_SnapShot_Async();
+} catch ( Exception $e ) {
+    dt_write_log( $e );
+}
+
+
 /**
  * Class Disciple_Tools_Update_Needed
  */

@@ -148,38 +148,34 @@ class DT_Network_Dashboard {
 
 
         // CRON
-        require_once( 'cron/cron-log.php' );
-
-
         if ( file_exists( get_theme_file_path() . '/dt-core/wp-async-request.php' ) ) {
+            require_once( 'cron/cron-log.php' );
+
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
             require_once( get_theme_file_path() . '/dt-core/admin/site-link-post-type.php' ); // must load before cron
             require_once('cron/cron-utilities.php');
 
-            require_once('local/snapshot-cron.php');
-
+            require_once('cron/cron-snapshot.php');
 
             require_once( 'cron/cron-get-remote-snapshots.php' );
 
-            new DT_Network_Cron_Scheduler();
-
-            try {
-                new DT_Get_Sites_SnapShot_Async();
-            } catch ( Exception $e ) {
-                dt_write_log( $e );
-            }
+//            new DT_Network_Cron_Scheduler();
+//            try {
+//                new DT_Get_Sites_SnapShot_Async();
+//            } catch ( Exception $e ) {
+//                dt_write_log( $e );
+//            }
 
             // load if approved for multisite collection
             if ( dt_is_current_multisite_dashboard_approved() ) {
                 require_once( 'cron/cron-get-multisite-snapshots.php' );
 
-                new DT_Network_Multisite_Cron_Scheduler();
-
-                try {
-                    new DT_Get_Network_Multisite_SnapShot_Async();
-                } catch ( Exception $e ) {
-                    dt_write_log( $e );
-                }
+//                new DT_Network_Multisite_Cron_Scheduler();
+//                try {
+//                    new DT_Get_Network_Multisite_SnapShot_Async();
+//                } catch ( Exception $e ) {
+//                    dt_write_log( $e );
+//                }
             }
         }
 

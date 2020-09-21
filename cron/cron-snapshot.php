@@ -1,4 +1,14 @@
 <?php
+/**
+ * Scheduled Cron Service
+ */
+
+new DT_Network_Dashboard_Cron_Snapshot_Scheduler();
+try {
+    new DT_Network_Dashboard_Cron_Snapshot_Async();
+} catch (Exception $e) {
+    dt_write_log($e);
+}
 
 
 // Begin Schedule daily cron build
@@ -35,9 +45,3 @@ class DT_Network_Dashboard_Cron_Snapshot_Async extends Disciple_Tools_Async_Task
     }
 }
 
-new DT_Network_Dashboard_Cron_Snapshot_Scheduler();
-try {
-    new DT_Network_Dashboard_Cron_Snapshot_Async();
-} catch (Exception $e) {
-    dt_write_log($e);
-}

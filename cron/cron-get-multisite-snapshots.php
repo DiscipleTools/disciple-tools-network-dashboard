@@ -5,6 +5,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 } // Exit if accessed directly
 
 
+// Load Scheduler
+new DT_Network_Multisite_Cron_Scheduler();
+try {
+    new DT_Get_Network_Multisite_SnapShot_Async();
+} catch ( Exception $e ) {
+    dt_write_log( $e );
+}
+
+
 /**
  * Class Disciple_Tools_Update_Needed
  */

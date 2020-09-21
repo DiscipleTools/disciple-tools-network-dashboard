@@ -11,6 +11,7 @@ class DT_Network_Activity_Hooks {
 
     public function __construct() {
         add_action( 'dt_insert_activity', [ $this, 'filter_activity' ], 10, 1 );
+//        add_action('dt_network_dashboard_external_cron', 'dt_activity_log_payload_check' ); // @todo remove. not using a post_meta strategy
     }
 
     public function filter_activity( $args ){
@@ -172,6 +173,26 @@ class DT_Network_Activity_Hooks {
         DT_Network_Activity_Log::post_activity($data);
 
     }
+
+//    public function dt_activity_log_payload_check(){
+//        $process_status = [];
+//        $process_status['event'] = __METHOD__;
+//        $process_status['start'] = microtime(true); // @todo remove after development
+//
+//        global $wpdb;
+//        $results = $wpdb->get_results( "
+//        SELECT ml.id, ml.payload
+//        FROM $wpdb->dt_movement_log as ml
+//        LEFT JOIN $wpdb->dt_movement_log_meta as mlm ON mlm.ml_id=ml.id
+//        WHERE mlm.meta_id IS NULL
+//    ", ARRAY_A );
+//
+//        foreach( $results as $result ) {
+//            $payload = maybe_unserialize( $result['payload'] );
+//            DT_Network_Activity_Log::build_meta( $result['id'], $payload, true );
+//        }
+//        $process_status['stop'] = microtime(true);
+//    }
 
 }
 DT_Network_Activity_Hooks::instance();
