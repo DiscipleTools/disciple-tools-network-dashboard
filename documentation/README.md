@@ -9,4 +9,5 @@ _DTND = Disciple Tools Network Dashboard_
  - [Network Dashboard Big Picture](files/network-dashboard-overview.md)
  - [Cron Collection Schedules](files/cron-collection-schedules.md)
  - [Activity Log Collection](files/activity-log-collection.md)
+ - [Activity Log - Classification](files/activity-log-classification.md)
  

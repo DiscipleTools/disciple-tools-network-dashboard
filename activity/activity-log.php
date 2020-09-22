@@ -409,6 +409,8 @@ class DT_Network_Activity_Log {
 
         $process_status['stop'] = microtime(true);
 
+        do_action( 'dt_network_dashboard_post_activity_log_insert' );
+
         return $process_status;
     }
 

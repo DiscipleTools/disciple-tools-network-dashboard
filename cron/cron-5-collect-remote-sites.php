@@ -165,30 +165,12 @@ function dt_get_site_snapshot( $site_post_id ) {
         return false;
     }
 
-    if ( isset( $snapshot['timestamp'] ) ) {
-        $timestamp = $snapshot['timestamp'];
-    } else {
-        $timestamp = current_time( 'timestamp' );
+    $saved = DT_Network_Dashboard_Snapshot::save_remote_snapshot( $snapshot );
+    if ( is_wp_error( $saved ) ){
+        dt_save_log( $file, 'FAIL ID: ' . $site_post_id . ' (Failed to save snapshot.)' );
+        dt_save_log( $file, maybe_serialize( $saved ) );
+        return false;
     }
-
-    /* SAVE PROCESS */
-
-    if ( ! get_post_meta( $site_post_id, 'partner_id', true ) && isset( $snapshot['partner_id'] ) ) {
-        update_post_meta( $site_post_id, 'partner_id', $snapshot['partner_id'] );
-    }
-    if ( ! get_post_meta( $site_post_id, 'partner_name', true ) && isset( $snapshot['profile']['partner_name'] ) ) {
-        update_post_meta( $site_post_id, 'partner_name', $snapshot['profile']['partner_name'] );
-    }
-    if ( ! get_post_meta( $site_post_id, 'partner_description', true ) && isset( $snapshot['profile']['partner_description'] ) ) {
-        update_post_meta( $site_post_id, 'partner_description', $snapshot['profile']['partner_description'] );
-    }
-    if ( ! get_post_meta( $site_post_id, 'partner_url', true ) && isset( $snapshot['profile']['partner_url'] ) ) {
-        update_post_meta( $site_post_id, 'partner_url', $snapshot['profile']['partner_url'] );
-    }
-
-    update_post_meta( $site_post_id, 'snapshot', $snapshot );
-    update_post_meta( $site_post_id, 'snapshot_date', $timestamp );
-    update_post_meta( $site_post_id, 'snapshot_fail', false );
 
     dt_save_log( $file, 'SUCCESS ID: ' . $site_post_id );
 

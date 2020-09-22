@@ -9,9 +9,168 @@ class DT_Network_Activity_Hooks {
         return self::$_instance;
     } // End instance()
 
+    public $site_id;
+
     public function __construct() {
-        add_action( 'dt_insert_activity', [ $this, 'filter_activity' ], 10, 1 );
-//        add_action('dt_network_dashboard_external_cron', 'dt_activity_log_payload_check' ); // @todo remove. not using a post_meta strategy
+        $this->site_id = dt_network_site_id();
+        add_action( 'dt_insert_activity', [ $this, 'load_filters' ], 10, 1 );
+    }
+
+    public function load_filters( $args ) {
+        dt_write_log( __METHOD__ . ' ' . $args['action'] . ' ' . $args['object_type'] . ' ' . $args['object_subtype'] );
+
+        // new seeker contact added
+        $this->filter_for_new_contact( $args );
+        $this->filter_for_new_group( $args );
+
+        // new profession of faith
+
+        // new baptism reported
+
+        // new group reported
+
+        // new church reported
+
+        // new disciple generation reported
+
+        // new group generation reported
+
+        // new baptism generation reported
+        $this->filter_for_new_baptism( $args );
+
+        // new gospel share reported
+
+        // new coaching relationship begun
+        $this->filter_for_new_coaching( $args );
+
+    }
+
+    // new seeker contact added
+    public function filter_for_new_contact( $args ){
+        $object_type = 'contacts';
+        $object_subtype = '';
+        $meta_value = 'created';
+
+        if ( $args['object_type'] === $object_type && $args['object_subtype'] === $object_subtype && $args['meta_value'] === $meta_value ) {
+            $location = $this->get_location_details( $args );
+            $data = [
+                [
+                    'site_id' => $this->site_id,
+                    'action' => 'new_contact',
+                    'category' => 'connecting',
+                    'location_type' => $location['location_type'],
+                    'location_value' => $location['location_value'], // ip, grid, lnglat
+                    'payload' => [
+                        'language' => get_locale(),
+                        'note' => 'is reporting a new contact'
+                    ],
+                    'timestamp' => $args['hist_time']
+                ]
+            ];
+            DT_Network_Activity_Log::insert_log($data);
+        }
+    }
+
+    public function filter_for_new_group( $args ){
+        $object_type = 'groups';
+        $object_subtype = '';
+        $meta_value = 'created';
+
+        if ( $args['object_type'] === $object_type && $args['object_subtype'] === $object_subtype && $args['meta_value'] === $meta_value ) {
+            $location = $this->get_location_details( $args );
+            $data = [
+                [
+                    'site_id' => $this->site_id,
+                    'action' => 'new',
+                    'category' => 'forming',
+                    'location_type' => $location['location_type'],
+                    'location_value' => $location['location_value'], // ip, grid, lnglat
+                    'payload' => [
+                        'language' => get_locale(),
+                        'note' => 'is reporting a new group'
+                    ],
+                    'timestamp' => $args['hist_time']
+                ]
+            ];
+            DT_Network_Activity_Log::insert_log($data);
+        }
+    }
+
+    // new profession of faith
+
+    // new baptism reported
+
+    // new group reported
+
+    // new church reported
+
+    // new disciple generation reported
+
+    // new group generation reported
+
+    // new baptism generation reported
+    public function filter_for_new_baptism( $args ){
+        $object_subtype = 'milestones';
+        $meta_value = 'milestone_baptized';
+
+        if ( $args['object_subtype'] === $object_subtype && $args['meta_value'] === $meta_value ) {
+            $location = $this->get_location_details( $args );
+            $data = [
+                [
+                    'site_id' => $this->site_id,
+                    'action' => 'milestone_baptized',
+                    'category' => 'contacts',
+                    'location_type' => $location['location_type'],
+                    'location_value' => $location['location_value'], // ip, grid, lnglat
+                    'payload' => [
+                        'language' => get_locale(),
+                        'note' => 'is reporting a new baptism'
+                    ],
+                    'timestamp' => time()
+                ]
+            ];
+            DT_Network_Activity_Log::insert_log($data);
+        }
+    }
+
+    // new coaching relationship begun
+    public function filter_for_new_coaching( $args ){
+        $object_subtype = 'seeker_path';
+        $meta_value = 'coaching';
+
+        if ( $args['object_subtype'] === $object_subtype && $args['meta_value'] === $meta_value ) {
+            $location = $this->get_location_details( $args );
+            $data = [
+                [
+                    'site_id' => $this->site_id,
+                    'action' => 'seeker_path_coaching',
+                    'category' => 'contacts',
+                    'location_type' => $location['location_type'],
+                    'location_value' => $location['location_value'], // ip, grid, lnglat
+                    'payload' => [
+                        'language' => get_locale(),
+                        'note' => 'is reporting a new spiritual coaching relationship'
+                    ],
+                    'timestamp' => time()
+                ]
+            ];
+            DT_Network_Activity_Log::insert_log($data);
+        }
+    }
+
+    public function get_location_details( $args ){
+        if ( $grid = get_post_meta( $args['object_id'], 'location_grid' ) ){
+            $location = [
+                'location_type' => 'grid',
+                'location_value' => $grid[0],
+            ];
+        } else {
+            $location = [
+                'location_type' => 'ip',
+                'location_value' => Site_Link_System::get_real_ip_address(),
+            ];
+        }
+        return $location;
     }
 
     public function filter_activity( $args ){
@@ -123,7 +282,7 @@ class DT_Network_Activity_Hooks {
         //
     }
 
-    public function process_log( $args ){
+    public function add_activity_log( $args ){
         /*
          Array
             (
