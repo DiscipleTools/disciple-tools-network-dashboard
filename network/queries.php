@@ -31,6 +31,25 @@ class DT_Network_Dashboard_Queries {
         return $results;
     }
 
+    public static function remote_sites_needing_snapshot_refreshed() : array {
+
+        $sites = self::site_link_list();
+        if ( empty( $sites ) ){
+            return [];
+        }
+
+        $snapshots_needing_refreshed = [];
+        foreach ( $sites as $site ) {
+            if ( get_option( $site['id'], 'snapshot_date' ) >= strtotime( 'today' ) ) {
+                continue;
+            }
+
+            $snapshots_needing_refreshed[] = $site['id'];
+        }
+
+        return $snapshots_needing_refreshed;
+    }
+
     public static function get_site_id_from_partner_id( $partner_id ) : int {
         global $wpdb;
 
@@ -51,9 +70,6 @@ class DT_Network_Dashboard_Queries {
 
         return $results;
     }
-
-
-
 
 
     public static function has_sites_for_collection() : int {
@@ -142,10 +158,39 @@ class DT_Network_Dashboard_Queries {
             if ( get_blog_option( $id, 'current_theme' ) !== 'Disciple Tools' ) {
                 continue;
             }
+
             $snapshot[$id] = get_blog_option( $id, 'dt_snapshot_report' );
         }
 
         return $snapshot;
+    }
+
+    /**
+     * Returns list of site ids that need a refreshed snapshot
+     *
+     * @return array
+     */
+    public static function multisite_sites_needing_snapshot_refreshed() {
+        if ( ! dt_is_current_multisite_dashboard_approved() ) {
+            return [];
+        }
+
+        $site_ids = self::all_multisite_ids();
+
+        $snapshots_needing_refreshed = [];
+        foreach ( $site_ids as $id ) {
+            if ( get_blog_option( $id, 'current_theme' ) !== 'Disciple Tools' ) {
+                continue;
+            }
+
+            if ( get_blog_option( $id, 'dt_snapshot_report_timestamp' ) >= strtotime( 'today' ) ) {
+                continue;
+            }
+
+            $snapshots_needing_refreshed[] = $id;
+        }
+
+        return $snapshots_needing_refreshed;
     }
 }
 

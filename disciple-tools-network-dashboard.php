@@ -125,7 +125,6 @@ class DT_Network_Dashboard {
         require_once( 'shared/permissions.php' );
         require_once( 'shared/site-profile.php' );
         require_once( 'shared/wp-async-request.php' );
-        require_once( 'shared/customize-site-linking.php' ); // loads capabilities
         require_once( 'shared/remove-top-nav-config.php' );
 
         require_once('network/queries.php');
@@ -134,6 +133,7 @@ class DT_Network_Dashboard {
         require_once('local-snapshot/snapshot-endpoints.php');
         require_once('local-snapshot/snapshot-report.php');
         require_once('local-snapshot/snapshot-queries.php');
+        require_once('local-snapshot/snapshot.php');
 
         require_once( 'activity/activity-log.php');
         require_once( 'activity/hooks.php');

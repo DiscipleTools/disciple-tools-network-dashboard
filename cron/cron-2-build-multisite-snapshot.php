@@ -3,80 +3,66 @@
  * Scheduled Cron Service
  */
 
-// Load Scheduler
-new DT_Network_Multisite_Cron_Scheduler();
-try {
-    new DT_Get_Network_Multisite_SnapShot_Async();
-} catch ( Exception $e ) {
-    dt_write_log( $e );
+if ( dt_is_current_multisite_dashboard_approved() ) {
+
+    if (!wp_next_scheduled('dt_network_dashboard_collect_multisite_snapshots')) {
+        wp_schedule_event(strtotime('tomorrow 2am'), 'daily', 'dt_network_dashboard_collect_multisite_snapshots');
+    }
+    add_action('dt_network_dashboard_collect_multisite_snapshots', 'dt_network_dashboard_multisite_snapshot_async');
 }
-
-
-/**
- * Class Disciple_Tools_Update_Needed
- */
-class DT_Network_Multisite_Cron_Scheduler {
-
-    public function __construct()
-    {
-        if (!wp_next_scheduled('dt_network_dashboard_collect_multisite_snapshots')) {
-            wp_schedule_event(strtotime('tomorrow 2am'), 'daily', 'dt_network_dashboard_collect_multisite_snapshots');
-        }
-        add_action('dt_network_dashboard_collect_multisite_snapshots', [$this, 'action']);
-    }
-
-    public static function action()
-    {
-        do_action("dt_network_dashboard_collect_multisite_snapshots");
-    }
-}
-
-class DT_Get_Network_Multisite_SnapShot_Async extends Disciple_Tools_Async_Task {
-
-    protected $action = 'dt_network_dashboard_collect_multisite_snapshots';
-
-    protected function prepare_data( $data ) {
-        return $data;
-    }
-
-    protected function run_action() {
-        dt_network_dashboard_multisite_snapshot_async();
-    }
-
-}
-
 
 /**
  * Run collection process
  */
 function dt_network_dashboard_multisite_snapshot_async() {
-    $file = 'multisite';
-    dt_reset_log( $file );
+    $limit = 50; // set max loops before spawning new cron
 
-    dt_save_log( $file, '', false );
-    dt_save_log( $file, '*********************************************', false );
-    dt_save_log( $file, 'MULTISITE SNAPSHOT LOGS', false );
-    dt_save_log( $file, 'Timestamp: ' . current_time( 'mysql' ), false );
-    dt_save_log( $file, '*********************************************', false );
-    dt_save_log( $file, '', false );
+    $file = 'multisite';
+
+    if ( ! dt_is_todays_log( $file ) ) {
+        dt_reset_log( $file );
+
+        dt_save_log( $file, '', false );
+        dt_save_log( $file, '*********************************************', false );
+        dt_save_log( $file, 'MULTISITE SNAPSHOT LOGS', false );
+        dt_save_log( $file, 'Timestamp: ' . date( 'Y-m-d', time() ), false );
+        dt_save_log( $file, '*********************************************', false );
+        dt_save_log( $file, '', false );
+    }
 
     // Get list of sites
-    $sites = dt_multisite_dashboard_snapshots();
+    $sites = DT_Network_Dashboard_Queries::multisite_sites_needing_snapshot_refreshed();
+    if ( empty( $sites ) ){
+        dt_save_log( $file, 'No sites found to collect.', false );
+        return false;
+    }
+
+    if ( count( $sites ) > $limit ) {
+        /* if more than the limit of sites, spawn another event to process. This will keep spawning until all sites are reduced.*/
+        wp_schedule_single_event( strtotime('+20 minutes'), 'dt_network_dashboard_collect_multisite_snapshots' );
+    }
 
     // Loop sites through a second async task, so that each will become and individual async process.
-
-    foreach ( $sites as $key => $site ) {
+    $i = 0;
+    foreach ( $sites as $site_id ) {
         try {
             $task = new DT_Get_Single_Multisite_Snapshot();
             $task->launch(
                 [
-                    'blog_id' => $key
+                    'blog_id' => $site_id
                 ]
             );
         } catch ( Exception $e ) {
             dt_write_log( $e );
         }
+
+        if ( $i >= $limit ){
+            break;
+        }
+        $i++;
     }
+
+    return true;
 }
 
 /**
@@ -87,6 +73,7 @@ function dt_network_dashboard_multisite_snapshot_async() {
 class DT_Get_Single_Multisite_Snapshot extends Disciple_Tools_Async_Task
 {
     protected $action = 'multisite_snapshot';
+
     protected function prepare_data( $data ) {
         return $data;
     }

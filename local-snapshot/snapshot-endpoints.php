@@ -60,6 +60,12 @@ class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpo
                 'callback' => [ $this, 'live_stats' ],
             ]
         );
+        register_rest_route(
+            $this->public_namespace, '/network_dashboard/profile', [
+                'methods'  => 'POST',
+                'callback' => [ $this, 'profile' ],
+            ]
+        );
 
     }
 
@@ -73,6 +79,18 @@ class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpo
         }
 
         return DT_Network_Dashboard_Snapshot_Report::snapshot_report();
+    }
+
+    public function profile( WP_REST_Request $request ) {
+        $params = $this->process_token( $request );
+        if ( is_wp_error( $params ) ) {
+            return [
+                'status' => 'FAIL',
+                'error' => $params,
+            ];
+        }
+
+        return dt_network_site_profile();
     }
 
 }

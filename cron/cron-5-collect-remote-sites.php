@@ -3,89 +3,77 @@
  * Scheduled Cron Service
  */
 
-new DT_Network_Dashboard_Cron_Collect_Remote_Sites_Scheduler();
-try {
-    new DT_Network_Dashboard_Cron_Collect_Remote_Sites_Async();
-} catch (Exception $e) {
-    dt_write_log($e);
+if (!wp_next_scheduled('dt_network_dashboard_collect_remote_sites')) {
+    wp_schedule_event(strtotime('tomorrow 5am'), 'daily', 'dt_network_dashboard_collect_remote_sites');
 }
+add_action('dt_network_dashboard_collect_remote_sites', 'dt_network_dashboard_collect_remote_sites');
 
+function dt_network_dashboard_collect_remote_sites() {
+    $limit = 20;  // set max loops before spawning new cron
 
-// Begin Schedule daily cron build
-class DT_Network_Dashboard_Cron_Collect_Remote_Sites_Scheduler
-{
+    $file = 'remote';
+    if ( ! dt_is_todays_log( $file ) ) {
+        dt_reset_log($file);
 
-    public function __construct()
-    {
-        if (!wp_next_scheduled('dt_network_dashboard_collect_remote_sites')) {
-            wp_schedule_event(strtotime('tomorrow 5am'), 'daily', 'dt_network_dashboard_collect_remote_sites');
-        }
-        add_action('dt_network_dashboard_collect_remote_sites', [$this, 'action']);
+        dt_save_log($file, '', false);
+        dt_save_log($file, '*********************************************', false);
+        dt_save_log($file, 'RECENT SNAPSHOT LOGS', false);
+        dt_save_log($file, 'Timestamp: ' . date( 'Y-m-d', time()), false);
+        dt_save_log($file, '*********************************************', false);
+        dt_save_log($file, '', false);
     }
 
-    public static function action()
-    {
-        do_action("dt_network_dashboard_collect_remote_sites");
-    }
-}
-
-class DT_Network_Dashboard_Cron_Collect_Remote_Sites_Async extends Disciple_Tools_Async_Task {
-
-    protected $action = 'dt_network_dashboard_collect_remote_sites';
-
-    protected function prepare_data( $data ) {
-        return $data;
+    // Get list of sites
+    $sites = DT_Network_Dashboard_Queries::remote_sites_needing_snapshot_refreshed();
+    if ( empty( $sites ) ){
+        dt_save_log( $file, 'No remote sites found to trigger.', false );
+        return false;
     }
 
-    protected function run_action() {
-        $file = 'remote';
-        dt_reset_log( $file );
-
-
-        dt_save_log( $file, '', false );
-        dt_save_log( $file, '*********************************************', false );
-        dt_save_log( $file, 'RECENT SNAPSHOT LOGS', false );
-        dt_save_log( $file, 'Timestamp: ' . current_time( 'mysql' ), false );
-        dt_save_log( $file, '*********************************************', false );
-        dt_save_log( $file, '', false );
-
-        // Get list of sites
-        $sites = DT_Network_Dashboard_Queries::site_link_list();
-
-        $result = [
-            'success' => 0,
-            'fail' => 0,
-        ];
-
-        // Loop sites through a second async task, so that each will become and individual async process.
-        foreach ( $sites as $site ) {
-            try {
-                $task = new DT_Get_Single_Site_Snapshot();
-                $task->launch(
-                    [
-                        'site_post_id' => $site['id'],
-                    ]
-                );
-                $result['success'] = $result['success'] + 1;
-            } catch ( Exception $e ) {
-                dt_write_log( $e );
-                $result['fail'] = $result['fail'] + 1;
-            }
-        }
-        $result['timestamp'] = current_time( 'mysql' );
-        return $result;
+    if ( count( $sites ) > $limit ) {
+        /* if more than the limit of sites, spawn another event to process. This will keep spawning until all sites are reduced.*/
+        wp_schedule_single_event( strtotime('+20 minutes'), 'dt_network_dashboard_collect_remote_sites' );
     }
 
-    public static function force_run_action() {
+    // Loop sites through a second async task, so that each will become and individual async process.
+    $i = 0;
+    foreach ( $sites as $site ) {
         try {
-            $object = new DT_Network_Dashboard_Cron_Collect_Remote_Sites_Async();
-            return $object->run_action();
+            $task = new DT_Get_Single_Site_Snapshot();
+            $task->launch(
+                [
+                    'site_post_id' => $site,
+                ]
+            );
         } catch ( Exception $e ) {
             dt_write_log( $e );
-            return $e;
+        }
+
+        if ( $i >= $limit ){
+            break;
+        }
+        $i++;
+
+    }
+    return true;
+}
+
+function dt_load_async_site_snapshot() {
+    if ( isset( $_POST['_wp_nonce'] )
+        && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wp_nonce'] ) ) )
+        && isset( $_POST['action'] )
+        && sanitize_key( wp_unslash( $_POST['action'] ) ) == 'dt_async_site_snapshot' ) {
+        try {
+            $object = new DT_Get_Single_Site_Snapshot();
+            $object->get_site_snapshot();
+        } catch ( Exception $e ) {
+            dt_write_log( __METHOD__ . ': Failed to call site snapshot' );
+            return new WP_Error( __METHOD__, 'Failed to send email with Async' );
         }
     }
+    return 1;
 }
+add_action( 'init', 'dt_load_async_site_snapshot' );
 
 /**
  * Class DT_Get_Single_Site_Snapshot
@@ -110,22 +98,6 @@ class DT_Get_Single_Site_Snapshot extends Disciple_Tools_Async_Task
 
     protected function run_action() {}
 }
-function dt_load_async_site_snapshot() {
-    if ( isset( $_POST['_wp_nonce'] )
-        && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['_wp_nonce'] ) ) )
-        && isset( $_POST['action'] )
-        && sanitize_key( wp_unslash( $_POST['action'] ) ) == 'dt_async_site_snapshot' ) {
-        try {
-            $send_email = new DT_Get_Single_Site_Snapshot();
-            $send_email->get_site_snapshot();
-        } catch ( Exception $e ) {
-            dt_write_log( __METHOD__ . ': Failed to call site snapshot' );
-            return new WP_Error( __METHOD__, 'Failed to send email with Async' );
-        }
-    }
-    return 1;
-}
-add_action( 'init', 'dt_load_async_site_snapshot' );
 
 /**
  * @param $site_post_id
@@ -199,6 +171,8 @@ function dt_get_site_snapshot( $site_post_id ) {
         $timestamp = current_time( 'timestamp' );
     }
 
+    /* SAVE PROCESS */
+
     if ( ! get_post_meta( $site_post_id, 'partner_id', true ) && isset( $snapshot['partner_id'] ) ) {
         update_post_meta( $site_post_id, 'partner_id', $snapshot['partner_id'] );
     }
@@ -211,7 +185,6 @@ function dt_get_site_snapshot( $site_post_id ) {
     if ( ! get_post_meta( $site_post_id, 'partner_url', true ) && isset( $snapshot['profile']['partner_url'] ) ) {
         update_post_meta( $site_post_id, 'partner_url', $snapshot['profile']['partner_url'] );
     }
-
 
     update_post_meta( $site_post_id, 'snapshot', $snapshot );
     update_post_meta( $site_post_id, 'snapshot_date', $timestamp );

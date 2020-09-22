@@ -26,9 +26,9 @@ if ( ! function_exists('dt_network_site_profile') ) {
 
         if ( empty( $profile ) ) {
             $profile = [
+                'partner_id' => dt_network_site_id(),
                 'partner_name' => get_option('blogname'),
                 'partner_description' => get_option('blogdescription'),
-                'partner_id' => dt_network_site_id(),
                 'partner_url' => site_url()
             ];
             update_option('dt_site_profile', $profile, true);

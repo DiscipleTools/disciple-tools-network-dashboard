@@ -3,54 +3,16 @@
  * Scheduled Cron Service
  */
 
-new DT_Network_Dashboard_Cron_Push_Snapshot_Scheduler();
-try {
-    new DT_Network_Dashboard_Cron_Push_Snapshot_Async();
-} catch (Exception $e) {
-    dt_write_log($e);
+if (!wp_next_scheduled('dt_network_dashboard_push_snapshot')) {
+    wp_schedule_event(strtotime('tomorrow 3am'), 'daily', 'dt_network_dashboard_push_snapshot');
 }
-
-
-// Begin Schedule daily cron build
-class DT_Network_Dashboard_Cron_Push_Snapshot_Scheduler
-{
-
-    public function __construct()
-    {
-        if (!wp_next_scheduled('dt_network_dashboard_push_snapshot')) {
-            wp_schedule_event(strtotime('tomorrow 3am'), 'daily', 'dt_network_dashboard_push_snapshot');
-        }
-        add_action('dt_network_dashboard_push_snapshot', [$this, 'action']);
-    }
-
-    public static function action()
-    {
-        do_action("dt_network_dashboard_push_snapshot");
-    }
-}
-
-class DT_Network_Dashboard_Cron_Push_Snapshot_Async extends Disciple_Tools_Async_Task
-{
-
-    protected $action = 'dt_network_dashboard_push_snapshot';
-
-    protected function prepare_data($data)
-    {
-        return $data;
-    }
-
-    protected function run_action()
-    {
-        dt_network_dashboard_push_snapshots();
-    }
-}
+add_action('dt_network_dashboard_push_snapshot', 'dt_network_dashboard_push_snapshots');
 
 function dt_network_dashboard_push_snapshots()
 {
     $sites = DT_Network_Dashboard_Snapshot_Queries::dashboards_to_report_to();
 
     if ( empty( $sites ) ){
-        dt_write_log(__METHOD__, 'No sites for snapshot distribution.' );
         return false;
     }
 
@@ -64,7 +26,6 @@ function dt_network_dashboard_push_snapshots()
         dt_write_log(__METHOD__, 'Failed to send report because snapshot collection failed' );
         return false;
     }
-
 
     // Loop sites and call their wp-cron.php service to run.
     foreach ($sites as $site) {

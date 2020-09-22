@@ -5,9 +5,8 @@ abstract class DT_Network_Dashboard_Endpoints_Base {
     public $namespace = "dt/v1";
     public $public_namespace = "dt-public/v1";
 
-    public function __construct() {
+    public function __construct() {}
 
-    }
     /**
      * Process the standard security checks on an api request to network endpoints.
      * @param \WP_REST_Request $request
@@ -30,11 +29,6 @@ abstract class DT_Network_Dashboard_Endpoints_Base {
             dt_write_log( $valid_token );
             return new WP_Error( __METHOD__, 'Invalid transfer token' );
         }
-
-        // required permission challenge (that this token comes from an approved network report site link)
-//        if ( ! ( current_user_can( 'network_dashboard_sending' ) || current_user_can( 'network_dashboard_receiving' ) || current_user_can( 'network_dashboard_both' ) ) ) {
-//            return new WP_Error( __METHOD__, 'Network report permission error.' );
-//        }
 
         // Add post id for site to site link
         $decrypted_key = Site_Link_System::decrypt_transfer_token( $params['transfer_token'] );

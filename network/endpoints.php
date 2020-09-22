@@ -79,51 +79,11 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             ];
         }
 
+        return DT_Network_Dashboard_Snapshot::save_remote_snapshot( $params['snapshot'] );
 
-
-        $this->save_snapshot( $params['snapshot'] );
-
-        return true;
     }
 
-    public function save_snapshot( $snapshot ){
-        global $wpdb;
 
-        if ( ! isset( $snapshot['partner_id'] ) ) {
-            return new WP_Error(__METHOD__, 'No partner id' );
-        }
-
-        $site_post_id = DT_Network_Dashboard_Queries::get_site_id_from_partner_id( $snapshot['partner_id'] );
-        if ( empty( $site_post_id ) ){
-            return new WP_Error(__METHOD__, 'No matching site link to this partner id' );
-        }
-
-        if ( isset( $snapshot['timestamp'] ) ) {
-            $timestamp = $snapshot['timestamp'];
-        } else {
-            $timestamp = current_time( 'timestamp' );
-        }
-
-        // @todo finish save process for snapshot
-
-//        if ( ! get_post_meta( $site_post_id, 'partner_id', true ) && isset( $snapshot['partner_id'] ) ) {
-//            update_post_meta( $site_post_id, 'partner_id', $snapshot['partner_id'] );
-//        }
-//        if ( ! get_post_meta( $site_post_id, 'partner_name', true ) && isset( $snapshot['profile']['partner_name'] ) ) {
-//            update_post_meta( $site_post_id, 'partner_name', $snapshot['profile']['partner_name'] );
-//        }
-//        if ( ! get_post_meta( $site_post_id, 'partner_description', true ) && isset( $snapshot['profile']['partner_description'] ) ) {
-//            update_post_meta( $site_post_id, 'partner_description', $snapshot['profile']['partner_description'] );
-//        }
-//        if ( ! get_post_meta( $site_post_id, 'partner_url', true ) && isset( $snapshot['profile']['partner_url'] ) ) {
-//            update_post_meta( $site_post_id, 'partner_url', $snapshot['profile']['partner_url'] );
-//        }
-//
-//
-//        update_post_meta( $site_post_id, 'snapshot', $snapshot );
-//        update_post_meta( $site_post_id, 'snapshot_date', $timestamp );
-//        update_post_meta( $site_post_id, 'snapshot_fail', false );
-    }
 
 }
 DT_Network_Dashboard_Network_Endpoints::instance();
