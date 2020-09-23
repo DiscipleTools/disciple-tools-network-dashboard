@@ -20,6 +20,10 @@ to celebrate. So what POV do you report in the movement_log? The baptizee, the b
 | Seeker |  | | |
 | Believer |  | | |
 | Leader |  | | |
+| BLESSINGS |  | | |
+| BREAKTHROUGHS |  | | |
+| SETBACKS |  | | |
+| BLESSINGS |  | | |
 |  | studying* | | is studying "_______"|
 |  | joining* | ---- | |
 |  |  | zume_training | is joining Zume Training
@@ -54,4 +58,31 @@ to celebrate. So what POV do you report in the movement_log? The baptizee, the b
 |  | coaching | ----| |
 |  |  |  coaching_states_belief | is coaching a new believer
 |  |  |  coaching_leader | is coaching a movement leader
+|  | reporting | ----| |
+|  |  | generations_disciples | is reporting new generations of disciples
+|  |  | generations_groups | is reporting new generations of spiritual families
+|  |  | generations_churches | is reporting new generations of churches
+| SETBACKS | ---- | ----| |
+|  | contact_closed | ----| |
+|  |  | martyred| |
+|  |  | insufficient| Insufficient contact info
+|  |  | hostile_self_gain| Hostile, playing games or self gain
+|  |  | apologetics| Only wants to argue or debate
+|  |  | no_longer_responding| No longer interested
+|  |  | no_longer_interested| No longer responding
+|  |  | hostile_self_gain | Hostile, playing games or self gain
+|  |  | moved | Moved or relocated
+|  | contact_paused | ---- | 
+|  |  | not_responding | Contact not responding
+|  |  | not_available | Contact not available
+|  |  | little_interest | Contact has little interest/hunger
+|  |  | no_initiative | Contact shows no initiative
+|  |  | questionable_motives | Contact has questionable motives
+|  |  | ball_in_their_court | Ball is in the contact\'s court
+|  |  | wait_and_see | We want to see if/how the contact responds to automated text messages
+|  | group_inactive | ----
+|  |  | inactive_church | is reporting a church has disbanded
+|  |  | inactive_group | is reporting a group has disbanded
+
+
 
