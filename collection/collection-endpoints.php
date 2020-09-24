@@ -16,7 +16,6 @@ if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
 
 class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoints_Base
 {
-
     /**
      * DT_Network_Dashboard_Network_Endpoints The single instance of DT_Network_Dashboard_Network_Endpoints.
      *
@@ -82,9 +81,6 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
         return DT_Network_Dashboard_Snapshot::save_remote_snapshot( $params['snapshot'] );
 
     }
-
-
-
 }
 DT_Network_Dashboard_Network_Endpoints::instance();
 

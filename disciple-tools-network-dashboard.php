@@ -127,13 +127,13 @@ class DT_Network_Dashboard {
         require_once( 'shared/wp-async-request.php' );
         require_once( 'shared/remove-top-nav-config.php' );
 
-        require_once('network/queries.php');
-        require_once('network/endpoints.php');
+        require_once('collection/collection-queries.php');
+        require_once('collection/collection-endpoints.php');
 
-        require_once('local-snapshot/snapshot-endpoints.php');
-        require_once('local-snapshot/snapshot-report.php');
-        require_once('local-snapshot/snapshot-queries.php');
-        require_once('local-snapshot/snapshot.php');
+        require_once('snapshots/snapshot-endpoints.php');
+        require_once('snapshots/snapshot-report.php');
+        require_once('snapshots/snapshot-queries.php');
+        require_once('snapshots/snapshot.php');
 
         require_once( 'activity/activity-log.php');
         require_once( 'activity/hooks.php');
@@ -157,7 +157,6 @@ class DT_Network_Dashboard {
             require_once( 'cron/cron-3-push-snapshot.php' );
             require_once( 'cron/cron-4-trigger-remote-sites.php' );
             require_once( 'cron/cron-5-collect-remote-sites.php' );
-
         }
 
         require_once( 'admin/menu-and-tabs-endpoints.php' );
@@ -185,7 +184,6 @@ class DT_Network_Dashboard {
 
         global $wpdb;
         $wpdb->dt_movement_log = $wpdb->prefix . 'dt_movement_log';
-        $wpdb->dt_movement_log_meta = $wpdb->prefix . 'dt_movement_log_meta';
 
         if ( ! class_exists( 'Site_Link_System' ) ){
             require_once( get_theme_file_path() . '/dt-core/admin/site-link-post-type.php' );

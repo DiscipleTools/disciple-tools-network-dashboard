@@ -618,10 +618,9 @@ class DT_Network_Dashboard_Tab_Local
                         <!-- Main Column -->
 
                         <?php $this->box_partner_profile() ?>
-                        <?php $this->box_site_link() ?>
                         <?php $this->box_mapbox_status() ?>
                         <?php $this->box_ipstack_api_key() ?>
-                        <?php $this->box_top_nav_item() ?>
+                        <?php $this->box_site_link() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -630,6 +629,7 @@ class DT_Network_Dashboard_Tab_Local
 
                         <?php $this->overview_message() ?>
                         <?php $this->box_send_text() ?>
+                        <?php $this->box_top_nav_item() ?>
 
                         <!-- End Right Column -->
                     </div><!-- postbox-container 1 -->

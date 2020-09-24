@@ -17,7 +17,7 @@ class DT_Network_Activity_Hooks {
     }
 
     public function load_filters( $args ) {
-        dt_write_log( __METHOD__ . ' ' . $args['action'] . ' ' . $args['object_type'] . ' ' . $args['object_subtype'] );
+
 
         // new seeker contact added
         $this->filter_for_new_contact( $args );
@@ -43,6 +43,59 @@ class DT_Network_Activity_Hooks {
         // new coaching relationship begun
         $this->filter_for_new_coaching( $args );
 
+    }
+
+    public function messages() {
+        /* These can get redistributed later, but it seems easiest to consolidate them for editing and review. */
+        $messages = [
+            'gospel_share' => [
+                'action' => 'gospel_share',
+                'category' => '',
+                'note'
+            ],
+            '' => [
+                'action' => '',
+                'category' => '',
+                'note'
+            ],
+            '' => [
+                'action' => '',
+                'category' => '',
+                'note'
+            ],
+            '' => [
+                'action' => '',
+                'category' => '',
+                'note'
+            ],
+            '' => [
+                'action' => '',
+                'category' => '',
+                'note'
+            ],
+            '' => [
+                'action' => '',
+                'category' => '',
+                'note'
+            ],
+            '' => [
+                'action' => '',
+                'category' => '',
+                'note'
+            ],
+            '' => [
+                'action' => '',
+                'category' => '',
+                'note'
+            ],
+            '' => [
+                'action' => '',
+                'category' => '',
+                'note'
+            ],
+        ];
+
+        return apply_filters( 'dt_network_dashboard_action_messages', $messages );
     }
 
     // new seeker contact added
@@ -332,26 +385,5 @@ class DT_Network_Activity_Hooks {
         DT_Network_Activity_Log::post_activity($data);
 
     }
-
-//    public function dt_activity_log_payload_check(){
-//        $process_status = [];
-//        $process_status['event'] = __METHOD__;
-//        $process_status['start'] = microtime(true); // @todo remove after development
-//
-//        global $wpdb;
-//        $results = $wpdb->get_results( "
-//        SELECT ml.id, ml.payload
-//        FROM $wpdb->dt_movement_log as ml
-//        LEFT JOIN $wpdb->dt_movement_log_meta as mlm ON mlm.ml_id=ml.id
-//        WHERE mlm.meta_id IS NULL
-//    ", ARRAY_A );
-//
-//        foreach( $results as $result ) {
-//            $payload = maybe_unserialize( $result['payload'] );
-//            DT_Network_Activity_Log::build_meta( $result['id'], $payload, true );
-//        }
-//        $process_status['stop'] = microtime(true);
-//    }
-
 }
 DT_Network_Activity_Hooks::instance();

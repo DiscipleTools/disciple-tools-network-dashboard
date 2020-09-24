@@ -70,9 +70,6 @@ class DT_Network_Activity_Log {
         if ( ! isset( $wpdb->dt_movement_log ) ) {
             $wpdb->dt_movement_log = $wpdb->prefix . 'dt_movement_log';
         }
-        if ( ! isset( $wpdb->dt_movement_log_meta ) ) {
-            $wpdb->dt_movement_log_meta = $wpdb->prefix . 'dt_movement_log_meta';
-        }
         if ( ! isset( $wpdb->dt_location_grid ) ) {
             $wpdb->dt_location_grid = $wpdb->prefix . 'dt_location_grid';
         }
@@ -402,7 +399,6 @@ class DT_Network_Activity_Log {
                 $data['hash']
             ) );
 
-//            self::build_meta( $wpdb->insert_id, $payload, true ); // @todo evaluating strategy
 
             $process_status[] = 'Success: Created id ' . $wpdb->insert_id;
         }
@@ -412,32 +408,6 @@ class DT_Network_Activity_Log {
         do_action( 'dt_network_dashboard_post_activity_log_insert' );
 
         return $process_status;
-    }
-
-    public static function build_meta( $id, $payload = [], $force = false ) {
-        global $wpdb;
-        if ( ! $force ){
-            $exists = $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(meta_id) as count FROM $wpdb->dt_movement_log_meta WHERE ml_id = %d", $id ) );
-            if ( $exists > 0 ){
-                return;
-            }
-        }
-
-        if ( empty( $payload ) ) {
-            $payload = $wpdb->get_var( "SELECT payload FROM $wpdb->dt_movement_log WHERE id = %d", $id );
-            $payload = maybe_unserialize( $payload );
-            if ( empty( $payload ) ) {
-                return;
-            }
-        }
-        else {
-            $payload = maybe_unserialize( $payload );
-        }
-
-        // $payload is intended to be a single dimensional array key/value. Accommodations for nested arrays, but is not recommended.
-        foreach ( $payload as $key => $value ) {
-            $wpdb->query($wpdb->prepare( "INSERT INTO $wpdb->dt_movement_log_meta (`meta_id`, `ml_id`, `meta_key`, `meta_value`) VALUES (NULL, %d, %s, %s);", $id, $key, $value )  );
-        }
     }
 
     public static function recursive_sanitize_text_field( array $array ) : array {

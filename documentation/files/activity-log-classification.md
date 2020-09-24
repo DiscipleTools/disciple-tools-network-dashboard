@@ -9,80 +9,51 @@ got baptized, but in a movement of non-professional followers of Jesus, whereas 
 is a blessing to celebrate, but the one who has been faithful to multiply their faith is a greater blessing 
 to celebrate. So what POV do you report in the movement_log? The baptizee, the baptizer, or both?
 
+The action and category are not directly type and subtype in relationship. The primary programming strategy is 
+as a key/value filter, but, as following the Google Analytics event system, I've added suggested categories, 
+but the list can be filtered and new categories can be added, and messages can be modified. I would discourage the 
+changing of actions because there are system dependencies on their keys, but they can also be changed if needed.
+
 -----
 
-|Type | Category | Action | Note |
+| Action | Category | Note | Trigger |
 | --- | --- | --- | --- |
-| Blessing | | | knowing Jesus better
-| Great Blessing | | | helping others know Jesus
-| Greater Blessing | | | starting spiritual families
-| Greatest Blessing | | | helping others start spiritual families
-| Seeker |  | | |
-| Believer |  | | |
-| Leader |  | | |
-| BLESSINGS |  | | |
-| BREAKTHROUGHS |  | | |
-| SETBACKS |  | | |
-| BLESSINGS |  | | |
-|  | studying* | | is studying "_______"|
-|  | joining* | ---- | |
-|  |  | zume_training | is joining Zume Training
-|  |  | zume_vision | is joining a Zume community to multiply disciples
-|  | responding | ---- | |
-|  |  | new_contact | (note: a new contact doesn't by itself tell us anything about how to celebrate this event.)
-|  |  | new_followup_contact | is reporting a new seeker has been found for followup
-|  | following_up | ---- | |
-|  |  | reaching_out | |
-|  | sharing | ---- | |
-|  |  | gospel | is reporting a gospel share (shared the gospel) |
-|  |  | meeting | is reporting meeting with a seeker
-|  |  | seeker_meeting | is reporting a gospel sharing meeting |
-|  | committing | ---- | |
-|  | forming | ---- | |
-|  |  | new_group | is reporting a new group has formed
-|  |  | new_church | is reporting an new church has formed
-|  |  | new_lead_team | is reporting an new leadership team has formed
-|  |  | new_training | is reporting an new leadership team has formed
-|  | meeting | ---- | |
-|  |  | church_meeting | is reporting a church has met together
-|  |  | seeker_meeting | is reporting a meeting with a seeker
-|  | leading | ---- | |
-|  |  | training | is leading a group of 5 through Zume Training session 2
-|  | baptizing | ----| |
-|  |  | | is baptizing a new believer |
-|  | meeting | ----| |
-|  | gathering | ----| |
-|  |  | church_meeting | is gathering as spiritual family
-|  |  | dbs_meeting | is gathering to discover the bible
-|  |  | training_meeting | is gathering for training
-|  | coaching | ----| |
-|  |  |  coaching_states_belief | is coaching a new believer
-|  |  |  coaching_leader | is coaching a movement leader
-|  | reporting | ----| |
-|  |  | generations_disciples | is reporting new generations of disciples
-|  |  | generations_groups | is reporting new generations of spiritual families
-|  |  | generations_churches | is reporting new generations of churches
-| SETBACKS | ---- | ----| |
-|  | contact_closed | ----| |
-|  |  | martyred| |
-|  |  | insufficient| Insufficient contact info
-|  |  | hostile_self_gain| Hostile, playing games or self gain
-|  |  | apologetics| Only wants to argue or debate
-|  |  | no_longer_responding| No longer interested
-|  |  | no_longer_interested| No longer responding
-|  |  | hostile_self_gain | Hostile, playing games or self gain
-|  |  | moved | Moved or relocated
-|  | contact_paused | ---- | 
-|  |  | not_responding | Contact not responding
-|  |  | not_available | Contact not available
-|  |  | little_interest | Contact has little interest/hunger
-|  |  | no_initiative | Contact shows no initiative
-|  |  | questionable_motives | Contact has questionable motives
-|  |  | ball_in_their_court | Ball is in the contact\'s court
-|  |  | wait_and_see | We want to see if/how the contact responds to automated text messages
-|  | group_inactive | ----
-|  |  | inactive_church | is reporting a church has disbanded
-|  |  | inactive_group | is reporting a group has disbanded
-
-
-
+|--- | outreach | ---- |  ----|
+| studying* | | XX is studying "_____" | website content trigger
+| more_info* | | XX is reaching out to learn more about Jesus | website content trigger: lead form
+| new_contact | | XX is tracking a new contact for followup | contact: add new contact
+| new_contact_{source} | | XX is tracking a new contact for followup | contact: add new contact + source
+--- | follow_up | | ---- | ----
+| quick_button_no_answer | | XX is trying to call a contact. Pray for responsiveness. | contact: quick action: no answer
+| quick_button_meeting_complete | | XX met for the first time with a seeker | contact: seeker path: first meeting complete
+| quick_button_no_show | | XX missed a meeting with a disciple-maker. Pray for better responsiveness. | contact: quick action: meeting no show
+| milestone_belief | | XX has declared faith in Jesus | contact: milestone: states belief
+| milestone_sharing | | XX is actively sharing their faith in Jesus | contact: milestone: sharing faith
+| milestone_baptizing | | XX is actively baptizing others in obedience to Jesus | contact: milestone: baptizing
+| ---| training | ---- |  |
+| new_group | | XX is reporting a new group has formed | group: add new : grouptype: group
+| new_church | | XX is reporting a new church has formed | group: add new : grouptype: church
+| new_lead_team | | XX is reporting new leadership team has formed | group: add new : grouptype: team
+| new_multiplier | | XX added a new disciple maker to the team | user: add user: role of multiplier, responder
+| milestone_planting | | XX is actively planting churches | contact: milestone: baptizing
+---| multiplying | ---- | ---- |
+| milestone_baptized | | XX reported a new baptism | contact: milestone: baptized + baptized by
+| disciple_generation | | XX is reporting new generations of disciples | contact: coached by or baptized by added.
+| group_generation | | XX is reporting new generations of spiritual families | group: child group added that has type group
+| church_generation | | XX is reporting new generations of churches | group: child group added that has type church
+---| barriers | ----| |
+| closed_martyred | | XX has been martyred for the gospel. | contact: status reason
+| closed_apologetics | | XX only wants to argue or debate. Pray for humility. | contact: status reason
+| closed_no_longer_responding | | XX is no longer spiritually interested. Pray for conviction. | contact: status reason
+| closed_no_longer_interested | | XX is no longer responding. Pray for conviction. | contact: status reason
+| closed_hostile_self_gain | | XX is hostile and playing games with disciple maker. Pray for conviction. | contact: status reason
+| closed_moved | | XX has moved away. Pray for spiritual health in new location. | contact: status reason
+| paused_not_responding | | XX is not responding. Pray for responsiveness. | contact: status reason
+| paused_not_available | | XX is not available to meet. Pray for connection. | contact: status reason
+| paused_little_interest | | XX shows little spiritual interest/hunger. Pray for conviction. | contact: status reason
+| paused_no_initiative | | XX shows no initiative. Pray for conviction. | contact: status reason
+| paused_questionable_motives | | XX has questionable motives. Pray for conviction and discernment. | contact: status reason
+| paused_ball_in_their_court | | XX has been spiritually challenged. Pray for spiritual responsiveness. | contact: status reason
+| paused_wait_and_see | | XX has been spiritually challenged. Pray for spiritual responsiveness. | contact: status reason
+| inactive_church | | XX has disbanded as a church | group: status + group type
+| inactive_group | | XX has disbanded as a group | group: status + group type

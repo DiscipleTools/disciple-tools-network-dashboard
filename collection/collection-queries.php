@@ -93,7 +93,6 @@ class DT_Network_Dashboard_Queries {
             ");
 
         return $results;
-
     }
 
     public static function sites_with_snapshots() : array {
@@ -110,7 +109,7 @@ class DT_Network_Dashboard_Queries {
                   ON a.ID=b.post_id
                   AND b.meta_key = 'type'
                 JOIN $wpdb->postmeta as pm2
-                  ON p.ID=pm2.post_id
+                  ON a.ID=pm2.post_id
 					AND pm2.meta_key = 'non_wp' AND pm2.meta_value = '1'
                 JOIN $wpdb->postmeta as c
                   ON a.ID=c.post_id
