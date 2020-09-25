@@ -162,7 +162,6 @@ class DT_Network_Dashboard {
         require_once( 'admin/menu-and-tabs-endpoints.php' );
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );
-            require_once( 'admin/metabox-site-profile.php' );
         }
     }
 
@@ -417,4 +416,16 @@ function dt_network_dashboard_admin_notice() {
 function dt_network_dashboard_ajax_notice_handler() {
     $type = 'dt-network-dashboard';
     update_option( 'dismissed-' . $type, true );
+}
+
+function recursive_sanitize_text_field( array $array ) : array {
+    foreach ( $array as $key => &$value ) {
+        if ( is_array( $value ) ) {
+            $value = recursive_sanitize_text_field($value);
+        }
+        else {
+            $value = sanitize_text_field( wp_unslash( $value ) );
+        }
+    }
+    return $array;
 }

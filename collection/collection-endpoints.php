@@ -53,7 +53,6 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
     } // End __construct()
 
     public function add_api_routes() {
-
         register_rest_route(
             $this->public_namespace, '/network_dashboard/collector', [
                 'methods'  => 'POST',

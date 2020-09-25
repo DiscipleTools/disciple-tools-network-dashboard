@@ -20,7 +20,7 @@ function dt_network_dashboard_remote_sites_trigger() {
     dt_save_log( $file, '', false );
 
     // Get list of sites
-    $sites = DT_Network_Dashboard_Queries::site_link_list();
+    $sites = DT_Network_Dashboard_Queries::remote_site_id_list();
     if ( empty( $sites ) ){
         dt_save_log( $file, 'No remote sites found to trigger.', false );
         return false;

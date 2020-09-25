@@ -2,7 +2,7 @@
 
 class DT_Network_Dashboard_Queries {
 
-    public static function site_link_list() : array {
+    public static function remote_site_id_list() : array {
         global $wpdb;
 
         $results = $wpdb->get_results("
@@ -33,7 +33,7 @@ class DT_Network_Dashboard_Queries {
 
     public static function remote_sites_needing_snapshot_refreshed() : array {
 
-        $sites = self::site_link_list();
+        $sites = self::remote_site_id_list();
         if ( empty( $sites ) ){
             return [];
         }
@@ -71,7 +71,6 @@ class DT_Network_Dashboard_Queries {
         return $results;
     }
 
-
     public static function has_sites_for_collection() : int {
         global $wpdb;
 
@@ -99,8 +98,12 @@ class DT_Network_Dashboard_Queries {
         global $wpdb;
 
         $results = $wpdb->get_results("
-                SELECT 
-                  a.post_title as name, 
+                 SELECT 
+                 CASE
+                    WHEN e.meta_value IS NOT NULL THEN e.meta_value
+                    WHEN f.meta_value IS NOT NULL THEN f.meta_value
+                    ELSE a.post_title
+                    END as name,
                   a.ID as id,
                   d.meta_value as partner_id,
                   c.meta_value as snapshot
@@ -108,9 +111,9 @@ class DT_Network_Dashboard_Queries {
                 JOIN $wpdb->postmeta as b
                   ON a.ID=b.post_id
                   AND b.meta_key = 'type'
-                JOIN $wpdb->postmeta as pm2
+                LEFT JOIN $wpdb->postmeta as pm2
                   ON a.ID=pm2.post_id
-					AND pm2.meta_key = 'non_wp' AND pm2.meta_value = '1'
+					AND pm2.meta_key = 'non_wp'
                 JOIN $wpdb->postmeta as c
                   ON a.ID=c.post_id
                   AND c.meta_key = 'snapshot'
@@ -118,11 +121,18 @@ class DT_Network_Dashboard_Queries {
                 JOIN $wpdb->postmeta as d
                   ON a.ID=d.post_id
                   AND d.meta_key = 'partner_id'
+                 LEFT JOIN $wpdb->postmeta as e
+                  	ON a.ID=e.post_id
+                  	AND e.meta_key = 'partner_nickname'
+                 LEFT JOIN $wpdb->postmeta as f
+                  	ON a.ID=f.post_id
+                  	AND f.meta_key = 'partner_name'
                 WHERE a.post_type = 'site_link_system'
                   AND a.post_status = 'publish'
                     AND ( b.meta_value = 'network_dashboard_both'
                   OR b.meta_value = 'network_dashboard_receiving' )
-                  ORDER BY name
+                  AND pm2.meta_value != '1'
+                  ORDER BY name;
             ",
         ARRAY_A );
 

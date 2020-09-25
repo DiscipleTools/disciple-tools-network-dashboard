@@ -130,14 +130,15 @@ class DT_Network_Dashboard_Menu {
                     Local Site
                 </a>
 
-                <a href="<?php echo esc_attr( $link ) . 'activity' ?>" class="nav-tab
-                <?php echo ( $tab == 'activity' ) ? 'nav-tab-active' : ''; ?>">
-                    Send Activity
-                </a>
 
                 <a href="<?php echo esc_attr( $link ) . 'cron' ?>" class="nav-tab
                 <?php echo ( $tab == 'cron' ) ? 'nav-tab-active' : ''; ?>">
                     Cron
+                </a>
+
+                <a href="<?php echo esc_attr( $link ) . 'integrations' ?>" class="nav-tab
+                <?php echo ( $tab == 'integrations' ) ? 'nav-tab-active' : ''; ?>">
+                    Integrations
                 </a>
 
                 <a href="<?php echo esc_attr( $link ) . 'tutorials' ?>" class="nav-tab
@@ -160,16 +161,16 @@ class DT_Network_Dashboard_Menu {
                     $object = new DT_Network_Dashboard_Tab_Local();
                     $object->content();
                     break;
-                case "activity":
-                    $object = new DT_Network_Dashboard_Tab_Activity();
-                    $object->content();
-                    break;
                 case "tutorials":
                     $object = new DT_Network_Dashboard_Tab_Tutorial();
                     $object->content();
                     break;
                 case "cron":
                     $object = new DT_Network_Dashboard_Tab_Cron();
+                    $object->content();
+                    break;
+                case "integrations":
+                    $object = new DT_Network_Dashboard_Tab_Integrations();
                     $object->content();
                     break;
                 default:
@@ -254,7 +255,6 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
 
     public function process_full_list() {
         ?>
-        <p><strong>Snapshot Collection</strong></strong></p>
         <table class="widefat striped">
             <tbody>
             <tr>
@@ -307,7 +307,7 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
 
             dt_save_log( 'multisite', '', false );
             dt_save_log( 'multisite', 'REFRESH SNAPSHOT', false );
-            $result = dt_get_multisite_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) );
+            $result = get_blog_option( ( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) ), 'dt_snapshot_report' );
             if ( $result ) {
                 $message = [ 'notice-success','Successful collection of new snapshot' ];
             }
@@ -438,7 +438,6 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
 
     public function process_full_list() {
         ?>
-        <p><strong>Snapshot Collection</strong></strong></p>
         <table class="widefat striped">
             <tbody>
                 <tr>
@@ -484,23 +483,40 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
     }
 
     public function main_column() {
+        dt_write_log($_POST);
         $message = false;
         if ( isset( $_POST['network_dashboard_nonce'] )
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
-            && isset( $_POST['new-snapshot'] ) ) {
+             ) {
 
-            dt_save_log( 'remote', '', false );
-            dt_save_log( 'remote', 'REFRESH SNAPSHOT', false );
-            $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) );
-            if ( $result ) {
-                $message = [ 'notice-success','Successful collection of new snapshot.' ];
+            /* new snapshot */
+            if (  isset( $_POST['new-snapshot'] ) ){
+                dt_save_log( 'remote', '', false );
+                dt_save_log( 'remote', 'REFRESH SNAPSHOT', false );
+                $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) );
+                if ( $result ) {
+                    $message = [ 'notice-success','Successful collection of new snapshot.' ];
+                }
+                else {
+                    $message = [ 'notice-error', 'Failed collection' ];
+                }
             }
-            else {
-                $message = [ 'notice-error', 'Failed collection' ];
+
+            if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
+                $partner = recursive_sanitize_text_field( $_POST['partner'] );
+                dt_write_log($partner);
+                foreach( $partner as $key => $value ){
+                    if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
+                        update_post_meta( $key, 'partner_nickname', $value['nickname'] );
+                    }
+                    if ( isset( $value['send_activity_log'] ) && ! empty( $value['send_activity_log'] ) ) {
+                        update_post_meta( $key, 'send_activity_log', $value['send_activity_log'] );
+                    }
+                }
             }
         }
         // Get list of sites
-        $sites = DT_Network_Dashboard_Queries::site_link_list();
+        $sites = DT_Network_Dashboard_Queries::remote_site_id_list();
 
         /** Message */
         if ( $message ) {
@@ -514,20 +530,24 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
             <p><strong>Network Dashboard Snapshots of Connected Sites</strong></p>
             <table class="widefat striped">
                 <thead>
-                    <th></th>
-                    <th>Site Name</th>
                     <th>ID</th>
-                    <th>Snapshot</th>
+                    <th>Partner Name</th>
+                    <th>Nickname</th>
+                    <th>Domain</th>
+                    <th>Send Activity</th>
+                    <th>Profile</th>
                     <th>Last Snapshot</th>
-                    <th>Success</th>
-                    <th></th>
+                    <th>Actions</th>
                 </thead>
                 <tbody>
                 <?php
                 if ( ! empty( $sites ) ) {
-                    $i = 1;
                     foreach ( $sites as $site ) {
-                        $site_meta = get_post_meta( $site['id'] );
+
+                        $site_meta = get_post_meta( $site['id'] ); dt_write_log($site_meta['send_activity_log']);
+
+                        $partner_profile =  get_post_meta( $site['id'], 'partner_profile', true );
+
                         if ( isset( $site_meta['snapshot_fail'][0] ) && ! empty( $site_meta['snapshot_fail'][0] ) ) {
                             $fail = maybe_serialize( $site_meta['snapshot_fail'][0] );
                         } else {
@@ -536,30 +556,40 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                         ?>
                         <tr>
                             <td style="width:10px;">
-                                <?php echo $i;
-                                $i++; ?>
+                                <?php echo $site['id'] ?>
                             </td>
                             <td>
-                               <?php echo $site['name'] ?>
+                                <strong><?php echo  esc_html( $partner_profile['partner_name'] ) ?></strong>
                             </td>
                             <td>
-                               <?php echo $site['id'] ?>
+                                <input type="text" name="partner[<?php echo esc_attr( $site['id'] ) ?>][nickname]" value="<?php echo esc_attr( $site_meta['partner_nickname'][0] ?? '' ) ?>" />
                             </td>
                             <td>
-                               <?php echo ( ! empty( $site_meta['snapshot'][0] ) ) ? '&#x2714;' : '&#x2718;' ?>
+                                <a href="<?php echo esc_url( $partner_profile['partner_url'] ?? '' ) ?>"><?php echo esc_url( $partner_profile['partner_url'] ?? '' ) ?></a>
+                            </td>
+
+                            <td>
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_activity_log]" value="yes" <?php echo ( isset( $site_meta['send_activity_log'][0] ) && $site_meta['send_activity_log'][0] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_activity_log]" value="no" <?php echo ( isset( $site_meta['send_activity_log'][0] ) && $site_meta['send_activity_log'][0] === 'no' ) ? 'checked' : '' ?>/> No
                             </td>
                             <td>
-                               <?php echo ( ! empty( $site_meta['snapshot_date'][0] ) ) ? date( 'Y-m-d H:i:s', $site_meta['snapshot_date'][0] ) : '&#x2718;' ?>
+                                <button value="<?php echo esc_attr( $site['id'] ) ?>" name="update-profile" type="submit" class="button" >Update Profile</button>
                             </td>
+
                             <td>
-                                <?php echo ( empty( $site_meta['snapshot_fail'][0] )
-                                        && ! empty( $site_meta['snapshot'][0] ) ) ? '&#x2714;' :
-                                    '<span style="color:red;" onclick="jQuery(\'#fail-error\').show().append(jQuery(\'#fail-'.$site['id'].'\').html())">&#x2718; view error below</span>
-                                     <span style="display:none;" id="fail-'.$site['id'].'">'. $fail .'</span>'
+                                <?php echo ( ! empty( $site_meta['snapshot'][0] ) ) ? '&#9989;' : '&#x2718;' ?>
+                                <?php echo ( ! empty( $site_meta['snapshot_date'][0] ) ) ? date( 'Y-m-d H:i:s', $site_meta['snapshot_date'][0] ) : '&#x2718;' ?><br>
+                                <?php
+                                if ( ! empty( $fail ) ){
+                                    ?>
+                                    <a href="javascript:void(0)" onclick="jQuery('#<?php echo $site['id'] ?>').toggle()">Show error</a>
+                                    <span id="fail-<?php echo $site['id'] ?>" style="display:none;"><?php echo $fail ?></span>
+                                    <?php
+                                }
                                 ?>
+
                             </td>
                             <td>
-                                <button value="<?php echo esc_attr( $site['id'] ) ?>" name="new-snapshot" type="submit" class="button" >Refresh Snapshot</button>
+                                <button value="<?php echo esc_attr( $site['id'] ) ?>" name="new-snapshot" type="submit" class="button" >Refresh</button>
                             </td>
                         </tr>
                         <?php
@@ -617,19 +647,18 @@ class DT_Network_Dashboard_Tab_Local
                     <div id="post-body-content">
                         <!-- Main Column -->
 
-                        <?php $this->box_partner_profile() ?>
-                        <?php $this->box_mapbox_status() ?>
-                        <?php $this->box_ipstack_api_key() ?>
-                        <?php $this->box_site_link() ?>
+                        <?php DT_Network_Dashboard_Site_Link_Metabox::admin_box_local_site_profile(); ?>
+
+
+                        <?php $this->box_send_activity() ?>
+
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
                     <div id="postbox-container-1" class="postbox-container">
                         <!-- Right Column -->
 
-                        <?php $this->overview_message() ?>
-                        <?php $this->box_send_text() ?>
-                        <?php $this->box_top_nav_item() ?>
+                        <?php $this->box_site_link() ?>
 
                         <!-- End Right Column -->
                     </div><!-- postbox-container 1 -->
@@ -638,236 +667,6 @@ class DT_Network_Dashboard_Tab_Local
                 </div><!-- post-body meta box container -->
             </div><!--poststuff end -->
         </div><!-- wrap end -->
-        <?php
-    }
-
-    public function overview_message() {
-        ?>
-        <style>dt { font-weight:bold;}</style>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <th>Overview of Plugin</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <dl>
-                        <dt>Plugin Purpose</dt>
-                        <dd>Collecting reports across many systems is difficult and doing it automatically, even more so. Making sure
-                            counts for certain location are counted only once you need a shared database of locations to post counts to.
-                            This network mapping plugin attempts to set up a globally consistent mapping schema.</dd>
-
-                        <dt>Local vs Network Functions</dt>
-                        <dd>This plugin has two functions.
-                            <ol>
-                                <li> First to extend Disciple Tools with structured mapping data
-                                    and to make it easy to install those locations for a team to use as they reach out to a certain area.
-                                </li>
-                                <li>This plugin also has the ability to add a network (global) dashboard to Disciple Tools for
-                                    multiple Disciple Tools teams to connect their systems and share reporting (i.e. celebration) of the
-                                    work between them.
-                                </li>
-                            </ol>
-                        </dd>
-
-                    </dl>
-
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-
-
-    public function box_top_nav_item() {
-        if ( isset( $_POST['network_dashboard_nonce'] )
-            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
-            && isset( $_POST['hide_top_nav'] ) ) {
-
-            $selection = sanitize_text_field( wp_unslash( $_POST['hide_top_nav'] ) );
-            if ( $selection === 'hide' ) {
-                update_option( 'dt_hide_top_menu', true, true );
-            }
-            if ( $selection === 'show' ) {
-                delete_option( 'dt_hide_top_menu' );
-            }
-        }
-        $state = get_option( 'dt_hide_top_menu' );
-        ?>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <tr>
-                <th>Hide Top Nav Except "Network"</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    For appearance, the default top nav of Disciple Tools (i.e. Contacts, Groups, Metrics)
-                    can be hidden for appearance, if you are only using this site as a dashboard and not managing
-                    contacts or groups here locally.
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <form method="post">
-                        <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
-                        <select name="hide_top_nav">
-                            <option value="show" <?php echo empty($state) ? '' : ' selected'; ?>>Show</option>
-                            <option value="hide" <?php echo ($state) ? ' selected' : ''; ?>>Hide</option>
-                        </select>
-                        <button type="submit" class="button">Update</button>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function box_mapbox_status() {
-        ?>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <th>Mapbox Upgrade Status</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    The presence of a mapbox key upgrades the mapping features of the network dashboard automatically.
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Mapbox Key Installed : <?php echo ( class_exists( 'DT_Mapbox_API' ) && empty( DT_Mapbox_API::get_key() ) ) ? '<span style="color:red;">&#x2718;</span>' : '&#9989;' ; ?>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <a href="<?php echo esc_url( admin_url() ) ?>admin.php?page=dt_mapping_module&tab=geocoding">Disciple Tools Geocoding Tab</a>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function box_ipstack_api_key(){
-        DT_Ipstack_API::metabox_for_admin();
-    }
-
-    public function box_partner_profile()
-    {
-        // process post action
-        if (isset($_POST['partner_profile_form'])
-            && isset($_POST['_wpnonce'])
-            && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'])), 'partner_profile' . get_current_user_id())
-            && isset($_POST['partner_name'])
-            && isset($_POST['partner_description'])
-            && isset($_POST['partner_id'])
-        ) {
-            $partner_profile = [
-                'partner_name' => sanitize_text_field(wp_unslash($_POST['partner_name'])) ?: get_option('blogname'),
-                'partner_description' => sanitize_text_field(wp_unslash($_POST['partner_description'])) ?: get_option('blogdescription'),
-                'partner_id' => sanitize_text_field(wp_unslash($_POST['partner_id'])) ?: Site_Link_System::generate_token(40),
-            ];
-
-            update_option('dt_site_partner_profile', $partner_profile, true);
-        }
-        $partner_profile = get_option('dt_site_partner_profile');
-
-        ?>
-        <!-- Box -->
-        <form method="post">
-            <?php wp_nonce_field('partner_profile' . get_current_user_id()); ?>
-            <table class="widefat striped">
-                <thead>
-                <tr><th>Network Profile</th></tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-                        <table class="widefat">
-                            <tbody>
-                            <tr>
-                                <td><label for="partner_name">Your Group Name</label></td>
-                                <td><input type="text" class="regular-text" name="partner_name"
-                                           id="partner_name"
-                                           value="<?php echo esc_html($partner_profile['partner_name']) ?>"/></td>
-                            </tr>
-                            <tr>
-                                <td><label for="partner_description">Your Group Description</label></td>
-                                <td><input type="text" class="regular-text" name="partner_description"
-                                           id="partner_description"
-                                           value="<?php echo esc_html($partner_profile['partner_description']) ?>"/>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><label for="partner_id">Site ID</label></td>
-                                <td><?php echo esc_attr($partner_profile['partner_id']) ?>
-                                    <input type="hidden" class="regular-text" name="partner_id"
-                                           id="partner_id"
-                                           value="<?php echo esc_attr($partner_profile['partner_id']) ?>"/></td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <p><br>
-                            <button type="submit" id="partner_profile_form" name="partner_profile_form"
-                                    class="button">Update
-                            </button>
-                        </p>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function box_send_text()
-    {
-        $report = false;
-        if (isset($_POST['test_send_nonce']) && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['test_send_nonce'])), 'test_send_' . get_current_user_id())) {
-            $report = DT_Network_Dashboard_Snapshot_Report::snapshot_report();
-
-        }
-        ?>
-        <table class="widefat striped">
-            <thead>
-            <tr>
-                <th>Site Links</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <form method="post">
-                        <?php wp_nonce_field('test_send_' . get_current_user_id(), 'test_send_nonce', false, true) ?>
-                        <button type="submit" name="send_test" class="button"><?php esc_html_e('Send Test') ?></button>
-                    </form>
-                    <?php
-                    if ($report) {
-                        echo esc_html(maybe_serialize($report));
-                    }
-                    ?></td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
         <?php
     }
 
@@ -940,57 +739,20 @@ class DT_Network_Dashboard_Tab_Local
         <br>
         <?php
     }
-}
 
 
-/**
- * Class DT_Network_Dashboard_Tab_Activity
- */
-class DT_Network_Dashboard_Tab_Activity
-{
-    public function content() {
-        ?>
-        <form method="post">
-            <?php wp_nonce_field( 'activity'. get_current_user_id(), 'activity-nonce') ?>
-            <div class="wrap">
-                <div id="poststuff">
-                    <div id="post-body" class="metabox-holder columns-2">
-                        <div id="post-body-content">
-                            <!-- Main Column -->
-
-                            <?php $this->box_site_link()?>
-
-                            <!-- End Main Column -->
-                        </div><!-- end post-body-content -->
-                        <div id="postbox-container-1" class="postbox-container">
-                            <!-- Right Column -->
-
-                            <?php $this->sidebar_update_settings() ?>
-                            <?php $this->sidebar() ?>
-
-                            <!-- End Right Column -->
-                        </div><!-- postbox-container 1 -->
-                        <div id="postbox-container-2" class="postbox-container">
-                        </div><!-- postbox-container 2 -->
-                    </div><!-- post-body meta box container -->
-                </div><!--poststuff end -->
-            </div><!-- wrap end -->
-        </form>
-        <?php
-    }
-
-    public function box_site_link()
+    public function box_send_activity()
     {
         if ( isset( $_POST['activity-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['activity-nonce'] ) ), 'activity'. get_current_user_id() ) ) {
-//            dt_write_log($_POST);
             if ( isset( $_POST['activity_log'] ) && ! empty( $_POST['activity_log'] ) && is_array( $_POST['activity_log'] ) ) {
                 foreach($_POST['activity_log'] as $i => $v ) {
                     update_post_meta( sanitize_text_field( wp_unslash( $i ) ), 'send_activity_log',  sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
         }
-        global $wpdb;
 
+        /* REMOTE SITES*/
+        global $wpdb;
         $site_links = $wpdb->get_results("
         SELECT p.ID, p.post_title, pm.meta_value as type, pa.meta_value as send_activity_log
             FROM $wpdb->posts as p
@@ -1000,114 +762,64 @@ class DT_Network_Dashboard_Tab_Activity
               AND p.post_status = 'publish'
               AND ( pm.meta_value = 'network_dashboard_both' OR pm.meta_value = 'network_dashboard_sending' )
         ", ARRAY_A);
-//        dt_write_log($site_links);
 
-        // @todo Add strategy for sending to multisite and saving to multisite
+        /* MULTISITES */
+
 
         ?>
-        <?php
-        if (!is_array($site_links)) :
-            ?>
-            No site links found. Go to <a href="<?php echo esc_url(admin_url()) ?>edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type.
-        <?php
-        else :
-            ?>
-            <table class="widefat striped">
-                <thead>
-                <tr>
-                    <td style="width:300px;">Available Sites to Send Activity Logs</td>
-                    <td>Send Activity</td>
-                </tr>
-                </thead>
-                <tbody>
+        <table class="widefat striped">
+            <thead>
+            <tr>
+                <td style="width:300px;">Send Activity</td>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
                 <?php
-                foreach ($site_links as $site) {
-                    if ('network_dashboard_sending' === $site['type'] || 'network_dashboard_both' === $site['type'] ) {
-                        ?>
-                        <tr><td><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['ID']) ?>&action=edit"><?php echo esc_html($site['post_title']) ?></a></td>
-                            <td><input type="radio" name="activity_log[<?php echo esc_attr($site['ID']) ?>]" value="yes" <?php echo ($site['send_activity_log'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="activity_log[<?php echo esc_attr($site['ID']) ?>]" value="no" <?php echo ($site['send_activity_log'] === 'yes' ) ? '' : 'checked' ?>/> No</td></tr>
-                        <?php
-                    }
-                }
+                if (!is_array($site_links)) :
+                    ?>
+                    No site links found. Go to <a href="<?php echo esc_url(admin_url()) ?>edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type.
+                <?php
+                else :
+                    ?>
+                        <form method="post">
+                            <table class="widefat striped">
+                                <thead>
+                                <tr>
+                                    <td style="width:300px;">Remote Sites</td>
+                                    <td style="text-align:right;">Send Activity</td>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <?php
+                                foreach ($site_links as $site) {
+                                    if ('network_dashboard_sending' === $site['type'] || 'network_dashboard_both' === $site['type'] ) {
+                                        ?>
+                                        <tr><td><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['ID']) ?>&action=edit"><?php echo esc_html($site['post_title']) ?></a></td>
+                                            <td style="text-align:right;"><input type="radio" name="activity_log[<?php echo esc_attr($site['ID']) ?>]" value="yes" <?php echo ($site['send_activity_log'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="activity_log[<?php echo esc_attr($site['ID']) ?>]" value="no" <?php echo ($site['send_activity_log'] === 'yes' ) ? '' : 'checked' ?>/> No</td></tr>
+                                        <?php
+                                    }
+                                }
+                                ?>
+                                </tbody>
+                            </table>
+                            <p><br>
+                                <button  type="submit" class="button">Update</button>
+                            </p>
+                        </form>
+                    </td>
+                    </tr>
+                    </tbody>
+                    </table>
+                <?php
+                endif;
                 ?>
-                </tbody>
-            </table>
-        <?php
-        endif;
-        ?>
         <br>
-        <?php
-    }
-
-    public function main() {
-        ?>
-        <style>dt { font-weight:bold;}</style>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <th>Activity</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <dl>
-                        <dt>Title</dt>
-                        <dd>Content</dd>
-
-                        <dt>Title</dt>
-                        <dd>Content</dd>
-                    </dl>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function sidebar() {
-        ?>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <th>Notes</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    Enable these site connections for
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function sidebar_update_settings() {
-        ?>
-        <!-- Box -->
-        <table class="widefat">
-            <thead>
-            <tr><td>Update Configuration</td></tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <form method="post">
-                        <button type="submit" class="button">Update</button><br>
-                    </form>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
         <?php
     }
 }
+
 
 /**
  * Class DT_Network_Dashboard_Tab_Tutorial
@@ -1274,6 +986,82 @@ class DT_Network_Dashboard_Tab_Cron
 /**
  * Class DT_Network_Dashboard_Tab_Tutorial
  */
+class DT_Network_Dashboard_Tab_Integrations
+{
+    public function content() {
+        DT_Network_Dashboard_Snapshot_Report::snapshot_report();
+        ?>
+        <div class="wrap">
+            <div id="poststuff">
+                <div id="post-body" class="metabox-holder columns-2">
+                    <div id="post-body-content">
+                        <!-- Main Column -->
+
+
+                        <?php $this->box_mapbox_status() ?>
+                        <?php $this->box_ipstack_api_key() ?>
+
+                        <!-- End Main Column -->
+                    </div><!-- end post-body-content -->
+                    <div id="postbox-container-1" class="postbox-container">
+                        <!-- Right Column -->
+
+                        <?php $this->box_instructions() ?>
+
+                        <!-- End Right Column -->
+                    </div><!-- postbox-container 1 -->
+                    <div id="postbox-container-2" class="postbox-container">
+                    </div><!-- postbox-container 2 -->
+                </div><!-- post-body meta box container -->
+            </div><!--poststuff end -->
+        </div><!-- wrap end -->
+        <?php
+    }
+
+    public function box_mapbox_status() {
+        DT_Mapbox_API::metabox_for_admin();
+    }
+
+    public function box_ipstack_api_key(){
+        DT_Ipstack_API::metabox_for_admin();
+    }
+
+    public function box_instructions() {
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>Integrations</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    These are a few third party enhancements you can add to improve your Disciple Tools and Network Dashboard system.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Mapbox</strong><br>
+                    Mapbox adds next level mapping and display to the Network Dashboard.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>IPStack</strong><br>
+                    Adds the capacity to translate IP Addresses of visitors into geolocation.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+}
+
+/**
+ * Class DT_Network_Dashboard_Tab_Tutorial
+ */
 class DT_Network_Dashboard_Tab_Tutorial
 {
     public function content() {
@@ -1292,6 +1080,7 @@ class DT_Network_Dashboard_Tab_Tutorial
                         <!-- Right Column -->
 
                         <?php $this->sidebar() ?>
+                        <?php $this->overview_message() ?>
 
                         <!-- End Right Column -->
                     </div><!-- postbox-container 1 -->
@@ -1300,6 +1089,47 @@ class DT_Network_Dashboard_Tab_Tutorial
                 </div><!-- post-body meta box container -->
             </div><!--poststuff end -->
         </div><!-- wrap end -->
+        <?php
+    }
+
+    public function overview_message() {
+        ?>
+        <style>dt { font-weight:bold;}</style>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>Overview of Plugin</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    <dl>
+                        <dt>Plugin Purpose</dt>
+                        <dd>Collecting reports across many systems is difficult and doing it automatically, even more so. Making sure
+                            counts for certain location are counted only once you need a shared database of locations to post counts to.
+                            This network mapping plugin attempts to set up a globally consistent mapping schema.</dd>
+
+                        <dt>Local vs Network Functions</dt>
+                        <dd>This plugin has two functions.
+                            <ol>
+                                <li> First to extend Disciple Tools with structured mapping data
+                                    and to make it easy to install those locations for a team to use as they reach out to a certain area.
+                                </li>
+                                <li>This plugin also has the ability to add a network (global) dashboard to Disciple Tools for
+                                    multiple Disciple Tools teams to connect their systems and share reporting (i.e. celebration) of the
+                                    work between them.
+                                </li>
+                            </ol>
+                        </dd>
+
+                    </dl>
+
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
         <?php
     }
 

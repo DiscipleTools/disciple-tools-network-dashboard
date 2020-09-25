@@ -271,9 +271,9 @@ class DT_Network_Dashboard_UI
 
     public function get_sites() {
 
-        if (wp_cache_get( 'get_sites' )) {
-            return wp_cache_get( 'get_sites' );
-        }
+//        if (wp_cache_get( 'get_sites' )) {
+//            return wp_cache_get( 'get_sites' );
+//        }
 
         $new = [];
 
@@ -283,6 +283,7 @@ class DT_Network_Dashboard_UI
                 $snapshot = maybe_unserialize( $site['snapshot'] );
                 if ( !empty( $snapshot['partner_id'] )) {
                     $new[$snapshot['partner_id']] = $snapshot;
+                    $new[$snapshot['partner_id']]['partner_name'] = $site['name'];
                 }
             }
         }
@@ -297,7 +298,7 @@ class DT_Network_Dashboard_UI
             }
         }
 
-        wp_cache_set( 'get_sites', $new );
+//        wp_cache_set( 'get_sites', $new );
 
         return $new;
     }
@@ -312,7 +313,7 @@ class DT_Network_Dashboard_UI
                 if ( !empty( $snapshot['partner_id'] )) {
                     $new[] = [
                         'id' => $snapshot['partner_id'],
-                        'name' => ucwords( $snapshot['profile']['partner_name'] ),
+                        'name' => ucwords( $site['name'] ),
                         'contacts' => $snapshot['contacts']['current_state']['status']['active'],
                         'groups' => $snapshot['groups']['current_state']['total_active'],
                         'users' => $snapshot['users']['current_state']['total_users'],
