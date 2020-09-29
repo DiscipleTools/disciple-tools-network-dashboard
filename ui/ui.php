@@ -277,9 +277,12 @@ class DT_Network_Dashboard_UI
 
         $new = [];
 
-        $sites = DT_Network_Dashboard_Queries::sites_with_snapshots();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
         if ( !empty( $sites )) {
             foreach ($sites as $site) {
+                if ( 'multisite' === $site['type'] ){
+                    continue;
+                }
                 $snapshot = maybe_unserialize( $site['snapshot'] );
                 if ( !empty( $snapshot['partner_id'] )) {
                     $new[$snapshot['partner_id']] = $snapshot;
@@ -289,8 +292,10 @@ class DT_Network_Dashboard_UI
         }
 
         if (dt_is_current_multisite_dashboard_approved()) {
-            $sites = dt_multisite_dashboard_snapshots();
             foreach ($sites as $key => $site) {
+                if ( 'remote' === $site['type'] ){
+                    continue;
+                }
                 $snapshot = maybe_unserialize( $site );
                 if ( !empty( $snapshot['partner_id'] )) {
                     $new[$snapshot['partner_id']] = $snapshot;
@@ -304,11 +309,14 @@ class DT_Network_Dashboard_UI
     }
 
     public function get_site_list() {
-        $sites = DT_Network_Dashboard_Queries::sites_with_snapshots();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
 
         $new = [];
         if ( !empty( $sites )) {
             foreach ($sites as $key => $site) {
+                if ( 'multisite' === $site['type'] ){
+                    continue;
+                }
                 $snapshot = maybe_unserialize( $site['snapshot'] );
                 if ( !empty( $snapshot['partner_id'] )) {
                     $new[] = [
@@ -326,6 +334,9 @@ class DT_Network_Dashboard_UI
         if (dt_is_current_multisite_dashboard_approved()) {
             $sites = dt_multisite_dashboard_snapshots();
             foreach ($sites as $key => $site) {
+                if ( 'remote' === $site['type'] ){
+                    continue;
+                }
                 $snapshot = maybe_unserialize( $site );
                 if ( !empty( $snapshot['partner_id'] )) {
                     $new[] = [

@@ -326,9 +326,6 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                     if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
                         DT_Network_Dashboard_Site_Post_Type::update_site_name( $key, sanitize_text_field( wp_unslash( $value['nickname'] ) ) );
                     }
-                    if ( isset( $value['send_live_activity'] ) && ! empty( $value['send_live_activity'] ) ) {
-                        DT_Network_Dashboard_Site_Post_Type::update_send_live_activity( $key, sanitize_text_field( wp_unslash( $value['send_live_activity'] ) ) );
-                    }
                     if ( isset( $value['visibility'] ) && ! empty( $value['visibility'] ) ) {
                         DT_Network_Dashboard_Site_Post_Type::update_visibility( $key, sanitize_text_field( wp_unslash( $value['visibility'] ) ) );
                     }
@@ -356,8 +353,7 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                 <th>Site Name</th>
                 <th>Nickname</th>
                 <th>Domain</th>
-                <th>Send Activity</th>
-                <th>Hide</th>
+                <th>Show in Metrics</th>
                 <th>Profile</th>
                 <th>Last Snapshot</th>
                 <th>Refresh Snapshot</th>
@@ -384,9 +380,6 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                             </td>
                             <td>
                                 <?php echo '<a href="'. esc_url( $profile['partner_url'] ) .'" target="_blank">' . esc_url( $profile['partner_url'] ) . '</a>' ?>
-                            </td>
-                            <td>
-                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_live_activity]" value="yes" <?php echo ( isset( $site['send_live_activity'] ) && $site['send_live_activity'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_live_activity]" value="no" <?php echo ( isset( $site['send_live_activity'] ) && $site['send_live_activity'] === 'no' ) ? 'checked' : '' ?>/> No
                             </td>
                             <td>
                                 <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="show" <?php echo ( $site['visibility'] === 'show' ) ? 'checked' : '' ?>/> Show | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="hide" <?php echo ( isset( $site['visibility'] ) && $site['visibility'] === 'hide' ) ? 'checked' : '' ?>/> Hide
@@ -554,9 +547,6 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                     if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
                         DT_Network_Dashboard_Site_Post_Type::update_site_name( $key, sanitize_text_field( wp_unslash( $value['nickname'] ) ) );
                     }
-                    if ( isset( $value['send_live_activity'] ) && ! empty( $value['send_live_activity'] ) ) {
-                        DT_Network_Dashboard_Site_Post_Type::update_send_live_activity( $key, sanitize_text_field( wp_unslash( $value['send_live_activity'] ) ) );
-                    }
                     if ( isset( $value['visibility'] ) && ! empty( $value['visibility'] ) ) {
                         DT_Network_Dashboard_Site_Post_Type::update_visibility( $key, sanitize_text_field( wp_unslash( $value['visibility'] ) ) );
                     }
@@ -565,7 +555,7 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
         }
         // Get list of sites
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-        
+
         /** Message */
         if ( $message ) {
             echo '<div class="notice '.esc_attr( $message[0] ).'">'.esc_html( $message[1] ).'</div>';
@@ -582,8 +572,7 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                     <th>Partner Name</th>
                     <th>Nickname</th>
                     <th>Domain</th>
-                    <th>Send Activity</th>
-                    <th>Visibility</th>
+                    <th>Show in Metrics</th>
                     <th>Profile</th>
                     <th>Last Snapshot</th>
                     <th>Actions</th>
@@ -611,9 +600,6 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                             </td>
                             <td>
                                 <a href="<?php echo esc_url( $profile['partner_url'] ?? '' ) ?>"><?php echo esc_url( $profile['partner_url'] ?? '' ) ?></a>
-                            </td>
-                            <td>
-                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_live_activity]" value="yes" <?php echo ( $site['send_live_activity'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_live_activity]" value="no" <?php echo ( $site['send_live_activity'] === 'no' ) ? 'checked' : '' ?>/> No
                             </td>
                             <td>
                                 <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="show" <?php echo ( $site['visibility'] === 'show' ) ? 'checked' : '' ?>/> Show | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="hide" <?php echo ( isset( $site['visibility'] ) && $site['visibility'] === 'hide' ) ? 'checked' : '' ?>/> Hide
@@ -694,9 +680,7 @@ class DT_Network_Dashboard_Tab_Local
 
                         <?php DT_Network_Dashboard_Site_Link_Metabox::admin_box_local_site_profile(); ?>
 
-
                         <?php $this->box_send_activity() ?>
-
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -789,28 +773,16 @@ class DT_Network_Dashboard_Tab_Local
     public function box_send_activity()
     {
         if ( isset( $_POST['activity-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['activity-nonce'] ) ), 'activity'. get_current_user_id() ) ) {
+            dt_write_log($_POST);
             if ( isset( $_POST['activity_log'] ) && ! empty( $_POST['activity_log'] ) && is_array( $_POST['activity_log'] ) ) {
                 foreach($_POST['activity_log'] as $i => $v ) {
-                    update_post_meta( sanitize_text_field( wp_unslash( $i ) ), 'send_activity_log',  sanitize_text_field( wp_unslash( $v ) ) );
+                    update_post_meta( sanitize_text_field( wp_unslash( $i ) ), 'send_live_activity',  sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
         }
 
         /* REMOTE SITES*/
-        global $wpdb;
-        $site_links = $wpdb->get_results("
-        SELECT p.ID, p.post_title, pm.meta_value as type, pa.meta_value as send_activity_log
-            FROM $wpdb->posts as p
-              LEFT JOIN $wpdb->postmeta as pm ON p.ID=pm.post_id AND pm.meta_key = 'type'
-              LEFT JOIN $wpdb->postmeta as pa ON p.ID=pa.post_id AND pa.meta_key = 'send_activity_log'
-            WHERE p.post_type = 'site_link_system'
-              AND p.post_status = 'publish'
-              AND ( pm.meta_value = 'network_dashboard_both' OR pm.meta_value = 'network_dashboard_sending' )
-        ", ARRAY_A);
-
-        /* MULTISITES */
-
-
+       $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
         ?>
         <table class="widefat striped">
             <thead>
@@ -822,13 +794,14 @@ class DT_Network_Dashboard_Tab_Local
             <tr>
                 <td>
                 <?php
-                if (!is_array($site_links)) :
+                if (!is_array($sites)) :
                     ?>
                     No site links found. Go to <a href="<?php echo esc_url(admin_url()) ?>edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type.
                 <?php
                 else :
                     ?>
                         <form method="post">
+                            <?php wp_nonce_field( 'activity'. get_current_user_id(), 'activity-nonce') ?>
                             <table class="widefat striped">
                                 <thead>
                                 <tr>
@@ -838,13 +811,13 @@ class DT_Network_Dashboard_Tab_Local
                                 </thead>
                                 <tbody>
                                 <?php
-                                foreach ($site_links as $site) {
-                                    if ('network_dashboard_sending' === $site['type'] || 'network_dashboard_both' === $site['type'] ) {
-                                        ?>
-                                        <tr><td><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['ID']) ?>&action=edit"><?php echo esc_html($site['post_title']) ?></a></td>
-                                            <td style="text-align:right;"><input type="radio" name="activity_log[<?php echo esc_attr($site['ID']) ?>]" value="yes" <?php echo ($site['send_activity_log'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="activity_log[<?php echo esc_attr($site['ID']) ?>]" value="no" <?php echo ($site['send_activity_log'] === 'yes' ) ? '' : 'checked' ?>/> No</td></tr>
-                                        <?php
-                                    }
+                                foreach ($sites as $site) {
+                                    ?>
+                                    <tr>
+                                        <td><?php echo esc_html($site['name']) ?></td>
+                                        <td style="text-align:right;"><input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="yes" <?php echo ( $site['send_live_activity'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="no" <?php echo ($site['send_live_activity'] === 'yes' ) ? '' : 'checked' ?>/> No</td>
+                                    </tr>
+                                    <?php
                                 }
                                 ?>
                                 </tbody>

@@ -17,6 +17,8 @@ if ( dt_is_current_multisite_dashboard_approved() ) {
 function dt_network_dashboard_multisite_snapshot_async( ) {
     $limit = 100; // set max loops before spawning new cron
 
+    DT_Network_Dashboard_Site_Post_Type::sync_all_multisites_to_post_type();
+
     $file = 'multisite';
 
     if ( ! dt_is_todays_log( $file ) ) {
@@ -31,7 +33,7 @@ function dt_network_dashboard_multisite_snapshot_async( ) {
     }
 
     // Get list of sites
-    $sites = DT_Network_Dashboard_Queries::multisite_sites_needing_snapshot_refreshed();
+    $sites = DT_Network_Dashboard_Site_Post_Type::multisite_sites_needing_snapshot_refreshed();
     if ( empty( $sites ) ){
         dt_save_log( $file, 'No sites found to collect.', false );
         return false;

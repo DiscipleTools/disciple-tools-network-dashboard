@@ -24,7 +24,7 @@ function dt_network_dashboard_collect_remote_sites() {
     }
 
     // Get list of sites
-    $sites = DT_Network_Dashboard_Queries::remote_sites_needing_snapshot_refreshed();
+    $sites = DT_Network_Dashboard_Site_Post_Type::remote_sites_needing_snapshot_refreshed();
     if ( empty( $sites ) ){
         dt_save_log( $file, 'No remote sites found to trigger.', false );
         return false;
@@ -105,18 +105,20 @@ class DT_Get_Single_Site_Snapshot extends Disciple_Tools_Async_Task
  * @return bool
  */
 function dt_get_site_snapshot( $site_post_id ) {
-    update_post_meta( $site_post_id, 'snapshot_fail', true );
+
+    $partner_post_id = DT_Network_Dashboard_Site_Post_Type::get_by_remote_id( $site_post_id );
+    update_post_meta( $partner_post_id, 'snapshot_fail', true );
 
     $file = 'remote';
-    dt_save_log( $file, 'START ID: ' . $site_post_id );
+    dt_save_log( $file, 'START ID: ' . $partner_post_id );
 
     $site = Site_Link_System::get_site_connection_vars( $site_post_id, 'post_id' );
     if ( is_wp_error( $site ) ) {
-        delete_post_meta( $site_post_id, 'snapshot' );
-        delete_post_meta( $site_post_id, 'snapshot_date' );
-        update_post_meta( $site_post_id, 'snapshot_fail', $site );
+        delete_post_meta( $partner_post_id, 'snapshot' );
+        delete_post_meta( $partner_post_id, 'snapshot_date' );
+        update_post_meta( $partner_post_id, 'snapshot_fail', $site );
 
-        dt_save_log( $file, 'FAIL ID: ' . $site_post_id . ' (Failed to get valid site link connection details)' );
+        dt_save_log( $file, 'FAIL ID: ' . $partner_post_id . ' (Failed to get valid site link connection details)' );
         return false;
     }
 
@@ -131,13 +133,13 @@ function dt_get_site_snapshot( $site_post_id ) {
     if ( is_wp_error( $result ) ) {
         // retry connection in 3 seconds
         sleep( 10 );
-        dt_save_log( $file, 'RETRY ID: ' . $site_post_id . ' (WP_Remote_Post Error)' );
+        dt_save_log( $file, 'RETRY ID: ' . $partner_post_id . ' (WP_Remote_Post Error)' );
         $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/live_stats', $args );
     }
     if ( is_wp_error( $result ) ) {
         update_post_meta( $site_post_id, 'snapshot_fail', maybe_serialize( $result ) );
 
-        dt_save_log( $file, 'FAIL ID: ' . $site_post_id . ' (Failed in connection to remote site.)' );
+        dt_save_log( $file, 'FAIL ID: ' . $partner_post_id . ' (Failed in connection to remote site.)' );
         dt_save_log( $file, maybe_serialize( $result ) );
         return false;
     }
@@ -146,12 +148,12 @@ function dt_get_site_snapshot( $site_post_id ) {
     if ( $snapshot['status'] == 'FAIL' ) {
         // retry connection in 3 seconds
         sleep( 10 );
-        dt_save_log( $file, 'RETRY ID: ' . $site_post_id . ' (Payload = FAIL)' );
+        dt_save_log( $file, 'RETRY ID: ' . $partner_post_id . ' (Payload = FAIL)' );
         $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/live_stats', $args );
         if ( is_wp_error( $result ) ) {
             update_post_meta( $site_post_id, 'snapshot_fail', maybe_serialize( $result ) );
 
-            dt_save_log( $file, 'FAIL ID: ' . $site_post_id . ' (Failed in connection to remote site.)' );
+            dt_save_log( $file, 'FAIL ID: ' . $partner_post_id . ' (Failed in connection to remote site.)' );
             dt_save_log( $file, maybe_serialize( $result ) );
             return false;
         }
@@ -160,19 +162,20 @@ function dt_get_site_snapshot( $site_post_id ) {
     if ( $snapshot['status'] == 'FAIL' ) {
         update_post_meta( $site_post_id, 'snapshot_fail', $result );
 
-        dt_save_log( $file, 'FAIL ID: ' . $site_post_id . ' (Connection success, but data collection failed in remote site.)' );
+        dt_save_log( $file, 'FAIL ID: ' . $partner_post_id . ' (Connection success, but data collection failed in remote site.)' );
         dt_save_log( $file, maybe_serialize( $snapshot ) );
         return false;
     }
 
-    $saved = DT_Network_Dashboard_Site_Post_Type::update_snapshot( $snapshot, $site_post_id );
+
+    $saved = DT_Network_Dashboard_Site_Post_Type::update_snapshot( $snapshot, $partner_post_id );
     if ( is_wp_error( $saved ) ){
-        dt_save_log( $file, 'FAIL ID: ' . $site_post_id . ' (Failed to save snapshot.)' );
+        dt_save_log( $file, 'FAIL ID: ' . $partner_post_id . ' (Failed to save snapshot.)' );
         dt_save_log( $file, maybe_serialize( $saved ) );
         return false;
     }
 
-    dt_save_log( $file, 'SUCCESS ID: ' . $site_post_id );
+    dt_save_log( $file, 'SUCCESS ID: ' . $partner_post_id );
 
     return true;
 }

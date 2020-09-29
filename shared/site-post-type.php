@@ -144,6 +144,10 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $partner_post_id;
     }
 
+    public static function get_by_remote_id( $remote_post_id ){
+        return get_post_meta( $remote_post_id, 'dt_network_dashboard', true );
+    }
+
     public static function get_snapshot( $partner_post_id ){
         return get_post_meta( $partner_post_id, 'snapshot', true );
     }
@@ -358,33 +362,6 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $dt_sites;
     }
 
-    public static function all_remote_ids() : array {
-        global $wpdb;
-
-        $results = $wpdb->get_col("
-                SELECT 
-                  ID as id
-                FROM $wpdb->posts as p
-                JOIN $wpdb->postmeta as pm
-                  ON p.ID=pm.post_id
-					AND pm.meta_key = 'type'
-				LEFT JOIN $wpdb->postmeta as pm2
-                  ON p.ID=pm2.post_id
-					AND pm2.meta_key = 'non_wp' 
-                  WHERE p.post_type = 'site_link_system'
-                  AND p.post_status = 'publish'
-                  AND ( pm.meta_value = 'network_dashboard_both'
-                  OR pm.meta_value = 'network_dashboard_receiving' )
-                    AND pm2.meta_value != '1'
-            " );
-
-        if ( empty( $results ) ) {
-            $results = [];
-        }
-
-        return $results;
-    }
-
     public static function sync_all_multisites_to_post_type() : array {
         $result = [
             'delete' => [],
@@ -470,34 +447,38 @@ class DT_Network_Dashboard_Site_Post_Type {
             return [];
         }
 
-        $multisites = self::all_multisite_ids();
-        $l = self::all_sites();
+        $sites = self::all_sites();
 
-        $list = [];
-        foreach( $l as $item ){
-            if ( $item['type'] !== 'multisite' ){
+        $needs_update = [];
+        foreach( $sites as $site ){
+            if ( $site['type'] !== 'multisite' ){
                 continue;
             }
 
-            $list[$item['type_id']] = $item['snapshot_timestamp'];
+            if ( $site['snapshot_timestamp'] >= strtotime( 'today' ) ) {
+                continue;
+            }
+
+            $needs_update[] = $site['type_id'];
         }
 
+        return $needs_update;
+    }
+
+    public static function remote_sites_needing_snapshot_refreshed() {
+        $sites = self::all_sites();
+
         $needs_update = [];
-        foreach ( $multisites as $multisite ){
-            if ( isset( $list[$multisite] ) ) {
-                if ( $list[$multisite]  >= strtotime( 'today' ) ){
-                    continue;
-                } else {
-                    $needs_update[] = $multisite;
-                }
-            } else {
-                $network_dashboard_id = self::create_multisite_by_id( $multisite );
-                if ( is_wp_error( $network_dashboard_id ) ){
-                    dt_write_log($network_dashboard_id);
-                    continue;
-                }
-                $needs_update[] = $multisite;
+        foreach( $sites as $site ){
+            if ( $site['type'] !== 'remote' ){
+                continue;
             }
+
+            if ( $site['snapshot_timestamp'] >= strtotime( 'today' ) ) {
+                continue;
+            }
+
+            $needs_update[] = $site['type_id'];
         }
 
         return $needs_update;
