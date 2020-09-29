@@ -44,8 +44,7 @@ class DT_Network_Dashboard_Site_Link_Metabox {
             $post_id = $post->ID;
         }
 
-        dt_write_log($post_id);
-        $new_profile = $this->create_partner_profile( $post_id );
+        $new_profile = DT_Network_Dashboard_Site_Post_Type::create_remote_by_id( $post_id );
         if( is_wp_error( $new_profile ) ){
             dt_write_log($new_profile);
             ?>
@@ -86,90 +85,90 @@ class DT_Network_Dashboard_Site_Link_Metabox {
         <?php
     }
 
-    public function create_partner_profile( $site_post_id ) {
-
-        $site = Site_Link_System::get_site_connection_vars( $site_post_id, 'post_id');
-        if ( is_wp_error($site) ) {
-            return $site;
-        }
-
-        // Send remote request
-        $args = [
-            'method' => 'POST',
-            'body' => [
-                'transfer_token' => $site['transfer_token'],
-            ]
-        ];
-        $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/profile', $args );
-        if ( is_wp_error($result)) {
-            return $result;
-        }
-        if ( ! isset( $result['body'] ) || empty( $result['body'] ) ) {
-            return new WP_Error(__METHOD__, 'Remote API did not return properly configured body response.');
-        }
-
-        /* site profile returned */
-        $site_profile = json_decode( $result['body'], true );
-        if ( ! isset( $site_profile['partner_id'] ) || empty( $site_profile['partner_id'] ) ){
-            return new WP_Error(__METHOD__, 'Remote API did not return a proper partner id.');
-        }
-
-        recursive_sanitize_text_field( $site_profile );
-
-        $dt_network_dashboard_id = get_post_meta( $site_post_id, 'dt_network_dashboard', true );
-        if ( empty( $dt_network_dashboard_id ) ) {
-            $dt_network_dashboard_id = DT_Network_Dashboard_Site_Post_Type::create( $site_profile, 'remote', $site_post_id );
-            if ( is_wp_error( $dt_network_dashboard_id ) ){
-                return $dt_network_dashboard_id;
-            }
-        }
-
-        update_post_meta( $dt_network_dashboard_id, 'profile', $site_profile );
-
-        return $site_profile;
-    }
+//    public function create_partner_profile( $site_post_id ) {
+//
+//        $site = Site_Link_System::get_site_connection_vars( $site_post_id, 'post_id');
+//        if ( is_wp_error($site) ) {
+//            return $site;
+//        }
+//
+//        // Send remote request
+//        $args = [
+//            'method' => 'POST',
+//            'body' => [
+//                'transfer_token' => $site['transfer_token'],
+//            ]
+//        ];
+//        $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/profile', $args );
+//        if ( is_wp_error($result)) {
+//            return $result;
+//        }
+//        if ( ! isset( $result['body'] ) || empty( $result['body'] ) ) {
+//            return new WP_Error(__METHOD__, 'Remote API did not return properly configured body response.');
+//        }
+//
+//        /* site profile returned */
+//        $site_profile = json_decode( $result['body'], true );
+//        if ( ! isset( $site_profile['partner_id'] ) || empty( $site_profile['partner_id'] ) ){
+//            return new WP_Error(__METHOD__, 'Remote API did not return a proper partner id.');
+//        }
+//
+//        recursive_sanitize_text_field( $site_profile );
+//
+//        $dt_network_dashboard_id = get_post_meta( $site_post_id, 'dt_network_dashboard', true );
+//        if ( empty( $dt_network_dashboard_id ) ) {
+//            $dt_network_dashboard_id = DT_Network_Dashboard_Site_Post_Type::create( $site_profile, 'remote', $site_post_id );
+//            if ( is_wp_error( $dt_network_dashboard_id ) ){
+//                return $dt_network_dashboard_id;
+//            }
+//        }
+//
+//        update_post_meta( $dt_network_dashboard_id, 'profile', $site_profile );
+//
+//        return $site_profile;
+//    }
 
     public function network_field_filter( $fields ) {
 
-        $fields['partner_id'] = [
-            'name'        => 'Partner ID',
-            'description' => '',
-            'type'        => 'readonly',
-            'default'     => '',
-            'section'     => 'network_dashboard',
-        ];
-        $fields['partner_name'] = [
-            'name'        => 'Partner Name',
-            'description' => '',
-            'type'        => 'readonly',
-            'default'     => '',
-            'section'     => 'network_dashboard',
-        ];
-        $fields['partner_description'] = [
-            'name'        => 'Partner Description',
-            'description' => '',
-            'type'        => 'readonly',
-            'default'     => '',
-            'section'     => 'network_dashboard',
-        ];
-        $fields['partner_url'] = [
-            'name'        => 'Partner URL',
-            'description' => '',
-            'type'        => 'readonly',
-            'default'     => '',
-            'section'     => 'network_dashboard',
-        ];
-
-        $fields['send_activity_log'] = [
-            'name'        => 'Send Activity Log',
-            'description' => '',
-            'type'        => 'key_select',
-            'default'     => [
-                'no' => 'No',
-                'yes' => 'Yes',
-            ],
-            'section'     => 'network_dashboard',
-        ];
+//        $fields['partner_id'] = [
+//            'name'        => 'Partner ID',
+//            'description' => '',
+//            'type'        => 'readonly',
+//            'default'     => '',
+//            'section'     => 'network_dashboard',
+//        ];
+//        $fields['partner_name'] = [
+//            'name'        => 'Partner Name',
+//            'description' => '',
+//            'type'        => 'readonly',
+//            'default'     => '',
+//            'section'     => 'network_dashboard',
+//        ];
+//        $fields['partner_description'] = [
+//            'name'        => 'Partner Description',
+//            'description' => '',
+//            'type'        => 'readonly',
+//            'default'     => '',
+//            'section'     => 'network_dashboard',
+//        ];
+//        $fields['partner_url'] = [
+//            'name'        => 'Partner URL',
+//            'description' => '',
+//            'type'        => 'readonly',
+//            'default'     => '',
+//            'section'     => 'network_dashboard',
+//        ];
+//
+//        $fields['send_activity_log'] = [
+//            'name'        => 'Send Activity Log',
+//            'description' => '',
+//            'type'        => 'key_select',
+//            'default'     => [
+//                'no' => 'No',
+//                'yes' => 'Yes',
+//            ],
+//            'section'     => 'network_dashboard',
+//        ];
 
         return $fields;
     }

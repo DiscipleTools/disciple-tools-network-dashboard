@@ -300,12 +300,14 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
     }
 
     public function main_column() {
-        DT_Network_Dashboard_Site_Post_Type::sync_multisite_records();
+        DT_Network_Dashboard_Site_Post_Type::sync_all_multisites_to_post_type();
 
         $message = false;
         if ( isset( $_POST['network_dashboard_nonce'] )
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
              ) {
+
+            dt_write_log($_POST);
 
             if (  isset( $_POST['new-snapshot'] ) ){
                 dt_save_log( 'multisite', '', false );
@@ -321,22 +323,27 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
 
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
                 $partner = recursive_sanitize_text_field( $_POST['partner'] );
+                $nd_post_id = sanitize_text_field( wp_unslash( $_POST['update-profile'] ) );
 
                 dt_write_log($partner);
-//                foreach( $partner as $key => $value ){
-//                    if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
-//                        update_post_meta( $multisite_id, 'partner_nickname', $value['nickname'] );
-//                    }
-//                    if ( isset( $value['send_activity_log'] ) && ! empty( $value['send_activity_log'] ) ) {
-//                        update_post_meta( $multisite_id, 'send_activity_log', $value['send_activity_log'] );
-//                    }
-//                }
+                foreach( $partner as $key => $value ){
+                    if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
+                        DT_Network_Dashboard_Site_Post_Type::update_site_name( $nd_post_id, sanitize_text_field( wp_unslash( $value['nickname'] ) ) );
+                    }
+                    if ( isset( $value['send_live_activity'] ) && ! empty( $value['send_live_activity'] ) ) {
+                        DT_Network_Dashboard_Site_Post_Type::update_send_live_activity( $nd_post_id, sanitize_text_field( wp_unslash( $value['send_live_activity'] ) ) );
+                    }
+                    if ( isset( $value['visibility'] ) && ! empty( $value['visibility'] ) ) {
+                        DT_Network_Dashboard_Site_Post_Type::update_visibility( $nd_post_id, sanitize_text_field( wp_unslash( $value['visibility'] ) ) );
+                    }
+                }
             }
         }
         // Get list of sites
 
 
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+//        dt_write_log($sites);
 
         /** Message */
         if ( $message ) {
@@ -355,10 +362,10 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                 <th>Nickname</th>
                 <th>Domain</th>
                 <th>Send Activity</th>
+                <th>Hide</th>
                 <th>Profile</th>
                 <th>Last Snapshot</th>
-                <th>Actions</th>
-                <th>Hide</th>
+                <th>Refresh Snapshot</th>
                 </thead>
                 <tbody>
                 <?php
@@ -378,16 +385,19 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                                 <?php echo '<strong>' . esc_html( $site['name'] ) . '</strong>' ?>
                             </td>
                             <td>
-                                <input type="text" name="partner[<?php echo esc_attr( $profile['partner_id'] ) ?>][nickname]" value="<?php echo esc_attr( $site['name'] ) ?>" />
+                                <input type="text" name="partner[<?php echo esc_attr( $site['id'] ) ?>][nickname]" value="<?php echo esc_attr( $site['name'] ) ?>" />
                             </td>
                             <td>
                                 <?php echo '<a href="'. esc_url( $profile['partner_url'] ) .'" target="_blank">' . esc_url( $profile['partner_url'] ) . '</a>' ?>
                             </td>
                             <td>
-                                <input type="radio" name="partner[<?php echo esc_attr( $profile['partner_id'] ) ?>][send_live_activity]" value="yes" <?php echo ( isset( $site['send_live_activity'] ) && $site['send_live_activity'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="partner[<?php echo esc_attr( $profile['partner_id'] ) ?>][send_live_activity]" value="no" <?php echo ( isset( $site['send_live_activity'] ) && $site['send_live_activity'] === 'no' ) ? 'checked' : '' ?>/> No
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_live_activity]" value="yes" <?php echo ( isset( $site['send_live_activity'] ) && $site['send_live_activity'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_live_activity]" value="no" <?php echo ( isset( $site['send_live_activity'] ) && $site['send_live_activity'] === 'no' ) ? 'checked' : '' ?>/> No
                             </td>
                             <td>
-                                <button value="<?php echo esc_attr( $profile['partner_id'] ) ?>" name="update-profile" type="submit" class="button" >Update Profile</button>
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="show" <?php echo ( $site['visibility'] === 'show' ) ? 'checked' : '' ?>/> Show | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="hide" <?php echo ( isset( $site['visibility'] ) && $site['visibility'] === 'hide' ) ? 'checked' : '' ?>/> Hide
+                            </td>
+                            <td>
+                                <button name="update-profile"  value="<?php echo esc_attr( $site['id'] ) ?>" type="submit" class="button">Update Profile</button>
                             </td>
                             <td>
                                 <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
@@ -402,10 +412,7 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                                 ?>
                             </td>
                             <td>
-                                <button value="<?php echo esc_attr( $site['type_id']  ) ?>" name="new-snapshot" type="submit" class="button" >Refresh Snapshot</button>
-                            </td>
-                            <td>
-                                <input type="checkbox" name="hide" />
+                                <button name="new-snapshot" type="submit" value="<?php echo esc_attr( $site['type_id']  ) ?>" class="button" >Refresh</button>
                             </td>
                         </tr>
                         <?php
@@ -524,7 +531,9 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
     }
 
     public function main_column() {
-        dt_write_log($_POST);
+
+        DT_Network_Dashboard_Site_Post_Type::sync_all_remotes_to_post_type();
+
         $message = false;
         if ( isset( $_POST['network_dashboard_nonce'] )
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
@@ -557,7 +566,7 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
             }
         }
         // Get list of sites
-        $sites = DT_Network_Dashboard_Queries::remote_site_id_list();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
 
         /** Message */
         if ( $message ) {
@@ -584,41 +593,40 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                 <?php
                 if ( ! empty( $sites ) ) {
                     foreach ( $sites as $site ) {
-
-                        $site_meta = get_post_meta( $site['id'] ); dt_write_log($site_meta['send_activity_log']);
-
-                        $partner_profile =  get_post_meta( $site['id'], 'partner_profile', true );
-
-                        if ( isset( $site_meta['snapshot_fail'][0] ) && ! empty( $site_meta['snapshot_fail'][0] ) ) {
-                            $fail = maybe_serialize( $site_meta['snapshot_fail'][0] );
-                        } else {
-                            $fail = '';
+                        if ( $site['type'] !== 'remote' ){
+                            continue;
                         }
+                        $snapshot = maybe_unserialize( $site['snapshot'] );
+                        $profile = maybe_unserialize( $site['profile'] );
+
+//                        if ( isset( $site_meta['snapshot_fail'][0] ) && ! empty( $site_meta['snapshot_fail'][0] ) ) {
+//                            $fail = maybe_serialize( $site_meta['snapshot_fail'][0] );
+//                        } else {
+//                            $fail = '';
+//                        }
                         ?>
                         <tr>
                             <td style="width:10px;">
                                 <?php echo $site['id'] ?>
                             </td>
                             <td>
-                                <strong><?php echo  esc_html( $partner_profile['partner_name'] ) ?></strong>
+                                <strong><?php echo esc_html( $site['name'] ) ?></strong>
                             </td>
                             <td>
-                                <input type="text" name="partner[<?php echo esc_attr( $site['id'] ) ?>][nickname]" value="<?php echo esc_attr( $site_meta['partner_nickname'][0] ?? '' ) ?>" />
+                                <input type="text" name="partner[<?php echo esc_attr( $site['id'] ) ?>][nickname]" value="<?php echo esc_html( $site['name'] ) ?>" />
                             </td>
                             <td>
-                                <a href="<?php echo esc_url( $partner_profile['partner_url'] ?? '' ) ?>"><?php echo esc_url( $partner_profile['partner_url'] ?? '' ) ?></a>
+                                <a href="<?php echo esc_url( $profile['partner_url'] ?? '' ) ?>"><?php echo esc_url( $profile['partner_url'] ?? '' ) ?></a>
                             </td>
-
                             <td>
-                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_activity_log]" value="yes" <?php echo ( isset( $site_meta['send_activity_log'][0] ) && $site_meta['send_activity_log'][0] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_activity_log]" value="no" <?php echo ( isset( $site_meta['send_activity_log'][0] ) && $site_meta['send_activity_log'][0] === 'no' ) ? 'checked' : '' ?>/> No
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_activity_log]" value="yes" <?php echo ( $site['send_live_activity'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_activity_log]" value="no" <?php echo ( $site['send_live_activity'] === 'no' ) ? 'checked' : '' ?>/> No
                             </td>
                             <td>
                                 <button value="<?php echo esc_attr( $site['id'] ) ?>" name="update-profile" type="submit" class="button" >Update Profile</button>
                             </td>
-
                             <td>
-                                <?php echo ( ! empty( $site_meta['snapshot'][0] ) ) ? '&#9989;' : '&#x2718;' ?>
-                                <?php echo ( ! empty( $site_meta['snapshot_date'][0] ) ) ? date( 'Y-m-d H:i:s', $site_meta['snapshot_date'][0] ) : '&#x2718;' ?><br>
+                                <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
+                                <?php echo ( ! empty( $snapshot) ) ? date( 'Y-m-d H:i:s', $snapshot['timestamp'] ) : '----' ?><br>
                                 <?php
                                 if ( ! empty( $fail ) ){
                                     ?>
@@ -627,10 +635,9 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                                     <?php
                                 }
                                 ?>
-
                             </td>
                             <td>
-                                <button value="<?php echo esc_attr( $site['id'] ) ?>" name="new-snapshot" type="submit" class="button" >Refresh</button>
+                                <button value="<?php echo esc_attr( $site['type_id'] ) ?>" name="new-snapshot" type="submit" class="button" >Refresh</button>
                             </td>
                         </tr>
                         <?php

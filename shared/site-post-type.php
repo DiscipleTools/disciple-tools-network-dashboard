@@ -28,6 +28,59 @@ class DT_Network_Dashboard_Site_Post_Type {
         register_post_type( $this->token, $args );
     }
 
+    /**
+     * @param $id (blog_id for the multisite)
+     * @return int|string|WP_Error
+     */
+    public static function create_multisite_by_id( $id ){
+        switch_to_blog( $id );
+        $profile = dt_network_site_profile();
+        restore_current_blog();
+
+        return self::create( $profile, 'multisite', $id );
+    }
+
+    /**
+     * @param $id  (site to site post id)
+     * @return array|bool|int|string|WP_Error
+     */
+    public static function create_remote_by_id( $id ){
+        $site = Site_Link_System::get_site_connection_vars( $id, 'post_id');
+        if ( is_wp_error($site) ) {
+            return $site;
+        }
+
+        // Send remote request
+        $args = [
+            'method' => 'POST',
+            'body' => [
+                'transfer_token' => $site['transfer_token'],
+            ]
+        ];
+        $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/profile', $args );
+        if ( is_wp_error($result)) {
+            return $result;
+        }
+        if ( ! isset( $result['body'] ) || empty( $result['body'] ) ) {
+            return new WP_Error(__METHOD__, 'Remote API did not return properly configured body response.');
+        }
+
+        /* site profile returned */
+        $site_profile = json_decode( $result['body'], true );
+        if ( ! isset( $site_profile['partner_id'] ) || empty( $site_profile['partner_id'] ) ){
+            return new WP_Error(__METHOD__, 'Remote API did not return a proper partner id.');
+        }
+
+        recursive_sanitize_text_field( $site_profile );
+
+        $dt_network_dashboard_id = get_post_meta( $id, 'dt_network_dashboard', true );
+        if ( empty( $dt_network_dashboard_id ) ) {
+            return self::create( $site_profile, 'multisite', $id );
+        } else {
+            return update_post_meta( $dt_network_dashboard_id, 'profile', $site_profile );
+        }
+    }
+
     public static function create( $site_profile, $connection_type, $id ) {
         global $wpdb;
 
@@ -55,7 +108,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         $multisite_post_id = wp_insert_post([
             'post_title' => $partner_id,
             'guid' => $partner_id,
-            'post_content' => 'Stores Network Dashboard site',
+            'post_content' => 'Network Dashboard site',
             'post_type' => self::get_token(),
             'post_status' => 'show',
             'comment_status' => 'closed',
@@ -193,10 +246,8 @@ class DT_Network_Dashboard_Site_Post_Type {
     }
 
     public static function delete( $partner_post_id ) {
-        wp_delete_post( $partner_post_id );
+        return wp_delete_post( $partner_post_id );
     }
-
-
 
     public static function all_sites() : array {
         global $wpdb;
@@ -214,12 +265,12 @@ class DT_Network_Dashboard_Site_Post_Type {
                   c.meta_value as snapshot,
                   g.meta_value as snapshot_timestamp,
                   h.meta_value as profile,
-                  i.meta_value as send_live_activity 
+                  i.meta_value as send_live_activity,
+                  j.meta_value as visibility
                 FROM $wpdb->posts as a
                 LEFT JOIN $wpdb->postmeta as c
                   ON a.ID=c.post_id
                   AND c.meta_key = 'snapshot'
-                  AND c.meta_value IS NOT NULL
                 JOIN $wpdb->postmeta as d
                   ON a.ID=d.post_id
                   AND d.meta_key = 'partner_id'
@@ -241,6 +292,9 @@ class DT_Network_Dashboard_Site_Post_Type {
                  LEFT JOIN $wpdb->postmeta as i
                   ON a.ID=i.post_id
                   AND i.meta_key = 'send_live_activity'
+                 LEFT JOIN $wpdb->postmeta as j
+                  ON a.ID=j.post_id
+                  AND j.meta_key = 'visibility'
                 WHERE a.post_type = 'dt_network_dashboard'
                 ORDER BY name;
             ",
@@ -306,15 +360,113 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $dt_sites;
     }
 
-    public static function sync_all_multisites(){
-        // delete all multisites not permitted or removed
+    public static function all_remote_ids() : array {
+        global $wpdb;
+
+        $results = $wpdb->get_col("
+                SELECT 
+                  ID as id
+                FROM $wpdb->posts as p
+                JOIN $wpdb->postmeta as pm
+                  ON p.ID=pm.post_id
+					AND pm.meta_key = 'type'
+				LEFT JOIN $wpdb->postmeta as pm2
+                  ON p.ID=pm2.post_id
+					AND pm2.meta_key = 'non_wp' 
+                  WHERE p.post_type = 'site_link_system'
+                  AND p.post_status = 'publish'
+                  AND ( pm.meta_value = 'network_dashboard_both'
+                  OR pm.meta_value = 'network_dashboard_receiving' )
+                    AND pm2.meta_value != '1'
+            " );
+
+        if ( empty( $results ) ) {
+            $results = [];
+        }
+
+        return $results;
+    }
+
+    public static function sync_all_multisites_to_post_type() : array {
+        $result = [
+            'delete' => [],
+            'create' => [],
+        ];
         $multisites = self::all_multisite_ids();
+        $connections = self::all_connections();
 
+        // delete all multisites not permitted or removed
+        foreach( $connections as $connection ){
+            if ( 'multisite' !== $connection['type'] ){
+                continue;
+            }
 
+            if ( in_array( $connection['type_id'], $multisites ) ) {
+                continue;
+            }
+
+            $result['delete'][] = self::delete( $connection['id'] );
+        }
 
         // add all multisites not previously added
+        $type_ids = [];
+        foreach( $connections as $connection ){
+            if ( 'multisite' !== $connection['type'] ){
+                continue;
+            }
+            $type_ids[] = $connection['type_id'];
+        }
+        foreach( $multisites as $multisite ){
+            if ( in_array( $multisite, $type_ids ) ) {
+                continue;
+            }
 
+            $result['create'][$multisite] = self::create_multisite_by_id( $multisite );
+        }
 
+        dt_write_log($result);
+        return $result;
+    }
+
+    public static function sync_all_remotes_to_post_type() : array {
+        $result = [
+            'delete' => [],
+            'create' => [],
+        ];
+        $remotes = self::all_remote_ids();
+        $connections = self::all_connections();
+
+        // delete all remotes not permitted or removed
+        foreach( $connections as $connection ){
+            if ( 'remote' !== $connection['type'] ){
+                continue;
+            }
+
+            if ( in_array( $connection['type_id'], $remotes ) ) {
+                continue;
+            }
+
+            $result['delete'][] = self::delete( $connection['id'] );
+        }
+
+        // add all remotes not previously added
+        $type_ids = [];
+        foreach( $connections as $connection ){
+            if ( 'remote' !== $connection['type'] ){
+                continue;
+            }
+            $type_ids[] = $connection['type_id'];
+        }
+        foreach( $remotes as $remote ){
+            if ( in_array( $remote, $type_ids ) ) {
+                continue;
+            }
+
+            $result['create'][$remote] = self::create_remote_by_id( $remote );
+        }
+
+        dt_write_log($result);
+        return $result;
     }
 
     public static function multisite_sites_needing_snapshot_refreshed() {
@@ -343,7 +495,7 @@ class DT_Network_Dashboard_Site_Post_Type {
                     $needs_update[] = $multisite;
                 }
             } else {
-                $network_dashboard_id = self::create_multisite( $multisite );
+                $network_dashboard_id = self::create_multisite_by_id( $multisite );
                 if ( is_wp_error( $network_dashboard_id ) ){
                     dt_write_log($network_dashboard_id);
                     continue;
@@ -355,40 +507,5 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $needs_update;
     }
 
-    public static function sync_multisite_records(){
-        if ( ! dt_is_current_multisite_dashboard_approved() ) {
-            return false;
-        }
-
-        $multisites = self::all_multisite_ids();
-        $l = self::all_sites();
-
-        $list = [];
-        foreach( $l as $item ){
-            if ( $item['type'] !== 'multisite' ){
-                continue;
-            }
-            $list[$item['type_id']] = $item['snapshot_timestamp'];
-        }
-        foreach ( $multisites as $multisite ){
-            if ( ! isset( $list[$multisite] ) ) {
-                $needs_update[] = self::create_multisite( $multisite );
-            }
-        }
-
-        return true;
-
-    }
-
-    public static function create_multisite( $multisite_id ){
-
-        switch_to_blog( $multisite_id );
-
-        $profile = dt_network_site_profile();
-
-        restore_current_blog();
-
-        return DT_Network_Dashboard_Site_Post_Type::create( $profile, 'multisite', $multisite_id );
-    }
 }
 DT_Network_Dashboard_Site_Post_Type::instance();
