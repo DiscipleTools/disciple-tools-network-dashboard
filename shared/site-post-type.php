@@ -2,7 +2,6 @@
 
 class DT_Network_Dashboard_Site_Post_Type {
     public $token;
-
     private static $_instance = null;
     public static function instance() {
         if ( is_null( self::$_instance ) ) {
@@ -10,7 +9,6 @@ class DT_Network_Dashboard_Site_Post_Type {
         }
         return self::$_instance;
     } // End instance()
-
 
     public function __construct() {
         $this->token = self::get_token();

@@ -565,7 +565,7 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
         }
         // Get list of sites
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-
+        
         /** Message */
         if ( $message ) {
             echo '<div class="notice '.esc_attr( $message[0] ).'">'.esc_html( $message[1] ).'</div>';
@@ -872,7 +872,7 @@ class DT_Network_Dashboard_Tab_Local
 class DT_Network_Dashboard_Tab_Cron
 {
     public function content() {
-        DT_Network_Dashboard_Snapshot_Report::snapshot_report();
+        DT_Network_Dashboard_Snapshot::snapshot_report();
         ?>
         <div class="wrap">
             <div id="poststuff">
@@ -1034,7 +1034,7 @@ class DT_Network_Dashboard_Tab_Cron
 class DT_Network_Dashboard_Tab_Integrations
 {
     public function content() {
-        DT_Network_Dashboard_Snapshot_Report::snapshot_report();
+        DT_Network_Dashboard_Snapshot::snapshot_report();
         ?>
         <div class="wrap">
             <div id="poststuff">

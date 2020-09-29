@@ -22,7 +22,6 @@ class DT_Network_Dashboard_Site_Link_Metabox {
                 add_action( 'admin_menu', [ $this, 'meta_box_setup' ], 20 );
             }
         }
-        add_filter( "site_link_fields_settings", [ $this, 'network_field_filter' ], 10, 1 );
     }
 
     public function meta_box_setup() {
@@ -85,94 +84,6 @@ class DT_Network_Dashboard_Site_Link_Metabox {
         <?php
     }
 
-//    public function create_partner_profile( $site_post_id ) {
-//
-//        $site = Site_Link_System::get_site_connection_vars( $site_post_id, 'post_id');
-//        if ( is_wp_error($site) ) {
-//            return $site;
-//        }
-//
-//        // Send remote request
-//        $args = [
-//            'method' => 'POST',
-//            'body' => [
-//                'transfer_token' => $site['transfer_token'],
-//            ]
-//        ];
-//        $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/profile', $args );
-//        if ( is_wp_error($result)) {
-//            return $result;
-//        }
-//        if ( ! isset( $result['body'] ) || empty( $result['body'] ) ) {
-//            return new WP_Error(__METHOD__, 'Remote API did not return properly configured body response.');
-//        }
-//
-//        /* site profile returned */
-//        $site_profile = json_decode( $result['body'], true );
-//        if ( ! isset( $site_profile['partner_id'] ) || empty( $site_profile['partner_id'] ) ){
-//            return new WP_Error(__METHOD__, 'Remote API did not return a proper partner id.');
-//        }
-//
-//        recursive_sanitize_text_field( $site_profile );
-//
-//        $dt_network_dashboard_id = get_post_meta( $site_post_id, 'dt_network_dashboard', true );
-//        if ( empty( $dt_network_dashboard_id ) ) {
-//            $dt_network_dashboard_id = DT_Network_Dashboard_Site_Post_Type::create( $site_profile, 'remote', $site_post_id );
-//            if ( is_wp_error( $dt_network_dashboard_id ) ){
-//                return $dt_network_dashboard_id;
-//            }
-//        }
-//
-//        update_post_meta( $dt_network_dashboard_id, 'profile', $site_profile );
-//
-//        return $site_profile;
-//    }
-
-    public function network_field_filter( $fields ) {
-
-//        $fields['partner_id'] = [
-//            'name'        => 'Partner ID',
-//            'description' => '',
-//            'type'        => 'readonly',
-//            'default'     => '',
-//            'section'     => 'network_dashboard',
-//        ];
-//        $fields['partner_name'] = [
-//            'name'        => 'Partner Name',
-//            'description' => '',
-//            'type'        => 'readonly',
-//            'default'     => '',
-//            'section'     => 'network_dashboard',
-//        ];
-//        $fields['partner_description'] = [
-//            'name'        => 'Partner Description',
-//            'description' => '',
-//            'type'        => 'readonly',
-//            'default'     => '',
-//            'section'     => 'network_dashboard',
-//        ];
-//        $fields['partner_url'] = [
-//            'name'        => 'Partner URL',
-//            'description' => '',
-//            'type'        => 'readonly',
-//            'default'     => '',
-//            'section'     => 'network_dashboard',
-//        ];
-//
-//        $fields['send_activity_log'] = [
-//            'name'        => 'Send Activity Log',
-//            'description' => '',
-//            'type'        => 'key_select',
-//            'default'     => [
-//                'no' => 'No',
-//                'yes' => 'Yes',
-//            ],
-//            'section'     => 'network_dashboard',
-//        ];
-
-        return $fields;
-    }
-
     public static function admin_box_local_site_profile()
     {
         $partner_profile = dt_network_site_profile();
@@ -190,8 +101,6 @@ class DT_Network_Dashboard_Site_Link_Metabox {
 
             $partner_description = sanitize_text_field( wp_unslash( $_POST['partner_description'] ) );
             $partner_profile['partner_description'] = $partner_description;
-
-            // @future potentially insert selectable languages and locations that could be supported.
 
             update_option('dt_site_profile', $partner_profile, true);
             $partner_profile = dt_network_site_profile();
@@ -211,13 +120,13 @@ class DT_Network_Dashboard_Site_Link_Metabox {
                         <table class="widefat">
                             <tbody>
                             <tr>
-                                <td><label for="partner_name">Your Group Name</label></td>
+                                <td><label for="partner_name">Your Site Name</label></td>
                                 <td><input type="text" class="regular-text" name="partner_name"
                                            id="partner_name"
                                            value="<?php echo esc_html($partner_profile['partner_name']) ?>"/></td>
                             </tr>
                             <tr>
-                                <td><label for="partner_description">Your Group Description</label></td>
+                                <td><label for="partner_description">Your Site Description</label></td>
                                 <td><input type="text" class="regular-text" name="partner_description"
                                            id="partner_description"
                                            value="<?php echo esc_html($partner_profile['partner_description']) ?>"/>
@@ -259,7 +168,6 @@ class DT_Network_Dashboard_Site_Link_Metabox {
         <!-- End Box -->
         <?php
     }
-
 }
 DT_Network_Dashboard_Site_Link_Metabox::instance();
 
@@ -318,11 +226,14 @@ if ( ! function_exists('dt_network_site_profile') ) {
         }
 
         $profile['system'] = dt_network_site_system();
+
         $profile['languages'] = dt_get_option( "dt_working_languages" );
 
         return $profile;
     }
 }
+
+
 /**
  * Gets/Creates a Permanent ID for the Disciple Tools site. This allows for network duplicate checking etc.
  * @return string

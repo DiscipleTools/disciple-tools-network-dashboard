@@ -66,7 +66,5 @@ function dt_network_dashboard_remote_sites_trigger() {
     }
     $status['timestamp'] = current_time( 'mysql' );
 
-    dt_write_log($status);
-
     return $status;
 }

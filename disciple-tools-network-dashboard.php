@@ -132,9 +132,13 @@ class DT_Network_Dashboard {
         require_once( 'collection/collection-endpoints.php' );
 
         require_once( 'snapshots/snapshot-endpoints.php' );
-        require_once( 'snapshots/snapshot-report.php' );
         require_once( 'snapshots/snapshot-queries.php' );
         require_once( 'snapshots/snapshot.php' );
+        require_once( 'snapshots/snapshot-activity.php' );
+        require_once( 'snapshots/snapshot-contacts.php' );
+        require_once( 'snapshots/snapshot-groups.php' );
+        require_once( 'snapshots/snapshot-users.php' );
+        require_once( 'snapshots/snapshot-locations.php' );
 
         require_once( 'activity/activity-log.php' );
         require_once( 'activity/hooks.php' );

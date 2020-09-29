@@ -77,7 +77,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             ];
         }
 
-        return DT_Network_Dashboard_Snapshot::save_remote_snapshot( $params['snapshot'], $params['site_post_id'] );
+        return DT_Network_Dashboard_Site_Post_Type::update_snapshot( $params['snapshot'], $params['site_post_id'] );
 
     }
 }

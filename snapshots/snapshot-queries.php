@@ -1,6 +1,487 @@
 <?php
 
+if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
+
 class DT_Network_Dashboard_Snapshot_Queries {
+
+
+    /**
+     * Gets an array of the last number of days.
+     *
+     * @param int $number_of_days
+     *
+     * @return array
+     */
+    public static function get_day_list($number_of_days = 60)
+    {
+        $d = [];
+        for ($i = 0; $i < $number_of_days; $i++) {
+            $d[] = gmdate("Y-m-d", strtotime('-' . $i . ' days'));
+        }
+
+        return $d;
+    }
+
+
+    /**
+     * Gets an array of last 25 months.
+     *
+     * @note 25 months allows you to get 3 years to compare of this month.
+     *
+     * @param int $number_of_months
+     *
+     * @return array
+     */
+    public static function get_month_list($number_of_months = 25)
+    {
+        $d = [];
+        for ($i = 0; $i < $number_of_months; $i++) {
+            $d[] = gmdate("Y-m", strtotime('-' . $i . ' months'));
+        }
+
+        return $d;
+    }
+
+    public static function counted_by_day($type = null)
+    {
+        $data1 = [];
+        $data2 = [];
+        $data3 = [];
+
+        switch ($type) {
+            case 'groups':
+                $dates = self::query_counted_by_day('created', 'groups');
+                break;
+            case 'logged_in':
+                $dates = self::query_counted_by_day('logged_in', 'user');
+                break;
+            case 'baptisms':
+                $dates = self::baptisms_counted_by_day();
+                break;
+            default: // contacts
+                $dates = self::query_counted_by_day('created', 'contacts');
+                break;
+        }
+
+        foreach ($dates as $date) {
+            $date['value'] = (int)$date['value'];
+            $data1[$date['date']] = $date;
+        }
+
+        $day_list = self::get_day_list(60);
+        foreach ($day_list as $day) {
+            if (isset($data1[$day])) {
+                $data2[] = [
+                    'date' => $data1[$day]['date'],
+                    'value' => $data1[$day]['value'],
+                ];
+            } else {
+                $data2[] = [
+                    'date' => $day,
+                    'value' => 0,
+                ];
+            }
+        }
+
+        arsort($data2);
+
+        foreach ($data2 as $d) {
+            $data3[] = $d;
+        }
+
+        return $data3;
+    }
+
+    public static function counted_by_month($type = null)
+    {
+        $data1 = [];
+        $data2 = [];
+        $data3 = [];
+
+        switch ($type) {
+            case 'groups':
+                $dates = self::query_counted_by_month('created', 'groups');
+                break;
+            case 'logged_in':
+                $dates = self::query_counted_by_month('logged_in', 'user');
+                break;
+            case 'baptisms':
+                $dates = self::baptisms_counted_by_month();
+                break;
+            default: // contacts
+                $dates = self::query_counted_by_month('created', 'contacts');
+                break;
+        }
+
+        foreach ($dates as $date) {
+            $date['value'] = (int)$date['value'];
+            $data1[$date['date']] = $date;
+        }
+
+        $list = self::get_month_list(25);
+        foreach ($list as $month) {
+            if (isset($data1[$month])) {
+                $data2[] = [
+                    'date' => $data1[$month]['date'] . '-01',
+                    'value' => $data1[$month]['value'],
+                ];
+            } else {
+                $data2[] = [
+                    'date' => $month . '-01',
+                    'value' => 0,
+                ];
+            }
+        }
+
+        arsort($data2);
+
+        foreach ($data2 as $d) {
+            $data3[] = $d;
+        }
+
+        return $data3;
+    }
+
+    public static function generations($type = null)
+    {
+
+        $data = [];
+
+        switch ($type) {
+            case 'groups':
+                $generation = Disciple_Tools_Counter::critical_path('all_group_generations', 0, PHP_INT_MAX);
+                $item = 'group';
+                break;
+            case 'baptisms':
+                $baptisms = Disciple_Tools_Counter::critical_path('baptism_generations', 0, PHP_INT_MAX);
+                if (empty($baptisms)) {
+                    $generation = [];
+                } else {
+                    foreach ($baptisms as $key => $value) {
+                        $generation[] = [
+                            'generation' => $key,
+                            'value' => $value,
+                        ];
+                    }
+                }
+                $item = 'value';
+                break;
+            default: // returns churches
+                $generation = Disciple_Tools_Counter::critical_path('all_group_generations', 0, PHP_INT_MAX);
+                $item = 'church';
+                break;
+        }
+
+        if (empty($generation)) {
+            return [
+                [
+                    'label' => 'Gen 1',
+                    'value' => 0,
+                ]
+            ];
+        }
+
+        $end = false;
+        foreach ($generation as $gen) {
+            if ($end) { // this makes sure the last generation is zero but no more.
+                break;
+            }
+
+            $data[] = [
+                'label' => 'Gen ' . $gen['generation'],
+                'value' => $gen[$item]
+            ];
+
+            if ($gen[$item] === 0) {
+                $end = true;
+            }
+        }
+
+        return $data;
+    }
+
+    public static function contacts_current_state()
+    {
+        $data = [
+            'all_contacts' => 0,
+            'critical_path' => [],
+        ];
+
+        // Add critical path
+        if (!class_exists('DT_Metrics_Contacts_Overview')) {
+            require_once(get_template_directory() . '/dt-metrics/contacts/overview.php');
+        }
+        $contacts = new DT_Metrics_Contacts_Overview();
+
+        $critical_path = $contacts->query_project_contacts_progress();
+        foreach ($critical_path as $path) {
+            $data['critical_path'][$path['key']] = $path;
+        }
+
+        // Add
+        $data['status'] = self::get_contacts_status();
+
+        $data['all_contacts'] = self::all_contacts();
+
+        return $data;
+    }
+
+    /**
+     * Gets an array list of all contacts current status.
+     * [new] => 0
+     * [unassignable] => 0
+     * [unassigned] => 0
+     * [assigned] => 6
+     * [active] => 38
+     * [paused] => 5
+     * [closed] => 5
+     *
+     * @return array
+     */
+    public static function get_contacts_status(): array
+    {
+        $data = [];
+        $contact_fields = Disciple_Tools_Contact_Post_Type::instance()->get_custom_fields_settings();
+        $status_defaults = $contact_fields['overall_status']['default'];
+        $current_state = self::query_contacts_current_state();
+        foreach ($status_defaults as $key => $status) {
+            $data[$key] = 0;
+            foreach ($current_state as $state) {
+                if ($state['status'] === $key) {
+                    $data[$key] = (int)$state['count'];
+                }
+            }
+        }
+
+        return $data;
+    }
+
+
+
+
+    public static function follow_up_funnel()
+    {
+        $data = [];
+        $labels = [];
+        $keyed_result = [];
+
+        $contact_fields = Disciple_Tools_Contact_Post_Type::instance()->get_custom_fields_settings();
+
+        foreach ($contact_fields['seeker_path']['default'] as $key => $value) {
+            $labels[$key] = $value['label'];
+        }
+
+        require_once(get_template_directory() . '/dt-metrics/contacts/overview.php');
+
+        $contacts = new DT_Metrics_Contacts_Overview();
+
+        $results = $contacts->query_project_contacts_progress();
+        if (empty($results) || is_wp_error($results)) {
+            $results = [];
+        }
+
+        foreach ($results as $result) {
+            $keyed_result[$result['key']] = $result;
+        }
+
+        foreach ($labels as $key => $label) {
+            if (isset($keyed_result[$key])) {
+                $data[] = [
+                    "name" => $label,
+                    "value" => (int)$keyed_result[$key]['value']
+                ];
+            } else {
+                $data[] = [
+                    "name" => $label,
+                    "value" => 0
+                ];
+            }
+        }
+
+        return $data;
+    }
+
+    public static function funnel()
+    {
+        return array_slice(self::follow_up_funnel(), 0, 5);
+    }
+
+    public static function ongoing_meetings()
+    {
+        $data = self::follow_up_funnel();
+        if (isset($data[5])) {
+            return (int)$data[5]['value'];
+        }
+
+        return 0; // returns 0 if fail
+    }
+
+    /**
+     * Selects single value from query.
+     *
+     * @return int
+     */
+    public static function coaching()
+    {
+        $data = self::follow_up_funnel();
+        if (isset($data[6])) {
+            return (int)$data[6]['value'];
+        }
+
+        return 0; // returns 0 if fail
+    }
+
+    /**
+     * Gets an array of the current state of groups
+     * [active] => Array
+     * (
+     * [pre_group] => 3
+     * [group] => 0
+     * [church] => 3
+     * )
+     * [inactive] => Array
+     * (
+     * [pre_group] => 0
+     * [group] => 0
+     * [church] => 0
+     * )
+     * [total_active] => 6
+     * [all] => 6
+     *
+     * @return array
+     */
+    public static function groups_current_state()
+    {
+        $data = [
+            'active' => [
+                'pre_group' => 0,
+                'group' => 0,
+                'church' => 0,
+            ],
+            'inactive' => [
+                'pre_group' => 0,
+                'group' => 0,
+                'church' => 0,
+            ],
+            'total_active' => 0, // all non-duplicate groups in the system active or inactive.
+            'all' => 0,
+        ];
+
+        // Add types and status
+        $types_and_status = DT_Network_Dashboard_Snapshot_Queries::groups_types_and_status();
+        foreach ($types_and_status as $value) {
+            $value['type'] = str_replace('-', '_', $value['type']);
+
+            $data[$value['status']][$value['type']] = (int)$value['count'];
+
+            if ('active' === $value['status']) {
+                $data ['total_active'] = $data['total_active'] + (int)$value['count'];
+            }
+        }
+
+        $data['all'] = DT_Network_Dashboard_Snapshot_Queries::all_groups();
+
+        return $data;
+    }
+
+    public static function groups_by_type()
+    {
+        $data = [];
+
+        $types_and_status = DT_Network_Dashboard_Snapshot_Queries::groups_types_and_status();
+
+        $keyed = [];
+        foreach ($types_and_status as $status) {
+            if ('active' === $status['status']) {
+                $keyed[$status['type']] = $status;
+            }
+        }
+
+        if (isset($keyed['pre-group'])) {
+            $data[] = [
+                'name' => 'Pre-Group',
+                'value' => $keyed['pre-group']['count'],
+            ];
+        } else {
+            $data[] = [
+                'name' => 'Pre-Group',
+                'value' => 0,
+            ];
+        }
+
+        if (isset($keyed['group'])) {
+            $data[] = [
+                'name' => 'Group',
+                'value' => $keyed['group']['count'],
+            ];
+        } else {
+            $data[] = [
+                'name' => 'Group',
+                'value' => 0,
+            ];
+        }
+
+        if (isset($keyed['church'])) {
+            $data[] = [
+                'name' => 'Church',
+                'value' => $keyed['church']['count'],
+            ];
+        } else {
+            $data[] = [
+                'name' => 'Church',
+                'value' => 0,
+            ];
+        }
+
+        return $data;
+    }
+
+    public static function group_health()
+    {
+        $data = [];
+        $labels = [];
+        $keyed_practicing = [];
+
+        // Make key list
+        $group_fields = Disciple_Tools_Groups_Post_Type::instance()->get_custom_fields_settings();
+        foreach ($group_fields["health_metrics"]["default"] as $key => $option) {
+            $labels[$key] = $option["label"];
+        }
+
+        // get results
+        $practicing = DT_Network_Dashboard_Snapshot_Queries::query_group_health();
+
+        // build keyed practicing
+        foreach ($practicing as $value) {
+            $keyed_practicing[$value['category']] = $value['practicing'];
+        }
+
+        // get total number
+        $total_groups = DT_Network_Dashboard_Snapshot_Queries::groups_churches_total(); // total groups and churches
+
+        // add real numbers and prepare array
+        foreach ($labels as $key => $label) {
+            if (isset($keyed_practicing[$key])) {
+                $not_practicing = (int)$total_groups - $keyed_practicing[$key];
+                if ($not_practicing < 1) {
+                    $not_practicing = 0;
+                }
+                $data[] = [
+                    'category' => $label,
+                    'not_practicing' => $not_practicing,
+                    'practicing' => $keyed_practicing[$key],
+                ];
+            } else {
+                $data[] = [
+                    'category' => $label,
+                    'not_practicing' => $total_groups,
+                    'practicing' => 0,
+                ];
+            }
+        }
+
+        return $data;
+    }
 
     public static function dashboards_to_report_to() : array {
         global $wpdb;
@@ -31,7 +512,7 @@ class DT_Network_Dashboard_Snapshot_Queries {
         return $results;
     }
 
-    public static function contacts_current_state() : array  {
+    public static function query_contacts_current_state() : array  {
         global $wpdb;
         /**
          * Returns status and count of contacts according to the overall status
@@ -105,7 +586,7 @@ class DT_Network_Dashboard_Snapshot_Queries {
         return $results;
     }
 
-    public static function group_health() : array {
+    public static function query_group_health() : array {
         global $wpdb;
         /**
          * Returns health numbers for groups and churches but not pre-groups
@@ -174,7 +655,7 @@ class DT_Network_Dashboard_Snapshot_Queries {
         return $results;
     }
 
-    public static function counted_by_month( $action, $object_type ) : array {
+    public static function query_counted_by_month( $action, $object_type ) : array {
         global $wpdb;
 
         /**
@@ -212,7 +693,7 @@ class DT_Network_Dashboard_Snapshot_Queries {
         return $results;
     }
 
-    public static function counted_by_day( $action, $object_type ) : array {
+    public static function query_counted_by_day( $action, $object_type ) : array {
         global $wpdb;
 
         /**

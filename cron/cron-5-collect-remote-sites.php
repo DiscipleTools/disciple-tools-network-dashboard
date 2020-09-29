@@ -165,7 +165,7 @@ function dt_get_site_snapshot( $site_post_id ) {
         return false;
     }
 
-    $saved = DT_Network_Dashboard_Snapshot::save_remote_snapshot( $snapshot, $site_post_id );
+    $saved = DT_Network_Dashboard_Site_Post_Type::update_snapshot( $snapshot, $site_post_id );
     if ( is_wp_error( $saved ) ){
         dt_save_log( $file, 'FAIL ID: ' . $site_post_id . ' (Failed to save snapshot.)' );
         dt_save_log( $file, maybe_serialize( $saved ) );

@@ -21,7 +21,7 @@ function dt_network_dashboard_push_snapshots()
         'fail' => 0,
     ];
 
-    $snapshot = DT_Network_Dashboard_Snapshot_Report::snapshot_report();
+    $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report();
     if ( is_wp_error( $snapshot ) ){
         dt_write_log(__METHOD__, 'Failed to send report because snapshot collection failed' );
         return false;

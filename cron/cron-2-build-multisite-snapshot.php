@@ -70,14 +70,13 @@ function dt_network_dashboard_collect_multisite( $blog_id ) {
     switch_to_blog( $blog_id );
 
     $profile = dt_network_site_profile();
-    $snapshot = DT_Network_Dashboard_Snapshot_Report::snapshot_report( true );
+    $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report( true );
     if ( $snapshot['status'] == 'FAIL' ) {
         // retry connection in 3 seconds
         sleep( 5 );
         dt_save_log( $file, 'RETRY ID: ' . $blog_id . ' (Payload = FAIL)' );
-        $snapshot = DT_Network_Dashboard_Snapshot_Report::snapshot_report( true ); // @todo remove true after development
+        $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report( true ); // @todo remove true after development
         if ( $snapshot['status'] == 'FAIL' ) {
-
             dt_save_log( $file, 'FAIL ID: ' . $blog_id . ' (Unable to run snapshot report for '.$blog_id.')' );
             dt_save_log( $file, maybe_serialize( $snapshot ) );
             restore_current_blog();
@@ -99,6 +98,7 @@ function dt_network_dashboard_collect_multisite( $blog_id ) {
     }
     update_post_meta( $partner_post_id, 'snapshot', $snapshot );
     update_post_meta( $partner_post_id, 'snapshot_timestamp', $snapshot['timestamp'] );
+    delete_post_meta( $partner_post_id, 'snapshot_fail' );
 
     dt_save_log( $file, 'SUCCESS ID: ' . $blog_id );
 
