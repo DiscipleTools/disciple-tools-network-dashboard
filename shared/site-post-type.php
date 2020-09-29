@@ -424,7 +424,6 @@ class DT_Network_Dashboard_Site_Post_Type {
             $result['create'][$multisite] = self::create_multisite_by_id( $multisite );
         }
 
-        dt_write_log($result);
         return $result;
     }
 
@@ -465,7 +464,6 @@ class DT_Network_Dashboard_Site_Post_Type {
             $result['create'][$remote] = self::create_remote_by_id( $remote );
         }
 
-        dt_write_log($result);
         return $result;
     }
 

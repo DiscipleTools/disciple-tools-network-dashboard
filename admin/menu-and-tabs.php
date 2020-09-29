@@ -307,8 +307,6 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
              ) {
 
-            dt_write_log($_POST);
-
             if (  isset( $_POST['new-snapshot'] ) ){
                 dt_save_log( 'multisite', '', false );
                 dt_save_log( 'multisite', 'REFRESH SNAPSHOT', false );
@@ -323,18 +321,16 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
 
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
                 $partner = recursive_sanitize_text_field( $_POST['partner'] );
-                $nd_post_id = sanitize_text_field( wp_unslash( $_POST['update-profile'] ) );
 
-                dt_write_log($partner);
                 foreach( $partner as $key => $value ){
                     if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
-                        DT_Network_Dashboard_Site_Post_Type::update_site_name( $nd_post_id, sanitize_text_field( wp_unslash( $value['nickname'] ) ) );
+                        DT_Network_Dashboard_Site_Post_Type::update_site_name( $key, sanitize_text_field( wp_unslash( $value['nickname'] ) ) );
                     }
                     if ( isset( $value['send_live_activity'] ) && ! empty( $value['send_live_activity'] ) ) {
-                        DT_Network_Dashboard_Site_Post_Type::update_send_live_activity( $nd_post_id, sanitize_text_field( wp_unslash( $value['send_live_activity'] ) ) );
+                        DT_Network_Dashboard_Site_Post_Type::update_send_live_activity( $key, sanitize_text_field( wp_unslash( $value['send_live_activity'] ) ) );
                     }
                     if ( isset( $value['visibility'] ) && ! empty( $value['visibility'] ) ) {
-                        DT_Network_Dashboard_Site_Post_Type::update_visibility( $nd_post_id, sanitize_text_field( wp_unslash( $value['visibility'] ) ) );
+                        DT_Network_Dashboard_Site_Post_Type::update_visibility( $key, sanitize_text_field( wp_unslash( $value['visibility'] ) ) );
                     }
                 }
             }
@@ -343,7 +339,6 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
 
 
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-//        dt_write_log($sites);
 
         /** Message */
         if ( $message ) {
@@ -382,7 +377,7 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                                 <?php echo esc_html( $site['id'] ) ?>
                             </td>
                             <td>
-                                <?php echo '<strong>' . esc_html( $site['name'] ) . '</strong>' ?>
+                                <?php echo '<strong>' . esc_html( $profile['partner_name'] ) . '</strong>' ?>
                             </td>
                             <td>
                                 <input type="text" name="partner[<?php echo esc_attr( $site['id'] ) ?>][nickname]" value="<?php echo esc_attr( $site['name'] ) ?>" />
@@ -554,13 +549,16 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
 
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
                 $partner = recursive_sanitize_text_field( $_POST['partner'] );
-                dt_write_log($partner);
+
                 foreach( $partner as $key => $value ){
                     if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
-                        update_post_meta( $key, 'partner_nickname', $value['nickname'] );
+                        DT_Network_Dashboard_Site_Post_Type::update_site_name( $key, sanitize_text_field( wp_unslash( $value['nickname'] ) ) );
                     }
-                    if ( isset( $value['send_activity_log'] ) && ! empty( $value['send_activity_log'] ) ) {
-                        update_post_meta( $key, 'send_activity_log', $value['send_activity_log'] );
+                    if ( isset( $value['send_live_activity'] ) && ! empty( $value['send_live_activity'] ) ) {
+                        DT_Network_Dashboard_Site_Post_Type::update_send_live_activity( $key, sanitize_text_field( wp_unslash( $value['send_live_activity'] ) ) );
+                    }
+                    if ( isset( $value['visibility'] ) && ! empty( $value['visibility'] ) ) {
+                        DT_Network_Dashboard_Site_Post_Type::update_visibility( $key, sanitize_text_field( wp_unslash( $value['visibility'] ) ) );
                     }
                 }
             }
@@ -585,6 +583,7 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                     <th>Nickname</th>
                     <th>Domain</th>
                     <th>Send Activity</th>
+                    <th>Visibility</th>
                     <th>Profile</th>
                     <th>Last Snapshot</th>
                     <th>Actions</th>
@@ -599,18 +598,13 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                         $snapshot = maybe_unserialize( $site['snapshot'] );
                         $profile = maybe_unserialize( $site['profile'] );
 
-//                        if ( isset( $site_meta['snapshot_fail'][0] ) && ! empty( $site_meta['snapshot_fail'][0] ) ) {
-//                            $fail = maybe_serialize( $site_meta['snapshot_fail'][0] );
-//                        } else {
-//                            $fail = '';
-//                        }
                         ?>
                         <tr>
                             <td style="width:10px;">
                                 <?php echo $site['id'] ?>
                             </td>
                             <td>
-                                <strong><?php echo esc_html( $site['name'] ) ?></strong>
+                                <strong><?php echo esc_html( $profile['partner_name'] ) ?></strong>
                             </td>
                             <td>
                                 <input type="text" name="partner[<?php echo esc_attr( $site['id'] ) ?>][nickname]" value="<?php echo esc_html( $site['name'] ) ?>" />
@@ -619,7 +613,10 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                                 <a href="<?php echo esc_url( $profile['partner_url'] ?? '' ) ?>"><?php echo esc_url( $profile['partner_url'] ?? '' ) ?></a>
                             </td>
                             <td>
-                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_activity_log]" value="yes" <?php echo ( $site['send_live_activity'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_activity_log]" value="no" <?php echo ( $site['send_live_activity'] === 'no' ) ? 'checked' : '' ?>/> No
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_live_activity]" value="yes" <?php echo ( $site['send_live_activity'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][send_live_activity]" value="no" <?php echo ( $site['send_live_activity'] === 'no' ) ? 'checked' : '' ?>/> No
+                            </td>
+                            <td>
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="show" <?php echo ( $site['visibility'] === 'show' ) ? 'checked' : '' ?>/> Show | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="hide" <?php echo ( isset( $site['visibility'] ) && $site['visibility'] === 'hide' ) ? 'checked' : '' ?>/> Hide
                             </td>
                             <td>
                                 <button value="<?php echo esc_attr( $site['id'] ) ?>" name="update-profile" type="submit" class="button" >Update Profile</button>
