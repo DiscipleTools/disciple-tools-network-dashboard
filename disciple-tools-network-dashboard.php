@@ -122,21 +122,22 @@ class DT_Network_Dashboard {
 
         // SHARED RESOURCES
         require_once( 'shared/endpoints-base.php' );
+        require_once( 'shared/site-post-type.php' );
         require_once( 'shared/permissions.php' );
         require_once( 'shared/site-profile.php' );
         require_once( 'shared/wp-async-request.php' );
         require_once( 'shared/remove-top-nav-config.php' );
 
-        require_once('collection/collection-queries.php');
-        require_once('collection/collection-endpoints.php');
+        require_once( 'collection/collection-queries.php' );
+        require_once( 'collection/collection-endpoints.php' );
 
-        require_once('snapshots/snapshot-endpoints.php');
-        require_once('snapshots/snapshot-report.php');
-        require_once('snapshots/snapshot-queries.php');
-        require_once('snapshots/snapshot.php');
+        require_once( 'snapshots/snapshot-endpoints.php' );
+        require_once( 'snapshots/snapshot-report.php' );
+        require_once( 'snapshots/snapshot-queries.php' );
+        require_once( 'snapshots/snapshot.php' );
 
-        require_once( 'activity/activity-log.php');
-        require_once( 'activity/hooks.php');
+        require_once( 'activity/activity-log.php' );
+        require_once( 'activity/hooks.php' );
 
         // UI METRICS FOR NETWORK TAB
         require_once( 'ui/ui.php' );
@@ -187,10 +188,7 @@ class DT_Network_Dashboard {
         if ( ! class_exists( 'Site_Link_System' ) ){
             require_once( get_theme_file_path() . '/dt-core/admin/site-link-post-type.php' );
         }
-
-
     }
-
 
     /**
      * Sets up main plugin actions and filters.

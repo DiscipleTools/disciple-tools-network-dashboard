@@ -14,27 +14,9 @@ if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
 class DT_Network_Dashboard_Admin_Endpoints
 {
 
-    private $version = 1;
     private $namespace;
     private $public_namespace;
-
-    /**
-     * DT_Network_Dashboard_Admin_Endpoints The single instance of DT_Network_Dashboard_Admin_Endpoints.
-     *
-     * @var     object
-     * @access    private
-     * @since     0.1.0
-     */
     private static $_instance = null;
-
-    /**
-     * Main DT_Network_Dashboard_Admin_Endpoints Instance
-     * Ensures only one instance of DT_Network_Dashboard_Admin_Endpoints is loaded or can be loaded.
-     *
-     * @since 0.1.0
-     * @static
-     * @return DT_Network_Dashboard_Admin_Endpoints instance
-     */
     public static function instance() {
         if ( is_null( self::$_instance ) ) {
             self::$_instance = new self();
@@ -42,12 +24,7 @@ class DT_Network_Dashboard_Admin_Endpoints
         return self::$_instance;
     } // End instance()
 
-    /**
-     * Constructor function.
-     *
-     * @access  public
-     * @since   0.1.0
-     */
+
     public function __construct() {
         $this->namespace = "dt/v1";
         $this->public_namespace = "dt-public/v1";
@@ -74,35 +51,24 @@ class DT_Network_Dashboard_Admin_Endpoints
     }
 
     public function trigger_snapshot_collection( WP_REST_Request $request ){
-        if ( ! user_can( get_current_user_id(), 'manage_options' ) ) {
+        if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
             return new WP_Error( __METHOD__, 'Permission Error' );
         }
-        add_action( 'dt_get_sites_snapshot', [ $this, 'remote_snapshot_action' ] );
 
-        wp_schedule_single_event( time(), 'dt_get_sites_snapshot' );
-        spawn_cron();
+        dt_network_dashboard_collect_remote_sites();
 
         return true;
-    }
-
-    public static function remote_snapshot_action(){
-        do_action( "dt_get_sites_snapshot" );
     }
 
     public function trigger_multisite_snapshot_collection( WP_REST_Request $request ){
-        if ( ! user_can( get_current_user_id(), 'manage_options' ) ) {
+        if ( ! user_can( get_current_user_id(), 'manage_dt' ) ) {
             return new WP_Error( __METHOD__, 'Permission Error' );
         }
 
-        add_action( 'dt_get_multisite_snapshot', [ $this, 'multisite_action' ] );
-
-        wp_schedule_single_event( time(), 'dt_get_multisite_snapshot' );
-        spawn_cron();
+        dt_network_dashboard_multisite_snapshot_async( );
 
         return true;
     }
-    public static function multisite_action(){
-        do_action( "dt_get_multisite_snapshot" );
-    }
+
 }
 DT_Network_Dashboard_Admin_Endpoints::instance();

@@ -300,26 +300,43 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
     }
 
     public function main_column() {
+        DT_Network_Dashboard_Site_Post_Type::sync_multisite_records();
+
         $message = false;
         if ( isset( $_POST['network_dashboard_nonce'] )
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
-            && $_POST['new-snapshot'] ) {
+             ) {
 
-            dt_save_log( 'multisite', '', false );
-            dt_save_log( 'multisite', 'REFRESH SNAPSHOT', false );
-            $result = get_blog_option( ( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) ), 'dt_snapshot_report' );
-            if ( $result ) {
-                $message = [ 'notice-success','Successful collection of new snapshot' ];
+            if (  isset( $_POST['new-snapshot'] ) ){
+                dt_save_log( 'multisite', '', false );
+                dt_save_log( 'multisite', 'REFRESH SNAPSHOT', false );
+
+                if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) ) ) {
+                    $message = [ 'notice-success','Successful collection of new snapshot' ];
+                }
+                else {
+                    $message = [ 'notice-error', 'Failed collection' ];
+                }
             }
-            else {
-                $message = [ 'notice-error', 'Failed collection' ];
+
+            if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
+                $partner = recursive_sanitize_text_field( $_POST['partner'] );
+
+                dt_write_log($partner);
+//                foreach( $partner as $key => $value ){
+//                    if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
+//                        update_post_meta( $multisite_id, 'partner_nickname', $value['nickname'] );
+//                    }
+//                    if ( isset( $value['send_activity_log'] ) && ! empty( $value['send_activity_log'] ) ) {
+//                        update_post_meta( $multisite_id, 'send_activity_log', $value['send_activity_log'] );
+//                    }
+//                }
             }
         }
         // Get list of sites
 
 
-        $snapshots = dt_multisite_dashboard_snapshots();
-        $number_of_snapshots = count( $snapshots );
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
 
         /** Message */
         if ( $message ) {
@@ -330,45 +347,69 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
         ?>
         <form method="post">
             <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
-            <p><strong>Network Dashboard Snapshots of Connected Sites (<?php echo $number_of_snapshots; ?>)</strong></p>
+            <p><strong>Network Dashboard Snapshots of Connected Sites</strong></p>
             <table class="widefat striped">
                 <thead>
                 <th>ID</th>
                 <th>Site Name</th>
+                <th>Nickname</th>
                 <th>Domain</th>
-                <th>Snapshot</th>
+                <th>Send Activity</th>
+                <th>Profile</th>
                 <th>Last Snapshot</th>
-                <th></th>
+                <th>Actions</th>
+                <th>Hide</th>
                 </thead>
                 <tbody>
                 <?php
-                if ( ! empty( $snapshots ) ) {
-                    foreach ( $snapshots as $blog_id => $snapshot ) {
-
+                if ( ! empty( $sites ) ) {
+                    foreach ( $sites as $partner_id => $site ) {
+                        if ( $site['type'] !== 'multisite' ){
+                            continue;
+                        }
+                        $snapshot = maybe_unserialize( $site['snapshot'] );
+                        $profile = maybe_unserialize( $site['profile'] );
                         ?>
                         <tr>
                             <td>
-                                <?php echo esc_html( $blog_id ) ?>
+                                <?php echo esc_html( $site['id'] ) ?>
                             </td>
                             <td>
-                                <?php echo '<strong>' . esc_html( $snapshot['profile']['partner_name'] ?? '' ) . '</strong>' ?>
+                                <?php echo '<strong>' . esc_html( $site['name'] ) . '</strong>' ?>
                             </td>
                             <td>
-                                <?php echo '<a href="'. esc_url( get_site_url( $blog_id ) ) .'" target="_blank">' . get_site_url( $blog_id ) . '</a>' ?>
+                                <input type="text" name="partner[<?php echo esc_attr( $profile['partner_id'] ) ?>][nickname]" value="<?php echo esc_attr( $site['name'] ) ?>" />
+                            </td>
+                            <td>
+                                <?php echo '<a href="'. esc_url( $profile['partner_url'] ) .'" target="_blank">' . esc_url( $profile['partner_url'] ) . '</a>' ?>
+                            </td>
+                            <td>
+                                <input type="radio" name="partner[<?php echo esc_attr( $profile['partner_id'] ) ?>][send_live_activity]" value="yes" <?php echo ( isset( $site['send_live_activity'] ) && $site['send_live_activity'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="partner[<?php echo esc_attr( $profile['partner_id'] ) ?>][send_live_activity]" value="no" <?php echo ( isset( $site['send_live_activity'] ) && $site['send_live_activity'] === 'no' ) ? 'checked' : '' ?>/> No
+                            </td>
+                            <td>
+                                <button value="<?php echo esc_attr( $profile['partner_id'] ) ?>" name="update-profile" type="submit" class="button" >Update Profile</button>
                             </td>
                             <td>
                                 <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
+                                <?php echo ( ! empty( $site['snapshot_timestamp'] ) ) ? date( 'Y-m-d H:i:s', $site['snapshot_timestamp'] ) : '---' ?>
+                                <?php
+                                if ( ! empty( $fail ) ){
+                                    ?>
+                                    <a href="javascript:void(0)" onclick="jQuery('#<?php echo esc_attr( $partner_id ) ?>').toggle()">Show error</a>
+                                    <span id="fail-<?php echo esc_attr( $partner_id ) ?>" style="display:none;"><?php echo $fail ?></span>
+                                    <?php
+                                }
+                                ?>
                             </td>
                             <td>
-                                <?php echo ( ! empty( $snapshot['date'] ) ) ? date( 'Y-m-d H:i:s', $snapshot['date'] ) : '&#x2718;' ?>
+                                <button value="<?php echo esc_attr( $site['type_id']  ) ?>" name="new-snapshot" type="submit" class="button" >Refresh Snapshot</button>
                             </td>
                             <td>
-                                <button value="<?php echo esc_attr( $blog_id ) ?>" name="new-snapshot" type="submit" class="button" >Refresh Snapshot</button>
+                                <input type="checkbox" name="hide" />
                             </td>
                         </tr>
                         <?php
                     } // end foreach
-
                 }
                 else {
                     ?>

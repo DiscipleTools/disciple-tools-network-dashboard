@@ -112,7 +112,6 @@ class DT_Network_Dashboard_Snapshot_Report
         if ($report_data) {
             update_option('dt_snapshot_report', $report_data, false);
             update_option('dt_snapshot_report_timestamp', time(), false);
-            update_option('dt_snapshot_report_hash', $report_data['hash'], false);
 
             return $report_data;
         } else {

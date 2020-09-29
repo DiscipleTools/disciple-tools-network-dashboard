@@ -43,34 +43,47 @@ class DT_Network_Dashboard_Site_Link_Metabox {
         } else {
             $post_id = $post->ID;
         }
+
+        dt_write_log($post_id);
         $new_profile = $this->create_partner_profile( $post_id );
         if( is_wp_error( $new_profile ) ){
+            dt_write_log($new_profile);
             ?>
             Failed to refresh remote site profile. Check connection. Error has been logged.
             <span style="float:right">Status: <strong><span id="fail-profile-status" class="fail-read" style="color:red;">Failed connection to remote Network Dashboard.</span></strong></span>
             <?php
         }
-        else {
-            if ( ! get_post_meta( $post_id, 'partner_id', true ) ) {
-                $new_profile = $this->create_partner_profile( $post_id );
-                if( is_wp_error( $new_profile ) ){
-                    ?>
-                    Failed to find site profile id. Please check connection, permissions, and attempt to refresh the link. Partner id is required.
-                    <span style="float:right">Status: <strong><span id="site-profile-status" class="fail-read">Failed to connect to partner dashboard and create local partner profile.</span></strong></span>
-                    <?php
-                    return;
-                }
-            } else {
-                ?><span style="float:right">Status: <strong><span id="site-profile-status" class="success-green">Linked</span></strong></span><?php
-            }
+
+        $dt_network_dashboard_id = get_post_meta( $post_id, 'dt_network_dashboard', true );
+        $site_profile = DT_Network_Dashboard_Site_Post_Type::get_profile( $dt_network_dashboard_id );
+        if( is_wp_error( $site_profile ) ){
+            dt_write_log($site_profile);
+            ?>
+            Failed to refresh remote site profile. Check connection. Error has been logged.
+            <span style="float:right">Status: <strong><span id="fail-profile-status" class="fail-read" style="color:red;">Failed connection to remote Network Dashboard.</span></strong></span>
+            <?php
+            return;
         }
-
-        /**
-         * Site Profile Info
-         */
-        $site_link_system = Site_Link_System::instance();
-        $site_link_system->meta_box_content( 'network_dashboard' );
-
+        ?>
+        <span style="float:right">Status: <strong><span id="site-profile-status" class="success-green">Linked</span></strong></span>
+        <table>
+            <tr>
+                <td>
+                    <?php echo  $site_profile['partner_name'] ?? 'Partner Name' ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <?php echo  $site_profile['partner_url'] ?? 'Partner URL' ?>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <?php echo  $site_profile['partner_id'] ?? 'Partner ID' ?>
+                </td>
+            </tr>
+        </table>
+        <?php
     }
 
     public function create_partner_profile( $site_post_id ) {
@@ -97,43 +110,23 @@ class DT_Network_Dashboard_Site_Link_Metabox {
 
         /* site profile returned */
         $site_profile = json_decode( $result['body'], true );
-        dt_write_log($site_profile);
-        if (isset( $site_profile['partner_id'] ) && ! empty( $site_profile['partner_id'] ) ){
-            $partner_id = sanitize_text_field( wp_unslash( $site_profile['partner_id'] ) );
-            update_post_meta( $site_post_id, 'partner_id', $partner_id );
-            update_post_meta( $site_post_id, 'partner_profile', $site_profile );
-        } else {
+        if ( ! isset( $site_profile['partner_id'] ) || empty( $site_profile['partner_id'] ) ){
             return new WP_Error(__METHOD__, 'Remote API did not return a proper partner id.');
-
         }
 
-        /* partner name */
-        if ( isset( $site_profile['partner_name'] ) ) {
-            $name = sanitize_text_field( wp_unslash( $site_profile['partner_name'] ) );
-            if ( empty( $name ) ){
-                $name = 'No Name Site';
+        recursive_sanitize_text_field( $site_profile );
+
+        $dt_network_dashboard_id = get_post_meta( $site_post_id, 'dt_network_dashboard', true );
+        if ( empty( $dt_network_dashboard_id ) ) {
+            $dt_network_dashboard_id = DT_Network_Dashboard_Site_Post_Type::create( $site_profile, 'remote', $site_post_id );
+            if ( is_wp_error( $dt_network_dashboard_id ) ){
+                return $dt_network_dashboard_id;
             }
-            update_post_meta( $site_post_id, 'partner_name', $name );
-        } else {
-            return new WP_Error(__METHOD__, 'Failed to get a properly configured partner_name.');
         }
 
-        /* partner description */
-        if ( isset( $site_profile['partner_description'] ) ) {
-            $desc = sanitize_text_field( wp_unslash( $site_profile['partner_description'] ) );
-            update_post_meta( $site_post_id, 'partner_description', $desc );
-        } else {
-            return new WP_Error(__METHOD__, 'Failed to get a properly configured partner_description.');
-        }
+        update_post_meta( $dt_network_dashboard_id, 'profile', $site_profile );
 
-        /* partner url */
-        if ( isset( $site_profile['partner_url'] ) ) {
-            update_post_meta( $site_post_id, 'partner_url', $site_profile['partner_url'] );
-        } else {
-            return new WP_Error(__METHOD__, 'Failed to get a properly configured partner_url.');
-        }
-
-        return true;
+        return $site_profile;
     }
 
     public function network_field_filter( $fields ) {
