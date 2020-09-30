@@ -132,12 +132,7 @@ class DT_Network_Dashboard_Menu {
 
                 <a href="<?php echo esc_attr( $link ) . 'local-site' ?>" class="nav-tab
                 <?php ( $tab == 'local-site' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
-                    Local Site
-                </a>
-
-                <a href="<?php echo esc_attr( $link ) . 'cron' ?>" class="nav-tab
-                <?php echo ( $tab == 'cron' ) ? 'nav-tab-active' : ''; ?>">
-                    Cron
+                    Local Profile
                 </a>
 
                 <a href="<?php echo esc_attr( $link ) . 'integrations' ?>" class="nav-tab
@@ -702,6 +697,8 @@ class DT_Network_Dashboard_Tab_Local
         <?php
     }
 
+
+
 }
 
 
@@ -723,8 +720,6 @@ class DT_Network_Dashboard_Tab_Activity
                     <div id="postbox-container-1" class="postbox-container">
                         <!-- Right Column -->
 
-                        <?php $this->box_site_link() ?>
-
                         <!-- End Right Column -->
                     </div><!-- postbox-container 1 -->
                     <div id="postbox-container-2" class="postbox-container">
@@ -735,65 +730,6 @@ class DT_Network_Dashboard_Tab_Activity
         <?php
     }
 
-    public function box_site_link()
-    {
-        $site_links = DT_Network_Dashboard_Site_Post_Type::all_site_to_site_ids();
-
-        ?>
-        <table class="widefat striped">
-            <thead>
-            <tr><th>Remote Site-to-site Links</th></tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <?php
-                    if (!is_array($site_links)) {
-                        ?>
-                        No site links found. Go to <a href="<?php echo esc_url(admin_url()) ?>edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type.
-                        <?php
-                    }
-                    ?>
-                    <h2>Can Send Reports to these Sites</h2>
-                    <?php
-                    foreach ($site_links as $site) {
-                        if ('network_dashboard_sending' === $site['type'] || 'network_dashboard_both' === $site['type'] ) {
-                            ?>
-                            <dd><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['id']) ?>&action=edit"><?php echo esc_html($site['name']) ?></a></dd>
-                            <?php
-                        }
-                    }
-                    ?>
-
-                    <h2>Can Receive Reports from these Sites</h2>
-                    <?php
-                    foreach ($site_links as $site) {
-                        if ('network_dashboard_receiving' === $site['type'] || 'network_dashboard_both' === $site['type'] ) {
-                            ?>
-                            <dd><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['id']) ?>&action=edit"><?php echo esc_html($site['name']) ?></a></dd>
-                            <?php
-                        }
-                    }
-                    ?>
-                    <h2><a onclick="jQuery('#other-links').toggle()" href="javascript:void(0)">Non-Dashboard Site Links</a></h2>
-                    <div id="other-links" style="display:none;">
-                        <?php
-                        foreach ($site_links as $site) {
-                            if (!('network_dashboard_sending' === $site['type'] || 'network_dashboard_receiving' === $site['type'] || 'network_dashboard_both' === $site['type'] ) ) {
-                                ?>
-                                <dd><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['id']) ?>&action=edit"><?php echo esc_html($site['name']) ?></a></dd>
-                                <?php
-                            }
-                        }
-                        ?>
-                    </div>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <?php
-    }
 
     public function box_send_activity()
     {
@@ -1105,6 +1041,7 @@ class DT_Network_Dashboard_Tab_Integrations
 
                         <?php $this->box_mapbox_status() ?>
                         <?php $this->box_ipstack_api_key() ?>
+                        <?php $this->metabox_cron_list(); ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -1112,6 +1049,7 @@ class DT_Network_Dashboard_Tab_Integrations
                         <!-- Right Column -->
 
                         <?php $this->box_instructions() ?>
+                        <?php $this->box_cron_instructions(); ?>
 
                         <!-- End Right Column -->
                     </div><!-- postbox-container 1 -->
@@ -1129,6 +1067,133 @@ class DT_Network_Dashboard_Tab_Integrations
 
     public function box_ipstack_api_key(){
         DT_Ipstack_API::metabox_for_admin();
+    }
+
+    public function metabox_cron_list() {
+
+        if ( isset( $_POST['cron_run_nonce'] )
+            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['cron_run_nonce'] ) ), 'cron_run_' . get_current_user_id() )
+            && isset( $_POST['run_now'] ) ) {
+
+            dt_write_log($_POST);
+
+            $hook = sanitize_text_field( wp_unslash( $_POST['run_now'] ) );
+            $timestamp = wp_next_scheduled( $hook );
+            wp_unschedule_event( $timestamp, $hook );
+
+            // @todo push a run
+
+        }
+        $cron_list = _get_cron_array();
+        ?>
+        <!-- Box -->
+
+        <table class="widefat striped">
+            <thead>
+            <tr>
+                <th>Daily Refresh Schedule</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach( $cron_list as $time => $time_array ){
+                foreach( $time_array as $token => $token_array ){
+                    if ( 'dt_' === substr( $token, 0, 3 ) ){
+                        foreach( $token_array as $key => $items ) {
+                            ?>
+                            <tr>
+                                <td>
+                                    <?php echo 'Next event in ' . round( ( $time - time() ) / 60 / 60 , 1) . ' hours' ?><br>
+                                    <?php echo date( 'Y-m-d H:i:s', $time  )?><br>
+                                </td>
+                                <td>
+                                    <?php echo $token ?>
+                                </td>
+                                <td>
+                                    <?php echo $key ?>
+                                </td>
+                                <td>
+                                    <?php echo $items['schedule'] ?? '' ?><br>
+                                    Every <?php echo isset($items['interval']) ? $items['interval'] / 60 . ' minutes' : '' ?><br>
+                                    <?php echo ! empty($items['args']) ? serialize( $items['args'] ) : '' ?><br>
+                                </td>
+                                <td>
+                                    <form method="post">
+                                        <?php wp_nonce_field( 'cron_run_' . get_current_user_id(), 'cron_run_nonce' ) ?>
+                                        <button type="submit" name="run_now" value="<?php echo $token ?>" class="button">Delete and Respawn</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                }
+            }
+            ?>
+            </tbody>
+        </table>
+
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function box_cron_instructions() {
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>What is CRON?</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    Cron is a time based task often scheduled to occur at regular times. You can have some tasks in a software run instantly, while others might build up and be run at a certain time.
+                    The Network Dashboard collects snapshots from remote sites in this time based way. Because these are processor intensive tasks/queries we do not run them instantly, so as to protect the performance of the
+                    Disciple.Tools system.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Although it is not required, if there are concerns about the timely distribution of posts/messages/emails or collection of snapshots, then it is very simple
+                    to add an external cron service.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>EXPLANATION</strong><br></p>
+                    Wordpress/Disciple.Tools Cron System depends on visits to trigger background processes. If the site is not visited regularly
+                    like a normal website would be, it is possible to use an external cron service to call the site regularly and trigger these
+                    background tasks. If the Network Dashboard is configured for frequent collections in the section above and you notice
+                    these services not running when expected, you can schedule an external cron service to connect to the site on a regular basis.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>SERVICES</strong></p>
+                    <ul>
+                        <li><a href="https://cron-job.org/en/">Cron-Job.org</a></li>
+                        <li><a href="https://www.easycron.com/">EasyCron</a></li>
+                        <li><a href="https://cronless.com/">Cronless</a></li>
+                        <li>Or Google "free cron services"</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>CRON URL</strong><br></p>
+                    <code><?php echo esc_url( site_url() ) . '/wp-cron.php' ?></code>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
     }
 
     public function box_instructions() {
