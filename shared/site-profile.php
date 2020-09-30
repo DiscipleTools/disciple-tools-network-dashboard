@@ -29,6 +29,10 @@ class DT_Network_Dashboard_Site_Link_Metabox {
     }
 
     public function load_site_profile_meta_box( $post = null ) {
+        if ( ! get_post_meta( $post->ID, 'site_key', true ) ){
+            return;
+        }
+
         if ( ! isset( $post->ID ) ) {
             global $pagenow;
             if ( isset( $_GET['post'] ) && 'post.php' === $pagenow ) {
@@ -50,6 +54,7 @@ class DT_Network_Dashboard_Site_Link_Metabox {
             Failed to refresh remote site profile. Check connection. Error has been logged.
             <span style="float:right">Status: <strong><span id="fail-profile-status" class="fail-read" style="color:red;">Failed connection to remote Network Dashboard.</span></strong></span>
             <?php
+            return;
         }
 
         $dt_network_dashboard_id = get_post_meta( $post_id, 'dt_network_dashboard', true );

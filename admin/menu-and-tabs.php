@@ -94,10 +94,10 @@ class DT_Network_Dashboard_Menu {
             $tab = sanitize_key( wp_unslash( $_GET["tab"] ) );
         }
         else if ( $approved_multisite ) {
-            $tab = 'multisite-sites';
+            $tab = 'multisite-reports';
         }
         else {
-            $tab = 'remote-sites';
+            $tab = 'remote-reports';
         }
 
         $link = 'admin.php?page='.$this->token.'&tab=';
@@ -109,27 +109,31 @@ class DT_Network_Dashboard_Menu {
 
                 <?php if ( $approved_multisite ) :  // check if approved multisite dashboard?>
 
-                    <a href="<?php echo esc_attr( $link ) . 'multisite-sites' ?>" class="nav-tab
-                        <?php echo ( $tab == 'multisite-sites' || ! isset( $tab ) ) ? 'nav-tab-active' : ''; ?>">
-                        Multisite Sites
+                    <a href="<?php echo esc_attr( $link ) . 'multisite-reports' ?>" class="nav-tab
+                        <?php echo ( $tab == 'multisite-reports' || ! isset( $tab ) ) ? 'nav-tab-active' : ''; ?>">
+                        Multisite Reports
                     </a>
-                    <a href="<?php echo esc_attr( $link ) . 'remote-sites' ?>" class="nav-tab
-                    <?php echo ( $tab == 'remote-sites'  ) ? 'nav-tab-active' : ''; ?>">
-                        Remote Sites
+                    <a href="<?php echo esc_attr( $link ) . 'remote-reports' ?>" class="nav-tab
+                    <?php echo ( $tab == 'remote-reports'  ) ? 'nav-tab-active' : ''; ?>">
+                        Remote Reports
                     </a>
 
                 <?php else: ?>
-                    <a href="<?php echo esc_attr( $link ) . 'remote-sites' ?>" class="nav-tab
-                    <?php echo ( $tab == 'remote-sites' || ! isset( $tab )  ) ? 'nav-tab-active' : ''; ?>">
-                        Remote Sites
+                    <a href="<?php echo esc_attr( $link ) . 'remote-reports' ?>" class="nav-tab
+                    <?php echo ( $tab == 'remote-reports' || ! isset( $tab )  ) ? 'nav-tab-active' : ''; ?>">
+                        Remote Reports
                     </a>
                 <?php endif; ?>
+
+                <a href="<?php echo esc_attr( $link ) . 'activity' ?>" class="nav-tab
+                <?php ( $tab == 'activity' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                    Send Activity
+                </a>
 
                 <a href="<?php echo esc_attr( $link ) . 'local-site' ?>" class="nav-tab
                 <?php ( $tab == 'local-site' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
                     Local Site
                 </a>
-
 
                 <a href="<?php echo esc_attr( $link ) . 'cron' ?>" class="nav-tab
                 <?php echo ( $tab == 'cron' ) ? 'nav-tab-active' : ''; ?>">
@@ -149,16 +153,20 @@ class DT_Network_Dashboard_Menu {
 
             <?php
             switch ($tab) {
-                case "remote-sites":
+                case "remote-reports":
                     $object = new DT_Network_Dashboard_Tab_Remote_Snapshots();
                     $object->content();
                     break;
-                case "multisite-sites":
+                case "multisite-reports":
                     $object = new DT_Network_Dashboard_Tab_Multisite_Snapshots();
                     $object->content();
                     break;
                 case "local-site":
                     $object = new DT_Network_Dashboard_Tab_Local();
+                    $object->content();
+                    break;
+                case "activity":
+                    $object = new DT_Network_Dashboard_Tab_Activity();
                     $object->content();
                     break;
                 case "tutorials":
@@ -667,7 +675,6 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
 }
 
 
-
 class DT_Network_Dashboard_Tab_Local
 {
     public function content() {
@@ -679,6 +686,35 @@ class DT_Network_Dashboard_Tab_Local
                         <!-- Main Column -->
 
                         <?php DT_Network_Dashboard_Site_Link_Metabox::admin_box_local_site_profile(); ?>
+
+                        <!-- End Main Column -->
+                    </div><!-- end post-body-content -->
+                    <div id="postbox-container-1" class="postbox-container">
+                        <!-- Right Column -->
+
+                        <!-- End Right Column -->
+                    </div><!-- postbox-container 1 -->
+                    <div id="postbox-container-2" class="postbox-container">
+                    </div><!-- postbox-container 2 -->
+                </div><!-- post-body meta box container -->
+            </div><!--poststuff end -->
+        </div><!-- wrap end -->
+        <?php
+    }
+
+}
+
+
+
+class DT_Network_Dashboard_Tab_Activity
+{
+    public function content() {
+        ?>
+        <div class="wrap">
+            <div id="poststuff">
+                <div id="post-body" class="metabox-holder columns-2">
+                    <div id="post-body-content">
+                        <!-- Main Column -->
 
                         <?php $this->box_send_activity() ?>
 
@@ -701,22 +737,12 @@ class DT_Network_Dashboard_Tab_Local
 
     public function box_site_link()
     {
-        global $wpdb;
-
-        $site_links = $wpdb->get_results("
-        SELECT p.ID, p.post_title, pm.meta_value as type
-            FROM $wpdb->posts as p
-              LEFT JOIN $wpdb->postmeta as pm
-              ON p.ID=pm.post_id
-              AND pm.meta_key = 'type'
-            WHERE p.post_type = 'site_link_system'
-              AND p.post_status = 'publish'
-        ", ARRAY_A);
+        $site_links = DT_Network_Dashboard_Site_Post_Type::all_site_to_site_ids();
 
         ?>
         <table class="widefat striped">
             <thead>
-            <tr><th>Site Links</th></tr>
+            <tr><th>Remote Site-to-site Links</th></tr>
             </thead>
             <tbody>
             <tr>
@@ -733,7 +759,7 @@ class DT_Network_Dashboard_Tab_Local
                     foreach ($site_links as $site) {
                         if ('network_dashboard_sending' === $site['type'] || 'network_dashboard_both' === $site['type'] ) {
                             ?>
-                            <dd><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['ID']) ?>&action=edit"><?php echo esc_html($site['post_title']) ?></a></dd>
+                            <dd><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['id']) ?>&action=edit"><?php echo esc_html($site['name']) ?></a></dd>
                             <?php
                         }
                     }
@@ -744,7 +770,7 @@ class DT_Network_Dashboard_Tab_Local
                     foreach ($site_links as $site) {
                         if ('network_dashboard_receiving' === $site['type'] || 'network_dashboard_both' === $site['type'] ) {
                             ?>
-                            <dd><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['ID']) ?>&action=edit"><?php echo esc_html($site['post_title']) ?></a></dd>
+                            <dd><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['id']) ?>&action=edit"><?php echo esc_html($site['name']) ?></a></dd>
                             <?php
                         }
                     }
@@ -755,7 +781,7 @@ class DT_Network_Dashboard_Tab_Local
                         foreach ($site_links as $site) {
                             if (!('network_dashboard_sending' === $site['type'] || 'network_dashboard_receiving' === $site['type'] || 'network_dashboard_both' === $site['type'] ) ) {
                                 ?>
-                                <dd><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['ID']) ?>&action=edit"><?php echo esc_html($site['post_title']) ?></a></dd>
+                                <dd><a href="<?php echo esc_url(admin_url()) ?>post.php?post=<?php echo esc_attr($site['id']) ?>&action=edit"><?php echo esc_html($site['name']) ?></a></dd>
                                 <?php
                             }
                         }
@@ -769,7 +795,6 @@ class DT_Network_Dashboard_Tab_Local
         <?php
     }
 
-
     public function box_send_activity()
     {
         if ( isset( $_POST['activity-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['activity-nonce'] ) ), 'activity'. get_current_user_id() ) ) {
@@ -781,63 +806,125 @@ class DT_Network_Dashboard_Tab_Local
             }
         }
 
+
         /* REMOTE SITES*/
-       $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+        $multisites = DT_Network_Dashboard_Site_Post_Type::all_multisite_blog_ids( true )
+
         ?>
+        <form method="post">
         <table class="widefat striped">
-            <thead>
-            <tr>
-                <td style="width:300px;">Send Activity</td>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                <?php
-                if (!is_array($sites)) :
-                    ?>
-                    No site links found. Go to <a href="<?php echo esc_url(admin_url()) ?>edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type.
-                <?php
-                else :
-                    ?>
-                        <form method="post">
-                            <?php wp_nonce_field( 'activity'. get_current_user_id(), 'activity-nonce') ?>
-                            <table class="widefat striped">
-                                <thead>
-                                <tr>
-                                    <td style="width:300px;">Remote Sites</td>
-                                    <td style="text-align:right;">Send Activity</td>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <?php
-                                foreach ($sites as $site) {
-                                    ?>
-                                    <tr>
-                                        <td><?php echo esc_html($site['name']) ?></td>
-                                        <td style="text-align:right;"><input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="yes" <?php echo ( $site['send_live_activity'] === 'yes' ) ? 'checked' : '' ?>/> Yes | <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="no" <?php echo ($site['send_live_activity'] === 'yes' ) ? '' : 'checked' ?>/> No</td>
-                                    </tr>
-                                    <?php
-                                }
-                                ?>
-                                </tbody>
-                            </table>
-                            <p><br>
-                                <button  type="submit" class="button">Update</button>
-                            </p>
-                        </form>
-                    </td>
-                    </tr>
-                    </tbody>
-                    </table>
-                <?php
-                endif;
+        <thead>
+        <tr>
+            <td style="width:300px;">Send Activity</td>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+            <?php
+            if (!is_array($sites)) :
                 ?>
+                No site links found. Go to <a href="<?php echo esc_url(admin_url()) ?>edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type.
+            <?php
+            else :
+                ?>
+                    <?php wp_nonce_field( 'activity'. get_current_user_id(), 'activity-nonce') ?>
+                    <table class="widefat striped">
+                        <thead>
+                        <tr>
+                            <td style="width:70%;">Available Remote Sites</td>
+                            <td style="width:30%;text-align:center;">Send Live Activity</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $i = 0;
+                        foreach ( $sites as $site ) {
+                            if ('network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] ) {
+                                $i++;
+                                ?>
+                                <tr>
+                                    <td><?php echo esc_html($site['name']) ?></td>
+                                    <td style="text-align: center;">
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="daily" <?php echo ($site['send_live_activity'] === 'daily' || $site['send_live_activity'] === '' ) ? 'checked' : '' ?>/> Send in Daily  |
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="live" <?php echo ($site['send_live_activity'] === 'live' ) ? 'checked' : '' ?>/> Send Immediately  |
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="none" <?php echo ( $site['send_live_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing
+                                    </td>
+
+                                </tr>
+                                <?php
+                            }
+                        }
+                        if (0 === $i ) {
+                            ?>
+                            <tr>
+                                <td>No sites found</td>
+                                 <td></td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+
+                    <?php if ( is_multisite() ) : ?>
+                    <br>
+                    <table class="widefat striped">
+                        <thead>
+                        <tr>
+                            <td style="width:70%;">Available Multisite Sites</td>
+                            <td style="width:30%;text-align:center;">Send Live Activity</td>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <?php
+                        $i = 0;
+                        foreach ( $sites as $site ) {
+                            if ('multisite' === $site['type'] && in_array( $site['type_id'], $multisites ) ) {
+                                $i++;
+                                ?>
+                                <tr>
+                                    <td><?php echo esc_html($site['name']) ?></td>
+                                    <td style="text-align: center;">
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="daily" <?php echo ($site['send_live_activity'] === 'daily' || $site['send_live_activity'] === '' ) ? 'checked' : '' ?>/> Send in Daily  |
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="live" <?php echo ($site['send_live_activity'] === 'live' ) ? 'checked' : '' ?>/> Send Immediately  |
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="none" <?php echo ( $site['send_live_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing
+                                    </td>
+                                </tr>
+                                <?php
+                            }
+                        }
+                        if (0 === $i ) {
+                            ?>
+                            <tr>
+                                <td>No sites found</td>
+                                 <td></td>
+                            </tr>
+                            <?php
+                        }
+                        ?>
+                        </tbody>
+                    </table>
+
+                    <?php endif; // end multisite check ?>
+
+                    <p>
+                        <br><button type="submit" style="float:right;" class="button">Update</button>
+                    </p>
+
+                    <!-- end inner table -->
+                </td>
+                </tr>
+                </tbody>
+                </table>
+            <?php
+            endif;
+            ?>
         <br>
         <?php
     }
 }
-
 
 /**
  * Class DT_Network_Dashboard_Tab_Tutorial

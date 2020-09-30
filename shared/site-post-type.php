@@ -72,9 +72,10 @@ class DT_Network_Dashboard_Site_Post_Type {
         recursive_sanitize_text_field( $site_profile );
 
         $dt_network_dashboard_id = get_post_meta( $id, 'dt_network_dashboard', true );
-        if ( empty( $dt_network_dashboard_id ) ) {
-            return self::create( $site_profile, 'multisite', $id );
-        } else {
+        if ( empty( $dt_network_dashboard_id )  || ! get_post_meta( $dt_network_dashboard_id, 'type_id', true ) ) {
+            return self::create( $site_profile, 'remote', $id );
+        }
+        else {
             return update_post_meta( $dt_network_dashboard_id, 'profile', $site_profile );
         }
     }
@@ -268,7 +269,8 @@ class DT_Network_Dashboard_Site_Post_Type {
                   g.meta_value as snapshot_timestamp,
                   h.meta_value as profile,
                   i.meta_value as send_live_activity,
-                  j.meta_value as visibility
+                  j.meta_value as visibility,
+                  k.meta_value as connection_type
                 FROM $wpdb->posts as a
                 LEFT JOIN $wpdb->postmeta as c
                   ON a.ID=c.post_id
@@ -297,6 +299,9 @@ class DT_Network_Dashboard_Site_Post_Type {
                  LEFT JOIN $wpdb->postmeta as j
                   ON a.ID=j.post_id
                   AND j.meta_key = 'visibility'
+                 LEFT JOIN $wpdb->postmeta as k
+                  ON k.post_id=f.meta_value
+                  AND k.meta_key = 'type'
                 WHERE a.post_type = 'dt_network_dashboard'
                 ORDER BY name;
             ",
@@ -316,7 +321,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $sites;
     }
 
-    public static function all_connections() : array {
+    public static function all_dashboard_ids() : array {
         global $wpdb;
 
         $results = $wpdb->get_results("
@@ -342,7 +347,10 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $results;
     }
 
-    public static function all_multisite_ids() : array {
+    public static function all_multisite_blog_ids( $active_dashboards_only = false ) : array {
+        if( ! is_multisite() ){
+            return [];
+        }
         global $wpdb;
         $table = $wpdb->base_prefix . 'blogs';
         $results = $wpdb->get_col( "SELECT blog_id FROM $table" );
@@ -353,13 +361,53 @@ class DT_Network_Dashboard_Site_Post_Type {
 
         $dt_sites = [];
         foreach ( $results as $id ) {
+            // reject non-dt blogs
             if ( get_blog_option( $id, 'current_theme' ) !== 'Disciple Tools' ) {
                 continue;
             }
-            $dt_sites[$id] = $id;
+
+            if ( $active_dashboards_only ) {
+                // reject blogs without network dashboards active
+                $plugin = 'disciple-tools-network-dashboard/disciple-tools-network-dashboard.php';
+                if ( in_array( $plugin, (array) get_blog_option( $id,'active_plugins', array() ), true ) || file_exists( WP_CONTENT_DIR . 'mu-plugins/' . $plugin ) ) {
+                    $dt_sites[$id] = $id;
+                }
+                else if ( function_exists( 'is_plugin_active_for_network' ) && is_plugin_active_for_network( $plugin ) ) {
+                    $dt_sites[$id] = $id;
+                }
+            } else {
+                $dt_sites[$id] = $id;
+            }
         }
 
         return $dt_sites;
+    }
+
+    public static function all_site_to_site_ids() : array {
+        global $wpdb;
+
+        $results = $wpdb->get_results("
+                SELECT 
+                  p.ID as id,
+                  p.post_title as name, 
+                  pm.meta_value as type,
+                  pm1.meta_value as dtnd_id
+                FROM $wpdb->posts as p
+                JOIN $wpdb->postmeta as pm
+                  ON p.ID=pm.post_id
+				  AND pm.meta_key = 'type'
+                LEFT JOIN $wpdb->postmeta as pm1
+                  ON p.ID=pm1.post_id
+				  AND pm1.meta_key = 'dt_network_dashboard'
+                WHERE p.post_type = 'site_link_system'
+                  AND pm.meta_value LIKE 'network_dashboard%'
+            ", ARRAY_A );
+
+        if ( empty( $results ) ) {
+            $results = [];
+        }
+
+        return $results;
     }
 
     public static function sync_all_multisites_to_post_type() : array {
@@ -367,8 +415,8 @@ class DT_Network_Dashboard_Site_Post_Type {
             'delete' => [],
             'create' => [],
         ];
-        $multisites = self::all_multisite_ids();
-        $connections = self::all_connections();
+        $multisites = self::all_multisite_blog_ids();
+        $connections = self::all_sites();
 
         // delete all multisites not permitted or removed
         foreach( $connections as $connection ){
@@ -407,37 +455,43 @@ class DT_Network_Dashboard_Site_Post_Type {
             'delete' => [],
             'create' => [],
         ];
-        $remotes = self::all_remote_ids();
-        $connections = self::all_connections();
+        $remote_ids = [];
+
+        $remotes = self::all_site_to_site_ids();
+        $dashboards = self::all_dashboard_ids();
 
         // delete all remotes not permitted or removed
-        foreach( $connections as $connection ){
-            if ( 'remote' !== $connection['type'] ){
+        foreach( $remotes as $item ){
+            $remote_ids[] = $item['id'];
+        }
+        foreach( $dashboards as $dashboard ){
+            if ( 'remote' !== $dashboard['type'] ){
                 continue;
             }
 
-            if ( in_array( $connection['type_id'], $remotes ) ) {
+            if ( in_array( $dashboard['type_id'], $remote_ids ) ) {
                 continue;
             }
 
-            $result['delete'][] = self::delete( $connection['id'] );
+            $result['delete'][] = self::delete( $dashboard['id'] );
         }
 
         // add all remotes not previously added
         $type_ids = [];
-        foreach( $connections as $connection ){
-            if ( 'remote' !== $connection['type'] ){
+        foreach( $dashboards as $dashboard ){
+            if ( 'remote' !== $dashboard['type'] ){
                 continue;
             }
-            $type_ids[] = $connection['type_id'];
+            $type_ids[] = $dashboard['type_id'];
         }
         foreach( $remotes as $remote ){
-            if ( in_array( $remote, $type_ids ) ) {
+            if ( in_array( $remote['id'], $type_ids ) ) {
                 continue;
             }
 
-            $result['create'][$remote] = self::create_remote_by_id( $remote );
+            $result['create'][$remote['id']] = self::create_remote_by_id( $remote['id'] );
         }
+
 
         return $result;
     }

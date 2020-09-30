@@ -143,7 +143,7 @@ class DT_Network_Dashboard_Queries {
         return $results;
     }
 
-    public static function all_multisite_ids() : array {
+    public static function all_multisite_blog_ids() : array {
         global $wpdb;
         $table = $wpdb->base_prefix . 'blogs';
         $results = $wpdb->get_col( "SELECT blog_id FROM $table" );
@@ -160,7 +160,7 @@ class DT_Network_Dashboard_Queries {
             return [];
         }
 
-        $site_ids = self::all_multisite_ids();
+        $site_ids = self::all_multisite_blog_ids();
 
         $snapshot = [];
         foreach ( $site_ids as $id ) {
@@ -184,7 +184,7 @@ class DT_Network_Dashboard_Queries {
             return [];
         }
 
-        $site_ids = self::all_multisite_ids();
+        $site_ids = self::all_multisite_blog_ids();
 
         $snapshots_needing_refreshed = [];
         foreach ( $site_ids as $id ) {
