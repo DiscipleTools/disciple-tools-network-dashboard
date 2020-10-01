@@ -106,7 +106,7 @@ class DT_Get_Single_Site_Snapshot extends Disciple_Tools_Async_Task
  */
 function dt_get_site_snapshot( $site_post_id ) {
 
-    $partner_post_id = DT_Network_Dashboard_Site_Post_Type::get_by_remote_id( $site_post_id );
+    $partner_post_id = DT_Network_Dashboard_Site_Post_Type::get_post_id_by_remote_id( $site_post_id );
     update_post_meta( $partner_post_id, 'snapshot_fail', true );
 
     $file = 'remote';

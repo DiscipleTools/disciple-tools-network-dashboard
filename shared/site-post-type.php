@@ -117,6 +117,7 @@ class DT_Network_Dashboard_Site_Post_Type {
                 'name' => $site_profile['partner_name'] ?? get_bloginfo('name'),
                 'visibility' => 'show',
                 'send_activity' => 'yes',
+                'location_precision' => 'none',
                 'profile' => $site_profile,
                 'type' => $connection_type,
                 'type_id' => $id
@@ -145,7 +146,11 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $partner_post_id;
     }
 
-    public static function get_by_remote_id( $remote_post_id ){
+    public static function get_remote_post_id( $partner_post_id ) {
+        return get_post_meta( $partner_post_id, 'type_id', true );
+    }
+
+    public static function get_post_id_by_remote_id( $remote_post_id ){
         return get_post_meta( $remote_post_id, 'dt_network_dashboard', true );
     }
 
@@ -188,6 +193,17 @@ class DT_Network_Dashboard_Site_Post_Type {
         return update_post_meta( $partner_post_id, 'profile', $profile );
     }
 
+    public static function update_multisite_profile( $partner_post_id ){
+        $multisite_id = get_post_meta( $partner_post_id, 'type_id', true );
+        switch_to_blog( $multisite_id );
+
+        $profile = dt_network_site_profile();
+
+        restore_current_blog();
+
+        self::update_profile( $partner_post_id, $profile );
+    }
+
     public static function delete_profile( $partner_post_id ){
         return delete_post_meta( $partner_post_id, 'profile' );
     }
@@ -212,10 +228,14 @@ class DT_Network_Dashboard_Site_Post_Type {
     }
 
     public static function update_send_activity( $partner_post_id, $send_activity ){
-        if ( $send_activity === 'no' ){
-            $value = 'no';
-        } else {
-            $value = 'yes';
+        if ( $send_activity === 'none' ){
+            $value = 'none';
+        }
+        else if ( $send_activity === 'live' ) {
+            $value = 'live';
+        }
+        else {
+            $value = 'daily';
         }
         return update_post_meta( $partner_post_id, 'send_activity', $value );
     }
@@ -230,12 +250,31 @@ class DT_Network_Dashboard_Site_Post_Type {
     }
 
     public static function update_receive_activity( $partner_post_id, $status ){
-        if ( $status === 'disable' ){
-            $value = 'disable';
+        if ( $status === 'reject' ){
+            $value = 'reject';
         } else {
-            $value = 'enable';
+            $value = 'allow';
         }
         return update_post_meta( $partner_post_id, 'receive_activity', $value );
+    }
+
+    public static function update_location_precision( $partner_post_id, $status ){
+        if ( $status == 'admin0' ){
+            $value = 'admin0';
+        }
+        else if ( $status == 'admin1' ) {
+            $value = 'admin1';
+        }
+        else if ( $status == 'admin2' ) {
+            $value = 'admin2';
+        }
+        else if ( $status == 'none' ) {
+            $value = 'none';
+        }
+        else {
+            $value = 'none';
+        }
+        return update_post_meta( $partner_post_id, 'location_precision', $value );
     }
 
     public static function get_type( $partner_post_id ){
@@ -258,6 +297,7 @@ class DT_Network_Dashboard_Site_Post_Type {
     }
 
     public static function delete( $partner_post_id ) {
+
         return wp_delete_post( $partner_post_id );
     }
 
@@ -267,9 +307,9 @@ class DT_Network_Dashboard_Site_Post_Type {
      */
     public static function all_sites() : array {
 
-        if (wp_cache_get( __METHOD__ )) {
-            return wp_cache_get( 'get_sites' );
-        }
+//        if (wp_cache_get( __METHOD__ )) {
+//            return wp_cache_get( 'get_sites' );
+//        }
         global $wpdb;
 
         $results = $wpdb->get_results("
@@ -285,10 +325,11 @@ class DT_Network_Dashboard_Site_Post_Type {
                   c.meta_value as snapshot,
                   g.meta_value as snapshot_timestamp,
                   h.meta_value as profile,
-                  i.meta_value as send_activity,
                   l.meta_value as receive_activity,
                   j.meta_value as visibility,
-                  k.meta_value as connection_type
+                  k.meta_value as connection_type,
+                  i.meta_value as send_activity,
+                  m.meta_value as location_precision
                 FROM $wpdb->posts as a
                 LEFT JOIN $wpdb->postmeta as c
                   ON a.ID=c.post_id
@@ -323,6 +364,9 @@ class DT_Network_Dashboard_Site_Post_Type {
                  LEFT JOIN $wpdb->postmeta as k
                   ON k.post_id=f.meta_value
                   AND k.meta_key = 'type'
+                 LEFT JOIN $wpdb->postmeta as m
+                  ON a.ID=m.post_id
+                  AND m.meta_key = 'location_precision'
                 WHERE a.post_type = 'dt_network_dashboard'
                 ORDER BY name;
             ",
@@ -339,7 +383,7 @@ class DT_Network_Dashboard_Site_Post_Type {
             $sites[$result['partner_id']] = $result;
         }
 
-        wp_cache_set( __METHOD__, $sites, __METHOD__, 10 );
+//        wp_cache_set( __METHOD__, $sites, __METHOD__, 10 );
 
         return $sites;
     }
