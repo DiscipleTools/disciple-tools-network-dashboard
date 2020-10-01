@@ -29,6 +29,9 @@ function dt_network_dashboard_push_snapshots()
 
     // Loop sites and call their wp-cron.php service to run.
     foreach ($sites as $site) {
+
+        $snapshot = apply_filters( 'dt_network_dashboard_snapshot_location_precision', $snapshot, $site['id'] );
+
         try {
             $site_post_id = $site['id'] ?? 0;
 

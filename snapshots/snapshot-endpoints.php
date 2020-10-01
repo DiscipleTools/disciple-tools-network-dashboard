@@ -78,7 +78,11 @@ class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpo
             ];
         }
 
-        return DT_Network_Dashboard_Snapshot::snapshot_report();
+        $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report();
+
+        $snapshot = apply_filters( 'dt_network_dashboard_snapshot_location_precision', $snapshot, $params['site_post_id'] );
+
+        return $snapshot;
     }
 
     public function profile( WP_REST_Request $request ) {

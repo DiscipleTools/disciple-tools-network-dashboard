@@ -116,7 +116,7 @@ class DT_Network_Dashboard_Site_Post_Type {
                 'partner_id' => $partner_id,
                 'name' => $site_profile['partner_name'] ?? get_bloginfo('name'),
                 'visibility' => 'show',
-                'send_live_activity' => 'yes',
+                'send_activity' => 'yes',
                 'profile' => $site_profile,
                 'type' => $connection_type,
                 'type_id' => $id
@@ -211,13 +211,13 @@ class DT_Network_Dashboard_Site_Post_Type {
         return update_post_meta( $partner_post_id, 'name', $name );
     }
 
-    public static function update_send_live_activity( $partner_post_id, $send_live_activity ){
-        if ( $send_live_activity === 'no' ){
+    public static function update_send_activity( $partner_post_id, $send_activity ){
+        if ( $send_activity === 'no' ){
             $value = 'no';
         } else {
             $value = 'yes';
         }
-        return update_post_meta( $partner_post_id, 'send_live_activity', $value );
+        return update_post_meta( $partner_post_id, 'send_activity', $value );
     }
 
     public static function update_visibility( $partner_post_id, $status ){
@@ -227,6 +227,15 @@ class DT_Network_Dashboard_Site_Post_Type {
             $value = 'show';
         }
         return update_post_meta( $partner_post_id, 'visibility', $value );
+    }
+
+    public static function update_receive_activity( $partner_post_id, $status ){
+        if ( $status === 'disable' ){
+            $value = 'disable';
+        } else {
+            $value = 'enable';
+        }
+        return update_post_meta( $partner_post_id, 'receive_activity', $value );
     }
 
     public static function get_type( $partner_post_id ){
@@ -252,7 +261,15 @@ class DT_Network_Dashboard_Site_Post_Type {
         return wp_delete_post( $partner_post_id );
     }
 
+    /**
+     * Returns complete list of sites with unserialized snapshot and profile.
+     * @return array
+     */
     public static function all_sites() : array {
+
+        if (wp_cache_get( __METHOD__ )) {
+            return wp_cache_get( 'get_sites' );
+        }
         global $wpdb;
 
         $results = $wpdb->get_results("
@@ -268,7 +285,8 @@ class DT_Network_Dashboard_Site_Post_Type {
                   c.meta_value as snapshot,
                   g.meta_value as snapshot_timestamp,
                   h.meta_value as profile,
-                  i.meta_value as send_live_activity,
+                  i.meta_value as send_activity,
+                  l.meta_value as receive_activity,
                   j.meta_value as visibility,
                   k.meta_value as connection_type
                 FROM $wpdb->posts as a
@@ -295,7 +313,10 @@ class DT_Network_Dashboard_Site_Post_Type {
                   AND h.meta_key = 'profile'
                  LEFT JOIN $wpdb->postmeta as i
                   ON a.ID=i.post_id
-                  AND i.meta_key = 'send_live_activity'
+                  AND i.meta_key = 'send_activity'
+                 LEFT JOIN $wpdb->postmeta as l
+                  ON a.ID=l.post_id
+                  AND l.meta_key = 'receive_activity'
                  LEFT JOIN $wpdb->postmeta as j
                   ON a.ID=j.post_id
                   AND j.meta_key = 'visibility'
@@ -318,9 +339,15 @@ class DT_Network_Dashboard_Site_Post_Type {
             $sites[$result['partner_id']] = $result;
         }
 
+        wp_cache_set( __METHOD__, $sites, __METHOD__, 10 );
+
         return $sites;
     }
 
+    /**
+     * Truncated list of all network dashboard post types returning only id, type, and type_id (either the multisite blog it or site to site link id)
+     * @return array
+     */
     public static function all_dashboard_ids() : array {
         global $wpdb;
 
@@ -347,6 +374,11 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $results;
     }
 
+    /**
+     * Lists all multiste disciple tools sites. Can be limited to only those with the network dashboard installed.
+     * @param false $active_dashboards_only
+     * @return array
+     */
     public static function all_multisite_blog_ids( $active_dashboards_only = false ) : array {
         if( ! is_multisite() ){
             return [];
@@ -383,6 +415,10 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $dt_sites;
     }
 
+    /**
+     * Lists all network dashboard site to site links
+     * @return array
+     */
     public static function all_site_to_site_ids() : array {
         global $wpdb;
 
@@ -408,6 +444,19 @@ class DT_Network_Dashboard_Site_Post_Type {
         }
 
         return $results;
+    }
+
+    public static function dashboards_to_send_activity( $timing = 'daily' ) : array {
+        $sites = self::all_sites();
+
+        $list = [];
+        foreach( $sites as $site ){
+            if ( $site['send_activity'] === $timing ) {
+                $list[$site['type']] = $site['type_id'];
+            }
+        }
+
+        return $list;
     }
 
     public static function sync_all_multisites_to_post_type() : array {

@@ -111,28 +111,28 @@ class DT_Network_Dashboard_Menu {
 
                     <a href="<?php echo esc_attr( $link ) . 'multisite-reports' ?>" class="nav-tab
                         <?php echo ( $tab == 'multisite-reports' || ! isset( $tab ) ) ? 'nav-tab-active' : ''; ?>">
-                        Multisite Reports
+                        Multisite Collection
                     </a>
                     <a href="<?php echo esc_attr( $link ) . 'remote-reports' ?>" class="nav-tab
                     <?php echo ( $tab == 'remote-reports'  ) ? 'nav-tab-active' : ''; ?>">
-                        Remote Reports
+                        Remote Collection
                     </a>
 
                 <?php else: ?>
                     <a href="<?php echo esc_attr( $link ) . 'remote-reports' ?>" class="nav-tab
                     <?php echo ( $tab == 'remote-reports' || ! isset( $tab )  ) ? 'nav-tab-active' : ''; ?>">
-                        Remote Reports
+                        Collection
                     </a>
                 <?php endif; ?>
 
                 <a href="<?php echo esc_attr( $link ) . 'activity' ?>" class="nav-tab
                 <?php ( $tab == 'activity' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
-                    Send Activity
+                    Distribution
                 </a>
 
                 <a href="<?php echo esc_attr( $link ) . 'local-site' ?>" class="nav-tab
                 <?php ( $tab == 'local-site' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
-                    Local Profile
+                    Profile
                 </a>
 
                 <a href="<?php echo esc_attr( $link ) . 'integrations' ?>" class="nav-tab
@@ -332,6 +332,9 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                     if ( isset( $value['visibility'] ) && ! empty( $value['visibility'] ) ) {
                         DT_Network_Dashboard_Site_Post_Type::update_visibility( $key, sanitize_text_field( wp_unslash( $value['visibility'] ) ) );
                     }
+                    if ( isset( $value['receive_activity'] ) && ! empty( $value['receive_activity'] ) ) {
+                        DT_Network_Dashboard_Site_Post_Type::update_receive_activity( $key, sanitize_text_field( wp_unslash( $value['receive_activity'] ) ) );
+                    }
                 }
             }
         }
@@ -357,6 +360,7 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                 <th>Nickname</th>
                 <th>Domain</th>
                 <th>Show in Metrics</th>
+                <th>Receive Activity</th>
                 <th>Profile</th>
                 <th>Last Snapshot</th>
                 <th>Refresh Snapshot</th>
@@ -385,7 +389,12 @@ class DT_Network_Dashboard_Tab_Multisite_Snapshots
                                 <?php echo '<a href="'. esc_url( $profile['partner_url'] ) .'" target="_blank">' . esc_url( $profile['partner_url'] ) . '</a>' ?>
                             </td>
                             <td>
-                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="show" <?php echo ( $site['visibility'] === 'show' ) ? 'checked' : '' ?>/> Show | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="hide" <?php echo ( isset( $site['visibility'] ) && $site['visibility'] === 'hide' ) ? 'checked' : '' ?>/> Hide
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="show" <?php echo ( $site['visibility'] === 'show' ) ? 'checked' : '' ?>/> Show |
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="hide" <?php echo ( isset( $site['visibility'] ) && $site['visibility'] === 'hide' ) ? 'checked' : '' ?>/> Hide
+                            </td>
+                            <td>
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][receive_activity]" value="enable" <?php echo ( $site['receive_activity'] === 'enable' ) ? 'checked' : '' ?>/> Enable |
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][receive_activity]" value="disable" <?php echo ( isset( $site['receive_activity'] ) && $site['receive_activity'] === 'disable' ) ? 'checked' : '' ?>/> Disable
                             </td>
                             <td>
                                 <button name="update-profile"  value="<?php echo esc_attr( $site['id'] ) ?>" type="submit" class="button">Update Profile</button>
@@ -553,6 +562,9 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                     if ( isset( $value['visibility'] ) && ! empty( $value['visibility'] ) ) {
                         DT_Network_Dashboard_Site_Post_Type::update_visibility( $key, sanitize_text_field( wp_unslash( $value['visibility'] ) ) );
                     }
+                    if ( isset( $value['receive_activity'] ) && ! empty( $value['receive_activity'] ) ) {
+                        DT_Network_Dashboard_Site_Post_Type::update_receive_activity( $key, sanitize_text_field( wp_unslash( $value['receive_activity'] ) ) );
+                    }
                 }
             }
         }
@@ -576,6 +588,7 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                     <th>Nickname</th>
                     <th>Domain</th>
                     <th>Show in Metrics</th>
+                    <th>Receive Activity</th>
                     <th>Profile</th>
                     <th>Last Snapshot</th>
                     <th>Actions</th>
@@ -605,7 +618,12 @@ class DT_Network_Dashboard_Tab_Remote_Snapshots
                                 <a href="<?php echo esc_url( $profile['partner_url'] ?? '' ) ?>"><?php echo esc_url( $profile['partner_url'] ?? '' ) ?></a>
                             </td>
                             <td>
-                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="show" <?php echo ( $site['visibility'] === 'show' ) ? 'checked' : '' ?>/> Show | <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="hide" <?php echo ( isset( $site['visibility'] ) && $site['visibility'] === 'hide' ) ? 'checked' : '' ?>/> Hide
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="show" <?php echo ( $site['visibility'] === 'show' ) ? 'checked' : '' ?>/> Show |
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="hide" <?php echo ( isset( $site['visibility'] ) && $site['visibility'] === 'hide' ) ? 'checked' : '' ?>/> Hide
+                            </td>
+                            <td>
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][receive_activity]" value="enable" <?php echo ( $site['receive_activity'] === 'enable' ) ? 'checked' : '' ?>/> Enable |
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][receive_activity]" value="disable" <?php echo ( isset( $site['receive_activity'] ) && $site['receive_activity'] === 'disable' ) ? 'checked' : '' ?>/> Disable
                             </td>
                             <td>
                                 <button value="<?php echo esc_attr( $site['id'] ) ?>" name="update-profile" type="submit" class="button" >Update Profile</button>
@@ -737,7 +755,7 @@ class DT_Network_Dashboard_Tab_Activity
             dt_write_log($_POST);
             if ( isset( $_POST['activity_log'] ) && ! empty( $_POST['activity_log'] ) && is_array( $_POST['activity_log'] ) ) {
                 foreach($_POST['activity_log'] as $i => $v ) {
-                    update_post_meta( sanitize_text_field( wp_unslash( $i ) ), 'send_live_activity',  sanitize_text_field( wp_unslash( $v ) ) );
+                    update_post_meta( sanitize_text_field( wp_unslash( $i ) ), 'send_activity',  sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
         }
@@ -769,7 +787,8 @@ class DT_Network_Dashboard_Tab_Activity
                     <table class="widefat striped">
                         <thead>
                         <tr>
-                            <td style="width:70%;">Available Remote Sites</td>
+                            <td style="width:40%;">Available Remote Sites</td>
+                            <td style="width:30%;text-align:center;">Location Precision Level</td>
                             <td style="width:30%;text-align:center;">Send Live Activity</td>
                         </tr>
                         </thead>
@@ -783,9 +802,17 @@ class DT_Network_Dashboard_Tab_Activity
                                 <tr>
                                     <td><?php echo esc_html($site['name']) ?></td>
                                     <td style="text-align: center;">
-                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="daily" <?php echo ($site['send_live_activity'] === 'daily' || $site['send_live_activity'] === '' ) ? 'checked' : '' ?>/> Send in Daily  |
-                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="live" <?php echo ($site['send_live_activity'] === 'live' ) ? 'checked' : '' ?>/> Send Immediately  |
-                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="none" <?php echo ( $site['send_live_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing
+                                        <select name="location_precision">
+                                            <option value="none">No Filter</option>
+                                            <option value="admin2">Admin2 (County, District)</option>
+                                            <option value="admin1">Admin1 (State)</option>
+                                            <option value="admin0">Admin0 (Country)</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="none" <?php echo ( $site['send_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing |
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="daily" <?php echo ($site['send_activity'] === 'daily' || $site['send_activity'] === '' ) ? 'checked' : '' ?>/> Send Daily  |
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="live" <?php echo ($site['send_activity'] === 'live' ) ? 'checked' : '' ?>/> Send Immediately
                                     </td>
 
                                 </tr>
@@ -809,7 +836,8 @@ class DT_Network_Dashboard_Tab_Activity
                     <table class="widefat striped">
                         <thead>
                         <tr>
-                            <td style="width:70%;">Available Multisite Sites</td>
+                            <td style="width:40%;">Available Multisite Sites</td>
+                            <td style="width:30%;text-align:center;">Location Precision Level</td>
                             <td style="width:30%;text-align:center;">Send Live Activity</td>
                         </tr>
                         </thead>
@@ -823,9 +851,17 @@ class DT_Network_Dashboard_Tab_Activity
                                 <tr>
                                     <td><?php echo esc_html($site['name']) ?></td>
                                     <td style="text-align: center;">
-                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="daily" <?php echo ($site['send_live_activity'] === 'daily' || $site['send_live_activity'] === '' ) ? 'checked' : '' ?>/> Send in Daily  |
-                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="live" <?php echo ($site['send_live_activity'] === 'live' ) ? 'checked' : '' ?>/> Send Immediately  |
-                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="none" <?php echo ( $site['send_live_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing
+                                        <select name="location_precision">
+                                            <option value="none">No Filter</option>
+                                            <option value="admin2">Admin2 (County, District)</option>
+                                            <option value="admin1">Admin1 (State)</option>
+                                            <option value="admin0">Admin0 (Country)</option>
+                                        </select>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="none" <?php echo ( $site['send_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing |
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="daily" <?php echo ($site['send_activity'] === 'daily' || $site['send_activity'] === '' ) ? 'checked' : '' ?>/> Send Daily  |
+                                        <input type="radio" name="activity_log[<?php echo esc_attr($site['id']) ?>]" value="live" <?php echo ($site['send_activity'] === 'live' ) ? 'checked' : '' ?>/> Send Immediately
                                     </td>
                                 </tr>
                                 <?php
