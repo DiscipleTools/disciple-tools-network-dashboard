@@ -143,6 +143,11 @@ class DT_Network_Dashboard {
         require_once( 'activity/activity-log.php' );
         require_once( 'activity/hooks.php' );
 
+        // METRICS
+        require_once( 'metrics/metrics.php' );
+        require_once( 'metrics/metrics-sites.php' );
+
+
         // UI METRICS FOR NETWORK TAB
         require_once( 'ui/ui.php' );
         require_once( 'ui/mapbox-metrics.php' );

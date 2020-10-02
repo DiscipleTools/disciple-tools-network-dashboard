@@ -1,8 +1,16 @@
 <?php
 
+add_action( 'dt_top_nav_desktop', 'dt_network_dashboard_top_nav_desktop');
+function dt_network_dashboard_top_nav_desktop() {
+    if (current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' )) {
+        ?>
+        <li><a href="<?php echo esc_url( site_url( '/network/' ) ); ?>"><?php esc_html_e( "Network" ); ?></a></li><?php
+    }
+}
 
-class DT_Network_Dashboard_UI
-{
+class DT_Network_Dashboard_Metrics {
+
+    public static $url_path;
     private static $_instance = null;
 
     public static function instance() {
@@ -13,13 +21,7 @@ class DT_Network_Dashboard_UI
     } // End instance()
 
     public function __construct() {
-        if ( ! current_user_can( 'manage_options' ) ) {
-            return false; // @todo development restriction, remove for production.
-        }
-
         if (current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' )) {
-
-//            add_action( 'dt_top_nav_desktop', [ $this, 'top_nav_desktop' ], 99 );
 
             if (isset( $_SERVER["SERVER_NAME"] )) {
                 $url = ( !isset( $_SERVER["HTTPS"] ) || @( $_SERVER["HTTPS"] != 'on' ) ) ? 'http://' . sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) ) : 'https://' . sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) );
@@ -27,97 +29,54 @@ class DT_Network_Dashboard_UI
                     $url .= sanitize_text_field( wp_unslash( $_SERVER["REQUEST_URI"] ) );
                 }
             }
-            $url_path = trim( str_replace( get_site_url(), "", $url ), '/' );
+            self::$url_path = $url_path = trim( str_replace( get_site_url(), "", $url ), '/' );
 
             if ('network' === substr( $url_path, '0', 7 )) {
-//                add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 ); // add custom URL
-//                add_action( "template_redirect", [ $this, 'url_redirect' ], 10 );
-//                add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 199 );
+                add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 ); // add custom URL
+                add_action( "template_redirect", [ $this, 'url_redirect' ], 10 );
+                add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 199 );
+                add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
+                add_filter( 'dt_mapping_module_data', [ $this, 'filter_mapping_module_data' ], 50, 1 );
 
-//                if ('network' === $url_path) {
-//                    add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
-//                    add_filter( 'dt_mapping_module_data', [ $this, 'filter_mapping_module_data' ], 50, 1 );
-//                }
-//
-//                if ('network/mapbox' === substr( $url_path, '0', 14 )) {
-//                    add_action( 'wp_enqueue_scripts', [ $this, 'mapbox_scripts' ], 99 );
-//                    require_once ('mapbox-metrics.php');
-//                }
-//
-//                if ('network/activity' === substr( $url_path, '0', 16 )) {
-//                    add_action( 'wp_enqueue_scripts', [ $this, 'activity_scripts' ], 99 );
-//                    require_once ('activity-metrics.php');
-//                }
             }
 
         } // end admin only test
     }
 
-//    public function add_url( $template_for_url) {
-//        $template_for_url['network'] = 'template-metrics.php';
-//        $template_for_url['network/activity/livefeed'] = 'template-metrics.php';
-//        return $template_for_url;
-//    }
 
-    /**
-     * This filter adds a menu item to the metrics
-     *
-     * @param $content
-     *
-     * @return string
-     */
+
+    public function add_url( $template_for_url) {
+        $template_for_url['network'] = 'template-metrics.php';
+        return $template_for_url;
+    }
+
+    public function url_redirect() {
+        $url = dt_get_url_path();
+        $plugin_dir = get_stylesheet_directory();
+        if ( strpos( $url, "network" ) !== false ){
+            $path = $plugin_dir . '/template-metrics.php';
+            include( $path );
+            die();
+        }
+    }
+
     public function menu( $content) {
         // home
-        $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#network_home" onclick="show_network_home()">' . esc_html__( 'Home' ) . '</a></li>';
-
-        $content .= '<li><a>' . esc_html__( 'Recent Activity' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
-        $content .= '<li><a href="' . esc_url( site_url( '/network/activity/livefeed' ) ) . '" onclick="" >' . esc_html__( 'Live Feed' ) . '</a></li>';
-        $content .= '<li><a href="' . esc_url( site_url( '/network/activity/map' ) ) . '"  onclick="" >' . esc_html__( 'Map' ) . '</a></li>';
-        $content .= '<li><a href="' . esc_url( site_url( '/network/activity/stats' ) ) . '"  onclick="" >' . esc_html__( 'Stats' ) . '</a></li>';
-        $content .= '</ul></li>';
-
-        $content .= '<li><a>' . esc_html__( 'Network Reports' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#network_home" onclick="show_network_home()">' . esc_html__( 'Overview' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_view" onclick="mapping_view()">' . esc_html__( 'Hover Map' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#mapping_list" onclick="page_mapping_list()">' . esc_html__( 'Location List' ) . '</a></li>';
-
-        if ( DT_Mapbox_API::get_key() ) {
-
-            $content .= '<li><a>' . esc_html__( 'Area Maps' ) . '</a><ul class="menu vertical nested is-active" aria-expanded="true" id="area">';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#contacts' ) ) . '" onclick="write_area(\'contact_settings\')" >' . esc_html__( 'Contacts' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#groups' ) ) . '"  onclick="write_area(\'group_settings\')" >' . esc_html__( 'Groups' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#churches' ) ) . '"  onclick="write_area(\'church_settings\')" >' . esc_html__( 'Churches' ) . '</a></li>';
-            $content .= '<li><a href="' . esc_url( site_url( '/network/mapbox/area/#users' ) ) . '" onclick="write_area(\'user_settings\')" >' . esc_html__( 'Users' ) . '</a></li>';
-            $content .= '</ul></li>';
-
-        }
-        $content .= '</ul></li>';
-
-        $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '#sites" onclick="show_sites_list()">' . esc_html__( 'Site Reports' ) . '</a></li>';
-
+        $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '" onclick="show_network_home()">' . esc_html__( 'Home' ) . '</a></li>';
         return $content;
     }
 
-//    public function url_redirect() {
-//        $url = dt_get_url_path();
-//        $plugin_dir = get_stylesheet_directory();
-//        if ( strpos( $url, "network" ) !== false ){
-//            $path = $plugin_dir . '/template-metrics.php';
-//            include( $path );
-//            die();
-//        }
-//    }
-
-    /**
-     * Load scripts for the plugin
-     */
     public function scripts() {
+
+        if ( DT_Mapbox_API::get_key() ){
+            DT_Mapbox_API::load_mapbox_header_scripts();
+        }
 
         DT_Mapping_Module::instance()->scripts();
 
         // UI script
         wp_enqueue_script('dt_network_dashboard_script',
-            trailingslashit( plugin_dir_url( __FILE__ ) ) . 'ui.js',
+            trailingslashit( plugin_dir_url( __FILE__ ) ) . 'metrics.js',
             [
                 'jquery',
                 'amcharts-core',
@@ -126,8 +85,8 @@ class DT_Network_Dashboard_UI
                 'amcharts-maps',
                 'datatable',
             ],
-            filemtime( plugin_dir_path( __DIR__ ) . 'ui/ui.js' ),
-        true);
+            filemtime( plugin_dir_path( __DIR__ ) . 'metrics/metrics.js' ),
+            true);
         wp_localize_script(
             'dt_network_dashboard_script',
             'wpApiNetworkDashboard',
@@ -139,137 +98,16 @@ class DT_Network_Dashboard_UI
                 'current_user_id' => get_current_user_id(),
                 'spinner' => ' <img src="' . plugin_dir_url( __DIR__ ) . 'spinner.svg" width="12px" />',
                 'spinner_large' => ' <img src="' . plugin_dir_url( __DIR__ ) . 'spinner.svg" width="24px" />',
-                'sites_list' => $this->get_site_list(),
-                'sites' => $this->get_sites(),
-                'global' => $this->get_global(),
-                'locations_list' => $this->get_locations_list(),
+                'global' => self::get_global(), // @todo make these ajax loaded
+                'locations_list' => self::get_locations_list(), // @todo make these ajax loaded
                 'translations' => [
-                    "sm_title" => __( "Network Dashboard", "dt_network_dashboard" ),
-                    "title_site_list" => __( "Individual Reports", "dt_network_dashboard" ),
-                    "title_locations" => __( "Locations", "dt_network_dashboard" ),
                 ]
             ]
         );
 
     }
 
-    public function mapbox_scripts() {
-
-        DT_Mapbox_API::load_mapbox_header_scripts();
-
-        wp_enqueue_script('dt_network_dashboard_mapbox',
-            trailingslashit( plugin_dir_url( __FILE__ ) ) . 'mapbox-metrics.js',
-            [
-                'jquery',
-                'mapbox-gl',
-                'shared-functions',
-            ],
-            filemtime( plugin_dir_path( __DIR__ ) . 'ui/mapbox-metrics.js' ),
-            true);
-
-        $contact_fields = Disciple_Tools_Contact_Post_Type::instance()->get_contact_field_defaults();
-        $group_fields = Disciple_Tools_Groups_Post_Type::instance()->get_group_field_defaults();
-        wp_localize_script(
-            'dt_network_dashboard_mapbox',
-            'dtDashboardMapbox',
-            [
-                'root' => esc_url_raw( rest_url() ),
-                'plugin_uri' => plugin_dir_url( __DIR__ ),
-                'theme_uri' => trailingslashit( get_stylesheet_directory_uri() ),
-                'nonce' => wp_create_nonce( 'wp_rest' ),
-                'current_user_id' => get_current_user_id(),
-                'map_key' => DT_Mapbox_API::get_key(),
-                "spinner_url" => get_stylesheet_directory_uri() . '/spinner.svg',
-                "translations" => array(
-                    'add' => __( 'add', 'disciple-tools' )
-                ),
-                'contact_settings' => [
-                    'post_type' => 'contacts',
-                    'title' => __( 'Contacts', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'paused'=> [ "label" => 'Paused' ], 'closed'=> [ "label" => 'Closed' ] ]
-                ],
-                'group_settings' => [
-                    'post_type' => 'groups',
-                    'title' => __( 'Groups', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
-                ],
-                'user_settings' => [
-                    'post_type' => 'users',
-                    'title' => __( 'Users', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
-                ],
-                'church_settings' => [
-                    'post_type' => 'churches',
-                    'title' => __( 'Churches', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
-                ]
-            ]
-        );
-    }
-    public function activity_scripts() {
-
-        DT_Mapbox_API::load_mapbox_header_scripts();
-
-        wp_enqueue_script('dt_network_dashboard_activity',
-            trailingslashit( plugin_dir_url( __FILE__ ) ) . 'activity-metrics.js',
-            [
-                'jquery',
-                'mapbox-gl',
-                'shared-functions',
-            ],
-            filemtime( plugin_dir_path( __DIR__ ) . 'ui/activity-metrics.js' ),
-            true);
-
-        wp_localize_script(
-            'dt_network_dashboard_activity',
-            'dtDashboardActivity',
-            [
-                'root' => esc_url_raw( rest_url() ),
-                'plugin_uri' => plugin_dir_url( __DIR__ ),
-                'theme_uri' => trailingslashit( get_stylesheet_directory_uri() ),
-                'nonce' => wp_create_nonce( 'wp_rest' ),
-                'current_user_id' => get_current_user_id(),
-                "spinner_url" => get_stylesheet_directory_uri() . '/spinner.svg',
-                'translations' => [
-                    'title' => __( "Mapping", "disciple_tools" ),
-                    'refresh_data' => __( "Refresh Cached Data", "disciple_tools" ),
-                    'population' => __( "Population", "disciple_tools" ),
-                    'name' => __( "Name", "disciple_tools" ),
-                    'status' => __( "Status", "disciple_tools" ),
-                    'status_all' => __( "Status - All", "disciple_tools" ),
-                    'zoom_level' => __( "Zoom Level", "disciple_tools" ),
-                    'auto_zoom' => __( "Auto Zoom", "disciple_tools" ),
-                    'world' => __( "World", "disciple_tools" ),
-                    'country' => __( "Country", "disciple_tools" ),
-                    'state' => __( "State", "disciple_tools" ),
-                    'view_record' => __( "View Record", "disciple_tools" ),
-                    'assigned_to' => __( "Assigned To", "disciple_tools" ),
-                ],
-                'settings' => [
-                    'map_key' => DT_Mapbox_API::get_key(),
-                    'map_mirror' => dt_get_location_grid_mirror( true ),
-                    'rest_base_url' => "network/activity",
-                    'points_rest_url' => '/points_geojson',
-                    'livefeed_rest_url' => '/livefeed',
-                    'site_profile' => dt_network_site_profile()
-                ]
-            ]
-        );
-    }
-
-    public function filter_mapping_module_data( $data) {
-        $data['custom_column_labels'] = $this->location_data_types();
-        return $data;
-    }
-
-    public function top_nav_desktop() {
-        if (current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' )) {
-            ?>
-          <li><a href="<?php echo esc_url( site_url( '/network/' ) ); ?>"><?php esc_html_e( "Network" ); ?></a></li><?php
-        }
-    }
-
-    public function get_sites() {
+    public static function get_sites() {
 
 //        if (wp_cache_get( 'get_sites' )) {
 //            return wp_cache_get( 'get_sites' );
@@ -296,7 +134,7 @@ class DT_Network_Dashboard_UI
                 if ( 'remote' === $site['type'] ){
                     continue;
                 }
-                $snapshot = maybe_unserialize( $site );
+                $snapshot = maybe_unserialize( $site['snapshot'] );
                 if ( !empty( $snapshot['partner_id'] )) {
                     $new[$snapshot['partner_id']] = $snapshot;
                 }
@@ -308,7 +146,7 @@ class DT_Network_Dashboard_UI
         return $new;
     }
 
-    public function get_site_list() {
+    public static function get_site_list() {
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
 
         $new = [];
@@ -332,12 +170,11 @@ class DT_Network_Dashboard_UI
         }
 
         if (dt_is_current_multisite_dashboard_approved()) {
-            $sites = dt_multisite_dashboard_snapshots();
             foreach ($sites as $key => $site) {
                 if ( 'remote' === $site['type'] ){
                     continue;
                 }
-                $snapshot = maybe_unserialize( $site );
+                $snapshot = maybe_unserialize( $site['snapshot'] );
                 if ( !empty( $snapshot['partner_id'] )) {
                     $new[] = [
                         'id' => $snapshot['partner_id'],
@@ -354,36 +191,42 @@ class DT_Network_Dashboard_UI
         return $new;
     }
 
-    public function get_global() {
-        $totals = $this->compile_totals();
+    public static function get_global() {
+        $totals = self::compile_totals();
         $data = [
             'contacts' => [
                 'total' => $totals['total_contacts'] ?? 0,
                 'added' => [
-                    'sixty_days' => $this->compile_by_days( 'contacts' ),
-                    'twenty_four_months' => $this->compile_by_months( 'contacts' ),
+                    'sixty_days' => self::compile_by_days( 'contacts' ),
+                    'twenty_four_months' => self::compile_by_months( 'contacts' ),
                 ],
             ],
             'groups' => [
                 'total' => $totals['total_groups'] ?? 0,
                 'added' => [
-                    'sixty_days' => $this->compile_by_days( 'groups' ),
-                    'twenty_four_months' => $this->compile_by_months( 'groups' ),
+                    'sixty_days' => self::compile_by_days( 'groups' ),
+                    'twenty_four_months' => self::compile_by_months( 'groups' ),
                 ],
             ],
             'users' => [
                 'total' => $totals['total_users'] ?? 0,
             ],
+            'sites' => [
+                'total' => $totals['total_sites'] ?? 0,
+            ],
             'locations' => [
                 'total_countries' => $totals['total_countries'] ?? 0,
+            ],
+            'prayer_events' => [
+                'total' => $totals['total_prayer_events'] ?? 0,
             ],
         ];
 
         return $data;
     }
 
-    public function get_locations_list() {
-        $data_types = $this->location_data_types();
+    public static function get_locations_list() {
+        $data_types = self::location_data_types();
         $data = [
             'custom_column_labels' => $data_types,
             'current_state' => [
@@ -396,7 +239,7 @@ class DT_Network_Dashboard_UI
             ],
             'list' => [],
         ];
-        $sites = $this->get_sites();
+        $sites = self::get_sites();
 
         if (empty( $sites )) {
             return [];
@@ -448,7 +291,7 @@ class DT_Network_Dashboard_UI
 
             // complete list
             $list_location_grids = array_keys( $data['list'] );
-            $location_grid_properties = $this->format_location_grid_types( Disciple_Tools_Mapping_Queries::get_by_grid_id_list( $list_location_grids, true ) );
+            $location_grid_properties = self::format_location_grid_types( Disciple_Tools_Mapping_Queries::get_by_grid_id_list( $list_location_grids, true ) );
             if ( !empty( $location_grid_properties )) {
                 foreach ($location_grid_properties as $value) {
                     foreach ($value as $k => $v) {
@@ -461,7 +304,16 @@ class DT_Network_Dashboard_UI
         return $data;
     }
 
-    public function format_location_grid_types( $query) {
+    public static function get_activity_log(){
+        global $wpdb;
+        $data = $wpdb->get_results( "SELECT * FROM $wpdb->dt_movement_log ORDER BY timestamp DESC LIMIT 5000;");
+        if ( empty( $data ) ) {
+            return [];
+        }
+        return $data;
+    }
+
+    public static function format_location_grid_types( $query) {
         if ( !empty( $query ) || !is_array( $query )) {
             foreach ($query as $index => $value) {
                 if (isset( $value['grid_id'] )) {
@@ -497,23 +349,23 @@ class DT_Network_Dashboard_UI
         return $query;
     }
 
-    public function location_data_types() {
+    public static function location_data_types() {
         return [
             [
-              "key" => "contacts",
-              "label" => "Contacts"
+                "key" => "contacts",
+                "label" => "Contacts"
             ],
             [
-              "key" => "groups",
-              "label" => "Groups"
+                "key" => "groups",
+                "label" => "Groups"
             ],
             [
-              "key" => "churches",
-              "label" => "Churches"
+                "key" => "churches",
+                "label" => "Churches"
             ],
             [
-              "key" => "users",
-              "label" => "Users"
+                "key" => "users",
+                "label" => "Users"
             ]
         ];
     }
@@ -525,7 +377,7 @@ class DT_Network_Dashboard_UI
      *
      * @return array
      */
-    public function get_day_list( $number_of_days = 60) {
+    public static function get_day_list( $number_of_days = 60) {
         $d = [];
         for ($i = 0; $i < $number_of_days; $i++) {
             $d[date( "Y-m-d", strtotime( '-' . $i . ' days' ) )] = [
@@ -545,7 +397,7 @@ class DT_Network_Dashboard_UI
      *
      * @return array
      */
-    public function get_month_list( $number_of_months = 25) {
+    public static function get_month_list( $number_of_months = 25) {
         $d = [];
         for ($i = 0; $i < $number_of_months; $i++) {
             $d[date( "Y-m", strtotime( '-' . $i . ' months' ) ) . '-01'] = [
@@ -556,11 +408,11 @@ class DT_Network_Dashboard_UI
         return $d;
     }
 
-    public function compile_by_days( $type) {
-        $dates1 = $this->get_day_list( 60 );
+    public static function compile_by_days( $type) {
+        $dates1 = self::get_day_list( 60 );
         $dates2 = [];
 
-        $sites = $this->get_sites();
+        $sites = self::get_sites();
         if (empty( $sites )) {
             return [];
         }
@@ -583,11 +435,11 @@ class DT_Network_Dashboard_UI
         return $dates2;
     }
 
-    public function compile_by_months( $type) {
-        $dates1 = $this->get_month_list( 25 );
+    public static function compile_by_months( $type) {
+        $dates1 = self::get_month_list( 25 );
         $dates2 = [];
 
-        $sites = $this->get_sites();
+        $sites = self::get_sites();
         if (empty( $sites )) {
             return [];
         }
@@ -610,13 +462,15 @@ class DT_Network_Dashboard_UI
         return $dates2;
     }
 
-    public function compile_totals() {
-        $sites = $this->get_sites();
+    public static function compile_totals() {
+        $sites = self::get_sites();
         $data = [
             'total_contacts' => 0,
             'total_groups' => 0,
             'total_users' => 0,
             'total_countries' => 0,
+            'total_sites' => 0,
+            'total_prayer_events' => 0,
         ];
         if (empty( $sites )) {
             return [];
@@ -637,9 +491,12 @@ class DT_Network_Dashboard_UI
             $data['total_countries'] = count( $data['countries'] );
         }
 
+        $data['total_sites'] = count($sites);
+
+        $logs = self::get_activity_log();
+        $data['total_prayer_events'] = count($logs);
+
         return $data;
     }
-
 }
-
-DT_Network_Dashboard_UI::instance();
+DT_Network_Dashboard_Metrics::instance();
