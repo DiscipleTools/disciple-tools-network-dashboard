@@ -59,6 +59,8 @@ function dt_network_dashboard() {
 }
 add_action( 'after_setup_theme', 'dt_network_dashboard' );
 
+
+
 /**
  * Singleton class for setting up the plugin.
  *
@@ -144,8 +146,8 @@ class DT_Network_Dashboard {
         require_once( 'activity/hooks.php' );
 
         // METRICS
-        require_once( 'metrics/metrics.php' );
-        require_once( 'metrics/metrics-sites.php' );
+        require_once( 'metrics/loader.php' );
+
 
 
         // UI METRICS FOR NETWORK TAB

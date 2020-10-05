@@ -1,8 +1,8 @@
 <?php
+if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
 
-class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics {
+class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics_Base {
     private static $_instance = null;
-
     public static function instance() {
         if (is_null( self::$_instance )) {
             self::$_instance = new self();
@@ -15,11 +15,10 @@ class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics {
 
         if (current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' )) {
 
-            $url_path = self::$url_path;
+            $url_path = $this->url_path;
 
             if ('network/sites' === substr( $url_path, '0', 13 )) {
                 add_action( 'wp_enqueue_scripts', [ $this, 'sites_script' ], 99 );
-//                    require_once ('activity-metrics.php');
             }
         } // end admin only test
     }

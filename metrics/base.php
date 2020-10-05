@@ -1,16 +1,22 @@
 <?php
 
-add_action( 'dt_top_nav_desktop', 'dt_network_dashboard_top_nav_desktop');
-function dt_network_dashboard_top_nav_desktop() {
-    if (current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' )) {
-        ?>
-        <li><a href="<?php echo esc_url( site_url( '/network/' ) ); ?>"><?php esc_html_e( "Network" ); ?></a></li><?php
-    }
-}
+if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
 
-class DT_Network_Dashboard_Metrics {
+class DT_Network_Dashboard_Metrics_Base {
 
-    public static $url_path;
+    public $url_path;
+    public $url;
+    public $namespace = 'dt/v1';
+    public $root_slug = 'network';
+    public $base_slug = 'example'; //lowercase
+    public $base_title = "Example Title";
+    public $menu_title = 'Example';
+    public $title = '';
+    public $slug = '';
+    public $js_object_name = ''; // This object will be loaded into the metrics.js file by the wp_localize_script.
+    public $js_file_name = ''; // should be full file name plus extension
+    public $permissions = ['view_any_contacts', 'view_project_metrics'];
+
     private static $_instance = null;
 
     public static function instance() {
@@ -21,29 +27,46 @@ class DT_Network_Dashboard_Metrics {
     } // End instance()
 
     public function __construct() {
-        if (current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' )) {
+        $this->url_path = dt_get_url_path();
 
-            if (isset( $_SERVER["SERVER_NAME"] )) {
-                $url = ( !isset( $_SERVER["HTTPS"] ) || @( $_SERVER["HTTPS"] != 'on' ) ) ? 'http://' . sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) ) : 'https://' . sanitize_text_field( wp_unslash( $_SERVER["SERVER_NAME"] ) );
-                if (isset( $_SERVER["REQUEST_URI"] )) {
-                    $url .= sanitize_text_field( wp_unslash( $_SERVER["REQUEST_URI"] ) );
-                }
-            }
-            self::$url_path = $url_path = trim( str_replace( get_site_url(), "", $url ), '/' );
+        add_action( "template_redirect", [ $this, 'url_redirect' ], 10 );
+        add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
 
-            if ('network' === substr( $url_path, '0', 7 )) {
-                add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 ); // add custom URL
-                add_action( "template_redirect", [ $this, 'url_redirect' ], 10 );
-                add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 199 );
-                add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
-                add_filter( 'dt_mapping_module_data', [ $this, 'filter_mapping_module_data' ], 50, 1 );
 
-            }
+//        add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 199 );
+//        add_filter( 'dt_mapping_module_data', [ $this, 'filter_mapping_module_data' ], 50, 1 );
 
-        } // end admin only test
+//        add_filter( 'dt_metrics_menu', [ $this, 'base_menu' ], 20 ); //load menu links
+
+//        $this->base_slug = str_replace( ' ', '', trim( strtolower( $this->base_slug ) ) );
+//        if ( strpos( $this->url_path, "network/$this->base_slug/$this->slug" ) === 0 ) {
+//            add_filter( 'dt_templates_for_urls', [ $this, 'base_add_url' ] ); // add custom URLs
+//            add_action( 'wp_enqueue_scripts', [ $this, 'base_scripts' ], 99 );
+//        }
+
     }
 
+//    public function base_add_url( $template_for_url ) {
+//        $template_for_url["network/$this->base_slug/$this->slug"] = 'template-metrics.php';
+//        return $template_for_url;
+//    }
 
+//    public function base_scripts() {
+//        wp_localize_script(
+//            'dt_'.$this->base_slug.'_script', 'apiNetworkDashboardBase', [
+//                'slug' => $this->base_slug,
+//                'root' => esc_url_raw( rest_url() ),
+//                'plugin_uri' => plugin_dir_url( __DIR__ ),
+//                'nonce' => wp_create_nonce( 'wp_rest' ),
+//                'current_user_login' => wp_get_current_user()->user_login,
+//                'current_user_id' => get_current_user_id()
+//            ]
+//        );
+//    }
+
+    public function has_permission(){
+        return dt_network_dashboard_has_metrics_permissions();
+    }
 
     public function add_url( $template_for_url) {
         $template_for_url['network'] = 'template-metrics.php';
@@ -61,8 +84,6 @@ class DT_Network_Dashboard_Metrics {
     }
 
     public function menu( $content) {
-        // home
-        $content .= '<li><a href="' . esc_url( site_url( '/network/' ) ) . '" onclick="show_network_home()">' . esc_html__( 'Home' ) . '</a></li>';
         return $content;
     }
 
@@ -74,36 +95,9 @@ class DT_Network_Dashboard_Metrics {
 
         DT_Mapping_Module::instance()->scripts();
 
-        // UI script
-        wp_enqueue_script('dt_network_dashboard_script',
-            trailingslashit( plugin_dir_url( __FILE__ ) ) . 'metrics.js',
-            [
-                'jquery',
-                'amcharts-core',
-                'amcharts-charts',
-                'amcharts-animated',
-                'amcharts-maps',
-                'datatable',
-            ],
-            filemtime( plugin_dir_path( __DIR__ ) . 'metrics/metrics.js' ),
-            true);
-        wp_localize_script(
-            'dt_network_dashboard_script',
-            'wpApiNetworkDashboard',
-            [
-                'root' => esc_url_raw( rest_url() ),
-                'plugin_uri' => plugin_dir_url( __DIR__ ),
-                'nonce' => wp_create_nonce( 'wp_rest' ),
-                'current_user_login' => wp_get_current_user()->user_login,
-                'current_user_id' => get_current_user_id(),
-                'spinner' => ' <img src="' . plugin_dir_url( __DIR__ ) . 'spinner.svg" width="12px" />',
-                'spinner_large' => ' <img src="' . plugin_dir_url( __DIR__ ) . 'spinner.svg" width="24px" />',
-                'global' => self::get_global(), // @todo make these ajax loaded
-                'locations_list' => self::get_locations_list(), // @todo make these ajax loaded
-                'translations' => [
-                ]
-            ]
-        );
+        wp_register_script( 'amcharts-core', 'https://www.amcharts.com/lib/4/core.js', false, '4' );
+        wp_register_script( 'amcharts-charts', 'https://www.amcharts.com/lib/4/charts.js', false, '4' );
+        wp_register_script( 'amcharts-animated', 'https://www.amcharts.com/lib/4/themes/animated.js', [ 'amcharts-core' ], '4' );
 
     }
 
@@ -499,4 +493,4 @@ class DT_Network_Dashboard_Metrics {
         return $data;
     }
 }
-DT_Network_Dashboard_Metrics::instance();
+DT_Network_Dashboard_Metrics_Base::instance();
