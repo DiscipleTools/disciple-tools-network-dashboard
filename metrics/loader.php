@@ -1,6 +1,16 @@
 <?php
 
 if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
+/**
+ * Add Top Navigation
+ */
+add_action( 'dt_top_nav_desktop', 'dt_network_dashboard_top_nav_desktop');
+function dt_network_dashboard_top_nav_desktop() {
+    if ( dt_network_dashboard_has_metrics_permissions() ) {
+        ?>
+        <li><a href="<?php echo esc_url( site_url( '/network/' ) ); ?>"><?php esc_html_e( "Network" ); ?></a></li><?php
+    }
+}
 
 /**
  * Has permissions
@@ -72,13 +82,3 @@ function dt_network_dashboard_build_menu( $content ){
     return $content;
 }
 
-/**
- * Add Top Navigation
- */
-add_action( 'dt_top_nav_desktop', 'dt_network_dashboard_top_nav_desktop');
-function dt_network_dashboard_top_nav_desktop() {
-    if ( dt_network_dashboard_has_metrics_permissions() ) {
-        ?>
-        <li><a href="<?php echo esc_url( site_url( '/network/' ) ); ?>"><?php esc_html_e( "Network" ); ?></a></li><?php
-    }
-}

@@ -151,10 +151,10 @@ class DT_Network_Dashboard {
 
 
         // UI METRICS FOR NETWORK TAB
-        require_once( 'ui/ui.php' );
-        require_once( 'ui/mapbox-metrics.php' );
-        require_once( 'ui/activity-metrics.php' );
-        require_once( 'ui/mapping-module-config.php' );
+//        require_once( 'ui/ui.php' );
+//        require_once( 'ui/mapbox-metrics.php' );
+//        require_once( 'ui/activity-metrics.php' );
+//        require_once( 'ui/mapping-module-config.php' );
 
 
         // CRON

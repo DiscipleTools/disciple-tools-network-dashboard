@@ -32,7 +32,6 @@ class DT_Network_Dashboard_Metrics_Base {
         add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
 
 
-//        add_filter( 'dt_metrics_menu', [ $this, 'menu' ], 199 );
 //        add_filter( 'dt_mapping_module_data', [ $this, 'filter_mapping_module_data' ], 50, 1 );
 
 //        add_filter( 'dt_metrics_menu', [ $this, 'base_menu' ], 20 ); //load menu links
