@@ -2,19 +2,19 @@
 if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
 
 
-class DT_Network_Dashboard_Metrics_Activity extends DT_Network_Dashboard_Metrics_Base
+class DT_Network_Dashboard_Metrics_Maps extends DT_Network_Dashboard_Metrics_Base
 {
     public function __construct() {
         parent::__construct();
 
-        $this->base_slug = 'activity';
+        $this->base_slug = 'maps';
         $this->slug = '';
-        $this->base_title = __( 'Activity', 'disciple_tools' );
-        $this->title = __( 'Activity', 'disciple_tools' );
-        $this->menu_title = 'Activity';
+        $this->base_title = __( 'Maps', 'disciple_tools' );
+        $this->title = __( 'Maps', 'disciple_tools' );
+        $this->menu_title = 'Maps';
         $this->url = $this->root_slug . '/' . $this->base_slug;
 
-        add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 5 );
+        add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 40 );
 
     }
 
@@ -27,6 +27,5 @@ class DT_Network_Dashboard_Metrics_Activity extends DT_Network_Dashboard_Metrics
         ];
         return $tree;
     }
-
 }
-new DT_Network_Dashboard_Metrics_Activity();
+new DT_Network_Dashboard_Metrics_Maps();

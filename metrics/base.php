@@ -18,7 +18,6 @@ class DT_Network_Dashboard_Metrics_Base {
     public $permissions = ['view_any_contacts', 'view_project_metrics'];
 
     private static $_instance = null;
-
     public static function instance() {
         if (is_null( self::$_instance )) {
             self::$_instance = new self();
