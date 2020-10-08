@@ -13,14 +13,15 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
         $this->title = __( 'Location List', 'disciple_tools' );
         $this->menu_title = 'Location List';
         $this->url = $this->root_slug . '/' . $this->base_slug . '/'  . $this->slug;
+        $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
+        $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';
+        $this->js_object_name = $this->key;
 
         add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 50 );
         add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
         add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
 
         if ( $this->url === $this->url_path ) {
-            $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';
-            $this->js_object_name = 'dt_' . $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
             add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
         }
     }
@@ -31,18 +32,14 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
         ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
         wp_localize_script(
             $this->js_object_name .'_script', $this->js_object_name, [
-                'root' => esc_url_raw( rest_url() ),
-                'theme_uri' => get_template_directory_uri(),
-                'nonce' => wp_create_nonce( 'wp_rest' ),
-                'current_user_login' => wp_get_current_user()->user_login,
-                'current_user_id' => get_current_user_id(),
+                'endpoint' => $this->url,
             ]
         );
     }
 
     public function menu( $tree ){
         $tree[$this->base_slug]['children'][$this->slug] = [
-            'key' => $this->slug,
+            'key' => $this->key,
             'label' => $this->menu_title,
             'url' => '/'.$this->url,
             'children' => []
@@ -57,7 +54,7 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
 
     public function add_api_routes() {
         register_rest_route(
-            $this->namespace, '/network/'.$this->base_slug.'/'.$this->slug . '/', [
+            $this->namespace, '/' . $this->url . '/', [
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'endpoint' ],

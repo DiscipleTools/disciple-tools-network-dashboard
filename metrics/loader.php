@@ -57,17 +57,17 @@ function dt_network_dashboard_build_menu( $content ){
 
     // l1
     foreach( $menu as $key => $value ){
-        $content .= '<li><a href="' . $value['url']  . '">' . $value['label']. '</a>';
+        $content .= '<li><a href="' . $value['url']  . '" id="'.$value['key'].'">' . $value['label']. '</a>';
         if ( isset( $value['children'] ) && ! empty( $value['children'] ) ){
             $content .= '<ul class="menu vertical nested is-active" aria-expanded="true" id="'.$value['key'].'">';
             // l2
             foreach( $value['children'] as $child ){
-                $content .= '<li><a href="' . $child['url']  . '">' . $child['label']. '</a>';
+                $content .= '<li><a href="' . $child['url']  . '" id="'.$child['key'].'">' . $child['label']. '</a>';
                 if ( isset( $child['children'] ) && ! empty( $child['children'] ) ){
                     $content .= '<ul class="menu vertical nested is-active" aria-expanded="true" id="'.$child['key'].'">';
                     // l3
                     foreach( $child['children'] as $grandchild ){
-                        $content .= '<li><a href="' . $grandchild['url']  . '">' . $grandchild['label']. '</a></li>';
+                        $content .= '<li><a href="' . $grandchild['url']  . '" id="'.$grandchild['key'].'">' . $grandchild['label']. '</a></li>';
                     }
                     $content .= '</ul>';
                 }

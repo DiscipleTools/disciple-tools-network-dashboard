@@ -13,6 +13,9 @@ class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics_Ba
         $this->title = __( 'Site Reports', 'disciple_tools' );
         $this->menu_title = 'Site Reports';
         $this->url = $this->root_slug . '/' . $this->base_slug;
+        $this->key = $this->root_slug . '_' . $this->base_slug;
+        $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '.js';
+        $this->js_object_name = $this->key;
 
         add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 10 );
         add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
@@ -32,11 +35,7 @@ class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics_Ba
         ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
         wp_localize_script(
             $this->js_object_name .'_script', $this->js_object_name, [
-                'root' => esc_url_raw( rest_url() ),
-                'theme_uri' => get_template_directory_uri(),
-                'nonce' => wp_create_nonce( 'wp_rest' ),
-                'current_user_login' => wp_get_current_user()->user_login,
-                'current_user_id' => get_current_user_id(),
+                'endpoint' => $this->url,
             ]
         );
     }
@@ -44,7 +43,7 @@ class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics_Ba
     public function menu( $tree ){
         // top levels load at 10, sub levels need to load at 50+
         $tree[$this->base_slug] = [
-            'key' => $this->base_slug,
+            'key' => $this->key,
             'label' => $this->menu_title,
             'url' => '/'.$this->url,
             'children' => []
@@ -59,7 +58,7 @@ class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics_Ba
 
     public function add_api_routes() {
         register_rest_route(
-            $this->namespace, '/network/'.$this->base_slug.'/', [
+            $this->namespace, '/' . $this->url . '/', [
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'endpoint' ],

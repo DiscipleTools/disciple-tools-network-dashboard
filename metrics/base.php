@@ -6,6 +6,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
     public $url_path;
     public $url;
+    public $key;
     public $namespace = 'dt/v1';
     public $root_slug = 'network';
     public $base_slug = 'example'; //lowercase

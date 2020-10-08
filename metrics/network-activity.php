@@ -13,6 +13,7 @@ class DT_Network_Dashboard_Metrics_Activity extends DT_Network_Dashboard_Metrics
         $this->title = __( 'Activity', 'disciple_tools' );
         $this->menu_title = 'Activity';
         $this->url = $this->root_slug . '/' . $this->base_slug;
+        $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
 
         add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 5 );
 
@@ -20,7 +21,7 @@ class DT_Network_Dashboard_Metrics_Activity extends DT_Network_Dashboard_Metrics
 
     public function menu( $tree ){
         $tree[$this->base_slug] = [
-            'key' => $this->base_slug,
+            'key' => $this->key,
             'label' => $this->menu_title,
             'url' => '/'.$this->url,
             'children' => []

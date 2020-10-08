@@ -13,6 +13,7 @@ class DT_Network_Dashboard_Metrics_Statistics extends DT_Network_Dashboard_Metri
         $this->title = __( 'Statistics', 'disciple_tools' );
         $this->menu_title = 'Statistics';
         $this->url = $this->root_slug . '/' . $this->base_slug;
+        $this->key = $this->root_slug . '_' . $this->base_slug;
 
         add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 30 );
     }
@@ -20,7 +21,7 @@ class DT_Network_Dashboard_Metrics_Statistics extends DT_Network_Dashboard_Metri
     public function menu( $tree ){
         // top levels load at 10, sub levels need to load at 50+
         $tree[$this->base_slug] = [
-            'key' => $this->base_slug,
+            'key' => $this->key,
             'label' => $this->menu_title,
             'url' => '/'.$this->url,
             'children' => []
