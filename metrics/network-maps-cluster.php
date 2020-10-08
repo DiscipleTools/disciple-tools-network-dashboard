@@ -70,7 +70,6 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         if ( !$this->has_permission() ) {
             return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
         }
-        dt_write_log(__METHOD__);
         $params = $request->get_params();
 
         return $params;
