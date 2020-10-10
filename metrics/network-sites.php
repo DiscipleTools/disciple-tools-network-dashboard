@@ -78,6 +78,9 @@ class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics_Ba
             case 'sites_list':
                 $data = $this->get_site_list();
                 break;
+            case 'locations_list':
+                $data =  $this->get_locations_list();
+                break;
             case 'sites':
             default:
                 $data = $this->get_sites();

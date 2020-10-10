@@ -31,6 +31,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
         add_action( "template_redirect", [ $this, 'url_redirect' ], 10 );
         add_action( 'wp_enqueue_scripts', [ $this, 'base_scripts' ], 99 );
+        add_action( 'rest_api_init', [ $this, 'base_add_api_routes' ] );
 
     }
 
@@ -57,12 +58,87 @@ class DT_Network_Dashboard_Metrics_Base {
         return $content;
     }
 
+    public function base_add_api_routes() {
+        register_rest_route(
+            $this->namespace, '/network/base/', [
+                [
+                    'methods'  => WP_REST_Server::READABLE,
+                    'callback' => [ $this, 'base_endpoint' ],
+                ],
+            ]
+        );
+    }
+
+    public function endpoint( WP_REST_Request $request ){
+        if ( !$this->has_permission() ) {
+            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+        }
+        $params = $request->get_params();
+
+        switch( $params['type'] ) {
+            case 'sites_list':
+                $data = $this->get_site_list();
+                break;
+            case 'locations_list':
+                $data =  $this->get_locations_list();
+                break;
+            case 'sites':
+            default:
+                $data = $this->get_sites();
+                break;
+        }
+
+        return $data;
+    }
+
     public function base_scripts() {
         wp_enqueue_script( 'network_base_script', plugin_dir_url(__FILE__) . 'base.js', [
             'jquery',
-            'network_base_script',
-            'datatable',
+            'amcharts-core',
+            'amcharts-charts',
+            'amcharts-animated',
+            'amcharts-maps',
+            'mapping-drill-down'
         ], filemtime( plugin_dir_path(__FILE__) . 'base.js' ), true );
+
+        if ( DT_Mapbox_API::get_key() ){
+            DT_Mapbox_API::load_mapbox_header_scripts();
+        }
+
+        wp_register_script( 'amcharts-core', 'https://www.amcharts.com/lib/4/core.js', false, '4' );
+        wp_register_script( 'amcharts-charts', 'https://www.amcharts.com/lib/4/charts.js', false, '4' );
+        wp_register_script( 'amcharts-animated', 'https://www.amcharts.com/lib/4/themes/animated.js', false, '4' );
+        wp_register_script( 'amcharts-maps', 'https://www.amcharts.com/lib/4/maps.js', false, '4' );
+//        wp_register_script( 'amcharts-world', 'https://www.amcharts.com/lib/4/geodata/worldLow.js', false, '4' );
+
+        // Datatable
+        wp_register_style( 'datatable-css', '//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css' );
+        wp_enqueue_style( 'datatable-css' );
+        wp_register_script( 'datatable', '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js', false, '1.10' );
+
+        // Drill Down Tool
+        wp_enqueue_script( 'mapping-drill-down', get_template_directory_uri() . '/dt-mapping/drill-down.js', [ 'jquery', 'lodash' ], '1.1' );
+        wp_localize_script(
+            'mapping-drill-down',
+            'mappingModule',
+            array(
+                'mapping_module' => $this->localize_script(),
+            )
+        );
+    }
+
+    public function localize_script() {
+        if ( ! class_exists( 'DT_Mapping_Module') ) {
+            require_once ( get_template_directory() . 'dt-mapping/mapping.php' );
+        }
+        $mapping_module = DT_Mapping_Module::instance()->localize_script();
+
+        if ( dt_network_dashboard_denied() ) {
+            return [];
+        } else {
+            return $mapping_module;
+        }
+
     }
 
 

@@ -8,7 +8,7 @@ jQuery(document).ready(function(){
 
     // write page layout with spinners
     chartDiv.empty().html(`
-            <span class="section-header">Sites</span>
+        <span class="section-header">Sites</span>
         
         <hr style="max-width:100%;">
         
@@ -17,13 +17,21 @@ jQuery(document).ready(function(){
                 <div id="list-sites">${spinner}</div>
             </div>
         </div>
-        
-        
+        <div class="full reveal" id="site-modal" data-v-offset="20px" data-reveal>
+            <div id="site-modal-content">${spinner}</div>
+            <button class="close-button" data-close aria-label="Close modal" type="button">
+                <h2><span aria-hidden="true">&times;</span></h2>
+             </button>
+        </div>
        `)
+
+    new Foundation.Reveal(jQuery('#site-modal'))
 
     // call for data
     load_sites_list_data()
     load_sites_data()
+    load_locations_list_data()
+
     function load_sites_list_data(){
         makeRequest('POST', obj.endpoint, {'type': 'sites_list'} )
             .done(function(data) {
@@ -35,6 +43,14 @@ jQuery(document).ready(function(){
         makeRequest('POST', obj.endpoint, {'type': 'sites'} )
             .done(function(data) {
                 window.sites = data
+            })
+    }
+    function load_locations_list_data(){
+        makeRequest('POST', obj.endpoint, {'type': 'locations_list'} )
+            .done(function(data) {
+                window.locations_list = data
+                // MAPPINGDATA.data = window.locations_list
+                console.log(data)
             })
     }
 
@@ -82,6 +98,7 @@ jQuery(document).ready(function(){
             jQuery(this).parent().append(spinner)
             let data = table.row(jQuery(this).parents('tr')).data();
             show_single_site(data['id'], data['name'])
+            jQuery('#site-modal').foundation('open')
             window.scrollTo(0, 0);
         })
     }
@@ -90,6 +107,7 @@ jQuery(document).ready(function(){
      * Single Snapshots Page
      */
     function show_single_site(id, name) {
+
         "use strict";
         if (id===undefined) {
             show_network_home()
@@ -102,7 +120,7 @@ jQuery(document).ready(function(){
 
         let data = window.sites[id]
 
-        let chartDiv = jQuery('#chart')
+        let chartDiv = jQuery('#site-modal-content')
         chartDiv.empty().html(`
               <span class="section-header">${name}</span>
               <span style="font-size:.5em;color:lightslategrey;float:right;" onclick="jQuery('#site-id').show()">show id<span id="site-id" style="display:none;"><br>${id}</span></span>
@@ -306,10 +324,10 @@ jQuery(document).ready(function(){
 
         load_line_chart('line-chart-div', id, 'days', 30)
         set_buttons('new-contact-buttons', 'c-30-days')
-
-        load_points_map('site-map-div', id)
+        //
+        // load_points_map('site-map-div', id)
         load_gen_chart('generations-div', id, 'g-baptisms')
-
+        //
         load_line_chart('group-line-chart-div', id, 'days', 30)
         set_buttons('new-group-buttons', 'g-30-days')
         load_funnel_chart('follow-up-funnel-chart-div', id)
