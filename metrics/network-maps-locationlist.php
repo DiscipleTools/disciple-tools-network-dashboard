@@ -29,6 +29,7 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
     public function add_scripts() {
         wp_enqueue_script( $this->js_object_name .'_script', plugin_dir_url(__FILE__) . $this->js_file_name, [
             'jquery',
+            'network_base_script',
         ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
         wp_localize_script(
             $this->js_object_name .'_script', $this->js_object_name, [

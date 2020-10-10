@@ -41,6 +41,9 @@ if ('network' !== substr( $url_path, '0', 7 ) && ! $is_rest ) {
 
 // load required files
 require_once( 'base.php' );
+require_once( 'mapping-module-config.php' );
+
+// scan load
 $dir = scandir( __DIR__ );
 foreach( $dir as $file ){
     if ( 'network' === substr( $file, 0, 7 ) && 'php' === substr( $file, -3, 3 )){

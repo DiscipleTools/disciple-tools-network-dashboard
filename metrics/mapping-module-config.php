@@ -12,7 +12,7 @@ class DT_Network_Mapping_Module_Config
 
     public function __construct() {
         $url = $this->get_url_path();
-        if ( 'network' === $url ) {
+        if ( 'network' === substr( $url, 0, 7) ) {
             /**
              * dt_mapping_module_has_permissions
              *
@@ -160,11 +160,15 @@ class DT_Network_Mapping_Module_Config
     }
 
     public function scripts() {
+        if ( DT_Mapbox_API::get_key() ){
+            DT_Mapbox_API::load_mapbox_header_scripts();
+        }
+
         wp_register_script( 'amcharts-core', 'https://www.amcharts.com/lib/4/core.js', false, '4' );
         wp_register_script( 'amcharts-charts', 'https://www.amcharts.com/lib/4/charts.js', false, '4' );
         wp_register_script( 'amcharts-animated', 'https://www.amcharts.com/lib/4/themes/animated.js', false, '4' );
         wp_register_script( 'amcharts-maps', 'https://www.amcharts.com/lib/4/maps.js', false, '4' );
-        wp_register_script( 'amcharts-world', 'https://www.amcharts.com/lib/4/geodata/worldLow.js', false, '4' );
+//        wp_register_script( 'amcharts-world', 'https://www.amcharts.com/lib/4/geodata/worldLow.js', false, '4' );
 
         // Datatable
         wp_register_style( 'datatable-css', '//cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css' );
