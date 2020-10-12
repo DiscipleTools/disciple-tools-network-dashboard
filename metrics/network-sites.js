@@ -1,6 +1,7 @@
 jQuery(document).ready(function(){
     let chartDiv = jQuery('#chart')
     let spinner = '<span class="loading-spinner"></span>'
+    console.log('here')
 
     // add highlight to menu
     jQuery('#network_sites').prop('style', 'font-weight:900;')
@@ -29,10 +30,10 @@ jQuery(document).ready(function(){
     makeRequest('POST', 'network/base', {'type': 'sites_list'} )
         .done(function(data) {
             window.sites_list = data
-            write_sites_list()
 
             new Foundation.Reveal(jQuery('#site-modal'))
 
+            write_sites_list()
         })
     makeRequest('POST', 'network/base', {'type': 'sites'} )
         .done(function(data) {

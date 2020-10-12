@@ -1,7 +1,7 @@
 jQuery(document).ready(function(){
+    // let obj = network_home
     let chartDiv = jQuery('#chart')
     let spinner = '<span class="loading-spinner active"></span>'
-    MAPPINGDATA.data = network_home.data
 
     // add highlight to menu
     jQuery('#network_home').prop('style', 'font-weight:900;')
@@ -96,29 +96,45 @@ jQuery(document).ready(function(){
     makeRequest('POST', 'network/base', {'type': 'sites_list'} )
         .done(function(data) {
             window.sites_list = data
+
             write_sites_list( true )
         })
     makeRequest('POST', 'network/base', {'type': 'sites'} )
         .done(function(data) {
             window.sites = data
+
+            makeRequest('POST', 'network/base', {'type': 'global'} )
+                .done(function(data) {
+                    window.global = data
+
+
+
+                    jQuery('#total_countries').html(window.global.locations.total_countries)
+                    jQuery('#total_users').html(window.global.users.total)
+                    jQuery('.total_groups').html(window.global.groups.total)
+                    jQuery('.total_contacts').html(window.global.contacts.total)
+                    jQuery('.total_sites').html(window.global.sites.total)
+                    jQuery('.total_activity').html(window.global.activity.total)
+
+                    load_line_chart('global-contacts-chart-div', null, 'days', 30)
+                    set_buttons('new-contact-buttons', 'c-30-days')
+
+                    load_line_chart('global-groups-chart-div', null, 'days', 30)
+                    set_buttons('new-group-buttons', 'g-30-days')
+                })
         })
-    makeRequest('POST', 'network/base', {'type': 'global'} )
+
+    makeRequest('POST', 'network/base', {'type': 'locations_list'} )
         .done(function(data) {
-            window.global = data
+            window.locations_list = data
+
+            MAPPINGDATA.data = data
 
             DRILLDOWN.get_drill_down('map_chart_drilldown', MAPPINGDATA.settings.current_map)
 
-            jQuery('#total_countries').html(window.global.locations.total_countries)
-            jQuery('#total_users').html(window.global.users.total)
-            jQuery('.total_groups').html(window.global.groups.total)
-            jQuery('.total_contacts').html(window.global.contacts.total)
-            jQuery('.total_sites').html(window.global.sites.total)
-            jQuery('.total_activity').html(window.global.activity.total)
 
-            load_line_chart('global-contacts-chart-div', null, 'days', 30)
-            set_buttons('new-contact-buttons', 'c-30-days')
 
-            load_line_chart('global-groups-chart-div', null, 'days', 30)
-            set_buttons('new-group-buttons', 'g-30-days')
         })
+
+
 })

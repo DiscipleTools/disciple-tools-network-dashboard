@@ -20,6 +20,7 @@ class DT_Network_Dashboard_Metrics_Maps_Hovermap extends DT_Network_Dashboard_Me
         add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 50 );
         add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
         add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
+        add_filter( 'dt_mapping_module_data', [ $this, 'filter_mapping_module_data' ], 50, 1 );
 
         if ( $this->url === $this->url_path ) {
             add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
@@ -30,13 +31,13 @@ class DT_Network_Dashboard_Metrics_Maps_Hovermap extends DT_Network_Dashboard_Me
     public function add_scripts() {
         wp_enqueue_script( $this->js_object_name .'_script', plugin_dir_url(__FILE__) . $this->js_file_name, [
             'jquery',
-            'network_base_script',
+            'jquery-ui-core',
+            'amcharts-core',
+            'amcharts-animated',
+            'amcharts-maps',
+            'mapping-drill-down',
+            'lodash',
         ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
-        wp_localize_script(
-            $this->js_object_name .'_script', $this->js_object_name, [
-                'endpoint' => $this->url,
-            ]
-        );
 
         $this->load_grid_mapping_scripts();
     }

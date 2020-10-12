@@ -32,12 +32,7 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
             'jquery',
             'network_base_script',
         ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
-        wp_localize_script(
-            $this->js_object_name .'_script', $this->js_object_name, [
-                'endpoint' => $this->url,
-                'data' => $this->get_locations_list(),
-            ]
-        );
+
         $this->load_grid_mapping_scripts();
     }
 
@@ -51,10 +46,6 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
         return $tree;
     }
 
-    public function filter_mapping_module_data( $data) {
-        $data['custom_column_labels'] = $this->location_data_types();
-        return $data;
-    }
 
     public function add_url( $template_for_url) {
         $template_for_url[$this->url] = 'template-metrics.php';

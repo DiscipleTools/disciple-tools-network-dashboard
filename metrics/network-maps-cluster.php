@@ -24,7 +24,7 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
         add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
 
-        if ( $this->url === $this->url_path ) {
+        if ( $this->url === substr( $this->url_path, 0, 20 )  ) {
             add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
         }
     }
@@ -37,6 +37,12 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         wp_localize_script(
             $this->js_object_name .'_script', $this->js_object_name, [
                 'endpoint' => $this->url,
+                'map_key' => DT_Mapbox_API::get_key(),
+                'contact_settings' => [
+                    'post_type' => 'contacts',
+                    'title' => __( 'Contacts', "disciple_tools" ),
+                    'status_list' => ['active'=> [ "label" => 'Active' ], 'paused'=> [ "label" => 'Paused' ], 'closed'=> [ "label" => 'Closed' ] ]
+                ],
             ]
         );
     }
@@ -65,6 +71,15 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
                 ],
             ]
         );
+
+        register_rest_route(
+            $this->namespace, '/' . $this->url . '/cluster_geojson', [
+                [
+                    'methods'  => WP_REST_Server::CREATABLE,
+                    'callback' => [ $this, 'cluster_geojson' ],
+                ],
+            ]
+        );
     }
 
     public function endpoint( WP_REST_Request $request ){
@@ -74,6 +89,88 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         $params = $request->get_params();
 
         return $params;
+    }
+
+    public function cluster_geojson( WP_REST_Request $request ) {
+        if ( ! $this->has_permission() ){
+            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+        }
+
+        return true;
+
+        $params = $request->get_json_params() ?? $request->get_body_params();
+        if ( ! isset( $params['post_type'] ) || empty( $params['post_type'] ) ) {
+            return new WP_Error( __METHOD__, "Missing Post Types", [ 'status' => 400 ] );
+        }
+
+        $status = null;
+        if ( isset( $params['status'] ) && $params['status'] !== 'all' ) {
+            $status = sanitize_text_field( wp_unslash( $params['status'] ) );
+        }
+
+        $post_type = sanitize_text_field( wp_unslash( $params['post_type'] ) );
+
+        return apply_filters( 'dashboard_cluster_geojson', $this->_empty_geojson(), $post_type, $status );
+
+    }
+    public function cluster_geojson_contacts( $geojson, $post_type, $status ) {
+        if ( 'contacts' !== $post_type ) {
+            return $geojson;
+        }
+
+        $results = [
+            [
+                "lng" => "0",
+                "lat" => "0",
+                "count" => "10",
+                "name" => "test location",
+                "level" => "0",
+            ]
+        ];
+
+        $features = [];
+        foreach ( $results as $result ) {
+            $features[] = array(
+                'type' => 'Feature',
+                'properties' => array(
+                    "name" => $result['name'],
+                    "count" => $result['count'],
+                    "level" => $result['level'],
+                ),
+                'geometry' => array(
+                    'type' => 'Point',
+                    'coordinates' => array(
+                        $result['lng'],
+                        $result['lat'],
+                        1
+                    ),
+                ),
+            );
+        }
+
+        $geojson = array(
+            'type' => 'FeatureCollection',
+            'features' => $features,
+        );
+
+        return $geojson;
+
+    }
+    public function cluster_geojson_groups( $geojson, $post_type, $status ) {
+        if ( 'groups' !== $post_type ) {
+            return $geojson;
+        }
+
+        //        if ( $post_type === 'contacts' ) {
+//            $results = Disciple_Tools_Mapping_Queries::get_contacts_grid_totals( $status );
+//        } else if ( $post_type === 'groups' ) {
+//            $results = Disciple_Tools_Mapping_Queries::get_groups_grid_totals( $status );
+//        } else {
+//            return new WP_Error( __METHOD__, "Invalid post type", [ 'status' => 400 ] );
+//        }
+
+
+        return $geojson;
     }
 
 }

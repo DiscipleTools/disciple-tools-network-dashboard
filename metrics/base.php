@@ -40,7 +40,10 @@ class DT_Network_Dashboard_Metrics_Base {
         return dt_network_dashboard_has_metrics_permissions();
     }
 
-
+    public function filter_mapping_module_data( $data) {
+        $data['custom_column_labels'] = $this->location_data_types();
+        return $data;
+    }
 
     public function add_url( $template_for_url) {
         $template_for_url['network'] = 'template-metrics.php';
@@ -89,8 +92,13 @@ class DT_Network_Dashboard_Metrics_Base {
                 $data = $this->get_global();
                 break;
             case 'sites':
-            default:
                 $data = $this->get_sites();
+                break;
+            case 'all':
+            default:
+                $data['sites_list'] = $this->get_site_list();
+                $data['locations_list'] = $this->get_locations_list();
+                $data['global'] = $this->get_global();
                 break;
         }
 
@@ -105,7 +113,6 @@ class DT_Network_Dashboard_Metrics_Base {
             'amcharts-animated',
             'amcharts-maps',
             'datatable',
-            'mapping-drill-down'
         ], filemtime( plugin_dir_path(__FILE__) . 'base.js' ), true );
 
         // mapbox
@@ -137,7 +144,6 @@ class DT_Network_Dashboard_Metrics_Base {
             )
         );
     }
-
 
     public function localize_script() {
         if ( ! class_exists( 'DT_Mapping_Module') ) {
@@ -543,6 +549,13 @@ class DT_Network_Dashboard_Metrics_Base {
         $data['total_activities'] = count($logs);
 
         return $data;
+    }
+
+    public function _empty_geojson() {
+        return array(
+            'type' => 'FeatureCollection',
+            'features' => []
+        );
     }
 }
 DT_Network_Dashboard_Metrics_Base::instance();

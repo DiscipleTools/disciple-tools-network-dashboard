@@ -1,10 +1,16 @@
 jQuery(document).ready(function(){
     // add highlight to menu
     jQuery('#network_maps_locationlist').prop('style', 'font-weight:900;')
-
+    let spinner = '<span class="loading-spinner active"></span>'
 
     let LISTDATA = MAPPINGDATA
-    LISTDATA.data = network_maps_locationlist.data
+
+    makeRequest('POST', 'network/base', {'type': 'locations_list'} )
+        .done(function(data) {
+            LISTDATA.data = data
+            page_mapping_list()
+        })
+
     function page_mapping_list() {
         "use strict";
         let chartDiv = jQuery('#chart')
@@ -49,7 +55,7 @@ jQuery(document).ready(function(){
                 <span id="current_level" class="current_level"></span>
               </div>
               
-              <div id="location_list" class="location_list"></div>
+              <div id="location_list" class="location_list">${spinner}</div>
               <hr id="map_hr_2" class="map_hr">
             </div> <!-- end widget -->
           `);
@@ -68,7 +74,7 @@ jQuery(document).ready(function(){
             })
         }
     }
-    page_mapping_list()
+
 
     window.DRILLDOWN.location_list_drilldown = function( grid_id ) {
         location_grid_list( 'location_list', grid_id )

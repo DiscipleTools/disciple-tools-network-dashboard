@@ -167,8 +167,8 @@ class DT_Network_Dashboard_UI
             filemtime( plugin_dir_path( __DIR__ ) . 'ui/mapbox-metrics.js' ),
             true);
 
-        $contact_fields = Disciple_Tools_Contact_Post_Type::instance()->get_contact_field_defaults();
-        $group_fields = Disciple_Tools_Groups_Post_Type::instance()->get_group_field_defaults();
+//        $contact_fields = Disciple_Tools_Contact_Post_Type::instance()->get_contact_field_defaults();
+//        $group_fields = Disciple_Tools_Groups_Post_Type::instance()->get_group_field_defaults();
         wp_localize_script(
             'dt_network_dashboard_mapbox',
             'dtDashboardMapbox',
