@@ -147,8 +147,7 @@ class DT_Network_Dashboard {
 
         // METRICS
         require_once( 'metrics/loader.php' );
-
-
+        require_once( 'metrics/mapping-module-config.php' );
 
         // UI METRICS FOR NETWORK TAB
 //        require_once( 'ui/ui.php' );

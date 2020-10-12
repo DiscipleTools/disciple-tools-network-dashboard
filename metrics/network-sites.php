@@ -33,11 +33,6 @@ class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics_Ba
             'network_base_script',
             'datatable',
         ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
-        wp_localize_script(
-            $this->js_object_name .'_script', $this->js_object_name, [
-                'endpoint' => $this->url,
-            ]
-        );
     }
 
     public function menu( $tree ){

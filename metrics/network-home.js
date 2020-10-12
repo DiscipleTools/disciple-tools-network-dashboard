@@ -1,5 +1,4 @@
 jQuery(document).ready(function(){
-    let obj = network_home
     let chartDiv = jQuery('#chart')
     let spinner = '<span class="loading-spinner active"></span>'
 
@@ -8,42 +7,41 @@ jQuery(document).ready(function(){
 
     // write page layout with spinners
     chartDiv.empty().html(`
-            <span class="section-header">Home</span>
-                <hr style="max-width:100%;">
-                <div id="map_chart" style="width: 100%; max-width:1200px; margin:0 auto; max-height: 700px;height: 100vh;vertical-align: text-top;">${spinner}</div>
-                
-                <hr style="max-width:100%;">
-                
-                <div class="grid-x grid-padding-x grid-padding-y">
-                  <div class="cell">
-                  <span class="section-header">Active Totals for All Sites </span><br>
-                    <div class="grid-x callout">
-                    <div class="medium-2 cell center">
-                        <h4>Contacts<br><span class="total_contacts"><a href="/network/">${spinner}</a></span></h4>
-                      </div>
-                      <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>Groups<br><span class="total_groups"><a href="/network/">${spinner}</a></span></h4>
-                      </div>
-                      <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>Users<br><span id="total_users"><a href="/network/">${spinner}</a></span></h4>
-                      </div>
-                      <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>Sites<br><span class="total_sites"><a href="/network/sites/">${spinner}</a></span></h4>
-                      </div>
-                      <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>Countries<br><span id="total_countries"><a href="/network/">${spinner}</a></span></h4>
-                      </div>
-                      <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>Activity<br><span id="total_prayer_events"><a href="/network/">${spinner}</a></span></h4>
-                      </div>
-                      
-                    </div>
+        <span class="section-header">Home</span>
+            <hr style="max-width:100%;">
+            <div id="map_chart" style="width: 100%; max-width:1200px; margin:0 auto; max-height: 700px;height: 100vh;vertical-align: text-top;">${spinner}</div>
+            
+            <hr style="max-width:100%;">
+            
+            <div class="grid-x grid-padding-x grid-padding-y">
+              <div class="cell">
+              <span class="section-header">Active Totals for All Sites </span><br>
+                <div class="grid-x callout">
+                <div class="medium-2 cell center">
+                    <h4>Contacts<br><a href="/network/statistics/contacts"><span class="total_contacts">${spinner}</span></a></h4>
+                  </div>
+                  <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
+                    <h4>Groups<br><a href="/network/statistics/groups"><span class="total_groups">${spinner}</span></a></h4>
+                  </div>
+                  <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
+                    <h4>Users<br><a href="/network/statistics/users"><span id="total_users">${spinner}</span></a></h4>
+                  </div>
+                  <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
+                    <h4>Sites<br><a href="/network/sites/"><span class="total_sites">${spinner}</span></a></h4>
+                  </div>
+                  <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
+                    <h4>Countries<br><a href="/network/maps/locationlist"><span id="total_countries">${spinner}</span></a></h4>
+                  </div>
+                  <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
+                    <h4>100/hr Activity<br><a href="/network/activity/feed"><span class="total_activity">${spinner}</span></a></h4>
                   </div>
                 </div>
+              </div>
+            </div>
+            
+            <div class="grid-x grid-padding-x grid-margin-x">
+                <div class="medium-6 cell">
                 
-                <div class="grid-x grid-padding-x">
-                    <div class="medium-6 cell">
-                    
                     <!-- new contacts -->
                      <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                       <div class="cell">
@@ -56,7 +54,7 @@ jQuery(document).ready(function(){
                         <div id="global-contacts-chart-div" style="height:500px;width:100%;">${spinner}</div>
                       </div>
                     </div>
-                    
+                
                     <!-- new groups -->
                     <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                       <div class="cell">
@@ -69,48 +67,55 @@ jQuery(document).ready(function(){
                         <div id="global-groups-chart-div" style="height:500px;width:100%;">${spinner}</div>
                       </div>
                     </div>
-                    
-                    </div>
-                    <div class="medium-6 cell">
-                        <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
-                          <div class="cell">
-                            <span class="section-header">Sites</span><br>
-                            <table class="hover">
-                                <thead><tr><td>Name</td></tr></thead>
-                                <tbody>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                    <tr><td>Site Name</td></tr>
-                                </tbody>
-                            </table>
-                          </div>
+                
+                </div>
+                <div class="medium-6 cell" >
+                    <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
+                      <div class="cell">
+                        <span class="section-header">Sites</span><br>
+                        <div class="grid-x grid-padding-x">
+                            <div class="cell">
+                                <div id="list-sites">${spinner}</div>
+                            </div>
+                            <div class="large reveal" id="site-modal" data-v-offset="0px" data-reveal>
+                                <div id="site-modal-content">${spinner}</div>
+                                <button class="close-button" data-close aria-label="Close modal" type="button">
+                                    <h2><span aria-hidden="true">&times;</span></h2>
+                                 </button>
+                            </div>
                         </div>
-                    
-                    
+                      </div>
                     </div>
                 </div>
-                
-               
-                
-                
-            `)
+            </div>
+            
+        `)
 
     // call for data
-    makeRequest('POST', obj.endpoint,{'id': 'test'} )
+    makeRequest('POST', 'network/base', {'type': 'sites_list'} )
         .done(function(data) {
-            "use strict";
-            console.log(obj)
+            window.sites_list = data
+            write_sites_list( true )
+        })
+    makeRequest('POST', 'network/base', {'type': 'sites'} )
+        .done(function(data) {
+            window.sites = data
+        })
+    makeRequest('POST', 'network/base', {'type': 'global'} )
+        .done(function(data) {
+            window.global = data
+
+            jQuery('#total_countries').html(window.global.locations.total_countries)
+            jQuery('#total_users').html(window.global.users.total)
+            jQuery('.total_groups').html(window.global.groups.total)
+            jQuery('.total_contacts').html(window.global.contacts.total)
+            jQuery('.total_sites').html(window.global.sites.total)
+            jQuery('.total_activity').html(window.global.activity.total)
+
+            load_line_chart('global-contacts-chart-div', null, 'days', 30)
+            set_buttons('new-contact-buttons', 'c-30-days')
+
+            load_line_chart('global-groups-chart-div', null, 'days', 30)
+            set_buttons('new-group-buttons', 'g-30-days')
         })
 })

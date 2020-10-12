@@ -33,11 +33,14 @@ class DT_Network_Dashboard_Metrics_Base {
         add_action( 'wp_enqueue_scripts', [ $this, 'base_scripts' ], 99 );
         add_action( 'rest_api_init', [ $this, 'base_add_api_routes' ] );
 
+
     }
 
     public function has_permission(){
         return dt_network_dashboard_has_metrics_permissions();
     }
+
+
 
     public function add_url( $template_for_url) {
         $template_for_url['network'] = 'template-metrics.php';
@@ -62,14 +65,14 @@ class DT_Network_Dashboard_Metrics_Base {
         register_rest_route(
             $this->namespace, '/network/base/', [
                 [
-                    'methods'  => WP_REST_Server::READABLE,
+                    'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'base_endpoint' ],
                 ],
             ]
         );
     }
 
-    public function endpoint( WP_REST_Request $request ){
+    public function base_endpoint( WP_REST_Request $request ){
         if ( !$this->has_permission() ) {
             return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
         }
@@ -80,7 +83,10 @@ class DT_Network_Dashboard_Metrics_Base {
                 $data = $this->get_site_list();
                 break;
             case 'locations_list':
-                $data =  $this->get_locations_list();
+                $data = $this->get_locations_list();
+                break;
+            case 'global':
+                $data = $this->get_global();
                 break;
             case 'sites':
             default:
@@ -98,6 +104,7 @@ class DT_Network_Dashboard_Metrics_Base {
             'amcharts-charts',
             'amcharts-animated',
             'amcharts-maps',
+            'datatable',
             'mapping-drill-down'
         ], filemtime( plugin_dir_path(__FILE__) . 'base.js' ), true );
 
@@ -116,16 +123,16 @@ class DT_Network_Dashboard_Metrics_Base {
         wp_enqueue_style( 'datatable-css' );
         wp_register_script( 'datatable', '//cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js', false, '1.10' );
 
+        DT_Mapping_Module::instance()->drilldown_script();
+        DT_Mapping_Module::instance()->scripts();
+
         // Drill Down Tool
-        wp_enqueue_script( 'mapping-drill-down', get_template_directory_uri() . '/dt-mapping/drill-down.js', [ 'jquery', 'lodash' ], '1.1' );
-        wp_localize_script(
-            'mapping-drill-down',
-            'mappingModule',
-            array(
-                'mapping_module' => $this->localize_script(),
-            )
-        );
+
+
+
     }
+
+
 
     public function localize_script() {
         if ( ! class_exists( 'DT_Mapping_Module') ) {
@@ -252,8 +259,8 @@ class DT_Network_Dashboard_Metrics_Base {
             'locations' => [
                 'total_countries' => $totals['total_countries'] ?? 0,
             ],
-            'prayer_events' => [
-                'total' => $totals['total_prayer_events'] ?? 0,
+            'activity' => [
+                'total' => $totals['total_activity'] ?? 0,
             ],
         ];
 
@@ -505,7 +512,7 @@ class DT_Network_Dashboard_Metrics_Base {
             'total_users' => 0,
             'total_countries' => 0,
             'total_sites' => 0,
-            'total_prayer_events' => 0,
+            'total_activities' => 0,
         ];
         if (empty( $sites )) {
             return [];
@@ -529,7 +536,7 @@ class DT_Network_Dashboard_Metrics_Base {
         $data['total_sites'] = count($sites);
 
         $logs = self::get_activity_log();
-        $data['total_prayer_events'] = count($logs);
+        $data['total_activities'] = count($logs);
 
         return $data;
     }

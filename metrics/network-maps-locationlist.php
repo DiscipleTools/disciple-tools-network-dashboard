@@ -20,6 +20,7 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
         add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 50 );
         add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
         add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
+        add_filter( 'dt_mapping_module_data', [ $this, 'filter_mapping_module_data' ], 50, 1 );
 
         if ( $this->url === $this->url_path ) {
             add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
@@ -34,7 +35,18 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
         wp_localize_script(
             $this->js_object_name .'_script', $this->js_object_name, [
                 'endpoint' => $this->url,
+                'data' => $this->get_locations_list(),
+
             ]
+        );
+
+        wp_enqueue_script( 'mapping-drill-down', get_template_directory_uri() . '/dt-mapping/drill-down.js', [ 'jquery', 'lodash' ], '1.1' );
+        wp_localize_script(
+            'mapping-drill-down',
+            'mappingModule',
+            array(
+                'mapping_module' => $this->localize_script(),
+            )
         );
     }
 
@@ -46,6 +58,11 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
             'children' => []
         ];
         return $tree;
+    }
+
+    public function filter_mapping_module_data( $data) {
+        $data['custom_column_labels'] = $this->location_data_types();
+        return $data;
     }
 
     public function add_url( $template_for_url) {

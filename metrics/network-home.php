@@ -30,6 +30,7 @@ class DT_Network_Dashboard_Metrics_Home extends DT_Network_Dashboard_Metrics_Bas
     public function add_scripts() {
         wp_enqueue_script( $this->js_object_name .'_script', plugin_dir_url(__FILE__) . $this->js_file_name, [
             'jquery',
+            'datatable',
             'network_base_script',
         ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
 
@@ -37,6 +38,15 @@ class DT_Network_Dashboard_Metrics_Home extends DT_Network_Dashboard_Metrics_Bas
             $this->js_object_name .'_script', $this->js_object_name, [
                 'endpoint' => $this->url,
             ]
+        );
+
+        wp_enqueue_script( 'mapping-drill-down', get_template_directory_uri() . '/dt-mapping/drill-down.js', [ 'jquery', 'lodash' ], '1.1' );
+        wp_localize_script(
+            'mapping-drill-down',
+            'mappingModule',
+            array(
+                'mapping_module' => $this->localize_script(),
+            )
         );
     }
 
