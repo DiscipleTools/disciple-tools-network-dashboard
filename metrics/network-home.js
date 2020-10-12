@@ -1,6 +1,7 @@
 jQuery(document).ready(function(){
     let chartDiv = jQuery('#chart')
     let spinner = '<span class="loading-spinner active"></span>'
+    MAPPINGDATA.data = network_home.data
 
     // add highlight to menu
     jQuery('#network_home').prop('style', 'font-weight:900;')
@@ -104,6 +105,8 @@ jQuery(document).ready(function(){
     makeRequest('POST', 'network/base', {'type': 'global'} )
         .done(function(data) {
             window.global = data
+
+            DRILLDOWN.get_drill_down('map_chart_drilldown', MAPPINGDATA.settings.current_map)
 
             jQuery('#total_countries').html(window.global.locations.total_countries)
             jQuery('#total_users').html(window.global.users.total)

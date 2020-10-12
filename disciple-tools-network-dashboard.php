@@ -154,8 +154,6 @@ class DT_Network_Dashboard {
 //        require_once( 'ui/mapbox-metrics.php' );
 //        require_once( 'ui/activity-metrics.php' );
 
-
-
         // CRON
         if ( file_exists( get_theme_file_path() . '/dt-core/wp-async-request.php' ) ) {
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
