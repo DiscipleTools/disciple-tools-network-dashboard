@@ -10,15 +10,18 @@ jQuery(document).ready(function(){
     chartDiv.empty().html(`
             <span class="section-header">Feed</span>
                 <hr style="max-width:100%;">
-                <div id="map_chart" style="width: 100%; margin:0 auto; max-height: 700px;height: 100vh;vertical-align: text-top;">${spinner}</div>
                 
-                <hr style="max-width:100%;">
+                
+                
+                
+                
+                <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
             `)
 
     // call for data
-    makeRequest('POST', obj.endpoint,{'id': 'test'} )
-        .done(function(data) {
+    makeRequest('POST', 'network/base', {'type': 'activity'} )
+        .done( data => {
             "use strict";
-            console.log(obj)
+            console.log(data)
         })
 })

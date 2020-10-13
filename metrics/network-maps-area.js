@@ -2,15 +2,19 @@
 jQuery(document).ready(function() {
 
     if( '/network/maps/area/contacts' === window.location.pathname ||'/network/maps/area/contacts/' === window.location.pathname ) {
+        jQuery('#network_maps_area_contacts').prop('style', 'font-weight:900;')
         write_area( 'contact_settings' )
     }
     else if ( '/network/maps/area/groups' === window.location.pathname || '/network/maps/area/groups/' === window.location.pathname ) {
+        jQuery('#network_maps_area_groups').prop('style', 'font-weight:900;')
         write_area( 'group_settings' )
     }
     else if ('/network/maps/area/churches' === window.location.pathname || '/network/maps/area/churches/' === window.location.pathname ) {
+        jQuery('#network_maps_area_churches').prop('style', 'font-weight:900;')
         write_area( 'church_settings' )
     }
     else if ( '/network/maps/area/users' === window.location.pathname || '/network/maps/area/users/' === window.location.pathname ) {
+        jQuery('#network_maps_area_users').prop('style', 'font-weight:900;')
         write_area( 'user_settings' )
     }
 
@@ -114,6 +118,7 @@ function write_area( settings ) {
                         <div id="geocode-details-content"></div>
                     </div>
                 </div>
+                
              `)
 
             // set info box

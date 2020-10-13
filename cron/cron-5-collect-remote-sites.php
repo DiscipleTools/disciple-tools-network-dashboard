@@ -159,7 +159,7 @@ function dt_get_site_snapshot( $site_post_id ) {
         }
         $snapshot = json_decode( $result['body'], true );
     }
-    if ( $snapshot['status'] == 'FAIL' ) {
+    if ( $snapshot['status'] == 'FAIL' || empty( $snapshot ) ) {
         update_post_meta( $site_post_id, 'snapshot_fail', $result );
 
         dt_save_log( $file, 'FAIL ID: ' . $partner_post_id . ' (Connection success, but data collection failed in remote site.)' );

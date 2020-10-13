@@ -58,6 +58,8 @@ jQuery(document).ready(function(){
               <div id="location_list" class="location_list">${spinner}</div>
               <hr id="map_hr_2" class="map_hr">
             </div> <!-- end widget -->
+            
+            <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
           `);
 
         if ( LISTDATA.data ){

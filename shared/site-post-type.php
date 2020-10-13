@@ -307,9 +307,9 @@ class DT_Network_Dashboard_Site_Post_Type {
      */
     public static function all_sites() : array {
 
-//        if (wp_cache_get( __METHOD__ )) {
-//            return wp_cache_get( 'get_sites' );
-//        }
+        if (wp_cache_get( __METHOD__ )) {
+            return wp_cache_get( __METHOD__  );
+        }
         global $wpdb;
 
         $results = $wpdb->get_results("
@@ -383,9 +383,30 @@ class DT_Network_Dashboard_Site_Post_Type {
             $sites[$result['partner_id']] = $result;
         }
 
-//        wp_cache_set( __METHOD__, $sites, __METHOD__, 10 );
+        wp_cache_set( __METHOD__, $sites, __METHOD__, 10 );
 
         return $sites;
+    }
+
+    public static function global_time_hash() : string {
+        global $wpdb;
+
+        $results = $wpdb->get_col("
+                SELECT 
+                  g.meta_value as snapshot_timestamp
+                FROM $wpdb->posts as a
+                LEFT JOIN $wpdb->postmeta as g
+                  ON a.ID=g.post_id
+                  AND g.meta_key = 'snapshot_timestamp'
+                WHERE a.post_type = 'dt_network_dashboard'
+                ORDER BY g.meta_value;
+            " );
+
+        if ( ! is_array( $results ) ) {
+            $results = [];
+        }
+
+        return hash( 'sha256', serialize($results) );
     }
 
     /**

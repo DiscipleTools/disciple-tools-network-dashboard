@@ -1,7 +1,6 @@
 jQuery(document).ready(function(){
     let chartDiv = jQuery('#chart')
     let spinner = '<span class="loading-spinner"></span>'
-    console.log('here')
 
     // add highlight to menu
     jQuery('#network_sites').prop('style', 'font-weight:900;')
@@ -23,8 +22,9 @@ jQuery(document).ready(function(){
                 <h2><span aria-hidden="true">&times;</span></h2>
              </button>
         </div>
+        
+        <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
        `)
-
 
     // call for data
     makeRequest('POST', 'network/base', {'type': 'sites_list'} )

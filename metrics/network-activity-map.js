@@ -13,6 +13,8 @@ jQuery(document).ready(function(){
                 <div id="map_chart" style="width: 100%; margin:0 auto; max-height: 700px;height: 100vh;vertical-align: text-top;">${spinner}</div>
                 
                 <hr style="max-width:100%;">
+                
+                <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
             `)
 
     // call for data

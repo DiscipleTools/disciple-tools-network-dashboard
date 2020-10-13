@@ -130,6 +130,15 @@ function load_line_chart(div, id, type, numberOfElements) {
                 line_chart(div, wpApiNetworkDashboard.global.contacts.added.twenty_four_months, numberOfElements, 'month')
                 break;
         }
+    } else if ('global-contacts-chart-div'===div) {
+        switch (type) {
+            case 'days':
+                line_chart(div, wpApiNetworkDashboard.global.contacts.added.sixty_days, numberOfElements)
+                break;
+            case 'months':
+                line_chart(div, wpApiNetworkDashboard.global.contacts.added.twenty_four_months, numberOfElements, 'month')
+                break;
+        }
     } else if ('global-groups-chart-div'===div) {
         switch (type) {
             case 'days':

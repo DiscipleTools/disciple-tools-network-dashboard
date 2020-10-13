@@ -90,6 +90,7 @@ jQuery(document).ready(function(){
                 </div>
             </div>
             
+            <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
         `)
 
     // call for data
@@ -99,29 +100,23 @@ jQuery(document).ready(function(){
 
             write_sites_list( true )
         })
-    makeRequest('POST', 'network/base', {'type': 'sites'} )
+    makeRequest('POST', 'network/base', {'type': 'global'} )
         .done(function(data) {
-            window.sites = data
+            window.sites = data.sites
+            window.global = data.global
 
-            makeRequest('POST', 'network/base', {'type': 'global'} )
-                .done(function(data) {
-                    window.global = data
+            jQuery('#total_countries').html(window.global.locations.total_countries)
+            jQuery('#total_users').html(window.global.users.total)
+            jQuery('.total_groups').html(window.global.groups.total)
+            jQuery('.total_contacts').html(window.global.contacts.total)
+            jQuery('.total_sites').html(window.global.sites.total)
+            jQuery('.total_activity').html(window.global.activity.total)
 
+            load_line_chart('global-contacts-chart-div', null, 'days', 30)
+            set_buttons('new-contact-buttons', 'c-30-days')
 
-
-                    jQuery('#total_countries').html(window.global.locations.total_countries)
-                    jQuery('#total_users').html(window.global.users.total)
-                    jQuery('.total_groups').html(window.global.groups.total)
-                    jQuery('.total_contacts').html(window.global.contacts.total)
-                    jQuery('.total_sites').html(window.global.sites.total)
-                    jQuery('.total_activity').html(window.global.activity.total)
-
-                    load_line_chart('global-contacts-chart-div', null, 'days', 30)
-                    set_buttons('new-contact-buttons', 'c-30-days')
-
-                    load_line_chart('global-groups-chart-div', null, 'days', 30)
-                    set_buttons('new-group-buttons', 'g-30-days')
-                })
+            load_line_chart('global-groups-chart-div', null, 'days', 30)
+            set_buttons('new-group-buttons', 'g-30-days')
         })
 
     makeRequest('POST', 'network/base', {'type': 'locations_list'} )
@@ -131,10 +126,5 @@ jQuery(document).ready(function(){
             MAPPINGDATA.data = data
 
             DRILLDOWN.get_drill_down('map_chart_drilldown', MAPPINGDATA.settings.current_map)
-
-
-
         })
-
-
 })

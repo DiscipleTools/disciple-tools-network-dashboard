@@ -1,27 +1,3 @@
-// jQuery(document).ready(function(){
-//     let obj = network_maps_cluster
-//     let chartDiv = jQuery('#chart')
-//     let spinner = '<span class="loading-spinner active"></span>'
-//
-//     // add highlight to menu
-//     jQuery('#network_maps_cluster').prop('style', 'font-weight:900;')
-//
-//     // write page layout with spinners
-//     chartDiv.empty().html(`
-//             <span class="section-header">Maps Cluster</span>
-//                 <hr style="max-width:100%;">
-//                 <div id="map_chart" style="width: 100%; margin:0 auto; max-height: 700px;height: 100vh;vertical-align: text-top;">${spinner}</div>
-//
-//                 <hr style="max-width:100%;">
-//             `)
-//
-//     // call for data
-//     makeRequest('POST', obj.endpoint,{'id': 'test'} )
-//         .done(function(data) {
-//             "use strict";
-//             console.log(obj)
-//         })
-// })
 
 if('/network/maps/cluster' === window.location.pathname) {
     write_cluster( 'contact_settings' )
@@ -32,33 +8,11 @@ function write_cluster( settings ) {
 
     jQuery('#network_maps_cluster').prop('style', 'font-weight:900;')
 
-    let post_type = obj[settings].post_type
-    let title = obj[settings].title
-    let status = obj[settings].status_list
 
     let chart = jQuery('#chart')
     let spinner = ' <span class="loading-spinner users-spinner active"></span> '
 
-    chart.empty().html(spinner)
-
-    /* build status list */
-    let status_list = `<option value="none" disabled></option>
-                      <option value="none" disabled>Status</option>
-                      <option value="none"></option>
-                      <option value="all" selected>Status - All</option>
-                      <option value="none" disabled>-----</option>
-                      `
-    jQuery.each(status, function(i,v){
-        status_list += `<option value="${i}">${v.label}</option>`
-    })
-    status_list += `<option value="none"></option>`
-
-
-    makeRequest( "POST", `network/maps/cluster/cluster_geojson`, { post_type: post_type, status: null} )
-        .then(data=>{
-            console.log(data)
-
-            chart.empty().html(`
+    chart.empty().html(`
             <style>
                     #map-wrapper {
                         position: relative;
@@ -152,67 +106,37 @@ function write_cluster( settings ) {
                 <div id='legend' class='legend'>
                     <div class="grid-x grid-margin-x grid-padding-x">
                         <div class="cell small-1 center info-bar-font">
-                            ${title} 
-                        </div>
-                        <div class="cell small-2 center border-left">
-                            <select id="status" class="small" style="width:170px;">
-                                ${status_list}
-                            </select> 
+                            Contacts: Red 
                         </div>
                     </div>
                 </div>
-                <div id="spinner"><img src="${obj.spinner_url}" class="spinner-image" alt="spinner"/></div>
+                <div id="spinner">${spinner}</div>
                 <div id="cross-hair">&#8982</div>
                 <div id="geocode-details" class="geocode-details">
-                    ${title}<span class="close-details" style="float:right;"><i class="fi-x"></i></span>
+                   <span class="close-details" style="float:right;"><i class="fi-x"></i></span>
                     <hr style="margin:10px 5px;">
                     <div id="geocode-details-content"></div>
                 </div>
             </div>
             `)
 
-            set_info_boxes()
-            function set_info_boxes() {
-                let map_wrapper = jQuery('#map-wrapper')
-                jQuery('.legend').css( 'width', map_wrapper.innerWidth() - 20 )
-                jQuery( window ).resize(function() {
-                    jQuery('.legend').css( 'width', map_wrapper.innerWidth() - 20 )
-                });
-            }
+    mapboxgl.accessToken = obj.map_key;
+    var map = new mapboxgl.Map({
+        container: 'map',
+        style: 'mapbox://styles/mapbox/light-v10',
+        center: [-98, 38.88],
+        minZoom: 0,
+        zoom: 0
+    });
 
-            mapboxgl.accessToken = obj.map_key;
-            var map = new mapboxgl.Map({
-                container: 'map',
-                style: 'mapbox://styles/mapbox/light-v10',
-                center: [-98, 38.88],
-                minZoom: 0,
-                zoom: 0
-            });
-
-            map.on('load', function() {
-                load_layer( data )
-            });
-
-            jQuery('#status').on('change', function() {
-                window.current_status = jQuery('#status').val()
-                makeRequest( "POST", `network/maps/cluster/cluster_geojson`, { post_type: post_type, status: window.current_status} )
-                    .then(data=> {
-                        clear_layer()
-                        load_layer( data )
-                    })
-            })
-
-            function clear_layer() {
-                map.removeLayer( 'clusters' )
-                map.removeLayer( 'cluster-count' )
-                map.removeLayer( 'unclustered-point' )
-                map.removeSource( post_type )
-            }
-
-            function load_layer( geojson ) {
-                map.addSource(post_type, {
+    map.on('load', function() {
+        makeRequest( "POST", `network/maps/cluster`, { post_type: 'contacts', status: null} )
+            .then(data=>{
+                console.log('contacts')
+                console.log(data)
+                map.addSource('layer-source-contacts', {
                     type: 'geojson',
-                    data: geojson,
+                    data: data,
                     cluster: true,
                     clusterMaxZoom: 14,
                     clusterRadius: 50
@@ -220,7 +144,7 @@ function write_cluster( settings ) {
                 map.addLayer({
                     id: 'clusters',
                     type: 'circle',
-                    source: post_type,
+                    source: 'layer-source-contacts',
                     filter: ['has', 'point_count'],
                     paint: {
                         'circle-color': [
@@ -244,9 +168,9 @@ function write_cluster( settings ) {
                     }
                 });
                 map.addLayer({
-                    id: 'cluster-count',
+                    id: 'cluster-count-contacts',
                     type: 'symbol',
-                    source: post_type,
+                    source: 'layer-source-contacts',
                     filter: ['has', 'point_count'],
                     layout: {
                         'text-field': '{point_count_abbreviated}',
@@ -255,9 +179,9 @@ function write_cluster( settings ) {
                     }
                 });
                 map.addLayer({
-                    id: 'unclustered-point',
+                    id: 'unclustered-point-contacts',
                     type: 'circle',
-                    source: post_type,
+                    source: 'layer-source-contacts',
                     filter: ['!', ['has', 'point_count']],
                     paint: {
                         'circle-color': '#11b4da',
@@ -266,54 +190,165 @@ function write_cluster( settings ) {
                         'circle-stroke-color': '#fff'
                     }
                 });
-                map.on('click', 'clusters', function(e) {
-                    var features = map.queryRenderedFeatures(e.point, {
-                        layers: ['clusters']
-                    });
-
-                    var clusterId = features[0].properties.cluster_id;
-                    map.getSource(post_type).getClusterExpansionZoom(
-                        clusterId,
-                        function(err, zoom) {
-                            if (err) return;
-
-                            map.easeTo({
-                                center: features[0].geometry.coordinates,
-                                zoom: zoom
-                            });
-                        }
-                    );
-                })
-                map.on('click', 'unclustered-point', function(e) {
-
-                    let content = jQuery('#geocode-details-content')
-                    content.empty()
-
-                    jQuery('#geocode-details').show()
-
-                    jQuery.each( e.features, function(i,v) {
-                        var address = v.properties.address;
-                        var post_id = v.properties.post_id;
-                        var name = v.properties.name
-
-                        content.append(`<p><a href="/trainings/${post_id}">${name}</a><br>${address}</p>`)
-                    })
-
-                });
-                map.on('mouseenter', 'clusters', function() {
-                    map.getCanvas().style.cursor = 'pointer';
-                });
-                map.on('mouseleave', 'clusters', function() {
-                    map.getCanvas().style.cursor = '';
-                });
-            }
-
-            jQuery('.close-details').on('click', function() {
-                jQuery('#geocode-details').hide()
             })
+        makeRequest( "POST", `network/maps/cluster`, { post_type: 'groups', status: null} )
+            .then(data=>{
+                console.log('groups')
+                console.log(data)
+            })
+        makeRequest( "POST", `network/maps/cluster`, { post_type: 'churches', status: null} )
+            .then(data=>{
+                console.log('churches')
+                console.log(data)
+            })
+        makeRequest( "POST", `network/maps/cluster`, { post_type: 'users', status: null} )
+            .then(data=>{
+                console.log('users')
+                console.log(data)
+            })
+    });
 
-        }).catch(err=>{
-        console.log("error")
-        console.log(err)
-    })
+
+    // makeRequest( "POST", `network/maps/cluster/cluster_geojson`, { post_type: post_type, status: null} )
+    //     .then(data=>{
+    //         console.log(data)
+    //
+    //
+    //
+    //         set_info_boxes()
+    //         function set_info_boxes() {
+    //             let map_wrapper = jQuery('#map-wrapper')
+    //             jQuery('.legend').css( 'width', map_wrapper.innerWidth() - 20 )
+    //             jQuery( window ).resize(function() {
+    //                 jQuery('.legend').css( 'width', map_wrapper.innerWidth() - 20 )
+    //             });
+    //         }
+    //
+    //
+    //
+    //
+    //
+    //         jQuery('#status').on('change', function() {
+    //             window.current_status = jQuery('#status').val()
+    //             makeRequest( "POST", `network/maps/cluster/cluster_geojson`, { post_type: post_type, status: window.current_status} )
+    //                 .then(data=> {
+    //                     clear_layer()
+    //                     load_layer( data )
+    //                 })
+    //         })
+    //
+    //         function clear_layer() {
+    //             map.removeLayer( 'clusters' )
+    //             map.removeLayer( 'cluster-count' )
+    //             map.removeLayer( 'unclustered-point' )
+    //             map.removeSource( post_type )
+    //         }
+    //
+    //         function load_layer( geojson ) {
+    //             map.addSource(post_type, {
+    //                 type: 'geojson',
+    //                 data: geojson,
+    //                 cluster: true,
+    //                 clusterMaxZoom: 14,
+    //                 clusterRadius: 50
+    //             });
+    //             map.addLayer({
+    //                 id: 'clusters',
+    //                 type: 'circle',
+    //                 source: post_type,
+    //                 filter: ['has', 'point_count'],
+    //                 paint: {
+    //                     'circle-color': [
+    //                         'step',
+    //                         ['get', 'point_count'],
+    //                         '#51bbd6',
+    //                         100,
+    //                         '#f1f075',
+    //                         750,
+    //                         '#f28cb1'
+    //                     ],
+    //                     'circle-radius': [
+    //                         'step',
+    //                         ['get', 'point_count'],
+    //                         20,
+    //                         100,
+    //                         30,
+    //                         750,
+    //                         40
+    //                     ]
+    //                 }
+    //             });
+    //             map.addLayer({
+    //                 id: 'cluster-count',
+    //                 type: 'symbol',
+    //                 source: post_type,
+    //                 filter: ['has', 'point_count'],
+    //                 layout: {
+    //                     'text-field': '{point_count_abbreviated}',
+    //                     'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
+    //                     'text-size': 12
+    //                 }
+    //             });
+    //             map.addLayer({
+    //                 id: 'unclustered-point',
+    //                 type: 'circle',
+    //                 source: post_type,
+    //                 filter: ['!', ['has', 'point_count']],
+    //                 paint: {
+    //                     'circle-color': '#11b4da',
+    //                     'circle-radius':12,
+    //                     'circle-stroke-width': 1,
+    //                     'circle-stroke-color': '#fff'
+    //                 }
+    //             });
+    //             map.on('click', 'clusters', function(e) {
+    //                 var features = map.queryRenderedFeatures(e.point, {
+    //                     layers: ['clusters']
+    //                 });
+    //
+    //                 var clusterId = features[0].properties.cluster_id;
+    //                 map.getSource(post_type).getClusterExpansionZoom(
+    //                     clusterId,
+    //                     function(err, zoom) {
+    //                         if (err) return;
+    //
+    //                         map.easeTo({
+    //                             center: features[0].geometry.coordinates,
+    //                             zoom: zoom
+    //                         });
+    //                     }
+    //                 );
+    //             })
+    //             map.on('click', 'unclustered-point', function(e) {
+    //
+    //                 let content = jQuery('#geocode-details-content')
+    //                 content.empty()
+    //
+    //                 jQuery('#geocode-details').show()
+    //
+    //                 jQuery.each( e.features, function(i,v) {
+    //                     var address = v.properties.address;
+    //                     var post_id = v.properties.post_id;
+    //                     var name = v.properties.name
+    //
+    //                     content.append(`<p><a href="/trainings/${post_id}">${name}</a><br>${address}</p>`)
+    //                 })
+    //
+    //             });
+    //             map.on('mouseenter', 'clusters', function() {
+    //                 map.getCanvas().style.cursor = 'pointer';
+    //             });
+    //             map.on('mouseleave', 'clusters', function() {
+    //                 map.getCanvas().style.cursor = '';
+    //             });
+    //         }
+    //
+    //         jQuery('.close-details').on('click', function() {
+    //             jQuery('#geocode-details').hide()
+    //         })
+    //
+    //     }).catch(err=>{
+    //     console.log("error")
+    //     console.log(err)
+    // })
 }

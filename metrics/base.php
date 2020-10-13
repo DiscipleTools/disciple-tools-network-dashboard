@@ -27,13 +27,9 @@ class DT_Network_Dashboard_Metrics_Base {
     } // End instance()
 
     public function __construct() {
-        $this->url_path = dt_get_url_path();
-
-        add_action( "template_redirect", [ $this, 'url_redirect' ], 10 );
-        add_action( 'wp_enqueue_scripts', [ $this, 'base_scripts' ], 99 );
-        add_action( 'rest_api_init', [ $this, 'base_add_api_routes' ] );
-
-
+        if ( empty( $this->url_path ) ){
+            $this->url_path = dt_get_url_path();
+        }
     }
 
     public function has_permission(){
@@ -73,6 +69,14 @@ class DT_Network_Dashboard_Metrics_Base {
                 ],
             ]
         );
+        register_rest_route(
+            $this->namespace, '/network/base/', [
+                [
+                    'methods'  => WP_REST_Server::READABLE,
+                    'callback' => [ $this, 'base_endpoint' ],
+                ],
+            ]
+        );
     }
 
     public function base_endpoint( WP_REST_Request $request ){
@@ -82,6 +86,9 @@ class DT_Network_Dashboard_Metrics_Base {
         $params = $request->get_params();
 
         switch( $params['type'] ) {
+            case 'sites':
+                $data = $this->get_sites();
+                break;
             case 'sites_list':
                 $data = $this->get_site_list();
                 break;
@@ -89,16 +96,24 @@ class DT_Network_Dashboard_Metrics_Base {
                 $data = $this->get_locations_list();
                 break;
             case 'global':
-                $data = $this->get_global();
+                $data['sites'] = $this->get_sites();
+                $data['global'] = $this->get_global();
                 break;
-            case 'sites':
-                $data = $this->get_sites();
+            case 'activity':
+                $data = self::get_activity_log();
+                break;
+            case 'reset':
+                $data['sites'] = $this->get_sites( true );;
+                $data['global'] = $this->get_global( true );
+                $data['sites_list'] = $this->get_site_list( true );
+                $data['locations_list'] = $this->get_locations_list( true );
                 break;
             case 'all':
             default:
+                $data['sites'] = $this->get_sites();;
+                $data['global'] = $this->get_global();
                 $data['sites_list'] = $this->get_site_list();
                 $data['locations_list'] = $this->get_locations_list();
-                $data['global'] = $this->get_global();
                 break;
         }
 
@@ -159,11 +174,18 @@ class DT_Network_Dashboard_Metrics_Base {
     }
 
 
-    public static function get_sites() {
+    public static function get_sites( $reset = false ) {
+        if ( $reset ){
+            delete_transient( __METHOD__ );
+            delete_transient( __METHOD__ . '_state' );
+        }
 
-//        if (wp_cache_get( 'get_sites' )) {
-//            return wp_cache_get( 'get_sites' );
-//        }
+        $live_global_hash_state = DT_Network_Dashboard_Site_Post_Type::global_time_hash();
+        $stored_global_hash_state = get_transient( __METHOD__ . '_state' );
+
+        if ( $live_global_hash_state === $stored_global_hash_state && ! empty( get_transient( __METHOD__ ) ) ){
+            return get_transient( __METHOD__ );
+        }
 
         $new = [];
 
@@ -193,12 +215,25 @@ class DT_Network_Dashboard_Metrics_Base {
             }
         }
 
-//        wp_cache_set( 'get_sites', $new );
+        set_transient( __METHOD__, $new, 24 * HOUR_IN_SECONDS );
+        set_transient( __METHOD__.'_state', $live_global_hash_state, 24 * HOUR_IN_SECONDS );
 
         return $new;
     }
 
-    public static function get_site_list() {
+    public static function get_site_list( $reset = false ) {
+        if ( $reset ){
+            delete_transient( __METHOD__ );
+            delete_transient( __METHOD__ . '_state' );
+        }
+
+        $live_global_hash_state = DT_Network_Dashboard_Site_Post_Type::global_time_hash();
+        $stored_global_hash_state = get_transient( __METHOD__ . '_state' );
+
+        if ( $live_global_hash_state === $stored_global_hash_state && ! empty( get_transient( __METHOD__ ) ) ){
+            return get_transient( __METHOD__ );
+        }
+
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
 
         $new = [];
@@ -240,10 +275,25 @@ class DT_Network_Dashboard_Metrics_Base {
             }
         }
 
+        set_transient( __METHOD__, $new, 24 * HOUR_IN_SECONDS );
+        set_transient( __METHOD__.'_state', $live_global_hash_state, 24 * HOUR_IN_SECONDS );
+
         return $new;
     }
 
-    public static function get_global() {
+    public static function get_global( $reset = false ) {
+        if ( $reset ){
+            delete_transient( __METHOD__ );
+            delete_transient( __METHOD__ . '_state' );
+        }
+
+        $live_global_hash_state = DT_Network_Dashboard_Site_Post_Type::global_time_hash();
+        $stored_global_hash_state = get_transient( __METHOD__ . '_state' );
+
+        if ( $live_global_hash_state === $stored_global_hash_state && ! empty( get_transient( __METHOD__ ) ) ){
+            return get_transient( __METHOD__ );
+        }
+
         $totals = self::compile_totals();
         $data = [
             'contacts' => [
@@ -252,6 +302,13 @@ class DT_Network_Dashboard_Metrics_Base {
                     'sixty_days' => self::compile_by_days( 'contacts' ),
                     'twenty_four_months' => self::compile_by_months( 'contacts' ),
                 ],
+                'baptisms' => [
+                    'added' => [
+                        'sixty_days' => self::compile_by_days_baptisms(),
+                        'twenty_four_months' => self::compile_by_months_baptisms(),
+                    ],
+                    'generations' => self::compile_generations_baptisms(),
+                ],
             ],
             'groups' => [
                 'total' => $totals['total_groups'] ?? 0,
@@ -259,9 +316,17 @@ class DT_Network_Dashboard_Metrics_Base {
                     'sixty_days' => self::compile_by_days( 'groups' ),
                     'twenty_four_months' => self::compile_by_months( 'groups' ),
                 ],
+                'church_generations' => self::compile_generations_church(),
+                'group_generations' => self::compile_generations_group(),
             ],
             'users' => [
                 'total' => $totals['total_users'] ?? 0,
+                'current_state' => self::compile_user_types(),
+                'login_activity' => [
+                    'sixty_days' => self::compile_by_days_users(),
+                    'twenty_four_months' => self::compile_by_months_users(),
+                ],
+                'last_thirty_day_engagement' => self::compile_logins_last_thirty_days(),
             ],
             'sites' => [
                 'total' => $totals['total_sites'] ?? 0,
@@ -274,10 +339,27 @@ class DT_Network_Dashboard_Metrics_Base {
             ],
         ];
 
+        $data = apply_filters( 'dt_network_dashboard_global_data', $data );
+
+        set_transient( __METHOD__, $data, 24 * HOUR_IN_SECONDS );
+        set_transient( __METHOD__.'_state', $live_global_hash_state, 24 * HOUR_IN_SECONDS );
+
         return $data;
     }
 
-    public static function get_locations_list() {
+    public static function get_locations_list( $reset = false ) {
+        if ( $reset ){
+            delete_transient( __METHOD__ );
+            delete_transient( __METHOD__ . '_state' );
+        }
+
+        $live_global_hash_state = DT_Network_Dashboard_Site_Post_Type::global_time_hash();
+        $stored_global_hash_state = get_transient( __METHOD__ . '_state' );
+
+        if ( $live_global_hash_state === $stored_global_hash_state && ! empty( get_transient( __METHOD__ ) ) ){
+            return get_transient( __METHOD__ );
+        }
+
         $data_types = self::location_data_types();
         $data = [
             'custom_column_labels' => $data_types,
@@ -353,16 +435,43 @@ class DT_Network_Dashboard_Metrics_Base {
             }
         }
 
+        set_transient( __METHOD__, $data, 24 * HOUR_IN_SECONDS );
+        set_transient( __METHOD__.'_state', $live_global_hash_state, 24 * HOUR_IN_SECONDS );
+
         return $data;
     }
 
     public static function get_activity_log(){
+
         global $wpdb;
-        $data = $wpdb->get_results( "SELECT * FROM $wpdb->dt_movement_log ORDER BY timestamp DESC LIMIT 5000;");
-        if ( empty( $data ) ) {
-            return [];
+        $timestamp = strtotime('-30 days' );
+        $results = $wpdb->get_results( $wpdb->prepare( "
+                SELECT site_id, action, category, lng, lat, label, payload, timestamp FROM $wpdb->dt_movement_log WHERE timestamp > %s  ORDER BY timestamp DESC
+                ", $timestamp ), ARRAY_A );
+        foreach( $results as $index => $result ){
+            $results[$index]['payload'] = maybe_unserialize( $result['payload']);
         }
-        return $data;
+
+//        if (dt_is_current_multisite_dashboard_approved()) {
+//            foreach ($sites as $key => $site) {
+//                if ( 'remote' === $site['type'] ){
+//                    continue;
+//                }
+//                $snapshot = maybe_unserialize( $site['snapshot'] );
+//                if ( !empty( $snapshot['partner_id'] )) {
+//                    $new[] = [
+//                        'id' => $snapshot['partner_id'],
+//                        'name' => ucwords( $snapshot['profile']['partner_name'] ),
+//                        'contacts' => $snapshot['contacts']['current_state']['status']['active'],
+//                        'groups' => $snapshot['groups']['current_state']['total_active'],
+//                        'users' => $snapshot['users']['current_state']['total_users'],
+//                        'date' => date( 'Y-m-d H:i:s', $snapshot['date'] ),
+//                    ];
+//                }
+//            }
+//        }
+
+        return $results;
     }
 
     public static function format_location_grid_types( $query) {
@@ -460,7 +569,7 @@ class DT_Network_Dashboard_Metrics_Base {
         return $d;
     }
 
-    public static function compile_by_days( $type) {
+    public static function compile_by_days( $type ) {
         $dates1 = self::get_day_list( 60 );
         $dates2 = [];
 
@@ -514,6 +623,234 @@ class DT_Network_Dashboard_Metrics_Base {
         return $dates2;
     }
 
+    public static function compile_by_days_baptisms( ) {
+        $dates1 = self::get_day_list( 60 );
+        $dates2 = [];
+
+        $sites = self::get_sites();
+        if (empty( $sites )) {
+            return [];
+        }
+
+        // extract days
+        foreach ($sites as $key => $site) {
+            foreach ($site['contacts']['baptisms']['added']['sixty_days'] as $day) {
+                if (isset( $dates1[$day['date']]['value'] ) && $day['value']) {
+                    $dates1[$day['date']]['value'] = $dates1[$day['date']]['value'] + $day['value'];
+                }
+            }
+        }
+
+        arsort( $dates1 );
+
+        foreach ($dates1 as $d) {
+            $dates2[] = $d;
+        }
+
+        return $dates2;
+    }
+
+    public static function compile_by_months_baptisms() {
+        $dates1 = self::get_month_list( 25 );
+        $dates2 = [];
+
+        $sites = self::get_sites();
+        if (empty( $sites )) {
+            return [];
+        }
+
+        // extract months
+        foreach ($sites as $key => $site) {
+            foreach ($site['contacts']['baptisms']['added']['twenty_four_months'] as $day) {
+                if (isset( $dates1[$day['date']]['value'] ) && $day['value']) {
+                    $dates1[$day['date']]['value'] = $dates1[$day['date']]['value'] + $day['value'];
+                }
+            }
+        }
+
+        arsort( $dates1 );
+
+        foreach ($dates1 as $d) {
+            $dates2[] = $d;
+        }
+
+        return $dates2;
+    }
+
+    public static function compile_by_days_users( ) {
+        $dates1 = self::get_day_list( 60 );
+        $dates2 = [];
+
+        $sites = self::get_sites();
+        if (empty( $sites )) {
+            return [];
+        }
+
+        // extract days
+        foreach ($sites as $key => $site) {
+            foreach ($site['users']['login_activity']['sixty_days'] as $day) {
+                if (isset( $dates1[$day['date']]['value'] ) && $day['value']) {
+                    $dates1[$day['date']]['value'] = $dates1[$day['date']]['value'] + $day['value'];
+                }
+            }
+        }
+
+        arsort( $dates1 );
+
+        foreach ($dates1 as $d) {
+            $dates2[] = $d;
+        }
+
+        return $dates2;
+    }
+
+    public static function compile_by_months_users() {
+        $dates1 = self::get_month_list( 25 );
+        $dates2 = [];
+
+        $sites = self::get_sites();
+        if (empty( $sites )) {
+            return [];
+        }
+
+        // extract months
+        foreach ($sites as $key => $site) {
+            foreach ($site['users']['login_activity']['twenty_four_months'] as $day) {
+                if (isset( $dates1[$day['date']]['value'] ) && $day['value']) {
+                    $dates1[$day['date']]['value'] = $dates1[$day['date']]['value'] + $day['value'];
+                }
+            }
+        }
+
+        arsort( $dates1 );
+
+        foreach ($dates1 as $d) {
+            $dates2[] = $d;
+        }
+
+        return $dates2;
+    }
+
+    public static function compile_logins_last_thirty_days(){
+        $data = [];
+
+        $sites = self::get_sites();
+        if (empty( $sites )) {
+            return [];
+        }
+
+        foreach ($sites as $key => $site) {
+            if ( ! isset( $site['users']['last_thirty_day_engagement'] ) ){
+                continue;
+            }
+            foreach ( $site['users']['last_thirty_day_engagement'] as $index => $value) {
+                if ( ! isset( $data[$index] ) ) {
+                    $data[$index] = $value;
+                    continue;
+                }
+                $data[$index]['value'] = $value['value'] + $data[$index]['value'];
+            }
+        }
+
+        return $data;
+    }
+
+    public static function compile_generations_church(){
+        $data = [];
+
+        $sites = self::get_sites();
+        if (empty( $sites )) {
+            return [];
+        }
+
+        foreach ($sites as $key => $site) {
+            if ( ! isset( $site['groups']['church_generations'] ) ){
+                continue;
+            }
+            foreach ($site['groups']['church_generations'] as $index => $gen) {
+                if ( ! isset( $data[$index] ) ) {
+                    $data[$index] = $gen;
+                    continue;
+                }
+               $data[$index]['value'] = $gen['value'] + $data[$index]['value'];
+            }
+        }
+
+        return $data;
+    }
+
+    public static function compile_generations_group(){
+        $data = [];
+
+        $sites = self::get_sites();
+        if (empty( $sites )) {
+            return [];
+        }
+
+        foreach ($sites as $key => $site) {
+            if ( ! isset( $site['groups']['group_generations'] ) ){
+                continue;
+            }
+            foreach ($site['groups']['group_generations'] as $index => $gen) {
+                if ( ! isset( $data[$index] ) ) {
+                    $data[$index] = $gen;
+                    continue;
+                }
+                $data[$index]['value'] = $gen['value'] + $data[$index]['value'];
+            }
+        }
+
+        return $data;
+    }
+
+    public static function compile_generations_baptisms(){
+        $data = [];
+
+        $sites = self::get_sites();
+        if (empty( $sites )) {
+            return [];
+        }
+
+        foreach ($sites as $key => $site) {
+            if ( ! isset( $site['contacts']['baptisms']['generations'] ) ){
+                continue;
+            }
+            foreach ($site['contacts']['baptisms']['generations'] as $index => $gen) {
+                if ( ! isset( $data[$index] ) ) {
+                    $data[$index] = $gen;
+                    continue;
+                }
+                $data[$index]['value'] = $gen['value'] + $data[$index]['value'];
+            }
+        }
+
+        return $data;
+    }
+
+    public static function compile_user_types(){
+        $data = [];
+
+        $sites = self::get_sites();
+        if (empty( $sites )) {
+            return [];
+        }
+
+        foreach ($sites as $key => $site) {
+            if ( ! isset( $site['users']['current_state']['roles'] ) ){
+                continue;
+            }
+            foreach ( $site['users']['current_state']['roles'] as $index => $value ) {
+                if ( ! isset( $data[$index] ) ) {
+                    $data[$index] = $value;
+                    continue;
+                }
+                $data[$index] = $value + $data[$index];
+            }
+        }
+
+        return $data;
+    }
+
     public static function compile_totals() {
         $sites = self::get_sites();
         $data = [
@@ -559,3 +896,22 @@ class DT_Network_Dashboard_Metrics_Base {
     }
 }
 DT_Network_Dashboard_Metrics_Base::instance();
+
+
+class DT_Network_Dashboard_Metrics_Base_Loader extends DT_Network_Dashboard_Metrics_Base {
+    private static $_instance = null;
+    public static function instance() {
+        if (is_null( self::$_instance )) {
+            self::$_instance = new self();
+        }
+        return self::$_instance;
+    } // End instance()
+
+    public function __construct() {
+        parent::__construct();
+        add_action( "template_redirect", [ $this, 'url_redirect' ], 10 );
+        add_action( 'wp_enqueue_scripts', [ $this, 'base_scripts' ], 99 );
+        add_action( 'rest_api_init', [ $this, 'base_add_api_routes' ] );
+    }
+}
+DT_Network_Dashboard_Metrics_Base_Loader::instance();

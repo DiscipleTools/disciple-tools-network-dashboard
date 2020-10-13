@@ -512,6 +512,35 @@ class DT_Network_Dashboard_Snapshot_Queries {
         return $results;
     }
 
+    public static function dashboards_to_report_activity_to() : array {
+        global $wpdb;
+
+        $results = $wpdb->get_results("
+            SELECT 
+              post_title as name, 
+              ID as id
+            FROM $wpdb->posts as p
+            JOIN $wpdb->postmeta as pm
+              ON p.ID=pm.post_id
+                AND pm.meta_key = 'type'
+            LEFT JOIN $wpdb->postmeta as pm2
+              ON p.ID=pm2.post_id
+                AND pm2.meta_key = 'non_wp' 
+              WHERE p.post_type = 'site_link_system'
+              AND p.post_status = 'publish'
+              AND ( pm.meta_value = 'network_dashboard_both'
+              OR pm.meta_value = 'network_dashboard_sending' )
+                AND pm2.meta_value != '1'
+        ",
+            ARRAY_A );
+
+        if ( empty( $results ) ) {
+            $results = [];
+        }
+
+        return $results;
+    }
+
     public static function query_contacts_current_state() : array  {
         global $wpdb;
         /**

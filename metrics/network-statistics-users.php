@@ -17,7 +17,7 @@ class DT_Network_Dashboard_Metrics_Statistics_Users extends DT_Network_Dashboard
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';
         $this->js_object_name = $this->key;
 
-        add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 50 );
+        add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 80 );
         add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
         add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
 

@@ -10,23 +10,26 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         }
         parent::__construct();
 
-        $this->base_slug = 'maps';
-        $this->slug = 'cluster';
-        $this->base_title = __( 'Cluster Map', 'disciple_tools' );
-        $this->title = __( 'Cluster Map', 'disciple_tools' );
-        $this->menu_title = 'Cluster Map';
-        $this->url = $this->root_slug . '/' . $this->base_slug . '/'  . $this->slug;
-        $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
-        $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';
-        $this->js_object_name = $this->key;
-
-        add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 50 );
-        add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
-        add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
-
-        if ( $this->url === substr( $this->url_path, 0, 20 )  ) {
-            add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
-        }
+//        $this->base_slug = 'maps';
+//        $this->slug = 'cluster';
+//        $this->base_title = __( 'Cluster Map', 'disciple_tools' );
+//        $this->title = __( 'Cluster Map', 'disciple_tools' );
+//        $this->menu_title = 'Cluster Map';
+//        $this->url = $this->root_slug . '/' . $this->base_slug . '/'  . $this->slug;
+//        $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
+//        $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';
+//        $this->js_object_name = $this->key;
+//
+//        add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 50 );
+//        add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
+//        add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
+//
+//        if ( $this->url === substr( $this->url_path, 0, 20 )  ) {
+//            add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
+//        }
+//
+//        add_filter('dashboard_cluster_layer_geojson', [$this, 'cluster_geojson_contacts'], 10, 2 );
+//        add_filter('dashboard_cluster_layer_geojson', [$this, 'cluster_geojson_groups'], 10, 2 );
     }
 
     public function add_scripts() {
@@ -38,11 +41,6 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
             $this->js_object_name .'_script', $this->js_object_name, [
                 'endpoint' => $this->url,
                 'map_key' => DT_Mapbox_API::get_key(),
-                'contact_settings' => [
-                    'post_type' => 'contacts',
-                    'title' => __( 'Contacts', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'paused'=> [ "label" => 'Paused' ], 'closed'=> [ "label" => 'Closed' ] ]
-                ],
             ]
         );
     }
@@ -72,76 +70,67 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
             ]
         );
 
-        register_rest_route(
-            $this->namespace, '/' . $this->url . '/cluster_geojson', [
-                [
-                    'methods'  => WP_REST_Server::CREATABLE,
-                    'callback' => [ $this, 'cluster_geojson' ],
-                ],
-            ]
-        );
     }
 
     public function endpoint( WP_REST_Request $request ){
         if ( !$this->has_permission() ) {
             return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
         }
-        $params = $request->get_params();
-
-        return $params;
-    }
-
-    public function cluster_geojson( WP_REST_Request $request ) {
-        if ( ! $this->has_permission() ){
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
-        }
-
-        return true;
 
         $params = $request->get_json_params() ?? $request->get_body_params();
         if ( ! isset( $params['post_type'] ) || empty( $params['post_type'] ) ) {
             return new WP_Error( __METHOD__, "Missing Post Types", [ 'status' => 400 ] );
         }
 
-        $status = null;
-        if ( isset( $params['status'] ) && $params['status'] !== 'all' ) {
-            $status = sanitize_text_field( wp_unslash( $params['status'] ) );
-        }
-
         $post_type = sanitize_text_field( wp_unslash( $params['post_type'] ) );
 
-        return apply_filters( 'dashboard_cluster_geojson', $this->_empty_geojson(), $post_type, $status );
-
+        return apply_filters( 'dashboard_cluster_layer_geojson', $this->_empty_geojson(), $post_type );;
     }
-    public function cluster_geojson_contacts( $geojson, $post_type, $status ) {
+
+    public function cluster_geojson_contacts( $geojson, $post_type ) {
         if ( 'contacts' !== $post_type ) {
             return $geojson;
         }
 
-        $results = [
-            [
-                "lng" => "0",
-                "lat" => "0",
-                "count" => "10",
-                "name" => "test location",
-                "level" => "0",
-            ]
-        ];
+        global $wpdb;
+
+        $sites = $this->get_sites();
+        $list = [];
+        foreach( $sites as $site ){
+            if ( ! isset( $site['locations']['contacts']['active'] ) ) {
+                continue;
+            }
+            foreach( $site['locations']['contacts']['active'] as $index => $value ) {
+               if ( ! isset( $list[$index] ) ) {
+                   $list[$index] = $value;
+               }
+                $list[$index] = $list[$index] + $value;
+            }
+        }
+
+        $grid = $wpdb->get_results("SELECT grid_id, longitude, latitude FROM $wpdb->dt_location_grid", ARRAY_A );
+        $grid_list = [];
+        foreach( $grid as $g ){
+            $grid_list[$g['grid_id']] = $g;
+        }
 
         $features = [];
-        foreach ( $results as $result ) {
+        foreach ( $list as $grid_id => $value ) {
+//            if ( ! isset( $grid_list[$grid_id] ) || empty( $grid_list[$grid_id] ) ) {
+//                continue;
+//            }
+
             $features[] = array(
                 'type' => 'Feature',
                 'properties' => array(
-                    "name" => $result['name'],
-                    "count" => $result['count'],
-                    "level" => $result['level'],
+                    "name" => $grid_list[$grid_id]['name'] ?? '',
+                    "count" => $value,
                 ),
                 'geometry' => array(
                     'type' => 'Point',
                     'coordinates' => array(
-                        $result['lng'],
-                        $result['lat'],
+                        $grid_list[$grid_id]['longitude'],
+                        $grid_list[$grid_id]['latitude'],
                         1
                     ),
                 ),
@@ -156,7 +145,7 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         return $geojson;
 
     }
-    public function cluster_geojson_groups( $geojson, $post_type, $status ) {
+    public function cluster_geojson_groups( $geojson, $post_type ) {
         if ( 'groups' !== $post_type ) {
             return $geojson;
         }

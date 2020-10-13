@@ -39,6 +39,94 @@ function load_line_chart(div, id, type, numberOfElements) {
                 line_chart(div, window.global.contacts.added.twenty_four_months, numberOfElements, 'month')
                 break;
         }
+    } else if ('global-baptisms-chart-div'===div) {
+        switch (type) {
+            case 'days':
+                line_chart(div, window.global.contacts.baptisms.added.sixty_days, numberOfElements)
+                break;
+            case 'months':
+                line_chart(div, window.global.contacts.baptisms.added.twenty_four_months, numberOfElements, 'month')
+                break;
+        }
+    } else if ('global-users-chart-div'===div) {
+        switch (type) {
+            case 'days':
+                line_chart(div, window.global.users.login_activity.sixty_days, numberOfElements)
+                break;
+            case 'months':
+                line_chart(div, window.global.users.login_activity.twenty_four_months, numberOfElements, 'month')
+                break;
+        }
+    } else if ('global-groups-chart-div'===div) {
+        switch (type) {
+            case 'days':
+                line_chart(div, window.global.groups.added.sixty_days, numberOfElements)
+                break;
+            case 'months':
+                line_chart(div, window.global.groups.added.twenty_four_months, numberOfElements, 'month')
+                break;
+        }
+    }
+}
+
+function load_global_line_chart(div, id, type, numberOfElements) {
+    if ( typeof window.sites === 'undefined'){
+        load_sites_data()
+    }
+    if ('group-line-chart-div'===div) {
+        switch (type) {
+            case 'days':
+                line_chart(div, window.sites[id].groups.added.sixty_days, numberOfElements)
+                break;
+            case 'months':
+                line_chart(div, window.sites[id].groups.added.twenty_four_months, numberOfElements, 'month')
+                break;
+        }
+    } else if ('line-chart-div'===div) {
+        switch (type) {
+            case 'days':
+                line_chart(div, window.sites[id].contacts.added.sixty_days, numberOfElements)
+                break;
+            case 'months':
+                line_chart(div, window.sites[id].contacts.added.twenty_four_months, numberOfElements, 'month')
+                break;
+        }
+    } else if ('user-activity-chart-div'===div) {
+        switch (type) {
+            case 'days':
+                line_chart(div, window.sites[id].users.login_activity.sixty_days, numberOfElements)
+                break;
+            case 'months':
+                line_chart(div, window.sites[id].users.login_activity.twenty_four_months, numberOfElements, 'month')
+                break;
+        }
+    } else if ('global-contacts-chart-div'===div) {
+        switch (type) {
+            case 'days':
+                line_chart(div, window.global.contacts.added.sixty_days, numberOfElements)
+                break;
+            case 'months':
+                line_chart(div, window.global.contacts.added.twenty_four_months, numberOfElements, 'month')
+                break;
+        }
+    } else if ('global-baptisms-chart-div'===div) {
+        switch (type) {
+            case 'days':
+                line_chart(div, window.global.contacts.baptisms.added.sixty_days, numberOfElements)
+                break;
+            case 'months':
+                line_chart(div, window.global.contacts.baptisms.added.twenty_four_months, numberOfElements, 'month')
+                break;
+        }
+    } else if ('global-users-chart-div'===div) {
+        switch (type) {
+            case 'days':
+                line_chart(div, window.global.users.login_activity.sixty_days, numberOfElements)
+                break;
+            case 'months':
+                line_chart(div, window.global.users.login_activity.twenty_four_months, numberOfElements, 'month')
+                break;
+        }
     } else if ('global-groups-chart-div'===div) {
         switch (type) {
             case 'days':
@@ -137,7 +225,7 @@ function show_single_site(id, name) {
                           <h4>Contacts<br><span class="total_contacts">${data.contacts.current_state.status.active}</span></h4>
                           </div>
                           <div class="medium-4 cell center" style="border-left: 1px solid #ccc">
-                          <h4>Groups<br><span class="total_groups">${data.groups.current_state.all}</span></h4>
+                          <h4>Groups<br><span class="total_groups">${data.groups.current_state.total_active}</span></h4>
                           </div>
                           <div class="medium-4 cell center" style="border-left: 1px solid #ccc">
                           <h4>Users<br><span id="total_users">${data.users.current_state.total_users}</span></h4>
@@ -326,10 +414,10 @@ function show_single_site(id, name) {
 
     load_line_chart('line-chart-div', id, 'days', 30)
     set_buttons('new-contact-buttons', 'c-30-days')
-    //
+
     // load_points_map('site-map-div', id)
     load_gen_chart('generations-div', id, 'g-baptisms')
-    //
+
     load_line_chart('group-line-chart-div', id, 'days', 30)
     set_buttons('new-group-buttons', 'g-30-days')
     load_funnel_chart('follow-up-funnel-chart-div', id)
@@ -403,6 +491,26 @@ function load_gen_chart(div, id, type) {
                 break;
             case 'g-churches':
                 bar_chart('generations-div', window.sites[id].groups.church_generations)
+                break;
+        }
+
+    }
+}
+
+function load_global_gen_chart(div, type) {
+    if ('generations-div'===div) {
+        switch (type) {
+            case 'g-baptisms':
+                bar_chart('generations-div', window.global.contacts.baptisms.generations)
+                break;
+            case 'g-coaching':
+                bar_chart('generations-div', window.global.contacts.coaching.generations)
+                break;
+            case 'g-groups':
+                bar_chart('generations-div', window.global.groups.group_generations)
+                break;
+            case 'g-churches':
+                bar_chart('generations-div', window.global.groups.church_generations)
                 break;
         }
 
@@ -511,6 +619,8 @@ function load_pie_chart(div, id) {
         pie_chart('types-pie-chart-div', window.sites[id].groups.by_types)
     } else if ('system-engagement-pie-chart-div'===div) {
         pie_chart('system-engagement-pie-chart-div', window.sites[id].users.last_thirty_day_engagement)
+    } else if ('global-system-engagement-pie-chart-div'===div) {
+        pie_chart('global-system-engagement-pie-chart-div', window.global.users.last_thirty_day_engagement)
     }
 }
 
@@ -652,4 +762,12 @@ function points_map_chart(div, values) {
         imageSeriesTemplate.nonScaling = true;
 
     })
+}
+
+function reset() {
+    jQuery('.reset-spinner').html('<span class="loading-spinner active"></span>')
+    makeRequest('POST', 'network/base', {'type': 'reset'} )
+        .done(function(data) {
+            location.reload()
+        })
 }
