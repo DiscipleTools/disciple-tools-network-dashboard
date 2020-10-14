@@ -77,6 +77,7 @@ if ( ! ( isset( $params['data'] ) && ! empty( $params['data'] ) && is_array( $pa
     _dt_network_doing_it_wrong('no data id found or data is not an array');
 }
 
+dt_write_log($params);
 // LOOP THROUGH ACTIVITY ELEMENTS
 $process_status = DT_Network_Activity_Log::insert_log( $params['data'] );
 

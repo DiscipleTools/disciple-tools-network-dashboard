@@ -461,35 +461,21 @@ class DT_Network_Dashboard_Metrics_Base {
         return $data;
     }
 
-    public static function get_activity_log(){
+    public static function get_activity_log( $time = null, $site_id = null ){
 
         global $wpdb;
-        $timestamp = strtotime('-30 days' );
+        if ( empty( $time ) ){
+            $time = strtotime('-30 days' );
+        }
         $results = $wpdb->get_results( $wpdb->prepare( "
-                SELECT site_id, action, category, lng, lat, label, payload, timestamp FROM $wpdb->dt_movement_log WHERE timestamp > %s  ORDER BY timestamp DESC
-                ", $timestamp ), ARRAY_A );
+                SELECT *, DATE_FORMAT(FROM_UNIXTIME(timestamp), '%Y-%c-%e') AS date_formatted
+                FROM $wpdb->dt_movement_log 
+                WHERE timestamp > %s 
+                ORDER BY timestamp DESC
+                ", $time ), ARRAY_A );
         foreach( $results as $index => $result ){
             $results[$index]['payload'] = maybe_unserialize( $result['payload']);
         }
-
-//        if (dt_is_current_multisite_dashboard_approved()) {
-//            foreach ($sites as $key => $site) {
-//                if ( 'remote' === $site['type'] ){
-//                    continue;
-//                }
-//                $snapshot = maybe_unserialize( $site['snapshot'] );
-//                if ( !empty( $snapshot['partner_id'] )) {
-//                    $new[] = [
-//                        'id' => $snapshot['partner_id'],
-//                        'name' => ucwords( $snapshot['profile']['partner_name'] ),
-//                        'contacts' => $snapshot['contacts']['current_state']['status']['active'],
-//                        'groups' => $snapshot['groups']['current_state']['total_active'],
-//                        'users' => $snapshot['users']['current_state']['total_users'],
-//                        'date' => date( 'Y-m-d H:i:s', $snapshot['date'] ),
-//                    ];
-//                }
-//            }
-//        }
 
         return $results;
     }

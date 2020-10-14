@@ -25,6 +25,8 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
             add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
         }
 
+        add_filter( 'dt_network_dashboard_build_message', [ $this, 'filter_studying_message'] );
+
     }
 
     public function add_scripts() {
@@ -67,7 +69,66 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
         }
         $params = $request->get_params();
 
-        return $params;
+        if ( isset( $params['time'] ) ) {
+            $time = sanitize_text_field( wp_unslash( $params['time'] ) );
+        } else {
+            $time = null;
+        }
+
+        dt_network_dashboard_push_activity();
+
+        return $this->build_log( $time );
+    }
+
+    public function build_log( $time ){
+
+        $results = $this->query_log( $time );
+
+        $results = apply_filters( 'dt_network_dashboard_build_message', $results );
+
+        $data = [];
+        foreach( $results as $index => $result ) {
+            if ( ! isset( $data[$result['day']] ) ) {
+                $data[$result['day']] = [];
+            }
+            if ( isset( $result['message'] ) ) {
+                $data[$result['day']][] = $result['message'];
+            } else {
+                $data[$result['day']][] = '('. $result['time'].')' . '  | action: ' . $result['action'] . $result['category'] . ' (' . $result['label'] . ')' ;
+            }
+        }
+
+        return $data;
+    }
+
+    public function query_log( $time = null, $site_id = null ){
+        global $wpdb;
+        if ( empty( $time ) ){
+            $time = strtotime('-30 days' );
+        }
+        $results = $wpdb->get_results( $wpdb->prepare( "
+                SELECT *, DATE_FORMAT(FROM_UNIXTIME(timestamp), '%Y-%c-%e') AS day, DATE_FORMAT(FROM_UNIXTIME(timestamp), '%H:%i %p') AS time
+                FROM $wpdb->dt_movement_log 
+                WHERE timestamp > %s 
+                ORDER BY timestamp DESC
+                ", $time ), ARRAY_A );
+
+
+        foreach( $results as $index => $result ){
+            $results[$index]['payload'] = maybe_unserialize( $result['payload']);
+        }
+
+        return $results;
+    }
+
+    public function filter_studying_message( $activity_log ){
+        foreach( $activity_log as $index => $log ){
+            if ( 'studying' === $log['category'] ) {
+                $activity_log[$index]['message'] = '(' . $log['time'] . ') This is the message for studying. ('. $log['label'] . ')';
+            }
+        }
+
+        return $activity_log;
     }
 
 }

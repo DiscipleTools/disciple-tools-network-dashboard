@@ -64,6 +64,31 @@ class DT_Network_Activity_Log {
         }
     }
 
+    public static function convert_log_for_sending( $results ) {
+        $data = [];
+
+        foreach( $results as $row ){
+            $data[] = [
+                'site_id' => $row['site_id'],
+                'site_record_id' => $row['id'],
+                'action' => $row['action'],
+                'category' => $row['category'],
+                'location_type' => 'complete', // ip, grid, lnglat
+                'location_value' => [
+                    'lng' => $row['lng'],
+                    'lat' => $row['lat'],
+                    'level' => $row['level'],
+                    'label' => $row['label'],
+                    'grid_id' => $row['grid_id']
+                ], // ip, grid, lnglat
+                'payload' => maybe_unserialize( $row['payload'] ),
+                'timestamp' => $row['timestamp']
+            ];
+        }
+
+        return $data;
+    }
+
     public static function insert_log( $data_array ) {
 
         global $wpdb;
@@ -79,7 +104,8 @@ class DT_Network_Activity_Log {
 
         $process_status = [];
         $process_status['start'] = microtime(true); // @todo remove after development
-
+        dt_write_log('recieved data');
+        dt_write_log(count($data_array));
         foreach( $data_array as $activity ) {
 
             $data = [

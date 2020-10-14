@@ -1,5 +1,4 @@
 jQuery(document).ready(function(){
-    let obj = network_activity_feed
     let chartDiv = jQuery('#chart')
     let spinner = '<span class="loading-spinner active"></span>'
 
@@ -8,20 +7,31 @@ jQuery(document).ready(function(){
 
     // write page layout with spinners
     chartDiv.empty().html(`
-            <span class="section-header">Feed</span>
+            <span class="section-header">Feed<span style="float:right;"><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></span></span>
                 <hr style="max-width:100%;">
-                
-                
-                
-                
-                
-                <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
+                <div id="activity-feed">${spinner}</div>
             `)
 
+
     // call for data
-    makeRequest('POST', 'network/base', {'type': 'activity'} )
+    makeRequest('POST', 'network/activity/feed' )
         .done( data => {
             "use strict";
             console.log(data)
+            let container = jQuery('#activity-feed');
+            let index = 0
+
+            jQuery.each( data, function(i,v){
+                container.append(`<h2>${i} (${v.length} events)</h2>`)
+                jQuery.each(v, function(ii,vv){
+                    container.append(` ${vv} <br>`)
+                    index++
+                })
+                if ( index > 1000 ){
+                    return false
+                }
+            })
+
+            jQuery('.loading-spinner').removeClass('active')
         })
 })
