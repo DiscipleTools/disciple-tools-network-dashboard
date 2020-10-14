@@ -517,15 +517,19 @@ class DT_Network_Dashboard_Snapshot_Queries {
 
         $results = $wpdb->get_results("
             SELECT 
-              post_title as name, 
-              ID as id
+              p.post_title as name, 
+              p.ID as id,
+              pm3.meta_value as last_activity_id
             FROM $wpdb->posts as p
             JOIN $wpdb->postmeta as pm
               ON p.ID=pm.post_id
                 AND pm.meta_key = 'type'
             LEFT JOIN $wpdb->postmeta as pm2
               ON p.ID=pm2.post_id
-                AND pm2.meta_key = 'non_wp' 
+                AND pm2.meta_key = 'non_wp'
+            LEFT JOIN $wpdb->postmeta as pm3
+              ON p.ID=pm3.post_id
+                AND pm3.meta_key = 'last_activity_id' 
               WHERE p.post_type = 'site_link_system'
               AND p.post_status = 'publish'
               AND ( pm.meta_value = 'network_dashboard_both'

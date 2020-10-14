@@ -203,16 +203,19 @@ class DT_Network_Dashboard_Tab_Profile
                         <?php DT_Network_Dashboard_Site_Link_Metabox::admin_box_local_site_profile(); ?>
                         <?php $this->box_diagram() ?>
 
+
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
                 </div><!-- post-body meta box container -->
             </div><!--poststuff end -->
         </div><!-- wrap end -->
         <?php
+
+        dt_network_dashboard_push_activity();
     }
 
     public function box_diagram(){
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites( );
         ?>
         <style>
         .columns {
@@ -440,8 +443,6 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
                 $partner = recursive_sanitize_text_field( $_POST['partner'] );
 
-
-
                 foreach( $partner as $key => $value ){
                     DT_Network_Dashboard_Site_Post_Type::update_multisite_profile( $key );
                     if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
@@ -455,11 +456,15 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                     }
                 }
             }
+
+            // reset ui transient caches with new parameters
+            require_once( plugin_dir_path(__DIR__) . 'metrics/base.php' );
+            DT_Network_Dashboard_Metrics_Base::reset_ui_caches();
         }
         // Get list of sites
 
 
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites( );
 
         /** Message */
         if ( $message ) {
@@ -650,7 +655,7 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
 
     public function main_column() {
 
-        DT_Network_Dashboard_Site_Post_Type::sync_all_remotes_to_post_type();
+//        DT_Network_Dashboard_Site_Post_Type::sync_all_remotes_to_post_type();
 
         $message = false;
         if ( isset( $_POST['network_dashboard_nonce'] )
@@ -684,10 +689,14 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                         DT_Network_Dashboard_Site_Post_Type::update_receive_activity( $key, sanitize_text_field( wp_unslash( $value['receive_activity'] ) ) );
                     }
                 }
+
+                // reset ui transient caches with new parameters
+                require_once( plugin_dir_path(__DIR__) . 'metrics/base.php' );
+                DT_Network_Dashboard_Metrics_Base::reset_ui_caches();
             }
         }
         // Get list of sites
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites( );
 
         /** Message */
         if ( $message ) {
@@ -851,7 +860,7 @@ class DT_Network_Dashboard_Tab_Outgoing
         }
 
         /* REMOTE SITES*/
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites( );
         $multisites = DT_Network_Dashboard_Site_Post_Type::all_multisite_blog_ids( true )
 
         ?>
@@ -1098,7 +1107,7 @@ class DT_Network_Dashboard_Tab_System
     }
 
     public function box_system_details() {
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites( );
         $current_profile = dt_network_site_profile();
         ?>
         <!-- Box -->

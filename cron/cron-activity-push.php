@@ -10,7 +10,10 @@ add_action('dt_network_dashboard_push_activity', 'dt_network_dashboard_push_acti
 
 function dt_network_dashboard_push_activity()
 {
-    $sites = DT_Network_Dashboard_Snapshot_Queries::dashboards_to_report_to();
+    global $wpdb;
+    $local_site_id = dt_network_site_id();
+
+    $sites = DT_Network_Dashboard_Snapshot_Queries::dashboards_to_report_activity_to();
 
     if ( empty( $sites ) ){
         return false;
@@ -21,19 +24,22 @@ function dt_network_dashboard_push_activity()
         'fail' => 0,
     ];
 
-    $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report();
-    if ( is_wp_error( $snapshot ) ){
-        dt_write_log(__METHOD__, 'Failed to send report because snapshot collection failed' );
-        return false;
-    }
 
     // Loop sites and call their wp-cron.php service to run.
     foreach ($sites as $site) {
-
-        $snapshot = apply_filters( 'dt_network_dashboard_snapshot_location_precision', $snapshot, $site['id'] );
-
         try {
-            $site_post_id = $site['id'] ?? 0;
+            $site_post_id = $site['id'];
+
+            $activity = $wpdb->get_results($wpdb->prepare( "
+                SELECT * 
+                FROM $wpdb->dt_movement_log
+                WHERE site_id = %s
+                AND id > %s
+                ", $local_site_id, $site['last_activity_id']), ARRAY_A );
+
+
+            // @todo  convert activity log into submit format
+
 
             $site = Site_Link_System::get_site_connection_vars( $site_post_id, 'post_id');
             if (is_wp_error($site)) {
@@ -46,7 +52,7 @@ function dt_network_dashboard_push_activity()
                 'method' => 'POST',
                 'body' => [
                     'transfer_token' => $site['transfer_token'],
-                    'snapshot' => $snapshot
+                    'activity' => $activity
                 ]
             ];
             $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/collector', $args );

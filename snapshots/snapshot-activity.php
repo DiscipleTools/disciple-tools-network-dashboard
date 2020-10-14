@@ -26,7 +26,7 @@ class DT_Network_Dashboard_Snapshot_Activity {
             'thirty_days' => [],
         ];
 
-        $site_id = dt_get_site_id();
+        $site_id = dt_network_site_id();
 
         $timestamp = strtotime('-30 days' );
         $results = $wpdb->get_results( $wpdb->prepare( "

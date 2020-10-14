@@ -305,7 +305,7 @@ class DT_Network_Dashboard_Site_Post_Type {
      * Returns complete list of sites with unserialized snapshot and profile.
      * @return array
      */
-    public static function all_sites() : array {
+    public static function all_sites(  ) : array {
 
         if (wp_cache_get( __METHOD__ )) {
             return wp_cache_get( __METHOD__  );

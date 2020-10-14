@@ -149,10 +149,6 @@ class DT_Network_Dashboard {
         require_once( 'metrics/loader.php' );
         require_once( 'metrics/mapping-module-config.php' );
 
-        // UI METRICS FOR NETWORK TAB
-//        require_once( 'ui/ui.php' );
-//        require_once( 'ui/mapbox-metrics.php' );
-//        require_once( 'ui/activity-metrics.php' );
 
         // CRON
         if ( file_exists( get_theme_file_path() . '/dt-core/wp-async-request.php' ) ) {
@@ -166,6 +162,9 @@ class DT_Network_Dashboard {
             require_once( 'cron/cron-3-push-snapshot.php' );
             require_once( 'cron/cron-4-trigger-remote-sites.php' );
             require_once( 'cron/cron-5-collect-remote-sites.php' );
+
+            // send activity
+            require_once( 'cron/cron-activity-push.php' );
         }
 
         require_once( 'admin/menu-and-tabs-endpoints.php' );

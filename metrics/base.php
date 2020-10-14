@@ -120,6 +120,14 @@ class DT_Network_Dashboard_Metrics_Base {
         return $data;
     }
 
+    public static function reset_ui_caches(){
+        // reset ui transient caches with new parameters
+        self::get_sites( true );
+        self::get_global( true );
+        self::get_site_list( true );
+        self::get_locations_list( true );
+    }
+
     public function base_scripts() {
         wp_enqueue_script( 'network_base_script', plugin_dir_url(__FILE__) . 'base.js', [
             'jquery',
@@ -195,6 +203,9 @@ class DT_Network_Dashboard_Metrics_Base {
                 if ( 'multisite' === $site['type'] ){
                     continue;
                 }
+                if ( 'hide' === $site['visibility'] ){
+                    continue;
+                }
                 $snapshot = maybe_unserialize( $site['snapshot'] );
                 if ( !empty( $snapshot['partner_id'] )) {
                     $new[$snapshot['partner_id']] = $snapshot;
@@ -206,6 +217,9 @@ class DT_Network_Dashboard_Metrics_Base {
         if (dt_is_current_multisite_dashboard_approved()) {
             foreach ($sites as $key => $site) {
                 if ( 'remote' === $site['type'] ){
+                    continue;
+                }
+                if ( 'hide' === $site['visibility'] ){
                     continue;
                 }
                 $snapshot = maybe_unserialize( $site['snapshot'] );
@@ -242,6 +256,9 @@ class DT_Network_Dashboard_Metrics_Base {
                 if ( 'multisite' === $site['type'] ){
                     continue;
                 }
+                if ( 'hide' === $site['visibility'] ){
+                    continue;
+                }
                 $snapshot = maybe_unserialize( $site['snapshot'] );
                 if ( !empty( $snapshot['partner_id'] )) {
                     $new[] = [
@@ -259,6 +276,9 @@ class DT_Network_Dashboard_Metrics_Base {
         if (dt_is_current_multisite_dashboard_approved()) {
             foreach ($sites as $key => $site) {
                 if ( 'remote' === $site['type'] ){
+                    continue;
+                }
+                if ( 'hide' === $site['visibility'] ){
                     continue;
                 }
                 $snapshot = maybe_unserialize( $site['snapshot'] );
