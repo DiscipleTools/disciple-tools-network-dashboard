@@ -47,22 +47,31 @@ class DT_Network_Dashboard_Site_Link_Metabox {
             $post_id = $post->ID;
         }
 
-        $new_profile = DT_Network_Dashboard_Site_Post_Type::create_remote_by_id( $post_id );
-        if( is_wp_error( $new_profile ) ){
-            dt_write_log($new_profile);
+        $refreshed_profile = DT_Network_Dashboard_Site_Post_Type::update_remote_site_profile_by_id( $post_id );
+        if( is_wp_error( $refreshed_profile ) ){
+            dt_write_log($refreshed_profile);
             ?>
-            Failed to refresh remote site profile. Check connection. Error has been logged.
-            <span style="float:right">Status: <strong><span id="fail-profile-status" class="fail-read" style="color:red;">Failed connection to remote Network Dashboard.</span></strong></span>
+            Failed to refresh remote site profile. Check connection. Error has been logged. (Remote 1)
+            <span style="float:right">Status: <strong><span id="fail-profile-status" class="fail-read" style="color:red;">Failed connection to remote Network Dashboard. (Profile)</span></strong></span>
             <?php
             return;
         }
 
         $dt_network_dashboard_id = get_post_meta( $post_id, 'dt_network_dashboard', true );
+        if ( empty( $dt_network_dashboard_id ) ) {
+            dt_write_log('create');
+            $dt_network_dashboard_id = DT_Network_Dashboard_Site_Post_Type::create( $refreshed_profile, 'remote', $post_id );
+        }
+
         $site_profile = DT_Network_Dashboard_Site_Post_Type::get_profile( $dt_network_dashboard_id );
         if( is_wp_error( $site_profile ) ){
+            update_post_meta( $dt_network_dashboard_id, 'profile', $refreshed_profile );
+            dt_write_log($post_id);
+            dt_write_log($dt_network_dashboard_id);
+            dt_write_log($refreshed_profile);
             dt_write_log($site_profile);
             ?>
-            Failed to refresh remote site profile. Check connection. Error has been logged.
+            Failed to refresh remote site profile. Check connection. Error has been logged. (2)
             <span style="float:right">Status: <strong><span id="fail-profile-status" class="fail-read" style="color:red;">Failed connection to remote Network Dashboard.</span></strong></span>
             <?php
             return;

@@ -130,7 +130,13 @@ class DT_Network_Activity_Log {
                 ];
                 continue;
             }
-            $data['site_id'] = sanitize_text_field( wp_unslash( $activity['site_id'] ) );
+
+            // SITE RECORD ID
+            if ( isset( $activity['site_record_id'] ) && ! empty( $activity['site_record_id'] ) ) {
+                $data['site_record_id'] = sanitize_text_field( wp_unslash( $activity['site_record_id'] ) );
+            } else {
+                $data['site_record_id'] = NULL;
+            }
 
             // ACTION
             if ( ! ( isset( $activity['action'] ) && ! empty( $activity['action'] ) ) ) {
@@ -363,7 +369,6 @@ class DT_Network_Activity_Log {
                     continue 2;
             }
 
-            $payload = $data['payload'];
             $data['payload'] = serialize( $data['payload'] );
 
             $data['hash'] = hash('sha256', serialize( $data ) );
@@ -388,6 +393,7 @@ class DT_Network_Activity_Log {
             $wpdb->query( $wpdb->prepare( "
             INSERT INTO $wpdb->dt_movement_log (
                 site_id,
+                site_record_id,
                 action,
                 category,
                 lng,
@@ -403,6 +409,7 @@ class DT_Network_Activity_Log {
                     %s,
                     %s,
                     %s,
+                    %s,
                     %f,
                     %f,
                     %s,
@@ -413,6 +420,7 @@ class DT_Network_Activity_Log {
                     %s
                     )",
                 $data['site_id'],
+                $data['site_record_id'],
                 $data['action'],
                 $data['category'],
                 $data['lng'],
@@ -425,7 +433,6 @@ class DT_Network_Activity_Log {
                 $data['hash']
             ) );
 
-
             $process_status[] = 'Success: Created id ' . $wpdb->insert_id;
         }
 
@@ -434,6 +441,59 @@ class DT_Network_Activity_Log {
         do_action( 'dt_network_dashboard_post_activity_log_insert' );
 
         return $process_status;
+    }
+
+    public static function transfer_insert( array $record ) {
+        global $wpdb;
+
+        // @todo check for duplicate??
+
+
+        // insert log record
+        $wpdb->query( $wpdb->prepare( "
+            INSERT INTO $wpdb->dt_movement_log (
+                site_id,
+                site_record_id,
+                action,
+                category,
+                lng,
+                lat,
+                level,
+                label,
+                grid_id,
+                payload,
+                timestamp,
+                hash
+            )
+            VALUES (
+                    %s,
+                    %s,
+                    %s,
+                    %s,
+                    %f,
+                    %f,
+                    %s,
+                    %s,
+                    %d,
+                    %s,
+                    %d,
+                    %s
+                    )",
+            $record['site_id'],
+            $record['id'], // this site_record_id is the id of the sending system
+            $record['action'],
+            $record['category'],
+            $record['lng'],
+            $record['lat'],
+            $record['level'],
+            $record['label'],
+            $record['grid_id'],
+            $record['payload'],
+            $record['timestamp'],
+            $record['hash']
+        ) );
+
+
     }
 
     public static function recursive_sanitize_text_field( array $array ) : array {

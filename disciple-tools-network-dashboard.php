@@ -155,16 +155,17 @@ class DT_Network_Dashboard {
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
 
             require_once( 'cron/cron-log.php' );
+            require_once( 'cron/cron-0-trigger-remote-sites.php' );
             require_once( 'cron/cron-1-build-snapshot.php' );
             if ( dt_is_current_multisite_dashboard_approved() ) { // load if approved for multisite collection
                 require_once('cron/cron-2-build-multisite-snapshot.php');
             }
             require_once( 'cron/cron-3-push-snapshot.php' );
-            require_once( 'cron/cron-4-trigger-remote-sites.php' );
+            require_once( 'cron/cron-4-collect-remote-activity-log.php' );
             require_once( 'cron/cron-5-collect-remote-sites.php' );
+            require_once( 'cron/cron-6-collect-multisite-activity-log.php' );
+            require_once( 'cron/cron-7-profile-update.php' );
 
-            // send activity
-            require_once( 'cron/cron-activity-push.php' );
         }
 
         require_once( 'admin/menu-and-tabs-endpoints.php' );

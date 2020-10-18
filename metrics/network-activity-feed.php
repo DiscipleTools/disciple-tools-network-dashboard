@@ -75,8 +75,6 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
             $time = null;
         }
 
-        dt_network_dashboard_push_activity();
-
         return $this->build_log( $time );
     }
 

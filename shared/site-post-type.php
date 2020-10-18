@@ -39,10 +39,10 @@ class DT_Network_Dashboard_Site_Post_Type {
     }
 
     /**
-     * @param $id  (site to site post id)
-     * @return array|bool|int|string|WP_Error
+     * @param $id (site to site post id)
+     * @return array|int|string|WP_Error
      */
-    public static function create_remote_by_id( $id ){
+    public static function update_remote_site_profile_by_id( $id ) {
         $site = Site_Link_System::get_site_connection_vars( $id, 'post_id');
         if ( is_wp_error($site) ) {
             return $site;
@@ -73,11 +73,25 @@ class DT_Network_Dashboard_Site_Post_Type {
 
         $dt_network_dashboard_id = get_post_meta( $id, 'dt_network_dashboard', true );
         if ( empty( $dt_network_dashboard_id )  || ! get_post_meta( $dt_network_dashboard_id, 'type_id', true ) ) {
-            return self::create( $site_profile, 'remote', $id );
+            $dt_network_dashboard_id =  self::create( $site_profile, 'remote', $id );
+            if ( is_wp_error($dt_network_dashboard_id)) {
+                return $dt_network_dashboard_id;
+            }
         }
         else {
-            return update_post_meta( $dt_network_dashboard_id, 'profile', $site_profile );
+            $success = update_post_meta( $dt_network_dashboard_id, 'profile', $site_profile );
+//            if ( ! $success ) {
+//                return new WP_Error(__METHOD__, 'Could not update post meta: profile.');
+//            }
         }
+
+        $profile = get_post_meta( $dt_network_dashboard_id, 'profile', true );
+        if ( ! is_array( $profile ) ) {
+            return new WP_Error(__METHOD__, 'Could not return profile array');
+        }
+
+        return $profile;
+
     }
 
     public static function create( $site_profile, $connection_type, $id ) {
@@ -93,6 +107,7 @@ class DT_Network_Dashboard_Site_Post_Type {
                       AND post_title = %s"
             , self::get_token(), $partner_id ) );
         if ( ! empty( $multisite_post_id  ) ) {
+            update_post_meta( $id, 'dt_network_dashboard', $multisite_post_id );
             return $multisite_post_id;
         }
 
@@ -305,7 +320,7 @@ class DT_Network_Dashboard_Site_Post_Type {
      * Returns complete list of sites with unserialized snapshot and profile.
      * @return array
      */
-    public static function all_sites(  ) : array {
+    public static function all_sites() : array {
 
         if (wp_cache_get( __METHOD__ )) {
             return wp_cache_get( __METHOD__  );
@@ -329,7 +344,8 @@ class DT_Network_Dashboard_Site_Post_Type {
                   j.meta_value as visibility,
                   k.meta_value as connection_type,
                   i.meta_value as send_activity,
-                  m.meta_value as location_precision
+                  m.meta_value as location_precision,
+                  n.meta_value as activity_timestamp
                 FROM $wpdb->posts as a
                 LEFT JOIN $wpdb->postmeta as c
                   ON a.ID=c.post_id
@@ -367,6 +383,9 @@ class DT_Network_Dashboard_Site_Post_Type {
                  LEFT JOIN $wpdb->postmeta as m
                   ON a.ID=m.post_id
                   AND m.meta_key = 'location_precision'
+                 LEFT JOIN $wpdb->postmeta as n
+                  ON a.ID=n.post_id
+                  AND n.meta_key = 'activity_timestamp'
                 WHERE a.post_type = 'dt_network_dashboard'
                 ORDER BY name;
             ",
@@ -385,6 +404,17 @@ class DT_Network_Dashboard_Site_Post_Type {
 
         wp_cache_set( __METHOD__, $sites, __METHOD__, 10 );
 
+        return $sites;
+    }
+
+    public static function all_remote_sites(){
+        $all_sites = self::all_sites();
+        $sites = [];
+        foreach( $all_sites as $site ){
+            if( 'remote' === $site['type'] ){
+                $sites[] = $site;
+            }
+        }
         return $sites;
     }
 
@@ -603,7 +633,7 @@ class DT_Network_Dashboard_Site_Post_Type {
                 continue;
             }
 
-            $result['create'][$remote['id']] = self::create_remote_by_id( $remote['id'] );
+            $result['create'][$remote['id']] = self::update_remote_site_profile_by_id( $remote['id'] );
         }
 
 
@@ -633,6 +663,33 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $needs_update;
     }
 
+    public static function multisite_sites_needing_activity_refreshed() {
+        if ( ! dt_is_current_multisite_dashboard_approved() ) {
+            return [];
+        }
+
+        $sites = self::all_sites();
+
+        $needs_update = [];
+        foreach( $sites as $site ){
+            if ( $site['type'] !== 'multisite' ){
+                continue;
+            }
+
+            if ( $site['receive_activity'] === 'reject' ) {
+                continue;
+            }
+
+            if ( $site['activity_timestamp'] >= strtotime( 'today' ) ) {
+                continue;
+            }
+
+            $needs_update[] = $site;
+        }
+
+        return $needs_update;
+    }
+
     public static function remote_sites_needing_snapshot_refreshed() {
         $sites = self::all_sites();
 
@@ -651,6 +708,8 @@ class DT_Network_Dashboard_Site_Post_Type {
 
         return $needs_update;
     }
+
+
 
 }
 DT_Network_Dashboard_Site_Post_Type::instance();

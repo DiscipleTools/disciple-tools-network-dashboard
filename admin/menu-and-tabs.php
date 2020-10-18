@@ -211,7 +211,6 @@ class DT_Network_Dashboard_Tab_Profile
         </div><!-- wrap end -->
         <?php
 
-        dt_network_dashboard_push_activity();
     }
 
     public function box_diagram(){
@@ -458,8 +457,7 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
             }
 
             // reset ui transient caches with new parameters
-            require_once( plugin_dir_path(__DIR__) . 'metrics/base.php' );
-            DT_Network_Dashboard_Metrics_Base::reset_ui_caches();
+
         }
         // Get list of sites
 
@@ -844,17 +842,14 @@ class DT_Network_Dashboard_Tab_Outgoing
         if ( isset( $_POST['activity-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['activity-nonce'] ) ), 'activity'. get_current_user_id() ) ) {
 
             if ( isset( $_POST['send_activity'] ) && ! empty( $_POST['send_activity'] ) && is_array( $_POST['send_activity'] ) ) {
-                dt_write_log('send activity');
                 foreach($_POST['send_activity'] as $i => $v ) {
                     DT_Network_Dashboard_Site_Post_Type::update_send_activity( sanitize_text_field( wp_unslash( $i ) ), sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
 
             if ( isset( $_POST['location_precision'] ) && ! empty( $_POST['location_precision'] ) && is_array( $_POST['location_precision'] ) ) {
-
                 foreach($_POST['location_precision'] as $i => $v ) {
-                    $u = DT_Network_Dashboard_Site_Post_Type::update_location_precision( sanitize_text_field( wp_unslash( $i ) ), sanitize_text_field( wp_unslash( $v ) ) );
-                    dt_write_log( 'location' . $i . ': ' . $u );
+                    DT_Network_Dashboard_Site_Post_Type::update_location_precision( sanitize_text_field( wp_unslash( $i ) ), sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
         }
@@ -1039,13 +1034,9 @@ class DT_Network_Dashboard_Tab_System
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['cron_run_nonce'] ) ), 'cron_run_' . get_current_user_id() )
             && isset( $_POST['run_now'] ) ) {
 
-            dt_write_log($_POST);
-
             $hook = sanitize_text_field( wp_unslash( $_POST['run_now'] ) );
             $timestamp = wp_next_scheduled( $hook );
             wp_unschedule_event( $timestamp, $hook );
-
-            // @todo push a run
 
         }
         $cron_list = _get_cron_array();
@@ -1107,10 +1098,19 @@ class DT_Network_Dashboard_Tab_System
     }
 
     public function box_system_details() {
+        if ( isset( $_POST['refresh_profiles'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['refresh_profiles'] ) ), 'refresh_profiles'.get_current_user_id() ) && isset( $_POST['refresh'] ) && ! empty( $_POST['refresh'] ) ) {
+            if ( ! function_exists( 'dt_network_dashboard_profiles_update') ) {
+                require_once( plugin_dir_path(__DIR__) . 'cron/cron-7-profile-update.php' );
+            }
+            dt_network_dashboard_profiles_update();
+        }
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites( );
         $current_profile = dt_network_site_profile();
         ?>
         <!-- Box -->
+        <form method="POST">
+        <?php wp_nonce_field( 'refresh_profiles'.get_current_user_id(), 'refresh_profiles' ) ?>
+
         <table class="widefat striped">
             <thead>
             <tr>
@@ -1118,7 +1118,10 @@ class DT_Network_Dashboard_Tab_System
                 <th>Last Collection</th>
                 <th>Network Dashboard</th>
                 <th>Disciple Tools</th>
-                <th>Misc</th>
+                <th>Misc
+                <span style="float:right;">
+                    <button type="submit" name="refresh" value="true" class="button">Refresh</button>
+                </span></th>
             </tr>
             </thead>
             <tbody>
@@ -1224,6 +1227,7 @@ class DT_Network_Dashboard_Tab_System
             ?>
             </tbody>
         </table>
+        </form>
         <br>
         <!-- End Box -->
         <?php
