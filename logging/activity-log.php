@@ -50,7 +50,7 @@ class DT_Network_Activity_Log {
                         'data' => $data
                     ]
                 ];
-                $response = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-content/plugins/disciple-tools-network-dashboard/activity/log.php', $args );
+                $response = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-content/plugins/disciple-tools-network-dashboard/public/log.php', $args );
                 DT_Network_Activity_Log::insert_log( $data );
 
                 dt_write_log('remote post');
@@ -64,30 +64,30 @@ class DT_Network_Activity_Log {
         }
     }
 
-    public static function convert_log_for_sending( $results ) {
-        $data = [];
-
-        foreach( $results as $row ){
-            $data[] = [
-                'site_id' => $row['site_id'],
-                'site_record_id' => $row['id'],
-                'action' => $row['action'],
-                'category' => $row['category'],
-                'location_type' => 'complete', // ip, grid, lnglat
-                'location_value' => [
-                    'lng' => $row['lng'],
-                    'lat' => $row['lat'],
-                    'level' => $row['level'],
-                    'label' => $row['label'],
-                    'grid_id' => $row['grid_id']
-                ], // ip, grid, lnglat
-                'payload' => maybe_unserialize( $row['payload'] ),
-                'timestamp' => $row['timestamp']
-            ];
-        }
-
-        return $data;
-    }
+//    public static function convert_log_for_sending( $results ) {
+//        $data = [];
+//
+//        foreach( $results as $row ){
+//            $data[] = [
+//                'site_id' => $row['site_id'],
+//                'site_record_id' => $row['id'],
+//                'action' => $row['action'],
+//                'category' => $row['category'],
+//                'location_type' => 'complete', // ip, grid, lnglat
+//                'location_value' => [
+//                    'lng' => $row['lng'],
+//                    'lat' => $row['lat'],
+//                    'level' => $row['level'],
+//                    'label' => $row['label'],
+//                    'grid_id' => $row['grid_id']
+//                ], // ip, grid, lnglat
+//                'payload' => maybe_unserialize( $row['payload'] ),
+//                'timestamp' => $row['timestamp']
+//            ];
+//        }
+//
+//        return $data;
+//    }
 
     public static function insert_log( $data_array ) {
 
@@ -104,8 +104,7 @@ class DT_Network_Activity_Log {
 
         $process_status = [];
         $process_status['start'] = microtime(true); // @todo remove after development
-        dt_write_log('recieved data');
-        dt_write_log(count($data_array));
+
         foreach( $data_array as $activity ) {
 
             $data = [
@@ -130,6 +129,7 @@ class DT_Network_Activity_Log {
                 ];
                 continue;
             }
+            $data['site_id'] = sanitize_text_field( wp_unslash( $activity['site_id'] ) );
 
             // SITE RECORD ID
             if ( isset( $activity['site_record_id'] ) && ! empty( $activity['site_record_id'] ) ) {
@@ -149,9 +149,9 @@ class DT_Network_Activity_Log {
             $data['action'] = sanitize_text_field( wp_unslash( $activity['action'] ) );
 
             // CATEGORY
-            if ( ! ( isset( $activity['category'] ) && ! empty( $activity['category'] ) ) ) {
+            if ( ! isset( $activity['category'] ) ) {
                 $process_status[] = [
-                    'error' => 'no category found',
+                    'error' => 'no category found in array',
                     'data' => $activity
                 ];
                 continue;
@@ -161,7 +161,7 @@ class DT_Network_Activity_Log {
             // LOCATION TYPE
             if ( ! ( isset( $activity['location_type'] ) && ! empty( $activity['location_type'] ) ) ) {
                 $process_status[] = [
-                    'error' => 'no location_type found',
+                    'error' => 'no location_type found. must be grid, ip, lnglat, complete, no_location',
                     'data' => $activity
                 ];
                 continue;
@@ -169,9 +169,9 @@ class DT_Network_Activity_Log {
             $location_type = sanitize_text_field( wp_unslash( $activity['location_type'] ) );
 
             // LOCATION VALUE
-            if ( ! ( isset( $activity['location_value'] ) && ! empty( $activity['location_value'] ) ) ) {
+            if ( ! isset( $activity['location_value'] ) ) {
                 $process_status[] = [
-                    'error' => 'no location value found',
+                    'error' => 'no location value found in array',
                     'data' => $activity
                 ];
                 continue;
@@ -181,7 +181,7 @@ class DT_Network_Activity_Log {
             if ( ! isset( $activity['payload'] ) || empty( $activity['payload'] ) ) {
                 $activity['payload'] = [];
             }
-            $data['payload'] = self::recursive_sanitize_text_field( $activity['payload'] );
+            $data['payload'] = recursive_sanitize_text_field( $activity['payload'] );
 
             // PREPARE LOCATION DATA
             switch ( $location_type ) {
@@ -361,6 +361,13 @@ class DT_Network_Activity_Log {
                     $data['grid_id'] = sanitize_text_field( wp_unslash( $activity['location_value']['grid_id'] ) );
 
                     break;
+                case 'no_location':
+                    $data['lng'] = NULL;
+                    $data['lat'] = NULL;
+                    $data['level'] = NULL;
+                    $data['label'] = NULL;
+                    $data['grid_id'] = NULL;
+                    break;
                 default:
                     $process_status[] = [
                         'error' => 'did not find location_type. Must be ip, grid, lnglat, or complete.',
@@ -388,7 +395,7 @@ class DT_Network_Activity_Log {
                 ];
                 continue;
             }
-
+dt_write_log($data);
             // insert log record
             $wpdb->query( $wpdb->prepare( "
             INSERT INTO $wpdb->dt_movement_log (
@@ -448,7 +455,6 @@ class DT_Network_Activity_Log {
 
         // @todo check for duplicate??
 
-
         // insert log record
         $wpdb->query( $wpdb->prepare( "
             INSERT INTO $wpdb->dt_movement_log (
@@ -493,18 +499,36 @@ class DT_Network_Activity_Log {
             $record['hash']
         ) );
 
-
     }
 
-    public static function recursive_sanitize_text_field( array $array ) : array {
-        foreach ( $array as $key => &$value ) {
-            if ( is_array( $value ) ) {
-                $value = self::recursive_sanitize_text_field($value);
-            }
-            else {
-                $value = sanitize_text_field( wp_unslash( $value ) );
+    public static function get_location_details( $post_id ) {
+        $location = [
+            'location_type' => 'no_location',
+            'location_value' => [],
+        ];
+
+        if ( $grid_meta = get_post_meta( $post_id, 'location_grid_meta', true ) ) {
+            $row = Location_Grid_Meta::get_location_grid_meta_by_id( $grid_meta );
+            if ( $row ) {
+                $location = [
+                    'location_type' => 'complete',
+                    'location_value' => [
+                        'lng' => $row['lng'],
+                        'lat' => $row['lat'],
+                        'level' => $row['level'],
+                        'label' => $row['label'],
+                        'grid_id' => $row['grid_id'],
+                    ],
+                ];
             }
         }
-        return $array;
+        else if ( $grid = get_post_meta( $post_id, 'location_grid', true ) ){
+            $location = [
+                'location_type' => 'grid',
+                'location_value' => $grid,
+            ];
+        }
+
+        return $location;
     }
 }

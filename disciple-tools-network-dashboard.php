@@ -123,6 +123,12 @@ class DT_Network_Dashboard {
     private function includes() {
 
         // SHARED RESOURCES
+//        $dir = scandir( plugin_dir_path(__FILE__). 'shared/' );
+//        foreach( $dir as $file ){
+//            if ( 'php' === substr( $file, -3, 3 ) && 'index.php' !== $file ){
+//                require_once( plugin_dir_path(__FILE__) . 'shared/' . $file );
+//            }
+//        }
         require_once( 'shared/endpoints-base.php' );
         require_once( 'shared/site-post-type.php' );
         require_once( 'shared/permissions.php' );
@@ -133,17 +139,11 @@ class DT_Network_Dashboard {
         require_once( 'collection/collection-queries.php' );
         require_once( 'collection/collection-endpoints.php' );
 
-        require_once( 'snapshots/snapshot-endpoints.php' );
-        require_once( 'snapshots/snapshot-queries.php' );
-        require_once( 'snapshots/snapshot.php' );
-        require_once( 'snapshots/snapshot-activity.php' );
-        require_once( 'snapshots/snapshot-contacts.php' );
-        require_once( 'snapshots/snapshot-groups.php' );
-        require_once( 'snapshots/snapshot-users.php' );
-        require_once( 'snapshots/snapshot-locations.php' );
+        // SNAPSHOTS
+        require_once( 'snapshots/loader.php' );
 
-        require_once( 'activity/activity-log.php' );
-        require_once( 'activity/hooks.php' );
+        // LOGGING
+        require_once( 'logging/loader.php' );
 
         // METRICS
         require_once( 'metrics/loader.php' );
@@ -154,17 +154,16 @@ class DT_Network_Dashboard {
         if ( file_exists( get_theme_file_path() . '/dt-core/wp-async-request.php' ) ) {
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
 
-            require_once( 'cron/cron-log.php' );
-            require_once( 'cron/cron-0-trigger-remote-sites.php' );
-            require_once( 'cron/cron-1-build-snapshot.php' );
-            if ( dt_is_current_multisite_dashboard_approved() ) { // load if approved for multisite collection
-                require_once('cron/cron-2-build-multisite-snapshot.php');
-            }
-            require_once( 'cron/cron-3-push-snapshot.php' );
-            require_once( 'cron/cron-4-collect-remote-activity-log.php' );
-            require_once( 'cron/cron-5-collect-remote-sites.php' );
-            require_once( 'cron/cron-6-collect-multisite-activity-log.php' );
-            require_once( 'cron/cron-7-profile-update.php' );
+            require_once( 'cron/loader.php' );
+//            require_once( 'cron/cron-log.php' );
+//            require_once( 'cron/cron-0-trigger-remote-sites.php' );
+//            require_once( 'cron/cron-1-build-snapshot.php' );
+//            require_once( 'cron/cron-2-build-multisite-snapshot.php');
+//            require_once( 'cron/cron-3-push-snapshot.php' );
+//            require_once( 'cron/cron-4-collect-remote-activity-log.php' );
+//            require_once( 'cron/cron-5-collect-remote-sites.php' );
+//            require_once( 'cron/cron-6-collect-multisite-activity-log.php' );
+//            require_once( 'cron/cron-7-profile-update.php' );
 
         }
 

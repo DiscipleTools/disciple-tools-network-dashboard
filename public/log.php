@@ -45,7 +45,7 @@ if (!defined('WP_CONTENT_URL')) {
     define('WP_CONTENT_URL', get_option('siteurl') . '/wp-content');
 }
 
-require_once('activity-log.php');
+require_once('../logging/activity-log.php');
 
 $mapping_path = ABSPATH . 'wp-content/themes/disciple-tools-theme/dt-mapping/';
 if (file_exists($mapping_path . 'geocode-api/location-grid-geocoder.php')) {

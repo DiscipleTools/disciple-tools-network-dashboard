@@ -25,8 +25,6 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
             add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
         }
 
-        add_filter( 'dt_network_dashboard_build_message', [ $this, 'filter_studying_message'] );
-
     }
 
     public function add_scripts() {
@@ -89,6 +87,7 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
             if ( ! isset( $data[$result['day']] ) ) {
                 $data[$result['day']] = [];
             }
+
             if ( isset( $result['message'] ) ) {
                 $data[$result['day']][] = $result['message'];
             } else {
@@ -105,10 +104,17 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
             $time = strtotime('-30 days' );
         }
         $results = $wpdb->get_results( $wpdb->prepare( "
-                SELECT *, DATE_FORMAT(FROM_UNIXTIME(timestamp), '%Y-%c-%e') AS day, DATE_FORMAT(FROM_UNIXTIME(timestamp), '%H:%i %p') AS time
-                FROM $wpdb->dt_movement_log 
-                WHERE timestamp > %s 
-                ORDER BY timestamp DESC
+                SELECT ml.*, 
+                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%Y-%c-%e') AS day, 
+                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%H:%i %p') AS time, 
+                       pname.meta_value as site_name
+                FROM $wpdb->dt_movement_log as ml
+                LEFT JOIN $wpdb->posts as pid ON pid.post_title=ml.site_id
+                	AND pid.post_type = 'dt_network_dashboard'
+                LEFT JOIN $wpdb->postmeta as pname ON pid.ID=pname.post_id
+                	AND	pname.meta_key = 'name'
+                WHERE ml.timestamp > %s 
+                ORDER BY ml.timestamp DESC
                 ", $time ), ARRAY_A );
 
 
@@ -117,16 +123,6 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
         }
 
         return $results;
-    }
-
-    public function filter_studying_message( $activity_log ){
-        foreach( $activity_log as $index => $log ){
-            if ( 'studying' === $log['category'] ) {
-                $activity_log[$index]['message'] = '(' . $log['time'] . ') This is the message for studying. ('. $log['label'] . ')';
-            }
-        }
-
-        return $activity_log;
     }
 
 }
