@@ -1010,7 +1010,6 @@ class DT_Network_Dashboard_Tab_System
                         <?php $this->box_system_details() ?>
 
 
-
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
                     <div id="postbox-container-1" class="postbox-container">
@@ -1032,11 +1031,17 @@ class DT_Network_Dashboard_Tab_System
 
         if ( isset( $_POST['cron_run_nonce'] )
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['cron_run_nonce'] ) ), 'cron_run_' . get_current_user_id() )
-            && isset( $_POST['run_now'] ) ) {
+             ) {
 
-            $hook = sanitize_text_field( wp_unslash( $_POST['run_now'] ) );
-            $timestamp = wp_next_scheduled( $hook );
-            wp_unschedule_event( $timestamp, $hook );
+            if ( isset( $_POST['run_now'] ) ){
+                $hook = sanitize_text_field( wp_unslash( $_POST['run_now'] ) );
+                $timestamp = wp_next_scheduled( $hook );
+                wp_unschedule_event( $timestamp, $hook );
+            }
+
+            if ( isset( $_POST['trigger'] ) ) {
+                dt_network_dashboard_trigger_sites();
+            }
 
         }
         $cron_list = _get_cron_array();
@@ -1050,7 +1055,13 @@ class DT_Network_Dashboard_Tab_System
                 <th></th>
                 <th></th>
                 <th></th>
-                <th></th>
+                <th>
+                <form method="post">
+                   <span style="float:right;">
+                   <?php wp_nonce_field( 'cron_run_' . get_current_user_id(), 'cron_run_nonce' ) ?><button type="submit" class="button" value="trigger" name="trigger">Trigger Sites</button>
+                   </span>
+                </form>
+                </th>
             </tr>
             </thead>
             <tbody>

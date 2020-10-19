@@ -3,14 +3,12 @@
  * Scheduled Cron Service
  */
 
-if ( is_multisite() ){
-    if ( dt_is_current_multisite_dashboard_approved() ) {
+if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
 
-        if (!wp_next_scheduled('dt_network_dashboard_multisite_activity_log_async')) {
-            wp_schedule_event(strtotime('tomorrow 4:30 am'), 'daily', 'dt_network_dashboard_multisite_activity_log_async');
-        }
-        add_action('dt_network_dashboard_multisite_activity_log_async', 'dt_network_dashboard_multisite_activity_log_async');
+    if (!wp_next_scheduled('dt_network_dashboard_multisite_activity_log_async')) {
+        wp_schedule_event(strtotime('tomorrow 4:30 am'), 'daily', 'dt_network_dashboard_multisite_activity_log_async');
     }
+    add_action('dt_network_dashboard_multisite_activity_log_async', 'dt_network_dashboard_multisite_activity_log_async');
 
 
     /**

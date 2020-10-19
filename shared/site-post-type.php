@@ -69,7 +69,7 @@ class DT_Network_Dashboard_Site_Post_Type {
             return new WP_Error(__METHOD__, 'Remote API did not return a proper partner id.');
         }
 
-        recursive_sanitize_text_field( $site_profile );
+        $site_profile = recursive_sanitize_text_field( $site_profile );
 
         $dt_network_dashboard_id = get_post_meta( $id, 'dt_network_dashboard', true );
         if ( empty( $dt_network_dashboard_id )  || ! get_post_meta( $dt_network_dashboard_id, 'type_id', true ) ) {
@@ -79,10 +79,7 @@ class DT_Network_Dashboard_Site_Post_Type {
             }
         }
         else {
-            $success = update_post_meta( $dt_network_dashboard_id, 'profile', $site_profile );
-//            if ( ! $success ) {
-//                return new WP_Error(__METHOD__, 'Could not update post meta: profile.');
-//            }
+            update_post_meta( $dt_network_dashboard_id, 'profile', $site_profile );
         }
 
         $profile = get_post_meta( $dt_network_dashboard_id, 'profile', true );

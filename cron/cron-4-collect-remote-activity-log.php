@@ -18,8 +18,6 @@ if (!wp_next_scheduled('dt_network_dashboard_collect_remote_activity_logs')) {
 }
 add_action('dt_network_dashboard_collect_remote_activity_logs', 'dt_network_dashboard_collect_remote_activity_logs');
 
-add_action('dt_network_dashboard_external_cron', 'dt_network_dashboard_collect_remote_activity_logs' ); // @todo development only.
-
 /**
  * Run collection process
  */

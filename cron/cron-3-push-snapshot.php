@@ -35,8 +35,8 @@ function dt_network_dashboard_push_snapshots()
         try {
             $site_post_id = $site['id'] ?? 0;
 
-            $site = Site_Link_System::get_site_connection_vars( $site_post_id, 'post_id');
-            if (is_wp_error($site)) {
+            $site_vars = Site_Link_System::get_site_connection_vars( $site_post_id, 'post_id');
+            if (is_wp_error($site_vars)) {
                 dt_write_log( __METHOD__, 'FAIL ID: ' . $site_post_id . ' (Failed to get valid site link connection details)');
                 continue;
             }
@@ -45,11 +45,11 @@ function dt_network_dashboard_push_snapshots()
             $args = [
                 'method' => 'POST',
                 'body' => [
-                    'transfer_token' => $site['transfer_token'],
+                    'transfer_token' => $site_vars['transfer_token'],
                     'snapshot' => $snapshot
                 ]
             ];
-            $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/collector', $args );
+            $result = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-json/dt-public/v1/network_dashboard/collector', $args );
             if (is_wp_error($result)) {
                 dt_write_log(__METHOD__, 'FAIL ID: ' . $site_post_id . ' (Failed in connection to remote site.)');
                 dt_write_log(__METHOD__, maybe_serialize($result));

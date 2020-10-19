@@ -45,6 +45,19 @@ function dt_network_dashboard_profiles_update()
         return false;
     }
 
+    // Remote Profile Collection
+    foreach ($sites as $site) {
+        if ($site['id'] === get_current_blog_id()) {
+            continue;
+        }
+        if ( $site['type'] === 'multisite' ){
+            continue;
+        }
+
+        DT_Network_Dashboard_Site_Post_Type::update_remote_site_profile_by_id( $site['type_id'] );
+        dt_save_log($file, 'Updated Site ' . $site['name'], false);
+    }
+
     /* Multisite Collection */
     if (dt_is_current_multisite_dashboard_approved()) {
         // collect multisite
@@ -67,19 +80,6 @@ function dt_network_dashboard_profiles_update()
                 dt_save_log($file, 'Updated Site ' . $site['name'], false);
             }
         }
-    }
-
-    // Remote Profile Collection
-    foreach ($sites as $site) {
-        if ($site['id'] === get_current_blog_id()) {
-            continue;
-        }
-        if ( $site['type'] === 'multisite' ){
-            continue;
-        }
-
-        DT_Network_Dashboard_Site_Post_Type::update_remote_site_profile_by_id( $site['type_id'] );
-        dt_save_log($file, 'Updated Site ' . $site['name'], false);
     }
 
     return true;
