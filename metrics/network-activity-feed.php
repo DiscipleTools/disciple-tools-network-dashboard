@@ -78,7 +78,7 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
 
     public function build_log( $time ){
 
-        $results = $this->query_log( $time );
+        $results = $this->get_activity_log( $time );
 
         $results = apply_filters( 'dt_network_dashboard_build_message', $results );
 
@@ -90,39 +90,16 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
 
             if ( isset( $result['message'] ) ) {
                 $data[$result['day']][] = $result['message'];
-            } else {
-                $data[$result['day']][] = '('. $result['time'].')' . '  | action: ' . $result['action'] . $result['category'] . ' (' . $result['label'] . ')' ;
+            }
+            else if ( isset( $result['payload']['note'] ) ) {
+                $data[$result['day']][] = '('. $result['time'].') ' .  $result['payload']['note']. '. (' . $result['label'] . ')' ;
+            }
+            else {
+                $data[$result['day']][] = '('. $result['time'].') ' .  ucwords( str_replace( '_', ' ', $result['action'] ) ) . ' (' . $result['label'] . ')';
             }
         }
 
         return $data;
-    }
-
-    public function query_log( $time = null, $site_id = null ){
-        global $wpdb;
-        if ( empty( $time ) ){
-            $time = strtotime('-30 days' );
-        }
-        $results = $wpdb->get_results( $wpdb->prepare( "
-                SELECT ml.*, 
-                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%Y-%c-%e') AS day, 
-                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%H:%i %p') AS time, 
-                       pname.meta_value as site_name
-                FROM $wpdb->dt_movement_log as ml
-                LEFT JOIN $wpdb->posts as pid ON pid.post_title=ml.site_id
-                	AND pid.post_type = 'dt_network_dashboard'
-                LEFT JOIN $wpdb->postmeta as pname ON pid.ID=pname.post_id
-                	AND	pname.meta_key = 'name'
-                WHERE ml.timestamp > %s 
-                ORDER BY ml.timestamp DESC
-                ", $time ), ARRAY_A );
-
-
-        foreach( $results as $index => $result ){
-            $results[$index]['payload'] = maybe_unserialize( $result['payload']);
-        }
-
-        return $results;
     }
 
 }

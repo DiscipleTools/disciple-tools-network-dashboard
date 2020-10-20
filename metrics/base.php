@@ -355,7 +355,7 @@ class DT_Network_Dashboard_Metrics_Base {
                 'total_countries' => $totals['total_countries'] ?? 0,
             ],
             'activity' => [
-                'total' => $totals['total_activity'] ?? 0,
+                'total' => number_format( $totals['total_activities'] ?? 0 ),
             ],
         ];
 
@@ -461,18 +461,31 @@ class DT_Network_Dashboard_Metrics_Base {
         return $data;
     }
 
-    public static function get_activity_log( $time = null, $site_id = null ){
+    public static function get_activity_log( $time = null, $limit = null, $site_id = null ){
 
         global $wpdb;
         if ( empty( $time ) ){
             $time = strtotime('-30 days' );
         }
         $results = $wpdb->get_results( $wpdb->prepare( "
-                SELECT *, DATE_FORMAT(FROM_UNIXTIME(timestamp), '%Y-%c-%e') AS date_formatted
-                FROM $wpdb->dt_movement_log 
-                WHERE timestamp > %s 
-                ORDER BY timestamp DESC
+                SELECT ml.*, 
+                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%Y-%c-%e') AS day, 
+                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%H:%i %p') AS time, 
+                       pname.meta_value as site_name
+                FROM $wpdb->dt_movement_log as ml
+                JOIN $wpdb->posts as pid ON pid.post_title=ml.site_id
+                	AND pid.post_type = 'dt_network_dashboard'
+                JOIN $wpdb->postmeta as pname ON pid.ID=pname.post_id
+                	AND	pname.meta_key = 'name'
+                JOIN $wpdb->postmeta as pvisibility ON pid.ID=pvisibility.post_id
+                	AND	pvisibility.meta_key = 'visibility'
+                WHERE ml.timestamp > %s 
+                AND pvisibility.meta_value != 'hide'
+                ORDER BY ml.timestamp DESC
+                LIMIT 2000
+                OFFSET 0
                 ", $time ), ARRAY_A );
+
         foreach( $results as $index => $result ){
             $results[$index]['payload'] = maybe_unserialize( $result['payload']);
         }
@@ -888,10 +901,31 @@ class DT_Network_Dashboard_Metrics_Base {
 
         $data['total_sites'] = count($sites);
 
-        $logs = self::get_activity_log();
-        $data['total_activities'] = count($logs);
+        $data['total_activities'] = self::query_count_activity_log();
 
         return $data;
+    }
+
+    public static function query_count_activity_log() : int {
+        global $wpdb;
+        $time = strtotime('-30 days' );
+        $results = $wpdb->get_var( $wpdb->prepare( "
+                SELECT COUNT(ml.id) as count
+                FROM $wpdb->dt_movement_log as ml
+                LEFT JOIN $wpdb->posts as pid ON pid.post_title=ml.site_id
+                	AND pid.post_type = 'dt_network_dashboard'
+                LEFT JOIN $wpdb->postmeta as pvisibility ON pid.ID=pvisibility.post_id
+                	AND	pvisibility.meta_key = 'visibility'
+                WHERE ml.timestamp > %s 
+                    AND pvisibility.meta_value != 'hide'
+                ", $time ) );
+
+
+        if ( empty( $results ) ){
+            return 0;
+        }
+        return $results;
+
     }
 
     public function _empty_geojson() {

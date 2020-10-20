@@ -38,8 +38,6 @@ class DT_Network_Dashboard_Metrics_Home extends DT_Network_Dashboard_Metrics_Bas
         $this->load_grid_mapping_scripts();
     }
 
-
-
     public function menu( $tree ){
         $tree[$this->base_slug] = [
             'key' => $this->key,

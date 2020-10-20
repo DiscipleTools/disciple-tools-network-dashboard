@@ -123,17 +123,10 @@ class DT_Network_Dashboard {
     private function includes() {
 
         // SHARED RESOURCES
-//        $dir = scandir( plugin_dir_path(__FILE__). 'shared/' );
-//        foreach( $dir as $file ){
-//            if ( 'php' === substr( $file, -3, 3 ) && 'index.php' !== $file ){
-//                require_once( plugin_dir_path(__FILE__) . 'shared/' . $file );
-//            }
-//        }
         require_once( 'shared/endpoints-base.php' );
         require_once( 'shared/site-post-type.php' );
         require_once( 'shared/permissions.php' );
         require_once( 'shared/site-profile.php' );
-        require_once( 'shared/wp-async-request.php' );
         require_once( 'shared/remove-top-nav-config.php' );
 
         require_once( 'collection/collection-queries.php' );
@@ -149,23 +142,11 @@ class DT_Network_Dashboard {
         require_once( 'metrics/loader.php' );
         require_once( 'metrics/mapping-module-config.php' );
 
-
         // CRON
-        if ( file_exists( get_theme_file_path() . '/dt-core/wp-async-request.php' ) ) {
+        if ( ! class_exists( 'Disciple_Tools_Async_Task') ) {
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
-
-            require_once( 'cron/loader.php' );
-//            require_once( 'cron/cron-log.php' );
-//            require_once( 'cron/cron-0-trigger-remote-sites.php' );
-//            require_once( 'cron/cron-1-build-snapshot.php' );
-//            require_once( 'cron/cron-2-build-multisite-snapshot.php');
-//            require_once( 'cron/cron-3-push-snapshot.php' );
-//            require_once( 'cron/cron-4-collect-remote-activity-log.php' );
-//            require_once( 'cron/cron-5-collect-remote-sites.php' );
-//            require_once( 'cron/cron-6-collect-multisite-activity-log.php' );
-//            require_once( 'cron/cron-7-profile-update.php' );
-
         }
+        require_once( 'cron/loader.php' );
 
         require_once( 'admin/menu-and-tabs-endpoints.php' );
         if ( is_admin() ) {
