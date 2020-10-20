@@ -10,22 +10,18 @@ jQuery(document).ready(function(){
                 <span class="section-header">Contacts</span>
                 <hr style="max-width:100%;">
                 
-                <div class="grid-x grid-padding-x grid-padding-y">
-                  <div class="cell">
-                    <div class="grid-x callout">
-                    <div class="medium-2 cell center">
-                        <h4>My Contacts<br><a href="/network/statistics/contacts"><span class="my_total_contacts">${spinner}</span></a></h4>
-                      </div>
-                      <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>Our Contacts<br><a href="/network/statistics/groups"><span class="our_total_contacts">${spinner}</span></a></h4>
-                      </div>
-                      <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>My Baptisms<br><a href="/network/statistics/users"><span id="my_total_baptisms">${spinner}</span></a></h4>
-                      </div>
-                      <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>Our Baptisms<br><a href="/network/sites/"><span class="our_total_contacts">${spinner}</span></a></h4>
-                      </div>
-                    </div>
+                <div class="grid-x callout">
+                  <div class="medium-3 cell center">
+                    <h4>Active Contacts<br><span id="active_contacts">${spinner}</span></h4>
+                  </div>
+                  <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
+                    <h4>Paused Contacts<br><span id="paused_contacts">${spinner}</span></h4>
+                  </div>
+                  <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
+                    <h4>Closed Contacts<br><span id="closed_contacts">${spinner}</span></h4>
+                  </div>
+                  <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
+                    <h4>Total Contacts<br><span id="total_contacts">${spinner}</span></h4>
                   </div>
                 </div>
                 <br>
@@ -70,6 +66,7 @@ jQuery(document).ready(function(){
                     </div>
                 </div>
                 
+                <hr style="max-width:100%;">
                 <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
             `)
 
@@ -79,6 +76,10 @@ jQuery(document).ready(function(){
             window.sites = data.sites
             window.global = data.global
 
+            jQuery('#active_contacts').html(window.global.contacts.status.active)
+            jQuery('#paused_contacts').html(window.global.contacts.status.paused)
+            jQuery('#closed_contacts').html(window.global.contacts.status.closed)
+            jQuery('#total_contacts').html(window.global.contacts.status.total)
 
             load_line_chart('global-contacts-chart-div', null, 'days', 30)
             set_buttons('new-contact-buttons', 'c-30-days')

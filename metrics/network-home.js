@@ -90,6 +90,7 @@ jQuery(document).ready(function(){
                 </div>
             </div>
             
+            <hr style="max-width:100%;">
             <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
         `)
 
@@ -108,7 +109,7 @@ jQuery(document).ready(function(){
             jQuery('#total_countries').html(window.global.locations.total_countries)
             jQuery('#total_users').html(window.global.users.total)
             jQuery('.total_groups').html(window.global.groups.total)
-            jQuery('.total_contacts').html(window.global.contacts.total)
+            jQuery('.total_contacts').html(window.global.contacts.status.active)
             jQuery('.total_sites').html(window.global.sites.total)
             jQuery('.total_activity').html(window.global.activity.total)
 

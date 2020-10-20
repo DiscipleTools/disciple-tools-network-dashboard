@@ -200,9 +200,9 @@ class DT_Network_Dashboard_Tab_Profile
                     <div id="post-body-content">
                         <!-- Main Column -->
 
+                        <?php $this->box_network_tab(); ?>
                         <?php DT_Network_Dashboard_Site_Link_Metabox::admin_box_local_site_profile(); ?>
                         <?php $this->box_diagram() ?>
-
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -300,6 +300,47 @@ class DT_Network_Dashboard_Tab_Profile
         <?php
     }
 
+    public function box_network_tab(){
+        if ( isset( $_POST['show-tab'] )
+            && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['show-tab'] ) ), 'show-tab'.get_current_user_id() )
+            && isset( $_POST['tab'] ) ) {
+            $tab = sanitize_text_field( wp_unslash( $_POST['tab'] ) );
+            update_option('dt_network_dashboard_show_tab', $tab, true );
+        }
+        $tab = get_option('dt_network_dashboard_show_tab');
+        ?>
+        <form method="POST">
+        <?php wp_nonce_field( 'show-tab'.get_current_user_id(), 'show-tab') ?>
+        <table class="widefat striped">
+            <thead>
+                <tr><td>Show Tab</td><td></td><td></td></tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="width:115px;"><img src="<?php echo plugin_dir_url(__FILE__) ?>images/tab-screen.png" height="40px" /></td>
+                <td>
+                    <select name="tab">
+                        <option value="hide" <?php echo ( 'hide' === $tab || empty( $tab ) ) ? 'selected' : ''; ?>>Hide</option>
+                        <option value="show" <?php echo ( 'show' === $tab ) ? 'selected' : ''; ?>>Show</option>
+                    </select>
+                </td>
+                <td>
+
+                    To show the network dashboard, you must enable this feature. The background tasks of the network dashboard will run and facilitate connection to other sites, even with the "Network" tab hidden.
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                <button type="submit" class="button">Update</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </form>
+        <br>
+        <?php
+    }
+
 }
 
 /**
@@ -319,7 +360,6 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                         if ( dt_is_current_multisite_dashboard_approved() ) {
                             $this->process_full_list();
                             $this->main_column();
-                            $this->logging_viewer();
                         } else {
                             $this->not_approved_content();
                         }
@@ -560,23 +600,6 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
 
     }
 
-    public function logging_viewer() {
-        if ( ! file_exists( dt_get_log_location( 'multisite' ) ) ) {
-            dt_save_log( 'multisite', 'New log file' );
-            dt_reset_log( 'multisite' );
-        }
-        ?>
-        <a id="logs"></a>
-        <div style="padding: 1.2em;"><strong>Recent Cron Log</strong> <span style="float:right;"> <a href="javascript:void(0)" onclick="document.getElementById('log_viewer').contentWindow.location.reload();">reload</a></span></div>
-        <table class="widefat striped">
-            <tr>
-                <td>
-                    <iframe id="log_viewer" src="<?php echo dt_get_log_location( 'multisite', 'url' ) ?>" width="100%" height="800px" scrolling="yes"></iframe>
-                </td>
-            </tr>
-        </table>
-        <?php
-    }
 }
 
 /**
@@ -594,7 +617,6 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                         <!-- Main Column -->
                         <?php $this->process_full_list() ?>
                         <?php $this->main_column() ?>
-                        <?php $this->logging_viewer() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -792,24 +814,6 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
         <?php
     }
 
-    public function logging_viewer() {
-        if ( ! file_exists( dt_get_log_location( 'remote' ) ) ) {
-            dt_save_log( 'remote', 'New log file' );
-            dt_reset_log( 'remote' );
-        }
-        ?>
-        <a id="logs"></a>
-        <div style="padding: 1.2em;"><strong>Recent Cron Log</strong> <span style="float:right;"> <a href="javascript:void(0)" onclick="document.getElementById('log_viewer').contentWindow.location.reload();">reload</a></span></div>
-        <table class="widefat striped">
-            <tr>
-                <td>
-                    <iframe id="log_viewer" src="<?php echo dt_get_log_location( 'remote', 'url' ) ?>" width="100%" height="800px" scrolling="1"></iframe>
-                </td>
-            </tr>
-        </table>
-
-        <?php
-    }
 }
 
 
@@ -1005,10 +1009,9 @@ class DT_Network_Dashboard_Tab_System
                     <div id="post-body-content">
                         <!-- Main Column -->
 
-
                         <?php $this->metabox_cron_list() ?>
                         <?php $this->box_system_details() ?>
-
+                        <?php $this->logging_viewer() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -1241,6 +1244,44 @@ class DT_Network_Dashboard_Tab_System
         </form>
         <br>
         <!-- End Box -->
+        <?php
+    }
+
+    public function logging_viewer() {
+        if ( isset( $_POST['reset-logs'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['reset-logs'] ) ), 'reset-logs'.get_current_user_id() ) ) {
+            dt_reset_log( 'multisite' );
+            dt_reset_log( 'activity-remote' );
+            dt_reset_log( 'remote' );
+            dt_reset_log( 'activity-multisite' );
+            dt_reset_log( 'profile-collection' );
+        }
+        ?>
+        <a id="logs"></a>
+        <form method="POST">
+            <?php wp_nonce_field( 'reset-logs'.get_current_user_id(), 'reset-logs' ) ?>
+            <table class="widefat striped">
+                <thead>
+                <tr>
+                    <th>Recent Cron Log
+                    <span style="float:right;">
+                        <button type="submit" name="refresh" value="true" class="button">Refresh</button>
+                    </span>
+                    </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <a href="<?php echo dt_get_log_location( 'multisite', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'multisite', 'url' ) ?></a><br>
+                        <a href="<?php echo dt_get_log_location( 'activity-remote', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'activity-remote', 'url' ) ?></a><br>
+                        <a href="<?php echo dt_get_log_location( 'remote', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'remote', 'url' ) ?></a><br>
+                        <a href="<?php echo dt_get_log_location( 'activity-multisite', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'activity-multisite', 'url' ) ?></a><br>
+                        <a href="<?php echo dt_get_log_location( 'profile-collection', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'profile-collection', 'url' ) ?></a><br>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
         <?php
     }
 

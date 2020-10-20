@@ -1,6 +1,10 @@
 <?php
 
 if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
+
+if ( 'show' !== get_option('dt_network_dashboard_show_tab' ) ){
+    return;
+}
 /**
  * Add Top Navigation
  */

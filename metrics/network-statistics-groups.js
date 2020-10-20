@@ -10,26 +10,24 @@ jQuery(document).ready(function(){
     chartDiv.empty().html(`
             <span class="section-header">Groups</span>
                 <hr style="max-width:100%;">
-                <div class="grid-x grid-padding-x grid-padding-y">
+                <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell">
-                  
-                    <div class="grid-x callout">
-                    <div class="medium-2 cell center">
-                        <h4>My Groups<br><a href="/network/statistics/contacts"><span class="my_total_contacts">${spinner}</span></a></h4>
+                      <div class="grid-x callout">
+                          <div class="medium-3 cell center">
+                          <h4>Pre-Group<br><span id="active_pre_group">${spinner}</span></h4>
+                          </div>
+                          <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
+                          <h4>Group<br><span id="active_group">${spinner}</span></h4>
+                          </div>
+                          <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
+                          <h4>Church<br><span id="active_church">${spinner}</span></h4>
+                          </div>
+                          <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
+                          <h4>All Active/Inactive<br><span id="all_groups">${spinner}</span></h4>
+                          </div>
                       </div>
-                      <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>Our Groups<br><a href="/network/statistics/groups"><span class="our_total_contacts">${spinner}</span></a></h4>
-                      </div>
-                      <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>My Churches<br><a href="/network/statistics/users"><span id="my_total_baptisms">${spinner}</span></a></h4>
-                      </div>
-                      <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>Our Churches<br><a href="/network/sites/"><span class="our_total_contacts">${spinner}</span></a></h4>
-                      </div>
-                      
-                    </div>
                   </div>
-                </div>
+              </div>
                 
                 <!-- charts row -->
                 <div class="grid-x grid-padding-x">
@@ -63,6 +61,7 @@ jQuery(document).ready(function(){
                       </div>
                    </div> <!-- end charts row -->
                    
+                   <hr style="max-width:100%;">
                 <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
             `)
 
@@ -71,6 +70,11 @@ jQuery(document).ready(function(){
         .done(function(data) {
             window.sites = data.sites
             window.global = data.global
+
+            jQuery('#active_pre_group').html(window.global.groups.status.pre_group)
+            jQuery('#active_group').html(window.global.groups.status.group)
+            jQuery('#active_church').html(window.global.groups.status.church)
+            jQuery('#all_groups').html(window.global.groups.status.total)
 
             load_line_chart('global-groups-chart-div', null, 'days', 30)
             set_buttons('new-group-buttons', 'g-30-days')

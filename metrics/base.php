@@ -318,6 +318,7 @@ class DT_Network_Dashboard_Metrics_Base {
         $data = [
             'contacts' => [
                 'total' => $totals['total_contacts'] ?? 0,
+                'status' => self::compile_contacts_status(),
                 'added' => [
                     'sixty_days' => self::compile_by_days( 'contacts' ),
                     'twenty_four_months' => self::compile_by_months( 'contacts' ),
@@ -336,6 +337,7 @@ class DT_Network_Dashboard_Metrics_Base {
                     'sixty_days' => self::compile_by_days( 'groups' ),
                     'twenty_four_months' => self::compile_by_months( 'groups' ),
                 ],
+                'status' => self::compile_groups_status(),
                 'church_generations' => self::compile_generations_church(),
                 'group_generations' => self::compile_generations_group(),
             ],
@@ -865,6 +867,68 @@ class DT_Network_Dashboard_Metrics_Base {
                 }
                 $data[$index] = $value + $data[$index];
             }
+        }
+
+        return $data;
+    }
+
+    public static function compile_contacts_status(){
+        $data = [];
+        $data['total'] = 0;
+
+        $sites = self::get_sites();
+        if (empty( $sites )) {
+            return [];
+        }
+
+        foreach ($sites as $key => $site) {
+            if ( ! isset( $site['contacts']['current_state']['status'] ) ){
+                continue;
+            }
+            foreach ( $site['contacts']['current_state']['status'] as $index => $value ) {
+                if ( ! isset( $data[$index] ) ) {
+                    $data[$index] = $value;
+                    continue;
+                }
+                $data[$index] = $value + $data[$index];
+            }
+
+            if ( ! isset( $site['contacts']['current_state']['all_contacts'] ) ){
+                continue;
+            }
+            $data['total'] = $data['total'] + $site['contacts']['current_state']['all_contacts'];
+
+        }
+
+        return $data;
+    }
+
+    public static function compile_groups_status(){
+        $data = [];
+        $data['total'] = 0;
+
+        $sites = self::get_sites();
+        if (empty( $sites )) {
+            return [];
+        }
+
+        foreach ($sites as $key => $site) {
+            if ( ! isset( $site['groups']['current_state']['active'] ) ){
+                continue;
+            }
+            foreach ( $site['groups']['current_state']['active'] as $index => $value ) {
+                if ( ! isset( $data[$index] ) ) {
+                    $data[$index] = $value;
+                    continue;
+                }
+                $data[$index] = $value + $data[$index];
+            }
+
+            if ( ! isset( $site['groups']['current_state']['all'] ) ){
+                continue;
+            }
+            $data['total'] = $data['total'] + $site['groups']['current_state']['all'];
+
         }
 
         return $data;

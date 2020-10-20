@@ -43,17 +43,16 @@ jQuery(document).ready(function(){
                     <div class="medium-9 cell" style="border-left: 1px solid lightgrey;">
                         <div id="activity-wrapper">
                             <div id="activity-list">${spinner}</div>
-                            
                         </div>
                     </div>
                 </div>
             `)
 
+
     // call for data
     makeRequest('POST', 'network/activity/feed' )
         .done( data => {
             "use strict";
-            console.log(data)
             let container = jQuery('#activity-list');
             let index = 0
 

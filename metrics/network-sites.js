@@ -23,6 +23,7 @@ jQuery(document).ready(function(){
              </button>
         </div>
         
+         <hr style="max-width:100%;">
         <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
        `)
 

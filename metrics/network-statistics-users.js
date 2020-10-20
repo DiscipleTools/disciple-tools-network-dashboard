@@ -1,5 +1,4 @@
 jQuery(document).ready(function(){
-    let obj = network_statistics_users
     let chartDiv = jQuery('#chart')
     let spinner = '<span class="loading-spinner active"></span>'
 
@@ -15,19 +14,19 @@ jQuery(document).ready(function(){
                       <div class="cell">
                           <div class="grid-x callout">
                               <div class="medium-3 cell center">
-                              <h4>Total Users<br><span id="total_users">-</span></h4>
+                              <h4>Total Users<br><span id="total_users">${spinner}</span></h4>
                               </div>
                               <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                              <h4>Responders<br><span id="total_responders">-</span></h4>
+                              <h4>Responders<br><span id="total_responders">${spinner}</span></h4>
                               </div>
                               <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                              <h4>Dispatchers<br><span id="total_dispatchers">-</span></h4>
+                              <h4>Dispatchers<br><span id="total_dispatchers">${spinner}</span></h4>
                               </div>
                               <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                              <h4>Multipliers<br><span id="total_multipliers">-</span></h4>
+                              <h4>Multipliers<br><span id="total_multipliers">${spinner}</span></h4>
                               </div>
                               <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                              <h4>Admins<br><span id="total_admins">-</span></h4>
+                              <h4>Admins<br><span id="total_admins">${spinner}</span></h4>
                               </div>
                           </div>
                       </div>
@@ -35,24 +34,21 @@ jQuery(document).ready(function(){
                 <br>
                 <div class="grid-x grid-padding-x">
                     <div class="medium-6 cell"><!--column 1-->
-                        <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
-                              <div class="cell">
-                                  <span class="section-header">User Login Activity</span><br>
-                                  <button class="button hollow active-user-buttons" id="ua-7-days" onclick="load_line_chart( 'global-users-chart-div', null, 'days', 7 );set_buttons('active-user-buttons', 'ua-7-days' )">Last 7 days</button> 
-                                  <button class="button active-user-buttons" id="ua-30-days" onclick="load_line_chart( 'global-users-chart-div', null, 'days', 30 );set_buttons('active-user-buttons', 'ua-30-days' )">Last 30 days</button> 
-                                  <button class="button hollow active-user-buttons" id="ua-60-days" onclick="load_line_chart( 'global-users-chart-div', null, 'days', 60 );set_buttons('active-user-buttons', 'ua-60-days' )">Last 60 days</button> 
-                                  <button class="button hollow active-user-buttons" id="ua-12-months" onclick="load_line_chart( 'global-users-chart-div', null, 'months', 12 );set_buttons('active-user-buttons', 'ua-12-months' )">Last 12 Months</button>
-                                  <button class="button hollow active-user-buttons" id="ua-24-months" onclick="load_line_chart( 'global-users-chart-div', null, 'months', 24 );set_buttons('active-user-buttons', 'ua-24-months' )">Last 24 Months</button>
-                                  <div id="global-users-chart-div" style="height:500px;width:100%;">${spinner}</div>
-                              </div>
-                          </div>
+                        <span class="section-header">User Login Activity</span><br>
+                        <button class="button hollow active-user-buttons" id="ua-7-days" onclick="load_line_chart( 'global-users-chart-div', null, 'days', 7 );set_buttons('active-user-buttons', 'ua-7-days' )">Last 7 days</button> 
+                        <button class="button active-user-buttons" id="ua-30-days" onclick="load_line_chart( 'global-users-chart-div', null, 'days', 30 );set_buttons('active-user-buttons', 'ua-30-days' )">Last 30 days</button> 
+                        <button class="button hollow active-user-buttons" id="ua-60-days" onclick="load_line_chart( 'global-users-chart-div', null, 'days', 60 );set_buttons('active-user-buttons', 'ua-60-days' )">Last 60 days</button> 
+                        <button class="button hollow active-user-buttons" id="ua-12-months" onclick="load_line_chart( 'global-users-chart-div', null, 'months', 12 );set_buttons('active-user-buttons', 'ua-12-months' )">Last 12 Months</button>
+                        <button class="button hollow active-user-buttons" id="ua-24-months" onclick="load_line_chart( 'global-users-chart-div', null, 'months', 24 );set_buttons('active-user-buttons', 'ua-24-months' )">Last 24 Months</button>
+                        <div id="global-users-chart-div" style="height:500px;width:100%;">${spinner}</div>
                     </div>
-                <div class="medium-6 cell"><!--column 2-->
-                    <span class="section-header">Users Active in the Last 30 Days</span><br>
-                    <div id="global-system-engagement-pie-chart-div" style="height:500px;width:100%;"></div>
-                </div>
+                    <div class="medium-6 cell"><!--column 2-->
+                        <span class="section-header">Users Active in the Last 30 Days</span><br>
+                        <div id="global-system-engagement-pie-chart-div" style="height:500px;width:100%;">${spinner}</div>
+                    </div>
                 </div>
                 
+                <hr style="max-width:100%;">
                 <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
             `)
 
