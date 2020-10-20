@@ -20,22 +20,14 @@ jQuery(document).ready(function(){
                         <div class="grid-x">
                             <div class="cell">
                                 Sites
-                                <select>
-                                    <option>Sites</option>
-                                    <option>Sites</option>
-                                    <option>Sites</option>
-                                    <option>Sites</option>
-                                    <option>Sites</option>
+                                <select id="site-list" name="site-filter">
+                                    <option>No Filter</option>
                                 </select>
                             </div>
                             <div class="cell">
-                                Sites
-                                <select>
-                                    <option>Sites</option>
-                                    <option>Sites</option>
-                                    <option>Sites</option>
-                                    <option>Sites</option>
-                                    <option>Sites</option>
+                                Types
+                                <select id="action-filter" name="action-filter">
+                                    <option>No Filter</option>
                                 </select>
                             </div>
                         </div>
@@ -53,23 +45,35 @@ jQuery(document).ready(function(){
     makeRequest('POST', 'network/activity/feed' )
         .done( data => {
             "use strict";
+            window.feed = data
+
             let container = jQuery('#activity-list');
             let index = 0
-
-            jQuery.each( data, function(i,v){
-                container.append(`<h2>${i} (${v.length} events)</h2>`)
+            jQuery.each( window.feed.list, function(i,v){
+                container.append(`<h2>${v.label} (${v.list.length} events)</h2>`)
                 container.append(`<ul>`)
-                jQuery.each(v, function(ii,vv){
-                    container.append(`<li> ${vv} </li>`)
+                jQuery.each(v.list, function(ii,vv){
+                    container.append(`<li class="${vv.action} ${vv.site_id}"><strong>(${vv.time})</strong> ${vv.message} </li>`)
                     index++
                 })
                 container.append(`</ul>`)
 
-                if ( index > 1000 ){
+                if ( index > 500 ){
                     return false
                 }
             })
 
+            let site_list = jQuery('#site-list')
+            jQuery.each( window.feed.sites, function(i,sl){
+                site_list.append(`<option value="${sl.key}">${sl.label}</option>`)
+            })
+
+            let action_list = jQuery('#action-filter')
+            jQuery.each( window.feed.actions, function(i,a){
+                action_list.append(`<option value="${a.key}">${a.label}</option>`)
+            })
+
             jQuery('.loading-spinner').removeClass('active')
         })
+
 })

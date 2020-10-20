@@ -112,37 +112,37 @@ function dt_network_dashboard_translate_log_new_posts( $activity_log ){
 
         /* new_contact */
         if ( 'new_contact' === $log['action'] ) {
-            $activity_log[$index]['message'] = '(' . $log['time'] . ') ' . $log['site_name'] . ' is reporting a new contact';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new contact';
         }
 
         /* new_pre-group */
         if ( 'new_pre-group' === $log['action'] ) {
-            $activity_log[$index]['message'] = '(' . $log['time'] . ') ' . $log['site_name'] . ' is reporting a new pre-group formed';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new pre-group formed';
         }
 
         /* new_group */
         if ( 'new_group' === $log['action'] ) {
-            $activity_log[$index]['message'] = '(' . $log['time'] . ') ' . $log['site_name'] . ' is reporting a new group formed';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new group formed';
         }
 
         /* new_church */
         if ( 'new_church' === $log['action'] ) {
-            $activity_log[$index]['message'] = '(' . $log['time'] . ') ' . $log['site_name'] . ' is reporting a new church';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new church';
         }
 
         /* new_team */
         if ( 'new_team' === $log['action'] ) {
-            $activity_log[$index]['message'] = '(' . $log['time'] . ') ' . $log['site_name'] . ' is reporting a new leadership team formed';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new leadership team formed';
         }
 
         /* new_baptism */
         if ( 'new_baptism' === $log['action'] ) {
-            $activity_log[$index]['message'] = '(' . $log['time'] . ') ' . $log['site_name'] . ' is reporting a new baptism';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new baptism';
         }
 
         /* new_coaching */
         if ( 'new_coaching' === $log['action'] ) {
-            $activity_log[$index]['message'] = '(' . $log['time'] . ') ' . $log['site_name'] . ' is reporting an coaching relationship';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting an coaching relationship';
         }
     }
 

@@ -41,22 +41,22 @@ function dt_network_dashboard_translate_log_generations( $activity_log ){
 
         /* generation_pre-group */
         if ( 'generation_pre-group' === $log['action'] ) {
-            $activity_log[$index]['message'] = '(' . $log['time'] . ') ' . $log['site_name'] . ' is reporting a new pre-group generation';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new pre-group generation';
         }
 
         /* generation_group */
         if ( 'generation_group' === $log['action'] ) {
-            $activity_log[$index]['message'] = '(' . $log['time'] . ') ' . $log['site_name'] . ' is reporting a new group generation';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new group generation';
         }
 
         /* generation_church */
         if ( 'generation_church' === $log['action'] ) {
-            $activity_log[$index]['message'] = '(' . $log['time'] . ') ' . $log['site_name'] . ' is reporting a new church generation';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new church generation';
         }
 
         /* generation_team */
         if ( 'generation_team' === $log['action'] ) {
-            $activity_log[$index]['message'] = '(' . $log['time'] . ') ' . $log['site_name'] . ' is reporting a new leadership team generation';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new leadership team generation';
         }
 
     }

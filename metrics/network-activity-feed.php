@@ -82,24 +82,70 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
 
         $results = apply_filters( 'dt_network_dashboard_build_message', $results );
 
-        $data = [];
+        $data = [
+            'list' => [], // list of dates
+            'actions' => [], // list of actions
+            'sites' => [], // list of sites
+        ];
         foreach( $results as $index => $result ) {
-            if ( ! isset( $data[$result['day']] ) ) {
-                $data[$result['day']] = [];
+            if ( ! isset( $data['actions'][$result['action']] ) ){
+                $data['actions'][$result['action']] = [
+                    'key' => $result['action'],
+                    'label' => ucwords( str_replace( '_', ' ', $result['action']) ),
+                ];
+            }
+            if ( ! isset( $data['sites'][$result['site_id']] ) ){
+                $data['sites'][$result['site_id']] = [
+                    'key' => $result['site_id'],
+                    'label' => $result['site_name'],
+                ];
+            }
+            if ( ! isset( $data['list'][$result['day']] ) ) {
+                $data['list'][$result['day']] = [];
+                $data['list'][$result['day']]['label'] = $this->create_time_string( $result['day'] );
+                $data['list'][$result['day']]['list'] = [];
             }
 
             if ( isset( $result['message'] ) ) {
-                $data[$result['day']][] = $result['message'];
+                $data['list'][$result['day']]['list'][] = [
+                    'time' => $result['time'],
+                    'message' => $result['message'],
+                    'action' => $result['action'],
+                    'site_id' => $result['site_id'],
+                ];
             }
             else if ( isset( $result['payload']['note'] ) ) {
-                $data[$result['day']][] = '('. $result['time'].') ' .  $result['payload']['note']. '. (' . $result['label'] . ')' ;
+                $data['list'][$result['day']]['list'][] = [
+                    'time' => $result['time'],
+                    'message' => '('. $result['time'].') ' .  $result['payload']['note']. '. (' . $result['label'] . ')',
+                    'action' => $result['action'],
+                    'site_id' => $result['site_id'],
+                ];
             }
             else {
-                $data[$result['day']][] = '('. $result['time'].') ' .  ucwords( str_replace( '_', ' ', $result['action'] ) ) . ' (' . $result['label'] . ')';
+                $data['list'][$result['day']]['list'][] = [
+                    'time' => $result['time'],
+                    'message' => '('. $result['time'].') ' .  ucwords( str_replace( '_', ' ', $result['action'] ) ) . ' (' . $result['label'] . ')',
+                    'action' => $result['action'],
+                    'site_id' => $result['site_id'],
+                ];
             }
         }
 
         return $data;
+    }
+
+    public static function create_time_string( $day ) : string {
+        $current_day = strtotime( $day );
+        $week_ago = strtotime('-7 days');
+
+        if ( $current_day > $week_ago ) {
+            $time_string = date( 'l', $current_day );
+        }
+        else {
+            $time_string = date( 'M j, Y', $current_day );
+        }
+        return $time_string;
     }
 
 }

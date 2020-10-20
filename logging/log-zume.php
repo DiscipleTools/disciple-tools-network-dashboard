@@ -10,19 +10,19 @@ function zume_log_actions( $activity_log ){
 
         /* new_baptism */
         if ( 'studying' === substr( $log['action'], 0, 8 ) ) {
-            $activity_log[$index]['message'] = '('. $log['time'].') ' . $log['site_name'] . '  is studying "' . $log['payload']['title'] . '" (' . $log['payload']['country'] . ')';
+            $activity_log[$index]['message'] =  $log['site_name'] . '  is studying "' . $log['payload']['title'] . '" (' . $log['payload']['country'] . ')';
         }
 
         if ( 'leading' === substr( $log['action'], 0, 7 ) ) {
-            $activity_log[$index]['message'] = '('. $log['time'].') ' . $log['site_name'] . '  is leading a group through session '.substr( $log['action'], -1, 1 ).'! (' . $log['payload']['country'] . ')';
+            $activity_log[$index]['message'] =  $log['site_name'] . '  is leading a group through session '.substr( $log['action'], -1, 1 ).'! (' . $log['payload']['country'] . ')';
         }
 
         if ( 'zume_training' === $log['action'] && 'joining' === $log['category'] ) {
-            $activity_log[$index]['message'] = '('. $log['time'].') ' .'XX is registering for Zúme Training! (' . $log['payload']['country'] . ')';
+            $activity_log[$index]['message'] = 'XX is registering for Zúme Training! (' . $log['payload']['country'] . ')';
         }
 
         if ( 'zume_vision' === $log['action'] && 'joining' === $log['category'] ) {
-            $activity_log[$index]['message'] = '('. $log['time'].') ' .'XX is registering for Zúme Community! (' . $log['payload']['country'] . ')';
+            $activity_log[$index]['message'] = 'XX is registering for Zúme Community! (' . $log['payload']['country'] . ')';
         }
 
     }

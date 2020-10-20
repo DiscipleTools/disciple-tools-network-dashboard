@@ -39,7 +39,7 @@ function dt_network_dashboard_translate_log_milestone_actions( $activity_log ){
 
         /* new_baptism */
         if ( 'new_baptism' === $log['action'] ) {
-            $activity_log[$index]['message'] = '('. $log['time'].')' . $log['site_name'] . ' is reporting a new baptism';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new baptism';
         }
 
     }
