@@ -334,6 +334,7 @@ class DT_Network_Dashboard_Site_Post_Type {
                   b.meta_value as type,
                   f.meta_value as type_id,    
                   d.meta_value as partner_id,
+                  d.meta_value as site_id,
                   c.meta_value as snapshot,
                   g.meta_value as snapshot_timestamp,
                   h.meta_value as profile,
@@ -341,8 +342,7 @@ class DT_Network_Dashboard_Site_Post_Type {
                   j.meta_value as visibility,
                   k.meta_value as connection_type,
                   i.meta_value as send_activity,
-                  m.meta_value as location_precision,
-                  n.meta_value as activity_timestamp
+                  m.meta_value as location_precision
                 FROM $wpdb->posts as a
                 LEFT JOIN $wpdb->postmeta as c
                   ON a.ID=c.post_id
@@ -380,9 +380,6 @@ class DT_Network_Dashboard_Site_Post_Type {
                  LEFT JOIN $wpdb->postmeta as m
                   ON a.ID=m.post_id
                   AND m.meta_key = 'location_precision'
-                 LEFT JOIN $wpdb->postmeta as n
-                  ON a.ID=n.post_id
-                  AND n.meta_key = 'activity_timestamp'
                 WHERE a.post_type = 'dt_network_dashboard'
                 ORDER BY name;
             ",
@@ -397,6 +394,30 @@ class DT_Network_Dashboard_Site_Post_Type {
             $result['snapshot'] = maybe_unserialize( $result['snapshot'] );
             $result['profile'] = maybe_unserialize( $result['profile'] );
             $sites[$result['partner_id']] = $result;
+        }
+
+        if ( true /* include self metrics */ ){
+            $profile = dt_network_site_profile();
+
+            $self = [
+                'id' => 0,
+                'name' => $profile['partner_name'],
+                'type' => 'local',
+                'type_id' => '',
+                'partner_id' => $profile['partner_id'],
+                'site_id' => $profile['partner_id'],
+                'snapshot' => DT_Network_Dashboard_Snapshot::snapshot_report(),
+                'snapshot_timestamp' => get_option('dt_snapshot_report_timestamp'),
+                'profile' => $profile,
+                'receive_activity' => '',
+                'visibility' => 'show',
+                'connection_type' => '',
+                'send_activity' => '',
+                'location_precision' => '',
+            ];
+
+
+            $sites[$profile['partner_id']] = $self;
         }
 
         wp_cache_set( __METHOD__, $sites, __METHOD__, 10 );

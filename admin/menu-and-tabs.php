@@ -260,11 +260,18 @@ class DT_Network_Dashboard_Tab_Profile
                             <div>
                                 <?php
                                 foreach( $sites as $site ){
-                                    if ('network_dashboard_receiving' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] || 'multisite' === $site['type'] ) {
+                                    if ( 0 === $site['id'] ){
+                                        continue;
+                                    }
+                                    else if ( is_multisite() && 'multisite' === $site['type'] && dt_network_dashboard_multisite_is_approved() ) {
+                                        echo '<div class="row"><span class="nd-site-box">' . esc_html( $site['name'] ) . '</span></div>';
+                                    }
+                                    else if ('network_dashboard_receiving' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] || 'local' === $site['type'] ) {
                                         echo '<div class="row"><span class="nd-site-box">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
                                 }
                                 ?>
+                                <span class="center-text"><a href="<?php echo admin_url() ?>edit.php?post_type=site_link_system">Add Remote Dashboard</a></span>
                             </div>
                         </div>
                         <div class="arrow-columns">
@@ -290,7 +297,25 @@ class DT_Network_Dashboard_Tab_Profile
                                         echo '<div class="row"><span class="nd-site-box">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
                                 }
+
+                                if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ) :
+
+                                $approved_sites = dt_dashboard_approved_sites();
+                                foreach( $approved_sites as $index => $site ){
+                                    if ($index === get_current_blog_id() ){
+                                        continue;
+                                    }
+
+                                    $site_profile = get_blog_option( $index, 'dt_site_profile');
+                                    if ( ! isset( $site_profile['partner_name'] ) || empty( $site_profile['partner_name'] ) ) {
+                                        continue;
+                                    }
+                                    echo '<div class="row"><span class="nd-site-box">' . esc_html( $site_profile['partner_name'] ) . '</span></div>';
+                                }
+
+                                endif;
                                 ?>
+                                <span class="center-text"><a href="<?php echo admin_url() ?>edit.php?post_type=site_link_system">Add Remote Dashboard</a></span>
                         </div>
                     </td>
                 </tr>
@@ -637,7 +662,7 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                         &nbsp;<span id="rerun-collection-spinner" style="display: none;"><img src="<?php echo plugin_dir_url( __DIR__ ) ?>spinner.svg" width="25px" /></span>
                         &nbsp;<span id="result-message"></span>
 
-                        <span style="float:right;"><a href="#logs">View logs</a></span>
+                        <span style="float:right;"><a href="<?php echo admin_url() ?>edit.php?post_type=site_link_system">Add Remote Dashboard</a></span>
                     </td>
                 </tr>
             </tbody>
@@ -928,7 +953,7 @@ class DT_Network_Dashboard_Tab_Outgoing
                         </tbody>
                     </table>
 
-                    <?php if ( is_multisite() ) : ?>
+                <?php if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ) : ?>
                     <br>
                     <table class="widefat striped">
                         <thead>
@@ -939,9 +964,12 @@ class DT_Network_Dashboard_Tab_Outgoing
                         </tr>
                         </thead>
                         <tbody>
+
                         <?php
-                        $i = 0;
                         foreach ( $sites as $site ) {
+                            if ( 0 === $site['id'] ){
+                                continue;
+                            }
                             if ('multisite' === $site['type'] && in_array( $site['type_id'], $multisites ) ) {
                                 $i++;
                                 ?>
@@ -964,19 +992,35 @@ class DT_Network_Dashboard_Tab_Outgoing
                                 <?php
                             }
                         }
-                        if (0 === $i ) {
-                            ?>
-                            <tr>
-                                <td>No sites found</td>
-                                 <td></td>
-                            </tr>
-                            <?php
-                        }
+
                         ?>
+
+                        <?php
+                         $approved_sites = dt_dashboard_approved_sites();
+                        foreach( $approved_sites as $index => $site ){
+                            if ( $index === get_current_blog_id() ){
+                                continue;
+                            }
+
+                            $site_profile = get_blog_option( $index, 'dt_site_profile');
+                            if ( ! isset( $site_profile['partner_name'] ) || empty( $site_profile['partner_name'] ) ) {
+                                continue;
+                            }
+                            ?>
+                                <tr>
+                                    <td><?php echo esc_html($site_profile['partner_name']) ?></td>
+                                    <td style="text-align: center;"></td>
+                                    <td style="text-align: center;"></td>
+                                </tr>
+                            <?php
+                        } // end foreach
+                        ?>
+
                         </tbody>
                     </table>
 
-                    <?php endif; // end multisite check ?>
+                    <?php endif; // is multisite ?>
+
 
                     <p>
                         <br><button type="submit" style="float:right;" class="button">Update</button>
@@ -1189,6 +1233,9 @@ class DT_Network_Dashboard_Tab_System
             </tr>
             <?php
                 foreach( $sites as $site ){
+                    if ( 'multisite' === $site['type'] && ! dt_network_dashboard_multisite_is_approved() ){
+                        continue;
+                    }
                     ?>
                     <tr>
                     <td>
@@ -1272,11 +1319,16 @@ class DT_Network_Dashboard_Tab_System
                 <tbody>
                 <tr>
                     <td>
+
+                        <?php if ( dt_network_dashboard_multisite_is_approved() ) : ?>
                         <a href="<?php echo dt_get_log_location( 'multisite', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'multisite', 'url' ) ?></a><br>
-                        <a href="<?php echo dt_get_log_location( 'activity-remote', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'activity-remote', 'url' ) ?></a><br>
-                        <a href="<?php echo dt_get_log_location( 'remote', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'remote', 'url' ) ?></a><br>
                         <a href="<?php echo dt_get_log_location( 'activity-multisite', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'activity-multisite', 'url' ) ?></a><br>
+                        <?php endif; ?>
+
+                        <a href="<?php echo dt_get_log_location( 'remote', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'remote', 'url' ) ?></a><br>
+                        <a href="<?php echo dt_get_log_location( 'activity-remote', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'activity-remote', 'url' ) ?></a><br>
                         <a href="<?php echo dt_get_log_location( 'profile-collection', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'profile-collection', 'url' ) ?></a><br>
+
                     </td>
                 </tr>
                 </tbody>
