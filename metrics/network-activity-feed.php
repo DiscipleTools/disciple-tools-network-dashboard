@@ -19,7 +19,6 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
 
         add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 50 );
         add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
-        add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
 
         if ( $this->url === $this->url_path ) {
             add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
@@ -49,104 +48,5 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
         $template_for_url[$this->url] = 'template-metrics.php';
         return $template_for_url;
     }
-
-    public function add_api_routes() {
-        register_rest_route(
-            $this->namespace, '/' . $this->url . '/', [
-                [
-                    'methods'  => WP_REST_Server::CREATABLE,
-                    'callback' => [ $this, 'endpoint' ],
-                ],
-            ]
-        );
-    }
-
-    public function endpoint( WP_REST_Request $request ){
-        if ( !$this->has_permission() ) {
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
-        }
-        $params = $request->get_params();
-
-        if ( isset( $params['time'] ) ) {
-            $time = sanitize_text_field( wp_unslash( $params['time'] ) );
-        } else {
-            $time = null;
-        }
-
-        return $this->build_log( $time );
-    }
-
-    public function build_log( $time ){
-
-        $results = $this->get_activity_log( $time );
-
-        $results = apply_filters( 'dt_network_dashboard_build_message', $results );
-
-        $data = [
-            'list' => [], // list of dates
-            'actions' => [], // list of actions
-            'sites' => [], // list of sites
-        ];
-        foreach( $results as $index => $result ) {
-            if ( ! isset( $data['actions'][$result['action']] ) ){
-                $data['actions'][$result['action']] = [
-                    'key' => $result['action'],
-                    'label' => ucwords( str_replace( '_', ' ', $result['action']) ),
-                ];
-            }
-            if ( ! isset( $data['sites'][$result['site_id']] ) ){
-                $data['sites'][$result['site_id']] = [
-                    'key' => $result['site_id'],
-                    'label' => $result['site_name'],
-                ];
-            }
-            if ( ! isset( $data['list'][$result['day']] ) ) {
-                $data['list'][$result['day']] = [];
-                $data['list'][$result['day']]['label'] = $this->create_time_string( $result['day'] );
-                $data['list'][$result['day']]['list'] = [];
-            }
-
-            if ( isset( $result['message'] ) ) {
-                $data['list'][$result['day']]['list'][] = [
-                    'time' => $result['time'],
-                    'message' => $result['message'],
-                    'action' => $result['action'],
-                    'site_id' => $result['site_id'],
-                ];
-            }
-            else if ( isset( $result['payload']['note'] ) ) {
-                $data['list'][$result['day']]['list'][] = [
-                    'time' => $result['time'],
-                    'message' => '('. $result['time'].') ' .  $result['payload']['note']. '. (' . $result['label'] . ')',
-                    'action' => $result['action'],
-                    'site_id' => $result['site_id'],
-                ];
-            }
-            else {
-                $data['list'][$result['day']]['list'][] = [
-                    'time' => $result['time'],
-                    'message' => '('. $result['time'].') ' .  ucwords( str_replace( '_', ' ', $result['action'] ) ) . ' (' . $result['label'] . ')',
-                    'action' => $result['action'],
-                    'site_id' => $result['site_id'],
-                ];
-            }
-        }
-
-        return $data;
-    }
-
-    public static function create_time_string( $day ) : string {
-        $current_day = strtotime( $day );
-        $week_ago = strtotime('-7 days');
-
-        if ( $current_day > $week_ago ) {
-            $time_string = date( 'l', $current_day );
-        }
-        else {
-            $time_string = date( 'M j, Y', $current_day );
-        }
-        return $time_string;
-    }
-
 }
 new DT_Network_Dashboard_Metrics_Activity_Feed();

@@ -14,16 +14,16 @@ jQuery(document).ready(function(){
                   <div class="cell">
                     <div class="grid-x callout">
                     <div class="medium-2 cell center">
-                        <h4>My Contacts<br><a href="/network/statistics/contacts"><span class="my_total_contacts">${spinner}</span></a></h4>
+                        <h4>Events<br><span class="my_total_contacts">${spinner}</span></h4>
                       </div>
                       <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>Our Contacts<br><a href="/network/statistics/groups"><span class="our_total_contacts">${spinner}</span></a></h4>
+                        <h4>Sites<br><span class="our_total_contacts">${spinner}</span></h4>
                       </div>
                       <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>My Baptisms<br><a href="/network/statistics/users"><span id="my_total_baptisms">${spinner}</span></a></h4>
+                        <h4>Countries<br><span id="my_total_baptisms">${spinner}</span></h4>
                       </div>
                       <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                        <h4>Our Baptisms<br><a href="/network/sites/"><span class="our_total_contacts">${spinner}</span></a></h4>
+                        <h4>No Locations<br><span class="our_total_contacts">${spinner}</span></h4>
                       </div>
                     </div>
                   </div>
@@ -53,6 +53,8 @@ jQuery(document).ready(function(){
                 </div>
                 </div>
                 
+                <div id="action-list" style="height:300px;width:100%;"></div>
+                
                 <br>
                 
                 <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
@@ -63,6 +65,18 @@ jQuery(document).ready(function(){
         .done(function(data) {
             window.sites = data.sites
             window.global = data.global
+
+            let actions = [
+                {
+                    'label': 'Test',
+                    'value': 30
+                },
+                {
+                    'label': 'Test2',
+                    'value': 60
+                }
+            ]
+            bar_chart('action-list', actions)
 
 
             load_line_chart('global-contacts-chart-div', null, 'days', 30)

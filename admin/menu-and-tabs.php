@@ -1162,7 +1162,7 @@ class DT_Network_Dashboard_Tab_System
             }
             dt_network_dashboard_profiles_update();
         }
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites( );
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
         $current_profile = dt_network_site_profile();
         ?>
         <!-- Box -->
@@ -1233,6 +1233,9 @@ class DT_Network_Dashboard_Tab_System
             </tr>
             <?php
                 foreach( $sites as $site ){
+                    if ( 0 === $site['id'] ){
+                        continue;
+                    }
                     if ( 'multisite' === $site['type'] && ! dt_network_dashboard_multisite_is_approved() ){
                         continue;
                     }

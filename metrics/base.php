@@ -100,7 +100,17 @@ class DT_Network_Dashboard_Metrics_Base {
                 $data['global'] = $this->get_global();
                 break;
             case 'activity':
-                $data = self::get_activity_log();
+
+                if ( isset( $params['filters'] ) && ! empty( $params['filters'] ) ){
+                    $filters = recursive_sanitize_text_field( $params['filters'] );
+                    dt_write_log($filters);
+                    $data = self::build_log( $filters );
+                } else {
+                    $data = self::build_log();
+                }
+                break;
+            case 'activity_stats':
+                $data = self::get_activity_stats();
                 break;
             case 'reset':
                 $data['sites'] = $this->get_sites( true );;
@@ -141,6 +151,13 @@ class DT_Network_Dashboard_Metrics_Base {
         // mapbox
         if ( DT_Mapbox_API::get_key() ){
             DT_Mapbox_API::load_mapbox_header_scripts();
+            wp_localize_script(
+                'network_base_script',
+                'network_base_script',
+                array(
+                    'map_key' => DT_Mapbox_API::get_key(),
+                )
+            );
         }
 
         // amcharts
@@ -200,7 +217,7 @@ class DT_Network_Dashboard_Metrics_Base {
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
         if ( !empty( $sites )) {
             foreach ($sites as $site) {
-                if ( 'multisite' === $site['type'] ){
+                if ( 'multisite' === $site['type']  ){
                     continue;
                 }
                 if ( 'hide' === $site['visibility'] ){
@@ -216,7 +233,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
         if (dt_is_current_multisite_dashboard_approved()) {
             foreach ($sites as $key => $site) {
-                if ( 'remote' === $site['type'] ){
+                if ( 'multisite' !== $site['type'] ){
                     continue;
                 }
                 if ( 'hide' === $site['visibility'] ){
@@ -275,7 +292,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
         if (dt_is_current_multisite_dashboard_approved()) {
             foreach ($sites as $key => $site) {
-                if ( 'remote' === $site['type'] ){
+                if ( 'multisite' !== $site['type'] ){
                     continue;
                 }
                 if ( 'hide' === $site['visibility'] ){
@@ -463,12 +480,65 @@ class DT_Network_Dashboard_Metrics_Base {
         return $data;
     }
 
-    public static function get_activity_log( $time = null, $limit = null, $site_id = null ){
-
+    public static function get_activity_log( $filters = [] ){
         global $wpdb;
-        if ( empty( $time ) ){
-            $time = strtotime('-30 days' );
+        $defaults = [
+            'start' => time(),
+            'end' => strtotime('-7 days' ),
+            'limit' => 2000,
+            'offset' => 0,
+            'boundary' => [], // n_lat, s_lat, e_lng, w_lng lnglat, sw lnglat
+            'actions' => [],
+            'sites' => []
+        ];
+
+
+
+        $filter = wp_parse_args( $filters, $defaults );
+        $additional_where = '';
+
+        /* process start time */
+        if ( isset( $filters['start'] ) && ! empty( $filters['start'] ) ){
+            $filter['start'] = strtotime( sanitize_text_field( wp_unslash( $filters['start'] ) ) );
         }
+        if ( empty( $filter['start'] ) || $filter['start'] > time() || $filter['start'] < strtotime('30 years ago' ) ) {
+            $filter['start'] = time();
+        }
+
+        /* process end time */
+        if ( isset( $filters['end'] ) && ! empty( $filters['end'] ) ){
+            $filter['end'] = strtotime( sanitize_text_field( wp_unslash( $filters['end'] ) ) );
+        }
+        if ( $filter['end'] > time() || empty( $filter['end'] ) || $filter['end'] < strtotime('30 years ago' ) ) {
+            $filter['end'] = strtotime('-30 days' );
+        }
+
+        /* process actions */
+        if ( ! empty( $filter['actions'] ) && is_array( $filter['actions'] ) ) {
+            $string = dt_array_to_sql( $filter['actions'] );
+            $additional_where .= " AND action IN (".$string.")";
+        }
+        /* process sites */
+        if ( ! empty( $filter['sites'] ) && is_array( $filter['sites'] )  ) {
+            $string = dt_array_to_sql( $filter['sites'] );
+            $additional_where .= " AND site_id IN (".$string.")";
+        }
+        /* process boundary */
+        if ( ! empty( $filter['boundary'] ) && is_array( $filter['boundary'] )  ) {
+            if ( isset( $filter['boundary']['n_lat'] )
+              && isset( $filter['boundary']['s_lat'] )
+              && isset( $filter['boundary']['e_lng'] )
+              && isset( $filter['boundary']['w_lng'] )
+            ) {
+                $additional_where .= " 
+                AND lng < '".$filter['boundary']['e_lng']." 
+                AND lng > '".$filter['boundary']['w_lng']."
+                AND lat > '".$filter['boundary']['s_lat']."
+                AND lat < '".$filter['boundary']['n_lat']."
+                ";
+            }
+        }
+
         $results = $wpdb->get_results( $wpdb->prepare( "
                 SELECT ml.*, 
                        DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%Y-%c-%e') AS day, 
@@ -481,18 +551,52 @@ class DT_Network_Dashboard_Metrics_Base {
                 	AND	pname.meta_key = 'name'
                 JOIN $wpdb->postmeta as pvisibility ON pid.ID=pvisibility.post_id
                 	AND	pvisibility.meta_key = 'visibility'
-                WHERE ml.timestamp > %s 
-                AND pvisibility.meta_value != 'hide'
+                WHERE ml.timestamp < %s 
+                  AND ml.timestamp > %s
+                  AND pvisibility.meta_value != 'hide'
+                  $additional_where
                 ORDER BY ml.timestamp DESC
-                LIMIT 2000
-                OFFSET 0
-                ", $time ), ARRAY_A );
+                LIMIT %d
+                OFFSET %d
+                ", $filter['start'], $filter['end'], $filter['limit'], $filter['offset']  ), ARRAY_A );
 
         foreach( $results as $index => $result ){
             $results[$index]['payload'] = maybe_unserialize( $result['payload']);
         }
 
         return $results;
+    }
+
+    public static function get_activity_stats( $filters = [] ) {
+        $logs = self::get_activity_log( $filters );
+        if ( empty( $logs ) ){
+            return [];
+        }
+
+        $stats = [
+            'total_records' => count( $logs ),
+            'sites_labels' => [],
+            'sites_totals' => [],
+            'actions_labels' => [],
+            'actions_totals' => [],
+        ];
+        foreach( $logs as $log ){
+            /* sites */
+            $stats['sites_labels'][$log['site_id']] = $log['site_name'];
+            if ( ! isset( $stats['sites_totals'][$log['site_id']] ) ){
+                $stats['sites_totals'][$log['site_id']] = 0;
+            }
+            $stats['sites_totals'][$log['site_id']]++;
+
+            /* actions*/
+            $stats['actions_labels'][$log['action']] = ucwords( str_replace( '_', ' ', $log['action']) );
+            if ( ! isset( $stats['actions_totals'][$log['action']] ) ){
+                $stats['actions_totals'][$log['action']] = 0;
+            }
+            $stats['actions_totals'][$log['action']]++;
+        }
+
+        return $stats;
     }
 
     public static function format_location_grid_types( $query) {
@@ -990,6 +1094,63 @@ class DT_Network_Dashboard_Metrics_Base {
         }
         return $results;
 
+    }
+
+    public function build_log( $filter = [] ){
+
+        $results = $this->get_activity_log( $filter );
+
+        $results = apply_filters( 'dt_network_dashboard_build_message', $results );
+
+        $data = [];
+        foreach( $results as $index => $result ) {
+            if ( ! isset( $data[$result['day']] ) ) {
+                $data[$result['day']] = [];
+                $data[$result['day']]['label'] = $this->create_time_string( $result['day'] );
+                $data[$result['day']]['list'] = [];
+            }
+
+            if ( isset( $result['message'] ) ) {
+                $location = ( empty( $result['label'] ) ) ? '' : ' (' . $result['label'] . ')';
+                $data[$result['day']]['list'][] = [
+                    'time' => $result['time'],
+                    'message' => $result['message'] . $location,
+                    'action' => $result['action'],
+                    'site_id' => $result['site_id'],
+                ];
+            }
+            else if ( isset( $result['payload']['note'] ) ) {
+                $data[$result['day']]['list'][] = [
+                    'time' => $result['time'],
+                    'message' => '('. $result['time'].') ' .  $result['payload']['note']. '. (' . $result['label'] . ')',
+                    'action' => $result['action'],
+                    'site_id' => $result['site_id'],
+                ];
+            }
+            else {
+                $data[$result['day']]['list'][] = [
+                    'time' => $result['time'],
+                    'message' => '('. $result['time'].') ' .  ucwords( str_replace( '_', ' ', $result['action'] ) ) . ' (' . $result['label'] . ')',
+                    'action' => $result['action'],
+                    'site_id' => $result['site_id'],
+                ];
+            }
+        }
+
+        return $data;
+    }
+
+    public static function create_time_string( $day ) : string {
+        $current_day = strtotime( $day );
+        $week_ago = strtotime('-7 days');
+
+        if ( $current_day > $week_ago ) {
+            $time_string = date( 'l', $current_day );
+        }
+        else {
+            $time_string = date( 'M j, Y', $current_day );
+        }
+        return $time_string;
     }
 
     public function _empty_geojson() {

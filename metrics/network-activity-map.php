@@ -38,6 +38,7 @@ class DT_Network_Dashboard_Metrics_Activity_Map extends DT_Network_Dashboard_Met
         wp_localize_script(
             $this->js_object_name .'_script', $this->js_object_name, [
                 'endpoint' => $this->url,
+                'map_key' => DT_Mapbox_API::get_key(),
             ]
         );
     }
@@ -74,7 +75,44 @@ class DT_Network_Dashboard_Metrics_Activity_Map extends DT_Network_Dashboard_Met
         }
         $params = $request->get_params();
 
-        return $params;
+        $feed = $this->get_activity_log();
+
+        $features = [];
+        $no_location = 0;
+        $has_location = 0;
+        foreach ( $feed as $value ) {
+            if ( empty( $value['lng'] ) || empty( $value['lat'] ) ) {
+                $no_location++;
+                continue;
+            }
+            $has_location++;
+
+            $features[] = array(
+                'type' => 'Feature',
+                'properties' => array(
+                    "name" => $value['site_name'] ?? '',
+                    "action" => $value['action'],
+                ),
+                'geometry' => array(
+                    'type' => 'Point',
+                    'coordinates' => array(
+                        $value['lng'],
+                        $value['lat'],
+                        1
+                    ),
+                ),
+            );
+        }
+
+        $geojson = array(
+            'type' => 'FeatureCollection',
+            'no_location' => $no_location,
+            'has_location' => $has_location,
+            'features' => $features,
+        );
+
+        return $geojson;
+
     }
 
 }
