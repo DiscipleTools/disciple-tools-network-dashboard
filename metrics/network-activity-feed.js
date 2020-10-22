@@ -17,23 +17,24 @@ jQuery(document).ready(function(){
                 <hr style="max-width:100%;">
                 <div class="grid-x grid-padding-x">
                     <div class="medium-3 cell">
-                        <div class="grid-x">
+                        <div class="grid-x" id="filters_section">
+                            <div class="cell"><h3>Filters</h3></div>
                             <div class="cell" id="filters"></div>
                             <div class="cell"><hr></div>
                             <div class="cell">
-                                Sites
-                                <select id="site-list" name="site-filter">
-                                    <option>No Filter</option>
-                                </select>
+                                <strong>Sites</strong>
+                                <div id="site-list"></div>
                             </div>
                             <div class="cell">
-                                Types
-                                <select id="action-filter" name="action-filter">
-                                    <option>No Filter</option>
-                                </select>
+                                <strong>Types</strong>
+                                <div id="action-filter"></div>
+                            </div>
+                            <div class="cell">
+                             <hr>
+                             <button type="button" onclick="build_new_list()" class="button small secondary-button">Update List</button>
+                             <button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span>
                             </div>
                         </div>
-                        <div class="cell"><hr><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
                     </div>
                     <div class="medium-9 cell" style="border-left: 1px solid lightgrey;">
                         <div id="activity-wrapper">
@@ -43,26 +44,32 @@ jQuery(document).ready(function(){
                 </div>
             `)
 
+    // initialize vars
     let container = jQuery('#activity-list');
     let index = 0
+    window.activity_filter = { 'end': '-7 days' }
 
-    // call for data
-    makeRequest('POST', 'network/base', {'type': 'activity', 'filters': { 'end': '-7 days' } } )
-        .done( data => {
-            "use strict";
-            window.feed = data
-            write_activity_list()
-        })
+    // run on load
+    load_data()
 
-    makeRequest('POST', 'network/base', {'type': 'activity_stats'} )
-        .done(function(data) {
-            console.log(data)
-            window.activity_stats = data
-            write_filters()
-        })
+    // query and reload data
+    function load_data() {
+        // call for data
+        makeRequest('POST', 'network/base', {'type': 'activity', 'filters': window.activity_filter } )
+            .done( data => {
+                "use strict";
+                window.feed = data
+                write_activity_list()
+            })
 
+        makeRequest('POST', 'network/base', {'type': 'activity_stats'} )
+            .done(function(data) {
+                window.activity_stats = data
+                write_filters()
+            })
+    }
     function write_activity_list(){
-        index = 0
+        // index = 0
         jQuery.each( window.feed, function(i,v){
             container.append(`<h2>${v.label} (${v.list.length} events)</h2>`)
             container.append(`<ul>`)
@@ -71,10 +78,6 @@ jQuery(document).ready(function(){
                 index++
             })
             container.append(`</ul>`)
-
-            if ( index > 500 ){
-                return false
-            }
         })
 
         jQuery('.loading-spinner').removeClass('active')
@@ -83,18 +86,33 @@ jQuery(document).ready(function(){
     function write_filters(){
 
         let site_list = jQuery('#site-list')
-        site_list.empty().html(`<option>No Filter</option><option disabled>-----</option>`)
+        let hollow = ''
         jQuery.each( window.activity_stats.sites_labels, function(sli,slv){
-            site_list.append(`<option value="${sli}">${slv}</option>`)
+            hollow = ''
+            if ( jQuery.inArray( sli, window.activity_filter.sites ) >= 0 ){
+                hollow = 'hollow'
+            }
+            site_list.append(`<button class="button small sites ${hollow}" value="${sli}">${slv}</button> `)
         })
 
         let action_list = jQuery('#action-filter')
-        action_list.empty().html(`<option>No Filter</option><option disabled>-----</option>`)
         jQuery.each( window.activity_stats.actions_labels, function(ali,alv){
-            action_list.append(`<option value="${ali}">${alv}</option>`)
+            hollow = ''
+            if ( jQuery.inArray( ali, window.activity_filter.actions ) >= 0 ){
+                hollow = 'hollow'
+            }
+            action_list.append(`<button class="button small actions ${hollow}" value="${ali}">${alv}</button> `)
         })
 
-        jQuery('#filters').html(`Results: ${window.activity_stats.total_records} (Last 7 Days )`)
+        jQuery('#filters').html(`Results: ${window.activity_stats.total_records}`)
     }
+
+    function build_new_list(){
+        let sites = jQuery('button.sites .hollow')
+        let actions = jQuery('button.actions .hollow')
+
+
+    }
+
 
 })

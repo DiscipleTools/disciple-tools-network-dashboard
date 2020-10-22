@@ -33,8 +33,6 @@ function dt_network_dashboard_log_new_posts( $post_type, $post_id, $initial_fiel
     /* new_contact */
     if ( $post_type === 'contacts' ) {
 
-        dt_write_log($initial_fields);
-
         $location = DT_Network_Activity_Log::get_location_details( $post_id );
         $data = [
             [

@@ -100,10 +100,8 @@ class DT_Network_Dashboard_Metrics_Base {
                 $data['global'] = $this->get_global();
                 break;
             case 'activity':
-
                 if ( isset( $params['filters'] ) && ! empty( $params['filters'] ) ){
                     $filters = recursive_sanitize_text_field( $params['filters'] );
-                    dt_write_log($filters);
                     $data = self::build_log( $filters );
                 } else {
                     $data = self::build_log();
@@ -492,8 +490,6 @@ class DT_Network_Dashboard_Metrics_Base {
             'sites' => []
         ];
 
-
-
         $filter = wp_parse_args( $filters, $defaults );
         $additional_where = '';
 
@@ -539,26 +535,43 @@ class DT_Network_Dashboard_Metrics_Base {
             }
         }
 
+        /* handle local site */
+        $profile = dt_network_site_profile();
+
         $results = $wpdb->get_results( $wpdb->prepare( "
                 SELECT ml.*, 
                        DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%Y-%c-%e') AS day, 
-                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%H:%i %p') AS time, 
-                       pname.meta_value as site_name
+                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%H:%i %p') AS time,
+                       CASE
+                           WHEN pname.meta_value != '' THEN pname.meta_value
+                           WHEN ml.site_id = %s THEN %s
+                           ELSE ''
+                       END as site_name
                 FROM $wpdb->dt_movement_log as ml
-                JOIN $wpdb->posts as pid ON pid.post_title=ml.site_id
+                LEFT JOIN $wpdb->posts as pid ON pid.post_title=ml.site_id
                 	AND pid.post_type = 'dt_network_dashboard'
-                JOIN $wpdb->postmeta as pname ON pid.ID=pname.post_id
+                LEFT JOIN $wpdb->postmeta as pname ON pid.ID=pname.post_id
                 	AND	pname.meta_key = 'name'
-                JOIN $wpdb->postmeta as pvisibility ON pid.ID=pvisibility.post_id
+                LEFT JOIN $wpdb->postmeta as pvisibility ON pid.ID=pvisibility.post_id
                 	AND	pvisibility.meta_key = 'visibility'
                 WHERE ml.timestamp < %s 
                   AND ml.timestamp > %s
-                  AND pvisibility.meta_value != 'hide'
+                  AND ( pvisibility.meta_value != 'hide' || ml.site_id = %s )
                   $additional_where
                 ORDER BY ml.timestamp DESC
                 LIMIT %d
                 OFFSET %d
-                ", $filter['start'], $filter['end'], $filter['limit'], $filter['offset']  ), ARRAY_A );
+                ",
+            $profile['partner_id'],
+            $profile['partner_name'],
+            $filter['start'],
+            $filter['end'],
+            $profile['partner_id'],
+            $filter['limit'],
+            $filter['offset']
+        ), ARRAY_A );
+
+        dt_write_log($wpdb->last_query);
 
         foreach( $results as $index => $result ){
             $results[$index]['payload'] = maybe_unserialize( $result['payload']);

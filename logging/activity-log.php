@@ -523,9 +523,18 @@ dt_write_log($data);
             }
         }
         else if ( $grid = get_post_meta( $post_id, 'location_grid', true ) ){
+            $row = Disciple_Tools_Mapping_Queries::get_by_grid_id( $grid );
+            $object = new Location_Grid_Geocoder();
+            $label = $object->_format_full_name($row);
             $location = [
-                'location_type' => 'grid',
-                'location_value' => $grid,
+                'location_type' => 'complete',
+                'location_value' => [
+                    'lng' => $row['longitude'],
+                    'lat' => $row['latitude'],
+                    'level' => $row['level'],
+                    'label' => $label,
+                    'grid_id' => $row['grid_id'],
+                ],
             ];
         }
 
