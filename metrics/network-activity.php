@@ -29,5 +29,6 @@ class DT_Network_Dashboard_Metrics_Activity extends DT_Network_Dashboard_Metrics
         return $tree;
     }
 
+
 }
 new DT_Network_Dashboard_Metrics_Activity();

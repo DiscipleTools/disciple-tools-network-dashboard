@@ -532,17 +532,17 @@ class DT_Network_Dashboard_Metrics_Base {
               && isset( $filter['boundary']['w_lng'] )
             ) {
                 $additional_where .= " 
-                AND lng < '".$filter['boundary']['e_lng']." 
-                AND lng > '".$filter['boundary']['w_lng']."
-                AND lat > '".$filter['boundary']['s_lat']."
-                AND lat < '".$filter['boundary']['n_lat']."
+                AND lng < ".$filter['boundary']['e_lng']." 
+                AND lng > ".$filter['boundary']['w_lng']."
+                AND lat > ".$filter['boundary']['s_lat']."
+                AND lat < ".$filter['boundary']['n_lat']."
                 ";
             }
         }
 
         /* handle local site */
         $profile = dt_network_site_profile();
-
+        dt_write_log($filter);
         $results = $wpdb->get_results( $wpdb->prepare( "
                 SELECT ml.*, 
                        DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%Y-%c-%e') AS day, 
@@ -576,6 +576,7 @@ class DT_Network_Dashboard_Metrics_Base {
             $filter['offset']
         ), ARRAY_A );
 
+        dt_write_log($wpdb->last_query);
 
         foreach( $results as $index => $result ){
             $results[$index]['payload'] = maybe_unserialize( $result['payload']);

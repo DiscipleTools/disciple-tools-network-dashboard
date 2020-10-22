@@ -8,15 +8,19 @@ jQuery(document).ready(function(){
     // write page layout with spinners
     chartDiv.empty().html(`
             <style>
-                #activity-wrapper {
-                    height: ${window.innerHeight - 400}px !important;
+                #activity-list-wrapper {
+                    height: ${window.innerHeight - 300}px !important;
                     overflow: scroll;
                 }
-                #activity-wrapper li {
+                #activity-list-wrapper li {
                     font-size:.8em;
                 }
+                #activity-list-wrapper h2 {
+                    font-size:1.2em;
+                    font-weight:bold;
+                }
             </style>
-            <span class="section-header">Activity Map</span>
+            <span class="section-header float-left" >Activity Map</span><span class="float-right"><a data-open="activity-filter-modal">modify filter</a></span>
                 <hr style="max-width:100%;">
                 <div class="grid-x grid-padding-x">
                 <div class="medium-9 cell">
@@ -25,24 +29,19 @@ jQuery(document).ready(function(){
                     </div>
                 </div>
                 <div class="medium-3 cell">
-                    <div class="grid-x" id="filters_section">
-                        <div class="cell">
-                            <strong>Time</strong><br>
-                            <select name="time_range" id="time_range">
-                                <option value="7">Last 7 Days</option>
-                                <option value="30">Last 30 Days</option>
-                                <option value="this_year">This Year</option>
-                            </select>
-                        </div>
-                    </div>
                     <div class="grid-x">
                         <div class="cell">
-                            <div id="activity-wrapper">
-                                <div id="activity-list">${spinner}</div>
-                            </div>
+                            <div id="activity-list-wrapper"></div>
                         </div>
                     </div>
                 </div>
+                </div>
+                <div class="reveal" id="activity-filter-modal" data-v-offset="10" data-reveal>
+                    <h1></h1>
+                    <div id="activity-filter-wrapper"></div>
+                    <button class="close-button" data-close aria-label="Close modal" type="button">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 
                 <hr style="max-width:100%;">
@@ -58,46 +57,27 @@ jQuery(document).ready(function(){
                 <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
             `)
 
-    // call for data
-    makeRequest('POST', 'network/activity/map' )
-        .done( data => {
-            "use strict";
-            window.activity_geojson = data
+    new Foundation.Reveal(jQuery('#activity-filter-modal'))
 
-            write_cluster_map()
-            jQuery('#no_location').html( window.activity_geojson.no_location )
-            jQuery('#has_location').html( window.activity_geojson.has_location )
+    window.load_activity_filter()
 
-        })
-
-    load_data()
-    let container = jQuery('#activity-list');
-    window.activity_filter = { 'end': '-7 days' }
-    function load_data() {
-        makeRequest('POST', 'network/base', {'type': 'activity', 'filters': window.activity_filter } )
+    function load_map_geojson(){
+        if ( typeof window.activity_filter === 'undefined' ){
+            window.activity_filter = { 'end': '-7 days' }
+        }
+        // call for data
+        makeRequest('POST', 'network/activity/map', { 'filters': window.activity_filter } )
             .done( data => {
                 "use strict";
-                window.feed = data
-                write_activity_list()
+                window.activity_geojson = data
+
+                write_cluster_map()
+
+                jQuery('#no_location').html( window.activity_geojson.no_location )
+                jQuery('#has_location').html( window.activity_geojson.has_location )
             })
     }
-    function write_activity_list(){
-        container.empty()
-        jQuery.each( window.feed, function(i,v){
-            if ( 'records_count' === i ){
-                jQuery('#filters').html(`Results: ${v}`)
-            } else {
-                container.append(`<strong>${v.label} (${v.list.length} events)</strong>`)
-                container.append(`<ul>`)
-                jQuery.each(v.list, function(ii,vv){
-                    container.append(`<li><strong>(${vv.time})</strong> ${vv.message} </li>`)
-                })
-                container.append(`</ul>`)
-            }
-        })
-
-        jQuery('.loading-spinner').removeClass('active')
-    }
+    load_map_geojson()
 
     function write_cluster_map(){
         jQuery('#map').empty() // remove spinner
@@ -171,5 +151,16 @@ jQuery(document).ready(function(){
 
 
         });
+
+        map.on('zoomend', function(e){
+            window.current_bounds = map.getBounds()
+            window.activity_filter.boundary = { 'n_lat': window.current_bounds._ne.lat, 's_lat': window.current_bounds._sw.lat, 'e_lng': window.current_bounds._ne.lng, 'w_lng': window.current_bounds._sw.lng}
+            window.load_activity_filter()
+        })
+        map.on('dragend', function(e){
+            window.current_bounds = map.getBounds()
+            window.activity_filter.boundary = { 'n_lat': window.current_bounds._ne.lat, 's_lat': window.current_bounds._sw.lat, 'e_lng': window.current_bounds._ne.lng, 'w_lng': window.current_bounds._sw.lng}
+            window.load_activity_filter()
+        })
     }
 })

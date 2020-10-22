@@ -31,9 +31,14 @@ class DT_Network_Dashboard_Metrics_Activity_Map extends DT_Network_Dashboard_Met
     }
 
     public function add_scripts() {
+        wp_enqueue_script( 'network_activity_script', plugin_dir_url(__FILE__) . 'network-activity.js', [
+            'jquery',
+            'network_base_script',
+        ], filemtime( plugin_dir_path(__FILE__) . 'network-activity.js' ), true );
         wp_enqueue_script( $this->js_object_name .'_script', plugin_dir_url(__FILE__) . $this->js_file_name, [
             'jquery',
             'network_base_script',
+            'network_activity_script'
         ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
         wp_localize_script(
             $this->js_object_name .'_script', $this->js_object_name, [
@@ -73,10 +78,18 @@ class DT_Network_Dashboard_Metrics_Activity_Map extends DT_Network_Dashboard_Met
         if ( !$this->has_permission() ) {
             return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
         }
+
         $params = $request->get_params();
+        if ( isset( $params['filters'] ) && ! empty( $params['filters'] ) ){
+            $filters = recursive_sanitize_text_field( $params['filters'] );
+            $feed = $this->get_activity_log( $filters );
+        } else {
+            $feed = $this->get_activity_log();
+        }
 
-        $feed = $this->get_activity_log();
-
+        /**
+         * Build GEOJSON
+         */
         $features = [];
         $no_location = 0;
         $has_location = 0;
