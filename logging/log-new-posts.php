@@ -110,7 +110,7 @@ function dt_network_dashboard_translate_log_new_posts( $activity_log ){
 
         /* new_contact */
         if ( 'new_contact' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new contact';
+            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new contact.';
         }
 
         /* new_pre-group */

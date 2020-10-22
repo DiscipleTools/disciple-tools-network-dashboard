@@ -509,16 +509,21 @@ class DT_Network_Dashboard_Metrics_Base {
             $filter['end'] = strtotime('-30 days' );
         }
 
+        /**
+         * Action and Sites are negative filters. If the value is included in the filter, it is excluded from the query.
+         */
         /* process actions */
         if ( ! empty( $filter['actions'] ) && is_array( $filter['actions'] ) ) {
             $string = dt_array_to_sql( $filter['actions'] );
-            $additional_where .= " AND action IN (".$string.")";
+            $additional_where .= " AND action NOT IN (".$string.")";
         }
         /* process sites */
         if ( ! empty( $filter['sites'] ) && is_array( $filter['sites'] )  ) {
             $string = dt_array_to_sql( $filter['sites'] );
-            $additional_where .= " AND site_id IN (".$string.")";
+            $additional_where .= " AND site_id NOT IN (".$string.")";
         }
+
+
         /* process boundary */
         if ( ! empty( $filter['boundary'] ) && is_array( $filter['boundary'] )  ) {
             if ( isset( $filter['boundary']['n_lat'] )
@@ -571,7 +576,6 @@ class DT_Network_Dashboard_Metrics_Base {
             $filter['offset']
         ), ARRAY_A );
 
-        dt_write_log($wpdb->last_query);
 
         foreach( $results as $index => $result ){
             $results[$index]['payload'] = maybe_unserialize( $result['payload']);
@@ -1149,6 +1153,8 @@ class DT_Network_Dashboard_Metrics_Base {
                 ];
             }
         }
+
+        $data['records_count'] = count( $results );
 
         return $data;
     }

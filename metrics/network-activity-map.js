@@ -7,10 +7,42 @@ jQuery(document).ready(function(){
 
     // write page layout with spinners
     chartDiv.empty().html(`
+            <style>
+                #activity-wrapper {
+                    height: ${window.innerHeight - 400}px !important;
+                    overflow: scroll;
+                }
+                #activity-wrapper li {
+                    font-size:.8em;
+                }
+            </style>
             <span class="section-header">Activity Map</span>
                 <hr style="max-width:100%;">
-                <div id="map-wrapper">
-                    <div id='map'>${spinner}</div>
+                <div class="grid-x grid-padding-x">
+                <div class="medium-9 cell">
+                    <div id="map-wrapper">
+                        <div id='map'>${spinner}</div>
+                    </div>
+                </div>
+                <div class="medium-3 cell">
+                    <div class="grid-x" id="filters_section">
+                        <div class="cell">
+                            <strong>Time</strong><br>
+                            <select name="time_range" id="time_range">
+                                <option value="7">Last 7 Days</option>
+                                <option value="30">Last 30 Days</option>
+                                <option value="this_year">This Year</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid-x">
+                        <div class="cell">
+                            <div id="activity-wrapper">
+                                <div id="activity-list">${spinner}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 </div>
                 
                 <hr style="max-width:100%;">
@@ -37,6 +69,35 @@ jQuery(document).ready(function(){
             jQuery('#has_location').html( window.activity_geojson.has_location )
 
         })
+
+    load_data()
+    let container = jQuery('#activity-list');
+    window.activity_filter = { 'end': '-7 days' }
+    function load_data() {
+        makeRequest('POST', 'network/base', {'type': 'activity', 'filters': window.activity_filter } )
+            .done( data => {
+                "use strict";
+                window.feed = data
+                write_activity_list()
+            })
+    }
+    function write_activity_list(){
+        container.empty()
+        jQuery.each( window.feed, function(i,v){
+            if ( 'records_count' === i ){
+                jQuery('#filters').html(`Results: ${v}`)
+            } else {
+                container.append(`<strong>${v.label} (${v.list.length} events)</strong>`)
+                container.append(`<ul>`)
+                jQuery.each(v.list, function(ii,vv){
+                    container.append(`<li><strong>(${vv.time})</strong> ${vv.message} </li>`)
+                })
+                container.append(`</ul>`)
+            }
+        })
+
+        jQuery('.loading-spinner').removeClass('active')
+    }
 
     function write_cluster_map(){
         jQuery('#map').empty() // remove spinner

@@ -26,7 +26,6 @@ function dt_network_dashboard_log_milestone_actions( $args ){
         ];
         DT_Network_Activity_Log::insert_log($data);
     }
-
 }
 
 /**
