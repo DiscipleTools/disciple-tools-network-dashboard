@@ -1175,6 +1175,11 @@ class DT_Network_Dashboard_Tab_System
                 require_once( plugin_dir_path(__DIR__) . 'cron/cron-7-profile-update.php' );
             }
             dt_network_dashboard_profiles_update();
+
+            if ( get_option( 'dt_network_dashboard_migration_lock' ) ){
+                delete_option( 'dt_network_dashboard_migration_lock' );
+                delete_option( 'dt_network_dashboard_migration_number' );
+            }
         }
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
         $current_profile = dt_network_site_profile();

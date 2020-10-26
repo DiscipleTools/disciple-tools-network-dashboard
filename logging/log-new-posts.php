@@ -42,8 +42,8 @@ function dt_network_dashboard_register_action_new_posts( $actions ){
         ]
     ];
     $actions['new_baptism'] = [
-        'key' => 'New Baptism',
-        'label' => 'Team Generations',
+        'key' => 'new_baptism',
+        'label' => 'New Baptism',
         'message_pattern' => [
 
         ]
