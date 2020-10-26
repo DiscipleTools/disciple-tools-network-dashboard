@@ -9,7 +9,7 @@ jQuery(document).ready(function(){
     chartDiv.empty().html(`
             <style>
                 #activity-list-wrapper {
-                    height: ${window.innerHeight - 200}px !important;
+                    height: ${window.innerHeight - 175}px !important;
                     overflow: scroll;
                 }
             </style>

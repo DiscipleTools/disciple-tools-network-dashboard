@@ -37,7 +37,7 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
         }
 
         // Get list of sites
-        $sites = DT_Network_Dashboard_Site_Post_Type::multisite_sites_needing_activity_refreshed();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_multisite_sites();
         if ( empty( $sites ) ){
             dt_save_log( $file, 'No sites found to collect.', false );
             return false;
@@ -51,7 +51,7 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
         // Loop sites through a second async task, so that each will become and individual async process.
         $i = 0;
         foreach ( $sites as $site ) {
-            if ( $site['id'] === get_current_blog_id() ){
+            if ( $site['partner_id'] === dt_network_site_id() ){
                 continue;
             }
 
@@ -99,7 +99,6 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
 
             $prefix = $wpdb->get_blog_prefix( $site['type_id'] );
             $table = $prefix . 'dt_movement_log';
-            dt_write_log($table);
 
             $results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE site_id = %s AND id > %s LIMIT 10000", $site['partner_id'], $last_record_id ), ARRAY_A );
 

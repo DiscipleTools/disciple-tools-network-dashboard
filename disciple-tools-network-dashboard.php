@@ -127,6 +127,7 @@ class DT_Network_Dashboard {
         require_once( 'shared/site-post-type.php' );
         require_once( 'shared/permissions.php' );
         require_once( 'shared/site-profile.php' );
+        require_once( 'shared/actions.php' );
 
         require_once( 'collection/collection-queries.php' );
         require_once( 'collection/collection-endpoints.php' );

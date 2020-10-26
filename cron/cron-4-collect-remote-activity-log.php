@@ -23,9 +23,6 @@ add_action('dt_network_dashboard_collect_remote_activity_logs', 'dt_network_dash
  */
 function dt_network_dashboard_collect_remote_activity_logs()
 {
-    if (!dt_is_current_multisite_dashboard_approved()) {
-        return false;
-    }
 
     $limit = 100; // set max loops before spawning new cron
 
@@ -57,10 +54,7 @@ function dt_network_dashboard_collect_remote_activity_logs()
     // Loop sites through a second async task, so that each will become and individual async process.
     $i = 0;
     foreach ($sites as $site) {
-        if ($site['id'] === get_current_blog_id()) {
-            continue;
-        }
-        if ( $site['type'] === 'multisite' ){
+        if ($site['partner_id'] === dt_network_site_id() ) {
             continue;
         }
 
@@ -83,9 +77,6 @@ function dt_network_dashboard_collect_remote_activity_logs()
  */
 function dt_network_dashboard_collect_remote_activity_single($site)
 {
-    if (!dt_is_current_multisite_dashboard_approved()) {
-        return false;
-    }
 
     $file = 'activity-remote';
     

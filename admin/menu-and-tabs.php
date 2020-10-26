@@ -447,8 +447,6 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                     <button class="button" id="rerun-collection" type="button">Refresh All Snapshots</button>
                     &nbsp;<span id="rerun-collection-spinner" style="display: none;"><img src="<?php echo plugin_dir_url( __DIR__ ) ?>spinner.svg" width="25px" /></span>
                     &nbsp;<span id="result-message"></span>
-
-                    <span style="float:right;"><a href="#logs">View logs</a></span>
                 </td>
             </tr>
             </tbody>
@@ -504,6 +502,20 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                 }
             }
 
+            if (  isset( $_POST['new-activity'] ) ){
+                dt_save_log( 'multisite-activity', '', false );
+                dt_save_log( 'multisite-activity', 'REFRESH ACTIVITY', false );
+
+                dt_write_log($_POST );
+
+//                if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) ) ) {
+//                    $message = [ 'notice-success','Successful collection of new snapshot' ];
+//                }
+//                else {
+//                    $message = [ 'notice-error', 'Failed collection' ];
+//                }
+            }
+
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
                 $partner = recursive_sanitize_text_field( $_POST['partner'] );
 
@@ -549,7 +561,7 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                 <th>Receive Live Activity</th>
                 <th>Profile</th>
                 <th>Last Snapshot</th>
-                <th>Refresh Snapshot</th>
+                <th>Refresh</th>
                 </thead>
                 <tbody>
                 <?php
@@ -598,7 +610,8 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                                 ?>
                             </td>
                             <td>
-                                <button name="new-snapshot" type="submit" value="<?php echo esc_attr( $site['type_id']  ) ?>" class="button" >Refresh</button>
+                                <button name="new-snapshot" type="submit" value="<?php echo esc_attr( $site['type_id']  ) ?>" class="button" >Snapshot</button>
+                                <button name="new-activity" type="submit" value="<?php echo esc_attr( $site['id']  ) ?>" class="button" >Activity</button>
                             </td>
                         </tr>
                         <?php
@@ -1056,6 +1069,7 @@ class DT_Network_Dashboard_Tab_System
                         <?php $this->metabox_cron_list() ?>
                         <?php $this->box_system_details() ?>
                         <?php $this->logging_viewer() ?>
+                        <?php $this->box_registered_key_list() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -1337,6 +1351,7 @@ class DT_Network_Dashboard_Tab_System
                 </tbody>
             </table>
         </form>
+        <br>
         <?php
     }
 
@@ -1387,6 +1402,49 @@ class DT_Network_Dashboard_Tab_System
                     <code><?php echo esc_url( site_url() ) . '/wp-cron.php' ?></code>
                 </td>
             </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function box_registered_key_list() {
+        $actions = dt_network_dashboard_registered_actions();
+        $current_site_id = dt_network_site_id();
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <tr><th>Activity Log Registered Key List</th><td></td><td>Items for This Site</td><td>Other Sites</td></tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach( $actions as $value ){
+                ?>
+                <tr>
+                    <td>
+                        <?php echo esc_attr( $value['key'] ) ?>
+                    </td>
+                    <td>
+                        <?php echo esc_attr( $value['label'] ) ?>
+                    </td>
+                    <td>
+                        <?php
+                         global $wpdb;
+                         echo $wpdb->get_var($wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id = %s", $value['key'], $current_site_id ) );
+                         ?>
+                    </td>
+                    <td>
+                        <?php
+                         global $wpdb;
+                         echo $wpdb->get_var($wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id != %s", $value['key'], $current_site_id ) );
+                         ?>
+                    </td>
+                </tr>
+            <?php
+            }
+           ?>
             </tbody>
         </table>
         <br>

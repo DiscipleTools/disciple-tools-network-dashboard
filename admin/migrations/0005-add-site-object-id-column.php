@@ -3,9 +3,9 @@ declare(strict_types=1);
 if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
 
 /**
- * Class DT_Network_Dashboard_Migration_0002
+ * Class DT_Network_Dashboard_Migration_0005
  */
-class DT_Network_Dashboard_Migration_0003 extends DT_Network_Dashboard_Migration {
+class DT_Network_Dashboard_Migration_0005 extends DT_Network_Dashboard_Migration {
     /**
      * @throws \Exception  Got error when creating table $name.
      */
@@ -13,10 +13,9 @@ class DT_Network_Dashboard_Migration_0003 extends DT_Network_Dashboard_Migration
         global $wpdb;
         $table = $wpdb->prefix . 'dt_movement_log';
 
-        if ( empty( $wpdb->get_var("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='{$table}' AND column_name='site_record_id';") ) ){
-            $wpdb->query( "ALTER TABLE {$table} ADD `site_record_id` BIGINT(22)  NULL  DEFAULT NULL  AFTER `site_id`;");
+        if ( empty( $wpdb->get_var("SELECT COUNT(*) FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME='{$table}' AND column_name='site_object_id';") ) ){
+            $wpdb->query( "ALTER TABLE {$table} ADD `site_object_id` BIGINT(22)  NULL  DEFAULT NULL  AFTER `site_record_id`;");
         }
-
     }
 
     /**

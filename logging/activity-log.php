@@ -109,6 +109,7 @@ class DT_Network_Activity_Log {
 
             $data = [
                 'site_id' => '',
+                'site_object_id' => '',
                 'action' => '',
                 'category' => '',
                 'lng' => '',
@@ -136,6 +137,13 @@ class DT_Network_Activity_Log {
                 $data['site_record_id'] = sanitize_text_field( wp_unslash( $activity['site_record_id'] ) );
             } else {
                 $data['site_record_id'] = NULL;
+            }
+
+            // SITE RECORD ID
+            if ( isset( $activity['site_object_id'] ) && ! empty( $activity['site_object_id'] ) ) {
+                $data['site_object_id'] = sanitize_text_field( wp_unslash( $activity['site_object_id'] ) );
+            } else {
+                $data['site_object_id'] = NULL;
             }
 
             // ACTION
@@ -395,12 +403,13 @@ class DT_Network_Activity_Log {
                 ];
                 continue;
             }
-dt_write_log($data);
+
             // insert log record
             $wpdb->query( $wpdb->prepare( "
             INSERT INTO $wpdb->dt_movement_log (
                 site_id,
                 site_record_id,
+                site_object_id,
                 action,
                 category,
                 lng,
@@ -417,6 +426,7 @@ dt_write_log($data);
                     %s,
                     %s,
                     %s,
+                    %s,
                     %f,
                     %f,
                     %s,
@@ -428,6 +438,7 @@ dt_write_log($data);
                     )",
                 $data['site_id'],
                 $data['site_record_id'],
+                $data['site_object_id'],
                 $data['action'],
                 $data['category'],
                 $data['lng'],

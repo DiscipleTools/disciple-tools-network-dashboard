@@ -9,7 +9,7 @@ jQuery(document).ready(function(){
     chartDiv.empty().html(`
             <style>
                 #activity-list-wrapper {
-                    height: ${window.innerHeight - 300}px !important;
+                    height: ${window.innerHeight - 175}px !important;
                     overflow: scroll;
                 }
                 #activity-list-wrapper li {
@@ -18,6 +18,12 @@ jQuery(document).ready(function(){
                 #activity-list-wrapper h2 {
                     font-size:1.2em;
                     font-weight:bold;
+                }
+                #map-wrapper {
+                    height: ${window.innerHeight - 175}px !important;
+                }
+                #map {
+                    height: ${window.innerHeight - 175}px !important;
                 }
             </style>
             <span class="section-header float-left" >Activity Map</span><span class="float-right"><a data-open="activity-filter-modal">modify filter</a></span>
@@ -44,17 +50,6 @@ jQuery(document).ready(function(){
                     </button>
                 </div>
                 
-                <hr style="max-width:100%;">
-                 <div class="grid-x callout">
-                  <div class="medium-3 cell center">
-                    <h4>Locations<br><span id="has_location">${spinner}</span></h4>
-                  </div>
-                  <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
-                    <h4>No Location<br><span id="no_location">${spinner}</span></h4>
-                  </div>
-                </div>
-                <hr style="max-width:100%;">
-                <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
             `)
 
     new Foundation.Reveal(jQuery('#activity-filter-modal'))
@@ -72,9 +67,6 @@ jQuery(document).ready(function(){
                 window.activity_geojson = data
 
                 write_cluster_map()
-
-                jQuery('#no_location').html( window.activity_geojson.no_location )
-                jQuery('#has_location').html( window.activity_geojson.has_location )
             })
     }
     load_map_geojson()

@@ -29,6 +29,7 @@ window.load_activity_filter = () => {
             <select name="record_limit" id="record_limit">
                 <option value="2000">2000</option>
                 <option value="5000">5000</option>
+                <option value="10000">10000</option>
             </select>
         </div>
     </div>

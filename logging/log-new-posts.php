@@ -1,27 +1,90 @@
 <?php
 
 /**
+ * REGISTER ACTIONS (AND CATEGORIES)
+ */
+add_action( 'dt_network_dashboard_register_actions', 'dt_network_dashboard_register_action_new_posts', 10, 1 );
+function dt_network_dashboard_register_action_new_posts( $actions ){
+
+    $actions['new_contact'] = [
+        'key' => 'new_contact',
+        'label' => 'New Contact',
+        'message_pattern' => [
+
+        ]
+    ];
+    $actions['new_pre-group'] = [
+        'key' => 'new_pre-group',
+        'label' => 'New Pre-Group',
+        'message_pattern' => [
+
+        ]
+    ];
+    $actions['new_group'] = [
+        'key' => 'new_group',
+        'label' => 'New Group',
+        'message_pattern' => [
+
+        ]
+    ];
+    $actions['new_church'] = [
+        'key' => 'new_church',
+        'label' => 'New Church',
+        'message_pattern' => [
+
+        ]
+    ];
+    $actions['new_team'] = [
+        'key' => 'new_team',
+        'label' => 'New Team',
+        'message_pattern' => [
+
+        ]
+    ];
+    $actions['new_baptism'] = [
+        'key' => 'New Baptism',
+        'label' => 'Team Generations',
+        'message_pattern' => [
+
+        ]
+    ];
+    $actions['new_coaching'] = [
+        'key' => 'new_coaching',
+        'label' => 'New Coaching',
+        'message_pattern' => [
+
+        ]
+    ];
+
+    return $actions;
+}
+
+/**
  * CREATE LOG
  */
-add_action( 'dt_post_created', 'dt_network_dashboard_log_new_posts', 10, 3 );
-add_action( 'dt_post_updated', 'dt_network_dashboard_log_new_posts', 10, 3 );
-function dt_network_dashboard_log_new_posts( $post_type, $post_id, $initial_fields ){
+add_action( 'dt_post_created', 'dt_network_dashboard_log_create_posts', 10, 3 );
+function dt_network_dashboard_log_create_posts( $post_type, $post_id, $initial_fields ){
 
     /* new: pre-group, group, church, team */
-    if ( $post_type === 'groups' && isset( $initial_fields['group_type'] ) ) {
+    if ( $post_type === 'groups' ) {
+
+        if ( isset( $initial_fields['group_type'] ) ){
+            $action = $initial_fields['group_type'];
+        } else {
+            $action = 'group';
+        }
 
         $location = DT_Network_Activity_Log::get_location_details( $post_id );
         $data = [
             [
                 'site_id' => dt_network_site_id(),
-                'action' => 'new_' . $initial_fields['group_type'],
+                'site_object_id' => $post_id,
+                'action' => 'new_' . $action,
                 'category' => '',
                 'location_type' => $location['location_type'], // id, grid, lnglat, no_location
                 'location_value' => $location['location_value'],
                 'payload' => [
                     'language' => get_locale(),
-                    'note' => 'is reporting a new ' . $initial_fields['group_type'],
-                    'unique_id' => hash( 'sha256', $post_id ),
                 ],
                 'timestamp' => time()
             ]
@@ -37,14 +100,13 @@ function dt_network_dashboard_log_new_posts( $post_type, $post_id, $initial_fiel
         $data = [
             [
                 'site_id' => dt_network_site_id(),
+                'site_object_id' => $post_id,
                 'action' => 'new_contact',
                 'category' => '',
                 'location_type' => $location['location_type'], // id, grid, lnglat, no_location
                 'location_value' => $location['location_value'],
                 'payload' => [
                     'language' => get_locale(),
-                    'note' => 'is reporting a new contact',
-                    'unique_id' => hash( 'sha256', $post_id ),
                 ],
                 'timestamp' => time()
             ]
@@ -53,6 +115,11 @@ function dt_network_dashboard_log_new_posts( $post_type, $post_id, $initial_fiel
         DT_Network_Activity_Log::insert_log($data);
     }
 
+}
+
+add_action( 'dt_post_updated', 'dt_network_dashboard_log_update_posts', 10, 3 );
+function dt_network_dashboard_log_update_posts( $post_type, $post_id, $initial_fields ){
+
     /* check if contact was created through the baptized_by contact create widget */
     if ( $post_type === 'contacts' && isset( $initial_fields['baptized_by']) ) {
 
@@ -60,14 +127,13 @@ function dt_network_dashboard_log_new_posts( $post_type, $post_id, $initial_fiel
         $data = [
             [
                 'site_id' => dt_network_site_id(),
+                'site_object_id' => $post_id,
                 'action' => 'new_baptism',
                 'category' => '',
                 'location_type' => $location['location_type'], // id, grid, lnglat, no_location
                 'location_value' => $location['location_value'],
                 'payload' => [
                     'language' => get_locale(),
-                    'note' => 'is reporting a new baptism of a new contact',
-                    'unique_id' => hash( 'sha256', $post_id ),
                 ],
                 'timestamp' => time()
             ]
@@ -83,14 +149,13 @@ function dt_network_dashboard_log_new_posts( $post_type, $post_id, $initial_fiel
         $data = [
             [
                 'site_id' => dt_network_site_id(),
+                'site_object_id' => $post_id,
                 'action' => 'new_coaching',
                 'category' => '',
                 'location_type' => $location['location_type'], // id, grid, lnglat, no_location
                 'location_value' => $location['location_value'],
                 'payload' => [
                     'language' => get_locale(),
-                    'note' => 'is reporting a new coaching relationship',
-                    'unique_id' => hash( 'sha256', $post_id ),
                 ],
                 'timestamp' => time()
             ]

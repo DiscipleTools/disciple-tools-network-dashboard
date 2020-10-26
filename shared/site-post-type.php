@@ -436,6 +436,17 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $sites;
     }
 
+    public static function all_multisite_sites(){
+        $all_sites = self::all_sites();
+        $sites = [];
+        foreach( $all_sites as $site ){
+            if( 'multisite' === $site['type'] ){
+                $sites[] = $site;
+            }
+        }
+        return $sites;
+    }
+
     public static function global_time_hash() : string {
         global $wpdb;
 
