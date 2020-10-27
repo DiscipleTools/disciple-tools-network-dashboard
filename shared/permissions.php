@@ -117,6 +117,26 @@ function dt_is_current_multisite_dashboard_approved() :bool {
     return true;
 }
 
+function dt_is_network_dashboard_plugin_active( $site_id = NULL ) :bool {
+
+    if ( is_multisite() ){
+        $active_plugins = get_blog_option( $site_id, 'active_plugins' );
+        if ( in_array('disciple-tools-network-dashboard/disciple-tools-network-dashboard.php', $active_plugins ) ){
+            return true;
+        }
+        if ( is_plugin_active_for_network( 'disciple-tools-network-dashboard/disciple-tools-network-dashboard.php' ) ) {
+            return true;
+        }
+    } else {
+        $active_plugins = get_option( 'active_plugins' );
+        if ( in_array('disciple-tools-network-dashboard/disciple-tools-network-dashboard.php', $active_plugins ) ){
+            return true;
+        }
+    }
+
+    return false;
+}
+
 /**
  * @param int $id
  *

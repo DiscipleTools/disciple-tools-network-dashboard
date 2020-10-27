@@ -75,10 +75,19 @@ function dt_network_dashboard_collect_remote_activity_logs()
  *
  * @return bool
  */
-function dt_network_dashboard_collect_remote_activity_single($site)
+function dt_network_dashboard_collect_remote_activity_single( $site )
 {
+    if ( 'remote' !== $site['type'] ) {
+        return false;
+    }
 
     $file = 'activity-remote';
+
+    $site_vars = Site_Link_System::get_site_connection_vars( $site['type_id'], 'post_id');
+    if (is_wp_error($site_vars)) {
+        dt_save_log(  $file, 'FAIL ID: ' . $site['id'] . ' (Failed to get valid site link connection details)');
+        return false;
+    }
     
     global $wpdb;
     $last_site_record_id = $wpdb->get_var($wpdb->prepare( "SELECT MAX( site_record_id ) FROM $wpdb->dt_movement_log WHERE site_id = %s", $site['partner_id'] ) );
@@ -91,17 +100,15 @@ function dt_network_dashboard_collect_remote_activity_single($site)
         $last_site_record_id = 0;
     }
 
-    $site_vars = Site_Link_System::get_site_connection_vars( $site['type_id'], 'post_id');
-    if (is_wp_error($site_vars)) {
-        dt_save_log(  $file, 'FAIL ID: ' . $site['id'] . ' (Failed to get valid site link connection details)');
-        return false;
-    }
+    $registered_actions = dt_network_dashboard_registered_actions();
+    $action_keys = array_keys( $registered_actions );
 
     $args = [
         'method' => 'POST',
         'body' => [
             'transfer_token' => $site_vars['transfer_token'],
             'last_site_record_id' => $last_site_record_id,
+            'actions' => $action_keys,
         ]
     ];
 
@@ -121,9 +128,11 @@ function dt_network_dashboard_collect_remote_activity_single($site)
         return false;
     }
 
-    foreach( $data['data'] as $index => $row ){
-        DT_Network_Activity_Log::transfer_insert( $row );
+    if ( ! empty( $data['data'] ) ){
+        DT_Network_Activity_Log::transfer_insert_multiple( $data['data'], $site['partner_id'] );
     }
+    dt_write_log( count( $data['data'] ) );
+    dt_write_log( $site['partner_id'] );
 
     dt_save_log( $file, 'SUCCESS ID: ' . $site['type_id'] );
 

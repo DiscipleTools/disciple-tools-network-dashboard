@@ -471,6 +471,7 @@ class DT_Network_Activity_Log {
             INSERT INTO $wpdb->dt_movement_log (
                 site_id,
                 site_record_id,
+                site_object_id,
                 action,
                 category,
                 lng,
@@ -487,6 +488,7 @@ class DT_Network_Activity_Log {
                     %s,
                     %s,
                     %s,
+                    %s,
                     %f,
                     %f,
                     %s,
@@ -498,6 +500,7 @@ class DT_Network_Activity_Log {
                     )",
             $record['site_id'],
             $record['id'], // this site_record_id is the id of the sending system
+            $record['site_object_id'],
             $record['action'],
             $record['category'],
             $record['lng'],
@@ -510,6 +513,75 @@ class DT_Network_Activity_Log {
             $record['hash']
         ) );
 
+    }
+
+    /**
+     * Insert multiple transfer rows from a single site.
+     * This INSERT query is written to handle large number of inserts at a single time. It inserts 100 rows at a time.
+     *
+     * @param $rows
+     * @param null $site_id
+     */
+    public static function transfer_insert_multiple( $rows, $site_id = NULL ){
+        global $wpdb;
+
+        if ( empty( $site_id ) ){
+            $site_id = $rows[0]['site_id'];
+        }
+
+        $converted = $wpdb->get_col( $wpdb->prepare( "SELECT site_object_id FROM $wpdb->dt_movement_log WHERE site_id = %s AND action = 'new_contact'", $site_id ) );
+
+        $hunk = array_chunk($rows, 100 );
+        foreach( $hunk as $results ) {
+            if ( empty( $results ) ){
+                continue;
+            }
+            $query = " INSERT INTO $wpdb->dt_movement_log
+                        ( 
+                            site_id,
+                            site_record_id,
+                            site_object_id,
+                            action,
+                            category,
+                            lng,
+                            lat,
+                            level,
+                            label,
+                            grid_id,
+                            payload,
+                            timestamp,
+                            hash 
+                            )
+                        VALUES ";
+
+            $index = 0;
+            foreach( $results as $value ){
+                if ( ! in_array( $value['site_object_id'], $converted ) ){
+                    $index++;
+                    $query .= $wpdb->prepare( "( %s, %s, %s, %s, %s, %d, %d, %s, %s, %d, %s, %s, %s ), ",
+                        $value["site_id"],
+                        $value["id"], // the site id becomes the next site's site_record_id (foreign key)
+                        $value["site_object_id"],
+                        $value["action"],
+                        $value["category"],
+                        $value["lng"],
+                        $value["lat"],
+                        $value["level"],
+                        $value["label"],
+                        $value["grid_id"],
+                        maybe_serialize( $value["payload"] ),
+                        $value["timestamp"],
+                        $value["hash"]
+                    );
+                }
+            }
+
+            $query .= ';';
+            $query = str_replace( ", ;", ";", $query ); //remove last comma
+            if ( $index > 0 ){
+                $wpdb->query( $query ); //phpcs:ignore
+            }
+        }
     }
 
     public static function get_location_details( $post_id ) {
@@ -542,7 +614,7 @@ class DT_Network_Activity_Log {
                 'location_value' => [
                     'lng' => $row['longitude'],
                     'lat' => $row['latitude'],
-                    'level' => $row['level'],
+                    'level' => $row['level_name'],
                     'label' => $label,
                     'grid_id' => $row['grid_id'],
                 ],

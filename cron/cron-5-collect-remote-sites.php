@@ -167,7 +167,6 @@ function dt_get_site_snapshot( $site_post_id ) {
         return false;
     }
 
-
     $saved = DT_Network_Dashboard_Site_Post_Type::update_snapshot( $snapshot, $partner_post_id );
     if ( is_wp_error( $saved ) ){
         dt_save_log( $file, 'FAIL ID: ' . $partner_post_id . ' (Failed to save snapshot.)' );

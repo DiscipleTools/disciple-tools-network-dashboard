@@ -70,17 +70,51 @@ if ( is_multisite() ){
      * @return bool
      */
     function dt_network_dashboard_collect_multisite( $blog_id ) {
+        global $wpdb;
+
         if ( ! dt_is_current_multisite_dashboard_approved() ) {
             return false;
         }
+
+        // is this an approved network dashboard, and has that owner turned off collection
+        $check = false;
+        $approved_sites = dt_dashboard_approved_sites();
+        $approved_sites_ids = array_keys( $approved_sites );
+        if ( in_array( $blog_id, $approved_sites_ids ) ){
+            $check = true;
+        }
+
+        $source_blog_id = get_current_blog_id();
 
         $file = 'multisite';
         dt_save_log( $file, 'START ID: ' . $blog_id );
 
         switch_to_blog( $blog_id );
 
+        // checks if dashboard has set to not distribute to this dashboard.
+        if ( $check ) {
+            $prefix = $wpdb->get_blog_prefix( $blog_id );
+            $posts_table = $prefix . 'posts';
+            $postmeta_table = $prefix . 'postmeta';
+            $allowed = $wpdb->get_var($wpdb->prepare( "
+                SELECT pm1.meta_value 
+                FROM {$posts_table} as p 
+                    JOIN {$postmeta_table} as pm1 ON p.ID=pm1.post_id
+                    AND pm1.meta_key = 'send_activity'
+                    JOIN {$postmeta_table} as pm2 ON p.ID=pm2.post_id
+                    AND pm2.meta_key = 'type_id'
+                WHERE p.post_type = 'dt_network_dashboard'
+                    AND pm2.meta_value = %s
+                    ", $source_blog_id ) );
+            if ( ! empty( $allowed ) && 'none' === $allowed ){
+                restore_current_blog();
+                return false;
+            }
+        }
+
         $profile = dt_network_site_profile();
         $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report( true );
+
         if ( $snapshot['status'] == 'FAIL' ) {
             // retry connection in 3 seconds
             sleep( 5 );

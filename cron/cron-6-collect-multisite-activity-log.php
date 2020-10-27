@@ -78,14 +78,15 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
             return false;
         }
 
-        $active_plugins = get_blog_option( $site['type_id'], 'active_plugins' );
-        if ( ! in_array('disciple-tools-network-dashboard/disciple-tools-network-dashboard.php', $active_plugins ) ){
+        if ( ! dt_is_network_dashboard_plugin_active( $site['type_id'] ) ) {
             return false;
         }
 
         global $wpdb;
         $file = 'activity-multisite';
         dt_save_log( $file, 'START ID: ' . $site['type_id'] );
+
+        $registered_actions = dt_network_dashboard_registered_actions( true );
 
         // query last record in activity log
         $last_record_id = $wpdb->get_var($wpdb->prepare( "SELECT MAX( site_record_id ) FROM $wpdb->dt_movement_log WHERE site_id = %s", $site['partner_id'] ) );
@@ -100,14 +101,12 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
             $prefix = $wpdb->get_blog_prefix( $site['type_id'] );
             $table = $prefix . 'dt_movement_log';
 
-            $results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE site_id = %s AND id > %s LIMIT 10000", $site['partner_id'], $last_record_id ), ARRAY_A );
+            $results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE site_id = %s AND id > %s AND action IN ($registered_actions) ORDER BY id LIMIT 10000", $site['partner_id'], $last_record_id ), ARRAY_A );
 
         restore_current_blog();
 
         // insert new records
-        foreach( $results as $index => $result ){
-            DT_Network_Activity_Log::transfer_insert( $result );
-        }
+        DT_Network_Activity_Log::transfer_insert_multiple( $results, $site['partner_id'] );
 
         // store to local multisite post id
         update_post_meta( $site['id'], 'activity_timestamp', time() );

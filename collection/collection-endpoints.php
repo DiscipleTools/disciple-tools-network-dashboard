@@ -134,7 +134,6 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
         // @todo insert new activity log records
         dt_write_log(json_decode( $result['body'], true));
 
-
         return true;
     }
 
@@ -150,6 +149,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             ];
         }
 
+        // get dashboard id from site-to-site link
         $dt_network_dashboard_id = get_post_meta( $params['site_post_id'], 'dt_network_dashboard', true );
         if ( empty( $dt_network_dashboard_id ) ){
             return [
@@ -158,6 +158,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             ];
         }
 
+        // test if activity can be sent.
         $send_activity_configuration = get_post_meta( $dt_network_dashboard_id, 'send_activity', true );
         if ( 'none' === $send_activity_configuration ) {
             return [
@@ -171,17 +172,28 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             ];
         }
 
+        $site_id = dt_network_site_id();
+
         // @todo check level of precision allowed to send activity
 
         $last_site_record_id = sanitize_text_field( wp_unslash( $params['last_site_record_id'] ?? 0 ) );
+        $raw_actions = recursive_sanitize_text_field( $params['actions'] );
+        $actions = dt_array_to_sql( $raw_actions );
+
         global $wpdb;
         $activity = $wpdb->get_results( $wpdb->prepare( "
                 SELECT * 
                 FROM $wpdb->dt_movement_log
-                WHERE site_record_id > %s
-                ORDER BY site_record_id
-                LIMIT 5000
-                ", $last_site_record_id ), ARRAY_A );
+                WHERE 
+                      site_id = %s
+                    AND site_object_id > %s
+                    AND action IN ($actions)
+                ORDER BY id
+                LIMIT 10000
+                ",
+            $site_id,
+            $last_site_record_id
+        ), ARRAY_A );
         if ( is_wp_error( $activity ) ) {
             return [
                 'status' => 'FAIL',
@@ -194,9 +206,6 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             'data' => $activity,
         ];
     }
-
-
-
 
 }
 DT_Network_Dashboard_Network_Endpoints::instance();
