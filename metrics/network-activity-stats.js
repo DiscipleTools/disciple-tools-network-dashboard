@@ -51,8 +51,6 @@ jQuery(document).ready(function(){
 
     jQuery(document).ajaxComplete((event, xhr, settings) => {
         if ( typeof xhr.responseJSON.records_count !== 'undefined' ) {
-            // window.activity_stats = xhr.responseJSON
-            console.log(window.activity_stats)
 
             jQuery('#activities_count').html(window.activity_stats.records_count)
             jQuery('#actions_count').html( countProperties(window.activity_stats.actions) )
