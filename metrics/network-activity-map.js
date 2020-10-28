@@ -26,7 +26,7 @@ jQuery(document).ready(function(){
                     height: ${window.innerHeight - 175}px !important;
                 }
             </style>
-            <span class="section-header float-left" >Activity Map</span><span class="float-right"><a data-open="activity-filter-modal">modify filter</a></span>
+            <span class="section-header float-left" >Activity Map</span><span class="float-right"><button class="button small" data-open="activity-filter-modal">modify filter</button></span>
                 <hr style="max-width:100%;">
                 <div class="grid-x grid-padding-x">
                 <div class="medium-9 cell">
@@ -55,6 +55,16 @@ jQuery(document).ready(function(){
     new Foundation.Reveal(jQuery('#activity-filter-modal'))
 
     window.load_activity_filter()
+
+    jQuery('#filter_list_button').on('click', function(){
+        $('#activity-filter-modal').foundation('close');
+        setTimeout(
+            function()
+            {
+                load_map_geojson()
+            }, 500);
+    })
+
 
     function load_map_geojson(){
         if ( typeof window.activity_filter === 'undefined' ){

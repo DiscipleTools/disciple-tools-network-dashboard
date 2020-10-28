@@ -30,6 +30,7 @@ window.load_activity_filter = () => {
                 <option value="2000">2000</option>
                 <option value="5000">5000</option>
                 <option value="10000">10000</option>
+                <option value="100000">100000</option>
             </select>
         </div>
     </div>
@@ -57,7 +58,7 @@ window.load_activity_filter = () => {
             })
     }
     function load_filters(){
-        makeRequest('POST', 'network/base', {'type': 'activity_stats'} )
+        makeRequest('POST', 'network/base', {'type': 'activity_stats', 'filters': window.activity_filter } )
             .done(function(data) {
                 window.activity_stats = data
                 write_filters()
@@ -69,38 +70,39 @@ window.load_activity_filter = () => {
     function write_activity_list(){
         container.empty()
         jQuery.each( window.feed, function(i,v){
-            if ( 'records_count' === i ){
-                jQuery('#filters').html(`Results: ${v}`)
-            } else {
-                container.append(`<h2>${v.label} (${v.list.length} events)</h2>`)
-                container.append(`<ul>`)
-                jQuery.each(v.list, function(ii,vv){
-                    container.append(`<li><strong>(${vv.time})</strong> ${vv.message} </li>`)
-                })
-                container.append(`</ul>`)
-            }
+            container.append(`<h2>${v.label} (${v.list.length} events)</h2>`)
+            container.append(`<ul>`)
+            jQuery.each(v.list, function(ii,vv){
+                container.append(`<li><strong>(${vv.time})</strong> ${vv.message} </li>`)
+            })
+            container.append(`</ul>`)
         })
 
         jQuery('.loading-spinner').removeClass('active')
     }
     function write_filters(){
+
+        jQuery('#filters').html(`Results: ${window.activity_stats.records_count}`)
+
         let site_list = jQuery('#site-list')
         let hollow = ''
-        jQuery.each( window.activity_stats.sites_labels, function(sli,slv){
+        site_list.empty()
+        jQuery.each( window.activity_stats.sites, function(sli,slv){
             hollow = ''
-            if ( jQuery.inArray( sli, window.activity_filter.sites ) >= 0 ){
+            if ( typeof window.activity_filter.sites !== 'undefined' && jQuery.inArray( sli, window.activity_filter.sites ) < 0 ){
                 hollow = 'hollow'
             }
             site_list.append(`<button class="button small sites ${hollow}" value="${sli}">${slv}</button> `)
         })
 
         let action_list = jQuery('#action-filter')
-        jQuery.each( window.activity_stats.actions_labels, function(ali,alv){
+        action_list.empty()
+        jQuery.each( window.activity_stats.actions, function(ali,alv){
             hollow = ''
-            if ( jQuery.inArray( ali, window.activity_filter.actions ) >= 0 ){
+            if ( typeof window.activity_filter.actions !== 'undefined' && jQuery.inArray( ali, window.activity_filter.actions ) < 0 ){
                 hollow = 'hollow'
             }
-            action_list.append(`<button class="button small actions ${hollow}" value="${ali}">${alv}</button> `)
+            action_list.append(`<button class="button small actions ${hollow}" value="${ali}">${alv.label}</button> `)
         })
 
         // list to button changes
@@ -119,6 +121,9 @@ window.load_activity_filter = () => {
 
         // list to refresh filter button
         jQuery('#filter_list_button').on('click', function(){
+            jQuery('#filters').empty().html(spinner)
+            jQuery('#activity-list').prepend(spinner)
+
             jQuery('.loading-spinner').addClass('active')
 
             let time_range = jQuery('#time_range').val()
@@ -139,7 +144,7 @@ window.load_activity_filter = () => {
 
             // add site filters
             let sites = []
-            jQuery.each( jQuery('#filters_section button.sites.hollow'), function(i,v){
+            jQuery.each( jQuery('#filters_section button.sites').not('.hollow'), function(i,v){
                 sites.push(v.value)
             })
             if ( sites ){
@@ -148,7 +153,7 @@ window.load_activity_filter = () => {
 
             // add action filters
             let actions = []
-            jQuery.each( jQuery('#filters_section button.actions.hollow'), function(i,v){
+            jQuery.each( jQuery('#filters_section button.actions').not('.hollow'), function(i,v){
                 actions.push(v.value)
             })
             if ( actions ){
@@ -156,6 +161,7 @@ window.load_activity_filter = () => {
             }
 
             load_data()
+            load_filters()
             jQuery('#filter_list_button').removeClass('warning').addClass('hollow')
         })
     }

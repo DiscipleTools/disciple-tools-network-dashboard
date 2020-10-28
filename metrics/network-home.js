@@ -98,7 +98,6 @@ jQuery(document).ready(function(){
     makeRequest('POST', 'network/base', {'type': 'sites_list'} )
         .done(function(data) {
             window.sites_list = data
-
             write_sites_list( true )
         })
     makeRequest('POST', 'network/base', {'type': 'global'} )

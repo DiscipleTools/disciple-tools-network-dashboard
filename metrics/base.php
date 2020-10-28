@@ -107,8 +107,15 @@ class DT_Network_Dashboard_Metrics_Base {
                     $data = self::build_log();
                 }
                 break;
+
             case 'activity_stats':
-                $data = self::get_activity_stats();
+                if ( isset( $params['filters'] ) && ! empty( $params['filters'] ) ){
+                    $filters = recursive_sanitize_text_field( $params['filters'] );
+                    $data = self::get_activity_stats( $filters );
+                } else {
+                    $data = self::get_activity_stats();
+                }
+
                 break;
             case 'reset':
                 $data['sites'] = $this->get_sites( true );;
@@ -480,14 +487,26 @@ class DT_Network_Dashboard_Metrics_Base {
 
     public static function get_activity_log( $filters = [] ){
         global $wpdb;
+        $hash = hash('sha256', maybe_serialize( $filters ));
+
+        if (wp_cache_get( __METHOD__, $hash )) {
+            return wp_cache_get( __METHOD__, $hash );
+        }
+
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+        $sites_id_list = [];
+        foreach( $sites as $site ){
+            $sites_id_list[] = $site['partner_id'];
+        }
+
         $defaults = [
             'start' => time(),
             'end' => strtotime('-7 days' ),
             'limit' => 2000,
             'offset' => 0,
             'boundary' => [], // n_lat, s_lat, e_lng, w_lng lnglat, sw lnglat
-            'actions' => [],
-            'sites' => []
+            'actions' => array_keys( dt_network_dashboard_registered_actions() ),
+            'sites' => $sites_id_list,
         ];
 
         $filter = wp_parse_args( $filters, $defaults );
@@ -515,14 +534,13 @@ class DT_Network_Dashboard_Metrics_Base {
         /* process actions */
         if ( ! empty( $filter['actions'] ) && is_array( $filter['actions'] ) ) {
             $string = dt_array_to_sql( $filter['actions'] );
-            $additional_where .= " AND action NOT IN (".$string.")";
+            $additional_where .= " AND action IN (".$string.")";
         }
         /* process sites */
         if ( ! empty( $filter['sites'] ) && is_array( $filter['sites'] )  ) {
             $string = dt_array_to_sql( $filter['sites'] );
-            $additional_where .= " AND site_id NOT IN (".$string.")";
+            $additional_where .= " AND site_id IN (".$string.")";
         }
-
 
         /* process boundary */
         if ( ! empty( $filter['boundary'] ) && is_array( $filter['boundary'] )  ) {
@@ -579,6 +597,8 @@ class DT_Network_Dashboard_Metrics_Base {
             $results[$index]['payload'] = maybe_unserialize( $result['payload']);
         }
 
+        wp_cache_set( __METHOD__, $results, __METHOD__, 10 );
+
         return $results;
     }
 
@@ -589,12 +609,20 @@ class DT_Network_Dashboard_Metrics_Base {
         }
 
         $stats = [
-            'total_records' => count( $logs ),
-            'sites_labels' => [],
+            'records_count' => count( $logs ),
+            'sites' => [],
             'sites_totals' => [],
-            'actions_labels' => [],
+            'actions' => [],
             'actions_totals' => [],
         ];
+
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+        foreach( $sites as $site ){
+            $stats['sites'][$site['partner_id']] = $site['name'];
+        }
+
+        $stats['actions'] = dt_network_dashboard_registered_actions();
+
         foreach( $logs as $log ){
             /* sites */
             $stats['sites_labels'][$log['site_id']] = $log['site_name'];
@@ -604,7 +632,7 @@ class DT_Network_Dashboard_Metrics_Base {
             $stats['sites_totals'][$log['site_id']]++;
 
             /* actions*/
-            $stats['actions_labels'][$log['action']] = ucwords( str_replace( '_', ' ', $log['action']) );
+
             if ( ! isset( $stats['actions_totals'][$log['action']] ) ){
                 $stats['actions_totals'][$log['action']] = 0;
             }
@@ -1151,8 +1179,6 @@ class DT_Network_Dashboard_Metrics_Base {
                 ];
             }
         }
-
-        $data['records_count'] = count( $results );
 
         return $data;
     }
