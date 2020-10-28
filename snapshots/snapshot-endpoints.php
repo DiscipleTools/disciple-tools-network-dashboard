@@ -55,13 +55,17 @@ class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpo
 
     public function add_api_routes() {
         register_rest_route(
-            $this->public_namespace, '/network_dashboard/live_stats', [
+            $this->public_namespace,
+            '/network_dashboard/live_stats',
+            [
                 'methods'  => 'POST',
                 'callback' => [ $this, 'live_stats' ],
             ]
         );
         register_rest_route(
-            $this->public_namespace, '/network_dashboard/profile', [
+            $this->public_namespace,
+            '/network_dashboard/profile',
+            [
                 'methods'  => 'POST',
                 'callback' => [ $this, 'profile' ],
             ]

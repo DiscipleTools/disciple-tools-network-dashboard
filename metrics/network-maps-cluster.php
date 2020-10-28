@@ -33,12 +33,18 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
     }
 
     public function add_scripts() {
-        wp_enqueue_script( $this->js_object_name .'_script', plugin_dir_url(__FILE__) . $this->js_file_name, [
+        wp_enqueue_script( $this->js_object_name .'_script',
+            plugin_dir_url( __FILE__ ) . $this->js_file_name,
+            [
             'jquery',
             'network_base_script',
-        ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
+            ],
+            filemtime( plugin_dir_path( __FILE__ ) . $this->js_file_name ),
+        true );
         wp_localize_script(
-            $this->js_object_name .'_script', $this->js_object_name, [
+            $this->js_object_name .'_script',
+            $this->js_object_name,
+            [
                 'endpoint' => $this->url,
                 'map_key' => DT_Mapbox_API::get_key(),
             ]
@@ -62,7 +68,9 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
 
     public function add_api_routes() {
         register_rest_route(
-            $this->namespace, '/' . $this->url . '/', [
+            $this->namespace,
+            '/' . $this->url . '/',
+            [
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'endpoint' ],
@@ -84,7 +92,8 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
 
         $post_type = sanitize_text_field( wp_unslash( $params['post_type'] ) );
 
-        return apply_filters( 'dashboard_cluster_layer_geojson', $this->_empty_geojson(), $post_type );;
+        return apply_filters( 'dashboard_cluster_layer_geojson', $this->_empty_geojson(), $post_type );
+        ;
     }
 
     public function cluster_geojson_contacts( $geojson, $post_type ) {
@@ -96,21 +105,21 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
 
         $sites = $this->get_sites();
         $list = [];
-        foreach( $sites as $site ){
+        foreach ( $sites as $site ){
             if ( ! isset( $site['locations']['contacts']['active'] ) ) {
                 continue;
             }
-            foreach( $site['locations']['contacts']['active'] as $index => $value ) {
-               if ( ! isset( $list[$index] ) ) {
-                   $list[$index] = $value;
-               }
+            foreach ( $site['locations']['contacts']['active'] as $index => $value ) {
+                if ( ! isset( $list[$index] ) ) {
+                    $list[$index] = $value;
+                }
                 $list[$index] = $list[$index] + $value;
             }
         }
 
-        $grid = $wpdb->get_results("SELECT grid_id, longitude, latitude FROM $wpdb->dt_location_grid", ARRAY_A );
+        $grid = $wpdb->get_results( "SELECT grid_id, longitude, latitude FROM $wpdb->dt_location_grid", ARRAY_A );
         $grid_list = [];
-        foreach( $grid as $g ){
+        foreach ( $grid as $g ){
             $grid_list[$g['grid_id']] = $g;
         }
 

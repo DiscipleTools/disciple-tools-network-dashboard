@@ -29,7 +29,9 @@ class DT_Network_Dashboard_Metrics_Maps_Hovermap extends DT_Network_Dashboard_Me
     }
 
     public function add_scripts() {
-        wp_enqueue_script( $this->js_object_name .'_script', plugin_dir_url(__FILE__) . $this->js_file_name, [
+        wp_enqueue_script( $this->js_object_name .'_script',
+            plugin_dir_url( __FILE__ ) . $this->js_file_name,
+            [
             'jquery',
             'jquery-ui-core',
             'amcharts-core',
@@ -37,7 +39,9 @@ class DT_Network_Dashboard_Metrics_Maps_Hovermap extends DT_Network_Dashboard_Me
             'amcharts-maps',
             'mapping-drill-down',
             'lodash',
-        ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
+            ],
+            filemtime( plugin_dir_path( __FILE__ ) . $this->js_file_name ),
+        true );
 
         $this->load_grid_mapping_scripts();
     }
@@ -59,7 +63,9 @@ class DT_Network_Dashboard_Metrics_Maps_Hovermap extends DT_Network_Dashboard_Me
 
     public function add_api_routes() {
         register_rest_route(
-            $this->namespace, '/' . $this->url . '/', [
+            $this->namespace,
+            '/' . $this->url . '/',
+            [
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'endpoint' ],

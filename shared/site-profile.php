@@ -5,18 +5,18 @@
  * Gets or Creates Network Site Profile
  * @return array
  */
-if ( ! function_exists('dt_network_site_profile') ) {
+if ( ! function_exists( 'dt_network_site_profile' ) ) {
     function dt_network_site_profile() {
-        $profile = get_option('dt_site_profile');
+        $profile = get_option( 'dt_site_profile' );
 
         if ( empty( $profile ) || empty( $profile['partner_id'] || ! isset( $profile['partner_id'] ) ) ) {
             $profile = [
                 'partner_id' => dt_network_site_id(),
-                'partner_name' => get_option('blogname'),
-                'partner_description' => get_option('blogdescription'),
+                'partner_name' => get_option( 'blogname' ),
+                'partner_description' => get_option( 'blogdescription' ),
                 'partner_url' => site_url()
             ];
-            update_option('dt_site_profile', $profile, true);
+            update_option( 'dt_site_profile', $profile, true );
         }
 
         $profile['system'] = dt_network_site_system();
@@ -33,13 +33,12 @@ if ( ! function_exists('dt_network_site_profile') ) {
  * @return string
  * @throws Exception
  */
-if ( ! function_exists('dt_network_site_id') ) {
-    function dt_network_site_id()
-    {
-        $site_id = get_option('dt_site_id');
-        if (empty($site_id)) {
-            $site_id = hash('sha256', bin2hex(random_bytes(40)));
-            add_option('dt_site_id', $site_id, '', 'yes');
+if ( ! function_exists( 'dt_network_site_id' ) ) {
+    function dt_network_site_id() {
+        $site_id = get_option( 'dt_site_id' );
+        if (empty( $site_id )) {
+            $site_id = hash( 'sha256', bin2hex( random_bytes( 40 ) ) );
+            add_option( 'dt_site_id', $site_id, '', 'yes' );
         }
         return $site_id;
     }
@@ -48,19 +47,19 @@ if ( ! function_exists('dt_network_site_id') ) {
  * @return array
  * @throws Exception
  */
-if ( ! function_exists('dt_network_site_system') ) {
+if ( ! function_exists( 'dt_network_site_system' ) ) {
     function dt_network_site_system() : array {
         global $wp_version, $wp_db_version;
 
         $system = [
             'network_dashboard_version' => DT_Network_Dashboard::get_instance()->version ?? 0,
-            'network_dashboard_migration' => get_option('dt_network_dashboard_migration_number'),
-            'network_dashboard_migration_lock' => get_option('dt_network_dashboard_migration_lock'),
+            'network_dashboard_migration' => get_option( 'dt_network_dashboard_migration_number' ),
+            'network_dashboard_migration_lock' => get_option( 'dt_network_dashboard_migration_lock' ),
             'dt_theme_version' => Disciple_Tools::instance()->version ?? 0,
-            'dt_theme_migration' => get_option('dt_migration_number'),
-            'dt_theme_migration_lock' => get_option('dt_migration_lock'),
-            'dt_mapping_migration' => get_option('dt_mapping_module_migration_number'),
-            'dt_mapping_migration_lock' => get_option('dt_mapping_module_migration_lock'),
+            'dt_theme_migration' => get_option( 'dt_migration_number' ),
+            'dt_theme_migration_lock' => get_option( 'dt_migration_lock' ),
+            'dt_mapping_migration' => get_option( 'dt_mapping_module_migration_number' ),
+            'dt_mapping_migration_lock' => get_option( 'dt_mapping_module_migration_lock' ),
             'has_mapbox_key' => ( DT_Mapbox_API::get_key() ) ? 'yes' : 'no',
             'php_version' => phpversion(),
             'wp_version' => $wp_version,
@@ -120,8 +119,8 @@ class DT_Network_Dashboard_Site_Link_Metabox {
         }
 
         $refreshed_profile = DT_Network_Dashboard_Site_Post_Type::update_remote_site_profile_by_id( $post_id );
-        if( is_wp_error( $refreshed_profile ) ){
-            dt_write_log($refreshed_profile);
+        if ( is_wp_error( $refreshed_profile ) ){
+            dt_write_log( $refreshed_profile );
             ?>
             Failed to refresh remote site profile. Check connection. Error has been logged. (Remote 1)
             <span style="float:right">Status: <strong><span id="fail-profile-status" class="fail-read" style="color:red;">Failed connection to remote Network Dashboard. (Profile)</span></strong></span>
@@ -131,17 +130,17 @@ class DT_Network_Dashboard_Site_Link_Metabox {
 
         $dt_network_dashboard_id = get_post_meta( $post_id, 'dt_network_dashboard', true );
         if ( empty( $dt_network_dashboard_id ) ) {
-            dt_write_log('create');
+            dt_write_log( 'create' );
             $dt_network_dashboard_id = DT_Network_Dashboard_Site_Post_Type::create( $refreshed_profile, 'remote', $post_id );
         }
 
         $site_profile = DT_Network_Dashboard_Site_Post_Type::get_profile( $dt_network_dashboard_id );
-        if( is_wp_error( $site_profile ) ){
+        if ( is_wp_error( $site_profile ) ){
             update_post_meta( $dt_network_dashboard_id, 'profile', $refreshed_profile );
-            dt_write_log($post_id);
-            dt_write_log($dt_network_dashboard_id);
-            dt_write_log($refreshed_profile);
-            dt_write_log($site_profile);
+            dt_write_log( $post_id );
+            dt_write_log( $dt_network_dashboard_id );
+            dt_write_log( $refreshed_profile );
+            dt_write_log( $site_profile );
             ?>
             Failed to refresh remote site profile. Check connection. Error has been logged. (2)
             <span style="float:right">Status: <strong><span id="fail-profile-status" class="fail-read" style="color:red;">Failed connection to remote Network Dashboard.</span></strong></span>
@@ -153,33 +152,32 @@ class DT_Network_Dashboard_Site_Link_Metabox {
         <table>
             <tr>
                 <td>
-                    <?php echo  $site_profile['partner_name'] ?? 'Partner Name' ?>
+                    <?php echo $site_profile['partner_name'] ?? 'Partner Name' ?>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <?php echo  $site_profile['partner_url'] ?? 'Partner URL' ?>
+                    <?php echo $site_profile['partner_url'] ?? 'Partner URL' ?>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <?php echo  $site_profile['partner_id'] ?? 'Partner ID' ?>
+                    <?php echo $site_profile['partner_id'] ?? 'Partner ID' ?>
                 </td>
             </tr>
         </table>
         <?php
     }
 
-    public static function admin_box_local_site_profile()
-    {
+    public static function admin_box_local_site_profile() {
         $partner_profile = dt_network_site_profile();
 
         // process post action
-        if (isset($_POST['partner_profile_form'])
-            && isset($_POST['_wpnonce'])
-            && wp_verify_nonce(sanitize_text_field(wp_unslash($_POST['_wpnonce'])), 'partner_profile' . get_current_user_id())
-            && isset($_POST['partner_name'])
-            && isset($_POST['partner_description'])
+        if (isset( $_POST['partner_profile_form'] )
+            && isset( $_POST['_wpnonce'] )
+            && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'partner_profile' . get_current_user_id() )
+            && isset( $_POST['partner_name'] )
+            && isset( $_POST['partner_description'] )
         ) {
 
             $partner_name = sanitize_text_field( wp_unslash( $_POST['partner_name'] ) );
@@ -188,14 +186,14 @@ class DT_Network_Dashboard_Site_Link_Metabox {
             $partner_description = sanitize_text_field( wp_unslash( $_POST['partner_description'] ) );
             $partner_profile['partner_description'] = $partner_description;
 
-            update_option('dt_site_profile', $partner_profile, true);
+            update_option( 'dt_site_profile', $partner_profile, true );
             $partner_profile = dt_network_site_profile();
         }
 
         ?>
         <!-- Box -->
         <form method="post">
-            <?php wp_nonce_field('partner_profile' . get_current_user_id()); ?>
+            <?php wp_nonce_field( 'partner_profile' . get_current_user_id() ); ?>
             <table class="widefat striped">
                 <thead>
                 <tr><th>Network Profile</th></tr>
@@ -209,33 +207,33 @@ class DT_Network_Dashboard_Site_Link_Metabox {
                                 <td><label for="partner_name">Your Site Name</label></td>
                                 <td><input type="text" class="regular-text" name="partner_name"
                                            id="partner_name"
-                                           value="<?php echo esc_html($partner_profile['partner_name']) ?>"/></td>
+                                           value="<?php echo esc_html( $partner_profile['partner_name'] ) ?>"/></td>
                             </tr>
                             <tr>
                                 <td><label for="partner_description">Your Site Description</label></td>
                                 <td><input type="text" class="regular-text" name="partner_description"
                                            id="partner_description"
-                                           value="<?php echo esc_html($partner_profile['partner_description']) ?>"/>
+                                           value="<?php echo esc_html( $partner_profile['partner_description'] ) ?>"/>
                                 </td>
                             </tr>
                             <tr>
                                 <td><label for="partner_id">Your Site ID</label></td>
-                                <td><?php echo esc_attr($partner_profile['partner_id']) ?></td>
+                                <td><?php echo esc_attr( $partner_profile['partner_id'] ) ?></td>
                             </tr>
                             <tr>
                                 <td><label for="partner_id"><a href="/wp-admin/admin.php?page=dt_options&tab=custom-lists#languages">Languages</a></label></td>
                                 <td><?php
-                                    if ( isset( $partner_profile['languages'] ) ) {
-                                        $i = 0;
-                                        foreach ( $partner_profile['languages'] as $key => $label ){
-                                            if ( 0 !== $i ){
-                                                echo ', ';
-                                            }
-                                            echo $label['label'];
-                                            $i++;
+                                if ( isset( $partner_profile['languages'] ) ) {
+                                    $i = 0;
+                                    foreach ( $partner_profile['languages'] as $key => $label ){
+                                        if ( 0 !== $i ){
+                                            echo ', ';
                                         }
+                                        echo $label['label'];
+                                        $i++;
                                     }
-                                    ?></td>
+                                }
+                                ?></td>
                             </tr>
                             </tbody>
                         </table>
@@ -274,7 +272,9 @@ class DT_Network_Dashboard_Site_Links_Endpoint extends DT_Network_Dashboard_Endp
 
     public function add_api_routes() {
         register_rest_route(
-            $this->public_namespace, '/network_dashboard/profile', [
+            $this->public_namespace,
+            '/network_dashboard/profile',
+            [
                 'methods'  => 'POST',
                 'callback' => [ $this, 'profile' ],
             ]

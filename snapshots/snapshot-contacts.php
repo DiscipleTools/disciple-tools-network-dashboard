@@ -29,10 +29,10 @@ class DT_Network_Dashboard_Snapshot_Contacts {
                     'all_baptisms' => DT_Network_Dashboard_Snapshot_Queries::total_baptisms(),
                 ],
                 'added' => [
-                    'sixty_days' => DT_Network_Dashboard_Snapshot_Queries::counted_by_day('baptisms'),
-                    'twenty_four_months' => DT_Network_Dashboard_Snapshot_Queries::counted_by_month('baptisms'),
+                    'sixty_days' => DT_Network_Dashboard_Snapshot_Queries::counted_by_day( 'baptisms' ),
+                    'twenty_four_months' => DT_Network_Dashboard_Snapshot_Queries::counted_by_month( 'baptisms' ),
                 ],
-                'generations' => DT_Network_Dashboard_Snapshot_Queries::generations('baptisms'),
+                'generations' => DT_Network_Dashboard_Snapshot_Queries::generations( 'baptisms' ),
             ],
             'follow_up_funnel' => [
                 'funnel' => DT_Network_Dashboard_Snapshot_Queries::funnel(),

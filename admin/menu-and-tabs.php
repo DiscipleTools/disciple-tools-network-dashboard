@@ -116,13 +116,13 @@ class DT_Network_Dashboard_Menu {
                         Multisite Incoming
                     </a>
                     <a href="<?php echo esc_attr( $link ) . 'remote-incoming' ?>" class="nav-tab
-                    <?php echo ( $tab == 'remote-incoming'  ) ? 'nav-tab-active' : ''; ?>">
+                    <?php echo ( $tab == 'remote-incoming' ) ? 'nav-tab-active' : ''; ?>">
                         Remote Incoming
                     </a>
 
-                <?php else: ?>
+                <?php else : ?>
                     <a href="<?php echo esc_attr( $link ) . 'remote-incoming' ?>" class="nav-tab
-                    <?php echo ( $tab == 'remote-incoming' || ! isset( $tab )  ) ? 'nav-tab-active' : ''; ?>">
+                    <?php echo ( $tab == 'remote-incoming' || ! isset( $tab ) ) ? 'nav-tab-active' : ''; ?>">
                         Incoming
                     </a>
                 <?php endif; ?>
@@ -214,7 +214,7 @@ class DT_Network_Dashboard_Tab_Profile
     }
 
     public function box_diagram(){
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites( );
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
         ?>
         <style>
         .columns {
@@ -259,11 +259,11 @@ class DT_Network_Dashboard_Tab_Profile
                             <div class="column-heading">Incoming</div>
                             <div>
                                 <?php
-                                foreach( $sites as $site ){
+                                foreach ( $sites as $site ){
                                     if ( 0 === $site['id'] ){
                                         continue;
                                     }
-                                    else if ( is_multisite() && 'multisite' === $site['type'] && dt_network_dashboard_multisite_is_approved() && 'reject' !== $site['receive_activity']  ) {
+                                    else if ( is_multisite() && 'multisite' === $site['type'] && dt_network_dashboard_multisite_is_approved() && 'reject' !== $site['receive_activity'] ) {
                                         echo '<div class="row"><span class="nd-site-box multisite">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
                                     else if ('network_dashboard_receiving' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'reject' !== $site['receive_activity'] ) {
@@ -293,14 +293,14 @@ class DT_Network_Dashboard_Tab_Profile
                                 <?php
                                 $approved_sites = dt_dashboard_approved_sites();
                                 $approved_sites_ids = array_keys( $approved_sites );
-                                foreach( $sites as $site ){
+                                foreach ( $sites as $site ){
                                     if ( 0 === $site['id'] ){
                                         continue;
                                     }
                                     else if ( is_multisite() && 'multisite' === $site['type'] && dt_network_dashboard_multisite_is_approved() && 'none' !== $site['send_activity'] && in_array( $site['type_id'], $approved_sites_ids ) ) {
                                         echo '<div class="row"><span class="nd-site-box multisite">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
-                                    else if ('network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type']  && 'none' !== $site['send_activity'] ) {
+                                    else if ('network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'none' !== $site['send_activity'] ) {
                                         echo '<div class="row"><span class="nd-site-box remote">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
                                 }
@@ -319,19 +319,19 @@ class DT_Network_Dashboard_Tab_Profile
             && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['show-tab'] ) ), 'show-tab'.get_current_user_id() )
             && isset( $_POST['tab'] ) ) {
             $tab = sanitize_text_field( wp_unslash( $_POST['tab'] ) );
-            update_option('dt_network_dashboard_show_tab', $tab, true );
+            update_option( 'dt_network_dashboard_show_tab', $tab, true );
         }
-        $tab = get_option('dt_network_dashboard_show_tab');
+        $tab = get_option( 'dt_network_dashboard_show_tab' );
         ?>
         <form method="POST">
-        <?php wp_nonce_field( 'show-tab'.get_current_user_id(), 'show-tab') ?>
+        <?php wp_nonce_field( 'show-tab'.get_current_user_id(), 'show-tab' ) ?>
         <table class="widefat striped">
             <thead>
                 <tr><td>Show Tab</td><td></td><td></td></tr>
             </thead>
             <tbody>
             <tr>
-                <td style="width:115px;"><img src="<?php echo plugin_dir_url(__FILE__) ?>images/tab-screen.png" height="40px" /></td>
+                <td style="width:115px;"><img src="<?php echo plugin_dir_url( __FILE__ ) ?>images/tab-screen.png" height="40px" /></td>
                 <td>
                     <select name="tab">
                         <option value="hide" <?php echo ( 'hide' === $tab || empty( $tab ) ) ? 'selected' : ''; ?>>Hide</option>
@@ -484,7 +484,7 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
              ) {
 
-            if (  isset( $_POST['new-snapshot'] ) ){
+            if ( isset( $_POST['new-snapshot'] ) ){
                 dt_save_log( 'multisite', '', false );
                 dt_save_log( 'multisite', 'REFRESH SNAPSHOT', false );
 
@@ -496,26 +496,25 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                 }
             }
 
-            if (  isset( $_POST['new-activity'] ) ){
+            if ( isset( $_POST['new-activity'] ) ){
                 dt_save_log( 'multisite-activity', '', false );
                 dt_save_log( 'multisite-activity', 'REFRESH ACTIVITY', false );
 
                 $id = sanitize_text_field( wp_unslash( $_POST['new-activity'] ) );
 
                 $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-                foreach( $sites as $site ){
+                foreach ( $sites as $site ){
                     if ( $id === $site['id'] ){
                         dt_network_dashboard_collect_multisite_activity( $site );
                         break;
                     }
                 }
-
             }
 
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
                 $partner = recursive_sanitize_text_field( $_POST['partner'] );
 
-                foreach( $partner as $key => $value ){
+                foreach ( $partner as $key => $value ){
                     DT_Network_Dashboard_Site_Post_Type::update_multisite_profile( $key );
                     if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
                         DT_Network_Dashboard_Site_Post_Type::update_site_name( $key, sanitize_text_field( wp_unslash( $value['nickname'] ) ) );
@@ -535,7 +534,7 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
         // Get list of sites
 
 
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites( );
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
 
         /** Message */
         if ( $message ) {
@@ -604,9 +603,9 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                                 }
                                 ?>
                             </td>
-                            <td><button name="new-snapshot" type="submit" value="<?php echo esc_attr( $site['type_id']  ) ?>" class="button" >Refresh</button></td>
+                            <td><button name="new-snapshot" type="submit" value="<?php echo esc_attr( $site['type_id'] ) ?>" class="button" >Refresh</button></td>
                             <td>
-                                <button name="new-activity" type="submit" value="<?php echo esc_attr( $site['id']  ) ?>" class="button" >Sync</button>
+                                <button name="new-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Sync</button>
                             </td>
                              <td>
                                 <button name="update-profile"  value="<?php echo esc_attr( $site['id'] ) ?>" type="submit" class="button">Update Profile</button>
@@ -724,7 +723,7 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
              ) {
 
             /* new snapshot */
-            if (  isset( $_POST['new-snapshot'] ) ){
+            if ( isset( $_POST['new-snapshot'] ) ){
                 dt_save_log( 'remote', '', false );
                 dt_save_log( 'remote', 'REFRESH SNAPSHOT', false );
                 $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) );
@@ -736,26 +735,25 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                 }
             }
 
-            if (  isset( $_POST['new-activity'] ) ){
+            if ( isset( $_POST['new-activity'] ) ){
                 dt_save_log( 'remote-activity', '', false );
                 dt_save_log( 'remote-activity', 'REFRESH ACTIVITY', false );
 
                 $id = sanitize_text_field( wp_unslash( $_POST['new-activity'] ) );
 
                 $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-                foreach( $sites as $site ){
+                foreach ( $sites as $site ){
                     if ( $id === $site['id'] ){
                         dt_network_dashboard_collect_remote_activity_single( $site );
                         break;
                     }
                 }
-
             }
 
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
                 $partner = recursive_sanitize_text_field( $_POST['partner'] );
 
-                foreach( $partner as $key => $value ){
+                foreach ( $partner as $key => $value ){
                     if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
                         DT_Network_Dashboard_Site_Post_Type::update_site_name( $key, sanitize_text_field( wp_unslash( $value['nickname'] ) ) );
                     }
@@ -768,12 +766,12 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                 }
 
                 // reset ui transient caches with new parameters
-                require_once( plugin_dir_path(__DIR__) . 'metrics/base.php' );
+                require_once( plugin_dir_path( __DIR__ ) . 'metrics/base.php' );
                 DT_Network_Dashboard_Metrics_Base::reset_ui_caches();
             }
         }
         // Get list of sites
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites( );
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
 
         /** Message */
         if ( $message ) {
@@ -833,7 +831,7 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
 
                             <td>
                                 <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
-                                <?php echo ( ! empty( $snapshot) ) ? date( 'Y-m-d H:i:s', $snapshot['timestamp'] ) : '----' ?><br>
+                                <?php echo ( ! empty( $snapshot ) ) ? date( 'Y-m-d H:i:s', $snapshot['timestamp'] ) : '----' ?><br>
                                 <?php
                                 if ( ! empty( $fail ) ){
                                     ?>
@@ -846,7 +844,7 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                             </td>
                             <td><button value="<?php echo esc_attr( $site['type_id'] ) ?>" name="new-snapshot" type="submit" class="button" >Refresh</button></td>
                             <td>
-                                <button name="new-activity" type="submit" value="<?php echo esc_attr( $site['id']  ) ?>" class="button" >Sync</button>
+                                <button name="new-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Sync</button>
                             </td>
                             <td>
                                 <button value="<?php echo esc_attr( $site['id'] ) ?>" name="update-profile" type="submit" class="button" >Update Profile</button>
@@ -907,25 +905,24 @@ class DT_Network_Dashboard_Tab_Outgoing
     }
 
 
-    public function box_send_activity()
-    {
+    public function box_send_activity() {
         if ( isset( $_POST['activity-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['activity-nonce'] ) ), 'activity'. get_current_user_id() ) ) {
 
             if ( isset( $_POST['send_activity'] ) && ! empty( $_POST['send_activity'] ) && is_array( $_POST['send_activity'] ) ) {
-                foreach($_POST['send_activity'] as $i => $v ) {
+                foreach ($_POST['send_activity'] as $i => $v ) {
                     DT_Network_Dashboard_Site_Post_Type::update_send_activity( sanitize_text_field( wp_unslash( $i ) ), sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
 
             if ( isset( $_POST['location_precision'] ) && ! empty( $_POST['location_precision'] ) && is_array( $_POST['location_precision'] ) ) {
-                foreach($_POST['location_precision'] as $i => $v ) {
+                foreach ($_POST['location_precision'] as $i => $v ) {
                     DT_Network_Dashboard_Site_Post_Type::update_location_precision( sanitize_text_field( wp_unslash( $i ) ), sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
         }
 
         /* REMOTE SITES*/
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites( );
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
         $multisites = DT_Network_Dashboard_Site_Post_Type::all_multisite_blog_ids( true )
 
         ?>
@@ -940,13 +937,13 @@ class DT_Network_Dashboard_Tab_Outgoing
         <tr>
             <td>
             <?php
-            if (!is_array($sites)) :
+            if ( !is_array( $sites )) :
                 ?>
-                No site links found. Go to <a href="<?php echo esc_url(admin_url()) ?>edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type.
-            <?php
+                No site links found. Go to <a href="<?php echo esc_url( admin_url() ) ?>edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type.
+                <?php
             else :
                 ?>
-                    <?php wp_nonce_field( 'activity'. get_current_user_id(), 'activity-nonce') ?>
+                    <?php wp_nonce_field( 'activity'. get_current_user_id(), 'activity-nonce' ) ?>
                     <table class="widefat striped">
                         <thead>
                         <tr>
@@ -963,9 +960,9 @@ class DT_Network_Dashboard_Tab_Outgoing
                                 $i++;
                                 ?>
                                 <tr>
-                                    <td><?php echo esc_html($site['name']) ?></td>
+                                    <td><?php echo esc_html( $site['name'] ) ?></td>
                                     <td style="text-align: center;">
-                                        <select name="location_precision[<?php echo esc_attr($site['id']) ?>]">
+                                        <select name="location_precision[<?php echo esc_attr( $site['id'] ) ?>]">
                                             <option value="none" <?php echo ( $site['location_precision'] === '' || $site['location_precision'] === 'none' ) ? 'selected' : ''; ?>>No Filter</option>
                                             <option value="admin2" <?php echo ( $site['location_precision'] === 'admin2' ) ? 'selected' : ''; ?>>Admin2 (County, District)</option>
                                             <option value="admin1" <?php echo ( $site['location_precision'] === 'admin1' ) ? 'selected' : ''; ?>>Admin1 (State)</option>
@@ -973,8 +970,8 @@ class DT_Network_Dashboard_Tab_Outgoing
                                         </select>
                                     </td>
                                     <td style="text-align: center;">
-                                        <input type="radio" name="send_activity[<?php echo esc_attr($site['id']) ?>]" value="none" <?php echo ( $site['send_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing |
-                                        <input type="radio" name="send_activity[<?php echo esc_attr($site['id']) ?>]" value="daily" <?php echo ($site['send_activity'] === 'daily' || $site['send_activity'] === '' ) ? 'checked' : '' ?>/> Send Daily
+                                        <input type="radio" name="send_activity[<?php echo esc_attr( $site['id'] ) ?>]" value="none" <?php echo ( $site['send_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing |
+                                        <input type="radio" name="send_activity[<?php echo esc_attr( $site['id'] ) ?>]" value="daily" <?php echo ( $site['send_activity'] === 'daily' || $site['send_activity'] === '' ) ? 'checked' : '' ?>/> Send Daily
                                     </td>
                                 </tr>
                                 <?php
@@ -1017,9 +1014,9 @@ class DT_Network_Dashboard_Tab_Outgoing
                                 $i++;
                                 ?>
                                 <tr>
-                                    <td><?php echo esc_html($site['name']) ?></td>
+                                    <td><?php echo esc_html( $site['name'] ) ?></td>
                                     <td style="text-align: center;">
-                                        <select name="location_precision[<?php echo esc_attr($site['id']) ?>]">
+                                        <select name="location_precision[<?php echo esc_attr( $site['id'] ) ?>]">
                                             <option value="none" <?php echo ( $site['location_precision'] === '' || $site['location_precision'] === 'none' ) ? 'selected' : ''; ?>>No Filter</option>
                                             <option value="admin2" <?php echo ( $site['location_precision'] === 'admin2' ) ? 'selected' : ''; ?>>Admin2 (County, District)</option>
                                             <option value="admin1" <?php echo ( $site['location_precision'] === 'admin1' ) ? 'selected' : ''; ?>>Admin1 (State)</option>
@@ -1027,8 +1024,8 @@ class DT_Network_Dashboard_Tab_Outgoing
                                         </select>
                                     </td>
                                     <td style="text-align: center;">
-                                        <input type="radio" name="send_activity[<?php echo esc_attr($site['id']) ?>]" value="none" <?php echo ( $site['send_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing |
-                                        <input type="radio" name="send_activity[<?php echo esc_attr($site['id']) ?>]" value="daily" <?php echo ($site['send_activity'] === 'daily' || $site['send_activity'] === '' ) ? 'checked' : '' ?>/> Send Daily
+                                        <input type="radio" name="send_activity[<?php echo esc_attr( $site['id'] ) ?>]" value="none" <?php echo ( $site['send_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing |
+                                        <input type="radio" name="send_activity[<?php echo esc_attr( $site['id'] ) ?>]" value="daily" <?php echo ( $site['send_activity'] === 'daily' || $site['send_activity'] === '' ) ? 'checked' : '' ?>/> Send Daily
                                     </td>
                                 </tr>
                                 <?php
@@ -1050,7 +1047,7 @@ class DT_Network_Dashboard_Tab_Outgoing
                 </tr>
                 </tbody>
                 </table>
-            <?php
+                <?php
             endif;
             ?>
         <br>
@@ -1101,7 +1098,6 @@ class DT_Network_Dashboard_Tab_System
             if ( isset( $_POST['trigger'] ) ) {
                 dt_network_dashboard_trigger_sites();
             }
-
         }
         $cron_list = _get_cron_array();
         ?>
@@ -1125,15 +1121,15 @@ class DT_Network_Dashboard_Tab_System
             </thead>
             <tbody>
             <?php
-            foreach( $cron_list as $time => $time_array ){
-                foreach( $time_array as $token => $token_array ){
+            foreach ( $cron_list as $time => $time_array ){
+                foreach ( $time_array as $token => $token_array ){
                     if ( 'dt_' === substr( $token, 0, 3 ) ){
-                        foreach( $token_array as $key => $items ) {
+                        foreach ( $token_array as $key => $items ) {
                             ?>
                             <tr>
                                 <td>
-                                    <?php echo 'Next event in ' . round( ( $time - time() ) / 60 / 60 , 1) . ' hours' ?><br>
-                                    <?php echo date( 'Y-m-d H:i:s', $time  )?><br>
+                                    <?php echo 'Next event in ' . round( ( $time - time() ) / 60 / 60, 1 ) . ' hours' ?><br>
+                                    <?php echo date( 'Y-m-d H:i:s', $time )?><br>
                                 </td>
                                 <td>
                                     <?php echo $token ?>
@@ -1143,8 +1139,8 @@ class DT_Network_Dashboard_Tab_System
                                 </td>
                                 <td>
                                     <?php echo $items['schedule'] ?? '' ?><br>
-                                    Every <?php echo isset($items['interval']) ? $items['interval'] / 60 . ' minutes' : '' ?><br>
-                                    <?php echo ! empty($items['args']) ? serialize( $items['args'] ) : '' ?><br>
+                                    Every <?php echo isset( $items['interval'] ) ? $items['interval'] / 60 . ' minutes' : '' ?><br>
+                                    <?php echo ! empty( $items['args'] ) ? serialize( $items['args'] ) : '' ?><br>
                                 </td>
                                 <td>
                                     <form method="post">
@@ -1169,8 +1165,8 @@ class DT_Network_Dashboard_Tab_System
 
     public function box_system_details() {
         if ( isset( $_POST['refresh_profiles'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['refresh_profiles'] ) ), 'refresh_profiles'.get_current_user_id() ) && isset( $_POST['refresh'] ) && ! empty( $_POST['refresh'] ) ) {
-            if ( ! function_exists( 'dt_network_dashboard_profiles_update') ) {
-                require_once( plugin_dir_path(__DIR__) . 'cron/cron-7-profile-update.php' );
+            if ( ! function_exists( 'dt_network_dashboard_profiles_update' ) ) {
+                require_once( plugin_dir_path( __DIR__ ) . 'cron/cron-7-profile-update.php' );
             }
             dt_network_dashboard_profiles_update();
 
@@ -1218,7 +1214,7 @@ class DT_Network_Dashboard_Tab_System
                             if ( 'network' !== substr( $key, 0, 7 ) ){
                                 continue;
                             }
-                            echo ucwords( str_replace( '_', ' ', $key) ) . ': ' . $label . '<br>';
+                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
                         }
                     }
                     ?>
@@ -1230,7 +1226,7 @@ class DT_Network_Dashboard_Tab_System
                             if ( 'dt_' !== substr( $key, 0, 3 ) ){
                                 continue;
                             }
-                            echo ucwords( str_replace( '_', ' ', $key) ) . ': ' . $label . '<br>';
+                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
                         }
                     }
                     ?>
@@ -1242,65 +1238,65 @@ class DT_Network_Dashboard_Tab_System
                             if ( 'dt_' === substr( $key, 0, 3 ) || 'network' === substr( $key, 0, 7 ) ){
                                 continue;
                             }
-                            echo ucwords( str_replace( '_', ' ', $key) ) . ': ' . $label . '<br>';
+                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
                         }
                     }
                     ?>
                 </td>
             </tr>
             <?php
-                foreach( $sites as $site ){
-                    if ( 0 === $site['id'] ){
-                        continue;
-                    }
-                    if ( 'multisite' === $site['type'] && ! dt_network_dashboard_multisite_is_approved() ){
-                        continue;
-                    }
-                    ?>
+            foreach ( $sites as $site ){
+                if ( 0 === $site['id'] ){
+                    continue;
+                }
+                if ( 'multisite' === $site['type'] && ! dt_network_dashboard_multisite_is_approved() ){
+                    continue;
+                }
+                ?>
                     <tr>
                     <td>
-                        <?php echo esc_html( $site['name'] ) ?>
+                    <?php echo esc_html( $site['name'] ) ?>
                     </td>
                     <td>
-                        <?php
-                        echo date( 'Y-m-d H:i:s', $site['snapshot_timestamp'] );
-                        ?>
+                    <?php
+                    echo date( 'Y-m-d H:i:s', $site['snapshot_timestamp'] );
+                    ?>
                     </td>
                     <td>
-                        <?php
-                        if ( isset( $site['profile']['system'] ) ) {
-                            foreach ( $site['profile']['system'] as $key => $label ){
-                                if ( 'network' !== substr( $key, 0, 7 ) ){
-                                    continue;
-                                }
-                                echo ucwords( str_replace( '_', ' ', $key) ) . ': ' . $label . '<br>';
+                    <?php
+                    if ( isset( $site['profile']['system'] ) ) {
+                        foreach ( $site['profile']['system'] as $key => $label ){
+                            if ( 'network' !== substr( $key, 0, 7 ) ){
+                                continue;
                             }
+                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
                         }
-                        ?>
+                    }
+                    ?>
                     </td>
                     <td>
-                        <?php
-                        if ( isset( $site['profile']['system'] ) ) {
-                            foreach ( $site['profile']['system'] as $key => $label ){
-                                if ( 'dt_' !== substr( $key, 0, 3 ) ){
-                                    continue;
-                                }
-                                echo ucwords( str_replace( '_', ' ', $key) ) . ': ' . $label . '<br>';
+                    <?php
+                    if ( isset( $site['profile']['system'] ) ) {
+                        foreach ( $site['profile']['system'] as $key => $label ){
+                            if ( 'dt_' !== substr( $key, 0, 3 ) ){
+                                continue;
                             }
+                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
                         }
-                        ?>
+                    }
+                    ?>
                     </td>
                     <td>
-                        <?php
-                        if ( isset( $site['profile']['system'] ) ) {
-                            foreach ( $site['profile']['system'] as $key => $label ){
-                                if ( 'dt_' === substr( $key, 0, 3 ) || 'network' === substr( $key, 0, 7 ) ){
-                                    continue;
-                                }
-                                echo ucwords( str_replace( '_', ' ', $key) ) . ': ' . $label . '<br>';
+                    <?php
+                    if ( isset( $site['profile']['system'] ) ) {
+                        foreach ( $site['profile']['system'] as $key => $label ){
+                            if ( 'dt_' === substr( $key, 0, 3 ) || 'network' === substr( $key, 0, 7 ) ){
+                                continue;
                             }
+                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
                         }
-                        ?>
+                    }
+                    ?>
                     </td>
                 </tr>
                 <?php
@@ -1423,7 +1419,7 @@ class DT_Network_Dashboard_Tab_System
             </thead>
             <tbody>
             <?php
-            foreach( $actions as $value ){
+            foreach ( $actions as $value ){
                 ?>
                 <tr>
                     <td>
@@ -1435,19 +1431,19 @@ class DT_Network_Dashboard_Tab_System
                     <td>
                         <?php
                          global $wpdb;
-                         echo $wpdb->get_var($wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id = %s", $value['key'], $current_site_id ) );
-                         ?>
+                         echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id = %s", $value['key'], $current_site_id ) );
+                        ?>
                     </td>
                     <td>
                         <?php
                          global $wpdb;
-                         echo $wpdb->get_var($wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id != %s", $value['key'], $current_site_id ) );
-                         ?>
+                         echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id != %s", $value['key'], $current_site_id ) );
+                        ?>
                     </td>
                 </tr>
-            <?php
+                <?php
             }
-           ?>
+            ?>
             </tbody>
         </table>
         <br>

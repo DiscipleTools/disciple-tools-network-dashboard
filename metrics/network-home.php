@@ -12,7 +12,7 @@ class DT_Network_Dashboard_Metrics_Home extends DT_Network_Dashboard_Metrics_Bas
         $this->base_title = __( 'Home', 'disciple_tools' );
         $this->title = __( 'Home', 'disciple_tools' );
         $this->menu_title = 'Home';
-        $this->url =  $this->root_slug . '/' . $this->base_slug;
+        $this->url = $this->root_slug . '/' . $this->base_slug;
         $this->key = $this->root_slug . '_' . $this->base_slug;
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '.js';
         $this->js_object_name = $this->key;
@@ -27,13 +27,17 @@ class DT_Network_Dashboard_Metrics_Home extends DT_Network_Dashboard_Metrics_Bas
     }
 
     public function add_scripts() {
-        wp_enqueue_script( $this->js_object_name .'_script', plugin_dir_url(__FILE__) . $this->js_file_name, [
+        wp_enqueue_script( $this->js_object_name .'_script',
+            plugin_dir_url( __FILE__ ) . $this->js_file_name,
+            [
             'jquery',
             'datatable',
             'mapping-drill-down',
             'dt_mapping_js',
             'network_base_script',
-        ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
+            ],
+            filemtime( plugin_dir_path( __FILE__ ) . $this->js_file_name ),
+        true );
 
         $this->load_grid_mapping_scripts();
     }

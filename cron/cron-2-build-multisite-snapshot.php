@@ -6,10 +6,10 @@
 if ( is_multisite() ){
     if ( dt_is_current_multisite_dashboard_approved() ) {
 
-        if (!wp_next_scheduled('dt_network_dashboard_collect_multisite_snapshots')) {
-            wp_schedule_event(strtotime('tomorrow 2am'), 'daily', 'dt_network_dashboard_collect_multisite_snapshots');
+        if ( !wp_next_scheduled( 'dt_network_dashboard_collect_multisite_snapshots' )) {
+            wp_schedule_event( strtotime( 'tomorrow 2am' ), 'daily', 'dt_network_dashboard_collect_multisite_snapshots' );
         }
-        add_action('dt_network_dashboard_collect_multisite_snapshots', 'dt_network_dashboard_multisite_snapshot_async');
+        add_action( 'dt_network_dashboard_collect_multisite_snapshots', 'dt_network_dashboard_multisite_snapshot_async' );
     }
 
     /**
@@ -46,7 +46,7 @@ if ( is_multisite() ){
 
         if ( count( $sites ) > $limit ) {
             /* if more than the limit of sites, spawn another event to process. This will keep spawning until all sites are reduced.*/
-            wp_schedule_single_event( strtotime('+5 minutes'), 'dt_network_dashboard_collect_multisite_snapshots' );
+            wp_schedule_single_event( strtotime( '+5 minutes' ), 'dt_network_dashboard_collect_multisite_snapshots' );
         }
 
         // Loop sites through a second async task, so that each will become and individual async process.
@@ -55,7 +55,7 @@ if ( is_multisite() ){
 
             dt_network_dashboard_collect_multisite( $site_id );
 
-            if ( $i >= $limit  ){
+            if ( $i >= $limit ){
                 break;
             }
             $i++;
@@ -105,7 +105,8 @@ if ( is_multisite() ){
                     AND pm2.meta_key = 'type_id'
                 WHERE p.post_type = 'dt_network_dashboard'
                     AND pm2.meta_value = %s
-                    ", $source_blog_id ) );
+                    ",
+            $source_blog_id ) );
             if ( ! empty( $allowed ) && 'none' === $allowed ){
                 restore_current_blog();
                 return false;

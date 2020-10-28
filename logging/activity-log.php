@@ -1,5 +1,5 @@
 <?php
-if ( ! defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' )) {
     exit;
 }
 
@@ -37,9 +37,9 @@ class DT_Network_Activity_Log {
      */
     public static function post_activity( $data ) {
 
-        $sites = Site_Link_System::get_list_of_sites_by_type(['network_dashboard_both', 'network_dashboard_sending'], 'post_ids');
+        $sites = Site_Link_System::get_list_of_sites_by_type( [ 'network_dashboard_both', 'network_dashboard_sending' ], 'post_ids' );
 
-        foreach( $sites as $site ) {
+        foreach ( $sites as $site ) {
             if ( 'yes' === get_post_meta( $site, 'send_activity_log', true ) ) {
                 $site_vars = Site_Link_System::get_site_connection_vars( $site );
 
@@ -51,14 +51,14 @@ class DT_Network_Activity_Log {
                     ]
                 ];
                 $response = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-content/plugins/disciple-tools-network-dashboard/public/log.php', $args );
-                DT_Network_Activity_Log::insert_log( $data );
+                self::insert_log( $data );
 
-                dt_write_log('remote post');
+                dt_write_log( 'remote post' );
                 if ( ! is_wp_error( $response ) ) {
                     dt_write_log( json_decode( $response['body'], true ) );
                 } else {
-                    dt_write_log($response);
-                    dt_write_log($site_vars);
+                    dt_write_log( $response );
+                    dt_write_log( $site_vars );
                 }
             }
         }
@@ -103,9 +103,9 @@ class DT_Network_Activity_Log {
         }
 
         $process_status = [];
-        $process_status['start'] = microtime(true); // @todo remove after development
+        $process_status['start'] = microtime( true ); // @todo remove after development
 
-        foreach( $data_array as $activity ) {
+        foreach ( $data_array as $activity ) {
 
             $data = [
                 'site_id' => '',
@@ -136,14 +136,14 @@ class DT_Network_Activity_Log {
             if ( isset( $activity['site_record_id'] ) && ! empty( $activity['site_record_id'] ) ) {
                 $data['site_record_id'] = sanitize_text_field( wp_unslash( $activity['site_record_id'] ) );
             } else {
-                $data['site_record_id'] = NULL;
+                $data['site_record_id'] = null;
             }
 
             // SITE RECORD ID
             if ( isset( $activity['site_object_id'] ) && ! empty( $activity['site_object_id'] ) ) {
                 $data['site_object_id'] = sanitize_text_field( wp_unslash( $activity['site_object_id'] ) );
             } else {
-                $data['site_object_id'] = NULL;
+                $data['site_object_id'] = null;
             }
 
             // ACTION
@@ -206,10 +206,10 @@ class DT_Network_Activity_Log {
                     }
 
                     // sanitize string
-                    $ip_address = sanitize_text_field( wp_unslash( $activity['location_value']  ) );
+                    $ip_address = sanitize_text_field( wp_unslash( $activity['location_value'] ) );
 
                     $ipstack = new DT_Ipstack_API();
-                    $response = $ipstack::geocode_ip_address($ip_address);
+                    $response = $ipstack::geocode_ip_address( $ip_address );
 
                     // set lng and lat
                     $data['lng'] = $response['longitude'] ?? '';
@@ -295,7 +295,7 @@ class DT_Network_Activity_Log {
                     if ( ! (
                         is_array( $activity['location_value'] )
                         && isset( $activity['location_value']['lng'] ) && ! empty( $activity['location_value']['lng'] )
-                        && isset( $activity['location_value']['lat'] ) && ! empty( $activity['location_value']['lat']  )
+                        && isset( $activity['location_value']['lat'] ) && ! empty( $activity['location_value']['lat'] )
                         && isset( $activity['location_value']['level'] )
                     ) ) {
                         $process_status[] = [
@@ -370,11 +370,11 @@ class DT_Network_Activity_Log {
 
                     break;
                 case 'no_location':
-                    $data['lng'] = NULL;
-                    $data['lat'] = NULL;
-                    $data['level'] = NULL;
-                    $data['label'] = NULL;
-                    $data['grid_id'] = NULL;
+                    $data['lng'] = null;
+                    $data['lat'] = null;
+                    $data['level'] = null;
+                    $data['label'] = null;
+                    $data['grid_id'] = null;
                     break;
                 default:
                     $process_status[] = [
@@ -386,15 +386,15 @@ class DT_Network_Activity_Log {
 
             $data['payload'] = serialize( $data['payload'] );
 
-            $data['hash'] = hash('sha256', serialize( $data ) );
+            $data['hash'] = hash( 'sha256', serialize( $data ) );
 
             $data['timestamp'] = ( empty( $params['timestamp'] ) ) ? time() : $params['timestamp'];
 
 
             // test if duplicate
             $time = new DateTime();
-            $time->modify('-30 minutes');
-            $past_stamp = $time->format('U');
+            $time->modify( '-30 minutes' );
+            $past_stamp = $time->format( 'U' );
             $results = $wpdb->get_col( $wpdb->prepare( "SELECT hash FROM $wpdb->dt_movement_log WHERE timestamp > %d", $past_stamp ) );
             if ( array_search( $data['hash'], $results ) !== false ) {
                 $process_status[] = [
@@ -454,7 +454,7 @@ class DT_Network_Activity_Log {
             $process_status[] = 'Success: Created id ' . $wpdb->insert_id;
         }
 
-        $process_status['stop'] = microtime(true);
+        $process_status['stop'] = microtime( true );
 
         do_action( 'dt_network_dashboard_post_activity_log_insert' );
 
@@ -522,7 +522,7 @@ class DT_Network_Activity_Log {
      * @param $rows
      * @param null $site_id
      */
-    public static function transfer_insert_multiple( $rows, $site_id = NULL ){
+    public static function transfer_insert_multiple( $rows, $site_id = null ){
         global $wpdb;
 
         if ( empty( $site_id ) ){
@@ -531,8 +531,8 @@ class DT_Network_Activity_Log {
 
         $converted = $wpdb->get_col( $wpdb->prepare( "SELECT site_object_id FROM $wpdb->dt_movement_log WHERE site_id = %s AND action = 'new_contact'", $site_id ) );
 
-        $hunk = array_chunk($rows, 100 );
-        foreach( $hunk as $results ) {
+        $hunk = array_chunk( $rows, 100 );
+        foreach ( $hunk as $results ) {
             if ( empty( $results ) ){
                 continue;
             }
@@ -555,7 +555,7 @@ class DT_Network_Activity_Log {
                         VALUES ";
 
             $index = 0;
-            foreach( $results as $value ){
+            foreach ( $results as $value ){
                 if ( ! in_array( $value['site_object_id'], $converted ) ){
                     $index++;
                     $query .= $wpdb->prepare( "( %s, %s, %s, %s, %s, %d, %d, %s, %s, %d, %s, %s, %s ), ",
@@ -608,7 +608,7 @@ class DT_Network_Activity_Log {
         else if ( $grid = get_post_meta( $post_id, 'location_grid', true ) ){
             $row = Disciple_Tools_Mapping_Queries::get_by_grid_id( $grid );
             $object = new Location_Grid_Geocoder();
-            $label = $object->_format_full_name($row);
+            $label = $object->_format_full_name( $row );
             $location = [
                 'location_type' => 'complete',
                 'location_value' => [

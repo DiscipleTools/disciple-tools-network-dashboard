@@ -28,17 +28,27 @@ class DT_Network_Dashboard_Metrics_Activity_Chart extends DT_Network_Dashboard_M
     }
 
     public function add_scripts() {
-        wp_enqueue_script( 'network_activity_script', plugin_dir_url(__FILE__) . 'network-activity.js', [
+        wp_enqueue_script( 'network_activity_script',
+            plugin_dir_url( __FILE__ ) . 'network-activity.js',
+            [
             'jquery',
             'network_base_script',
-        ], filemtime( plugin_dir_path(__FILE__) . 'network-activity.js' ), true );
-        wp_enqueue_script( $this->js_object_name .'_script', plugin_dir_url(__FILE__) . $this->js_file_name, [
+            ],
+            filemtime( plugin_dir_path( __FILE__ ) . 'network-activity.js' ),
+        true );
+        wp_enqueue_script( $this->js_object_name .'_script',
+            plugin_dir_url( __FILE__ ) . $this->js_file_name,
+            [
             'jquery',
             'network_base_script',
             'network_activity_script',
-        ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
+            ],
+            filemtime( plugin_dir_path( __FILE__ ) . $this->js_file_name ),
+        true );
         wp_localize_script(
-            $this->js_object_name .'_script', $this->js_object_name, [
+            $this->js_object_name .'_script',
+            $this->js_object_name,
+            [
                 'endpoint' => $this->url,
             ]
         );

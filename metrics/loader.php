@@ -2,13 +2,13 @@
 
 if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
 
-if ( 'show' !== get_option('dt_network_dashboard_show_tab' ) ){
+if ( 'show' !== get_option( 'dt_network_dashboard_show_tab' ) ){
     return;
 }
 /**
  * Add Top Navigation
  */
-add_action( 'dt_top_nav_desktop', 'dt_network_dashboard_top_nav_desktop');
+add_action( 'dt_top_nav_desktop', 'dt_network_dashboard_top_nav_desktop' );
 function dt_network_dashboard_top_nav_desktop() {
     if ( dt_network_dashboard_has_metrics_permissions() ) {
         ?>
@@ -21,7 +21,7 @@ function dt_network_dashboard_top_nav_desktop() {
  * @return bool
  */
 function dt_network_dashboard_has_metrics_permissions() : bool {
-    $permissions = ['view_any_contacts', 'view_project_metrics'];
+    $permissions = [ 'view_any_contacts', 'view_project_metrics' ];
     foreach ( $permissions as $permission ){
         if ( current_user_can( $permission ) ){
             return true;
@@ -49,7 +49,7 @@ require_once( 'mapping-module-config.php' );
 
 // scan load
 $dir = scandir( __DIR__ );
-foreach( $dir as $file ){
+foreach ( $dir as $file ){
     if ( 'network' === substr( $file, 0, 7 ) && 'php' === substr( $file, -3, 3 )){
         require_once( $file );
     }
@@ -63,17 +63,17 @@ function dt_network_dashboard_build_menu( $content ){
     $menu = apply_filters( 'dt_network_dashboard_build_menu', [] );
 
     // l1
-    foreach( $menu as $key => $value ){
+    foreach ( $menu as $key => $value ){
         $content .= '<li><a href="' . $value['url']  . '" id="'.$value['key'].'">' . $value['label']. '</a>';
         if ( isset( $value['children'] ) && ! empty( $value['children'] ) ){
             $content .= '<ul class="menu vertical nested is-active" aria-expanded="true" id="'.$value['key'].'">';
             // l2
-            foreach( $value['children'] as $child ){
+            foreach ( $value['children'] as $child ){
                 $content .= '<li><a href="' . $child['url']  . '" id="'.$child['key'].'">' . $child['label']. '</a>';
                 if ( isset( $child['children'] ) && ! empty( $child['children'] ) ){
                     $content .= '<ul class="menu vertical nested is-active" aria-expanded="true" id="'.$child['key'].'">';
                     // l3
-                    foreach( $child['children'] as $grandchild ){
+                    foreach ( $child['children'] as $grandchild ){
                         $content .= '<li><a href="' . $grandchild['url']  . '" id="'.$grandchild['key'].'">' . $grandchild['label']. '</a></li>';
                     }
                     $content .= '</ul>';

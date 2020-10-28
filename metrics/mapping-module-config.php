@@ -12,7 +12,7 @@ class DT_Network_Mapping_Module_Config
 
     public function __construct() {
         $url = $this->get_url_path();
-        if ( 'network' === substr( $url, 0, 7) ) {
+        if ( 'network' === substr( $url, 0, 7 ) ) {
             /**
              * dt_mapping_module_has_permissions
              *
@@ -187,8 +187,8 @@ class DT_Network_Mapping_Module_Config
     }
 
     public function localize_script() {
-        if ( ! class_exists( 'DT_Mapping_Module') ) {
-            require_once ( get_template_directory() . 'dt-mapping/mapping.php' );
+        if ( ! class_exists( 'DT_Mapping_Module' ) ) {
+            require_once( get_template_directory() . 'dt-mapping/mapping.php' );
         }
         $mapping_module = DT_Mapping_Module::instance()->localize_script();
 

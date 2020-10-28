@@ -21,8 +21,8 @@ class DT_Network_Dashboard_Snapshot_Users {
         $report_data['users'] = [
             'current_state' => self::users_current_state(),
             'login_activity' => [
-                'sixty_days' => DT_Network_Dashboard_Snapshot_Queries::counted_by_day('logged_in'),
-                'twenty_four_months' => DT_Network_Dashboard_Snapshot_Queries::counted_by_month('logged_in'),
+                'sixty_days' => DT_Network_Dashboard_Snapshot_Queries::counted_by_day( 'logged_in' ),
+                'twenty_four_months' => DT_Network_Dashboard_Snapshot_Queries::counted_by_month( 'logged_in' ),
             ],
             'last_thirty_day_engagement' => self::user_logins_last_thirty_days(),
         ];
@@ -30,8 +30,7 @@ class DT_Network_Dashboard_Snapshot_Users {
         return $report_data;
     }
 
-    public static function user_logins_last_thirty_days()
-    {
+    public static function user_logins_last_thirty_days() {
 
         $active = DT_Network_Dashboard_Snapshot_Queries::user_logins_last_thirty_days();
 
@@ -56,8 +55,7 @@ class DT_Network_Dashboard_Snapshot_Users {
         return $data;
     }
 
-    public static function users_current_state()
-    {
+    public static function users_current_state() {
         $data = [
             'total_users' => 0,
             'roles' => [
@@ -72,7 +70,7 @@ class DT_Network_Dashboard_Snapshot_Users {
         // Add types and status
         $users = count_users();
 
-        $data['total_users'] = (int)$users['total_users'];
+        $data['total_users'] = (int) $users['total_users'];
 
         foreach ($users['avail_roles'] as $role => $count) {
             if ($role === 'marketer') {

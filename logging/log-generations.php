@@ -9,33 +9,25 @@ function dt_network_dashboard_register_action_generations( $actions ){
     $actions['generation_pre-group'] = [
         'key' => 'generation_pre-group',
         'label' => 'Pre-Group Generations',
-        'message_pattern' => [
-
-        ]
+        'message_pattern' => []
     ];
 
     $actions['generation_group'] = [
         'key' => 'generation_group',
         'label' => 'Group Generations',
-        'message_pattern' => [
-
-        ]
+        'message_pattern' => []
     ];
 
     $actions['generation_church'] = [
         'key' => 'generation_church',
         'label' => 'Church Generations',
-        'message_pattern' => [
-
-        ]
+        'message_pattern' => []
     ];
 
     $actions['generation_team'] = [
         'key' => 'generation_team',
         'label' => 'Team Generations',
-        'message_pattern' => [
-
-        ]
+        'message_pattern' => []
     ];
 
     return $actions;
@@ -66,7 +58,7 @@ function dt_network_dashboard_log_generations( $post_type, $post_id, $initial_fi
             ]
         ];
 
-        DT_Network_Activity_Log::insert_log($data);
+        DT_Network_Activity_Log::insert_log( $data );
     }
 
 }
@@ -77,7 +69,7 @@ function dt_network_dashboard_log_generations( $post_type, $post_id, $initial_fi
 add_filter( 'dt_network_dashboard_build_message', 'dt_network_dashboard_translate_log_generations', 10, 1 );
 function dt_network_dashboard_translate_log_generations( $activity_log ){
 
-    foreach( $activity_log as $index => $log ){
+    foreach ( $activity_log as $index => $log ){
 
         /* generation_pre-group */
         if ( 'generation_pre-group' === $log['action'] ) {
@@ -98,7 +90,6 @@ function dt_network_dashboard_translate_log_generations( $activity_log ){
         if ( 'generation_team' === $log['action'] ) {
             $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new leadership team generation';
         }
-
     }
 
     return $activity_log;

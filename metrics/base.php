@@ -16,7 +16,7 @@ class DT_Network_Dashboard_Metrics_Base {
     public $menu_title = 'Example';
     public $js_object_name = ''; // This object will be loaded into the metrics.js file by the wp_localize_script.
     public $js_file_name = ''; // should be full file name plus extension
-    public $permissions = ['view_any_contacts', 'view_project_metrics'];
+    public $permissions = [ 'view_any_contacts', 'view_project_metrics' ];
 
     private static $_instance = null;
     public static function instance() {
@@ -62,7 +62,9 @@ class DT_Network_Dashboard_Metrics_Base {
 
     public function base_add_api_routes() {
         register_rest_route(
-            $this->namespace, '/network/base/', [
+            $this->namespace,
+            '/network/base/',
+            [
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'base_endpoint' ],
@@ -70,7 +72,9 @@ class DT_Network_Dashboard_Metrics_Base {
             ]
         );
         register_rest_route(
-            $this->namespace, '/network/base/', [
+            $this->namespace,
+            '/network/base/',
+            [
                 [
                     'methods'  => WP_REST_Server::READABLE,
                     'callback' => [ $this, 'base_endpoint' ],
@@ -85,7 +89,7 @@ class DT_Network_Dashboard_Metrics_Base {
         }
         $params = $request->get_params();
 
-        switch( $params['type'] ) {
+        switch ( $params['type'] ) {
             case 'sites':
                 $data = $this->get_sites();
                 break;
@@ -118,14 +122,16 @@ class DT_Network_Dashboard_Metrics_Base {
 
                 break;
             case 'reset':
-                $data['sites'] = $this->get_sites( true );;
+                $data['sites'] = $this->get_sites( true );
+                ;
                 $data['global'] = $this->get_global( true );
                 $data['sites_list'] = $this->get_site_list( true );
                 $data['locations_list'] = $this->get_locations_list( true );
                 break;
             case 'all':
             default:
-                $data['sites'] = $this->get_sites();;
+                $data['sites'] = $this->get_sites();
+                ;
                 $data['global'] = $this->get_global();
                 $data['sites_list'] = $this->get_site_list();
                 $data['locations_list'] = $this->get_locations_list();
@@ -144,14 +150,18 @@ class DT_Network_Dashboard_Metrics_Base {
     }
 
     public function base_scripts() {
-        wp_enqueue_script( 'network_base_script', plugin_dir_url(__FILE__) . 'base.js', [
+        wp_enqueue_script( 'network_base_script',
+            plugin_dir_url( __FILE__ ) . 'base.js',
+            [
             'jquery',
             'amcharts-core',
             'amcharts-charts',
             'amcharts-animated',
             'amcharts-maps',
             'datatable',
-        ], filemtime( plugin_dir_path(__FILE__) . 'base.js' ), true );
+            ],
+            filemtime( plugin_dir_path( __FILE__ ) . 'base.js' ),
+        true );
 
         // mapbox
         if ( DT_Mapbox_API::get_key() ){
@@ -191,8 +201,8 @@ class DT_Network_Dashboard_Metrics_Base {
     }
 
     public function localize_script() {
-        if ( ! class_exists( 'DT_Mapping_Module') ) {
-            require_once ( get_template_directory() . 'dt-mapping/mapping.php' );
+        if ( ! class_exists( 'DT_Mapping_Module' ) ) {
+            require_once( get_template_directory() . 'dt-mapping/mapping.php' );
         }
         $mapping_module = DT_Mapping_Module::instance()->localize_script();
 
@@ -222,7 +232,7 @@ class DT_Network_Dashboard_Metrics_Base {
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
         if ( !empty( $sites )) {
             foreach ($sites as $site) {
-                if ( 'multisite' === $site['type']  ){
+                if ( 'multisite' === $site['type'] ){
                     continue;
                 }
                 if ( 'hide' === $site['visibility'] ){
@@ -487,7 +497,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
     public static function get_activity_log( $filters = [] ){
         global $wpdb;
-        $hash = hash('sha256', maybe_serialize( $filters ));
+        $hash = hash( 'sha256', maybe_serialize( $filters ) );
 
         if (wp_cache_get( __METHOD__, $hash )) {
             return wp_cache_get( __METHOD__, $hash );
@@ -495,13 +505,13 @@ class DT_Network_Dashboard_Metrics_Base {
 
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
         $sites_id_list = [];
-        foreach( $sites as $site ){
+        foreach ( $sites as $site ){
             $sites_id_list[] = $site['partner_id'];
         }
 
         $defaults = [
             'start' => time(),
-            'end' => strtotime('-7 days' ),
+            'end' => strtotime( '-7 days' ),
             'limit' => 2000,
             'offset' => 0,
             'boundary' => [], // n_lat, s_lat, e_lng, w_lng lnglat, sw lnglat
@@ -516,7 +526,7 @@ class DT_Network_Dashboard_Metrics_Base {
         if ( isset( $filters['start'] ) && ! empty( $filters['start'] ) ){
             $filter['start'] = strtotime( sanitize_text_field( wp_unslash( $filters['start'] ) ) );
         }
-        if ( empty( $filter['start'] ) || $filter['start'] > time() || $filter['start'] < strtotime('30 years ago' ) ) {
+        if ( empty( $filter['start'] ) || $filter['start'] > time() || $filter['start'] < strtotime( '30 years ago' ) ) {
             $filter['start'] = time();
         }
 
@@ -524,8 +534,8 @@ class DT_Network_Dashboard_Metrics_Base {
         if ( isset( $filters['end'] ) && ! empty( $filters['end'] ) ){
             $filter['end'] = strtotime( sanitize_text_field( wp_unslash( $filters['end'] ) ) );
         }
-        if ( $filter['end'] > time() || empty( $filter['end'] ) || $filter['end'] < strtotime('30 years ago' ) ) {
-            $filter['end'] = strtotime('-30 days' );
+        if ( $filter['end'] > time() || empty( $filter['end'] ) || $filter['end'] < strtotime( '30 years ago' ) ) {
+            $filter['end'] = strtotime( '-30 days' );
         }
 
         /**
@@ -537,13 +547,13 @@ class DT_Network_Dashboard_Metrics_Base {
             $additional_where .= " AND action IN (".$string.")";
         }
         /* process sites */
-        if ( ! empty( $filter['sites'] ) && is_array( $filter['sites'] )  ) {
+        if ( ! empty( $filter['sites'] ) && is_array( $filter['sites'] ) ) {
             $string = dt_array_to_sql( $filter['sites'] );
             $additional_where .= " AND site_id IN (".$string.")";
         }
 
         /* process boundary */
-        if ( ! empty( $filter['boundary'] ) && is_array( $filter['boundary'] )  ) {
+        if ( ! empty( $filter['boundary'] ) && is_array( $filter['boundary'] ) ) {
             if ( isset( $filter['boundary']['n_lat'] )
               && isset( $filter['boundary']['s_lat'] )
               && isset( $filter['boundary']['e_lng'] )
@@ -591,10 +601,11 @@ class DT_Network_Dashboard_Metrics_Base {
             $profile['partner_id'],
             $filter['limit'],
             $filter['offset']
-        ), ARRAY_A );
+            ),
+        ARRAY_A );
 
-        foreach( $results as $index => $result ){
-            $results[$index]['payload'] = maybe_unserialize( $result['payload']);
+        foreach ( $results as $index => $result ){
+            $results[$index]['payload'] = maybe_unserialize( $result['payload'] );
         }
 
         wp_cache_set( __METHOD__, $results, __METHOD__, 10 );
@@ -617,13 +628,13 @@ class DT_Network_Dashboard_Metrics_Base {
         ];
 
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-        foreach( $sites as $site ){
+        foreach ( $sites as $site ){
             $stats['sites'][$site['partner_id']] = $site['name'];
         }
 
         $stats['actions'] = dt_network_dashboard_registered_actions();
 
-        foreach( $logs as $log ){
+        foreach ( $logs as $log ){
             /* sites */
             $stats['sites_labels'][$log['site_id']] = $log['site_name'];
             if ( ! isset( $stats['sites_totals'][$log['site_id']] ) ){
@@ -791,7 +802,7 @@ class DT_Network_Dashboard_Metrics_Base {
         return $dates2;
     }
 
-    public static function compile_by_days_baptisms( ) {
+    public static function compile_by_days_baptisms() {
         $dates1 = self::get_day_list( 60 );
         $dates2 = [];
 
@@ -845,7 +856,7 @@ class DT_Network_Dashboard_Metrics_Base {
         return $dates2;
     }
 
-    public static function compile_by_days_users( ) {
+    public static function compile_by_days_users() {
         $dates1 = self::get_day_list( 60 );
         $dates2 = [];
 
@@ -940,7 +951,7 @@ class DT_Network_Dashboard_Metrics_Base {
                     $data[$index] = $gen;
                     continue;
                 }
-               $data[$index]['value'] = $gen['value'] + $data[$index]['value'];
+                $data[$index]['value'] = $gen['value'] + $data[$index]['value'];
             }
         }
 
@@ -1110,7 +1121,7 @@ class DT_Network_Dashboard_Metrics_Base {
             $data['total_countries'] = count( $data['countries'] );
         }
 
-        $data['total_sites'] = count($sites);
+        $data['total_sites'] = count( $sites );
 
         $data['total_activities'] = self::query_count_activity_log();
 
@@ -1119,7 +1130,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
     public static function query_count_activity_log() : int {
         global $wpdb;
-        $time = strtotime('-30 days' );
+        $time = strtotime( '-30 days' );
         $results = $wpdb->get_var( $wpdb->prepare( "
                 SELECT COUNT(ml.id) as count
                 FROM $wpdb->dt_movement_log as ml
@@ -1129,7 +1140,8 @@ class DT_Network_Dashboard_Metrics_Base {
                 	AND	pvisibility.meta_key = 'visibility'
                 WHERE ml.timestamp > %s 
                     AND pvisibility.meta_value != 'hide'
-                ", $time ) );
+                ",
+        $time ) );
 
 
         if ( empty( $results ) ){
@@ -1146,7 +1158,7 @@ class DT_Network_Dashboard_Metrics_Base {
         $results = apply_filters( 'dt_network_dashboard_build_message', $results );
 
         $data = [];
-        foreach( $results as $index => $result ) {
+        foreach ( $results as $index => $result ) {
             if ( ! isset( $data[$result['day']] ) ) {
                 $data[$result['day']] = [];
                 $data[$result['day']]['label'] = $this->create_time_string( $result['day'] );
@@ -1185,7 +1197,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
     public static function create_time_string( $day ) : string {
         $current_day = strtotime( $day );
-        $week_ago = strtotime('-7 days');
+        $week_ago = strtotime( '-7 days' );
 
         if ( $current_day > $week_ago ) {
             $time_string = date( 'l', $current_day );

@@ -49,8 +49,8 @@ function dt_network_dashboard() {
     }
     else {
         if ( ! is_multisite() ) {
-            add_action('admin_notices', 'dt_network_dashboard_admin_notice');
-            add_action('wp_ajax_dismissed_notice_handler', 'dt_network_dashboard_ajax_notice_handler');
+            add_action( 'admin_notices', 'dt_network_dashboard_admin_notice' );
+            add_action( 'wp_ajax_dismissed_notice_handler', 'dt_network_dashboard_ajax_notice_handler' );
         }
 
         return false;
@@ -143,7 +143,7 @@ class DT_Network_Dashboard {
         require_once( 'metrics/mapping-module-config.php' );
 
         // CRON
-        if ( ! class_exists( 'Disciple_Tools_Async_Task') ) {
+        if ( ! class_exists( 'Disciple_Tools_Async_Task' ) ) {
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
         }
         require_once( 'cron/loader.php' );
@@ -232,8 +232,9 @@ class DT_Network_Dashboard {
      * @return void
      */
     public function i18n() {
-        load_plugin_textdomain( 'dt_network_dashboard', false,
-            trailingslashit( dirname( plugin_basename( __FILE__ ) ) ). 'languages' );
+        load_plugin_textdomain( 'dt_network_dashboard',
+            false,
+        trailingslashit( dirname( plugin_basename( __FILE__ ) ) ). 'languages' );
     }
 
     /**
@@ -407,7 +408,7 @@ function dt_network_dashboard_ajax_notice_handler() {
 function recursive_sanitize_text_field( array $array ) : array {
     foreach ( $array as $key => &$value ) {
         if ( is_array( $value ) ) {
-            $value = recursive_sanitize_text_field($value);
+            $value = recursive_sanitize_text_field( $value );
         }
         else {
             $value = sanitize_text_field( wp_unslash( $value ) );

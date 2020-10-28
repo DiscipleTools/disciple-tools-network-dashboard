@@ -9,51 +9,37 @@ function dt_network_dashboard_register_action_new_posts( $actions ){
     $actions['new_contact'] = [
         'key' => 'new_contact',
         'label' => 'New Contact',
-        'message_pattern' => [
-
-        ]
+        'message_pattern' => []
     ];
     $actions['new_pre-group'] = [
         'key' => 'new_pre-group',
         'label' => 'New Pre-Group',
-        'message_pattern' => [
-
-        ]
+        'message_pattern' => []
     ];
     $actions['new_group'] = [
         'key' => 'new_group',
         'label' => 'New Group',
-        'message_pattern' => [
-
-        ]
+        'message_pattern' => []
     ];
     $actions['new_church'] = [
         'key' => 'new_church',
         'label' => 'New Church',
-        'message_pattern' => [
-
-        ]
+        'message_pattern' => []
     ];
     $actions['new_team'] = [
         'key' => 'new_team',
         'label' => 'New Team',
-        'message_pattern' => [
-
-        ]
+        'message_pattern' => []
     ];
     $actions['new_baptism'] = [
         'key' => 'new_baptism',
         'label' => 'New Baptism',
-        'message_pattern' => [
-
-        ]
+        'message_pattern' => []
     ];
     $actions['new_coaching'] = [
         'key' => 'new_coaching',
         'label' => 'New Coaching',
-        'message_pattern' => [
-
-        ]
+        'message_pattern' => []
     ];
 
     return $actions;
@@ -90,7 +76,7 @@ function dt_network_dashboard_log_create_posts( $post_type, $post_id, $initial_f
             ]
         ];
 
-        DT_Network_Activity_Log::insert_log($data);
+        DT_Network_Activity_Log::insert_log( $data );
     }
 
     /* new_contact */
@@ -112,7 +98,7 @@ function dt_network_dashboard_log_create_posts( $post_type, $post_id, $initial_f
             ]
         ];
 
-        DT_Network_Activity_Log::insert_log($data);
+        DT_Network_Activity_Log::insert_log( $data );
     }
 
 }
@@ -121,7 +107,7 @@ add_action( 'dt_post_updated', 'dt_network_dashboard_log_update_posts', 10, 3 );
 function dt_network_dashboard_log_update_posts( $post_type, $post_id, $initial_fields ){
 
     /* check if contact was created through the baptized_by contact create widget */
-    if ( $post_type === 'contacts' && isset( $initial_fields['baptized_by']) ) {
+    if ( $post_type === 'contacts' && isset( $initial_fields['baptized_by'] ) ) {
 
         $location = DT_Network_Activity_Log::get_location_details( $post_id );
         $data = [
@@ -139,7 +125,7 @@ function dt_network_dashboard_log_update_posts( $post_type, $post_id, $initial_f
             ]
         ];
 
-        DT_Network_Activity_Log::insert_log($data);
+        DT_Network_Activity_Log::insert_log( $data );
     }
 
     /* check if contact was created through the baptized_by contact create widget */
@@ -161,7 +147,7 @@ function dt_network_dashboard_log_update_posts( $post_type, $post_id, $initial_f
             ]
         ];
 
-        DT_Network_Activity_Log::insert_log($data);
+        DT_Network_Activity_Log::insert_log( $data );
     }
 }
 
@@ -171,7 +157,7 @@ function dt_network_dashboard_log_update_posts( $post_type, $post_id, $initial_f
 add_filter( 'dt_network_dashboard_build_message', 'dt_network_dashboard_translate_log_new_posts', 10, 1 );
 function dt_network_dashboard_translate_log_new_posts( $activity_log ){
 
-    foreach( $activity_log as $index => $log ){
+    foreach ( $activity_log as $index => $log ){
 
         /* new_contact */
         if ( 'new_contact' === $log['action'] ) {

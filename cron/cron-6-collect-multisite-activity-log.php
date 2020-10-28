@@ -5,10 +5,10 @@
 
 if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
 
-    if (!wp_next_scheduled('dt_network_dashboard_multisite_activity_log_async')) {
-        wp_schedule_event(strtotime('tomorrow 4:30 am'), 'daily', 'dt_network_dashboard_multisite_activity_log_async');
+    if ( !wp_next_scheduled( 'dt_network_dashboard_multisite_activity_log_async' )) {
+        wp_schedule_event( strtotime( 'tomorrow 4:30 am' ), 'daily', 'dt_network_dashboard_multisite_activity_log_async' );
     }
-    add_action('dt_network_dashboard_multisite_activity_log_async', 'dt_network_dashboard_multisite_activity_log_async');
+    add_action( 'dt_network_dashboard_multisite_activity_log_async', 'dt_network_dashboard_multisite_activity_log_async' );
 
 
     /**
@@ -45,7 +45,7 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
 
         if ( count( $sites ) > $limit ) {
             /* if more than the limit of sites, spawn another event to process. This will keep spawning until all sites are reduced.*/
-            wp_schedule_single_event( strtotime('+5 minutes'), 'dt_network_dashboard_multisite_activity_log_async' );
+            wp_schedule_single_event( strtotime( '+5 minutes' ), 'dt_network_dashboard_multisite_activity_log_async' );
         }
 
         // Loop sites through a second async task, so that each will become and individual async process.
@@ -57,7 +57,7 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
 
             dt_network_dashboard_collect_multisite_activity( $site );
 
-            if ( $i >= $limit  ){
+            if ( $i >= $limit ){
                 break;
             }
             $i++;
@@ -89,10 +89,10 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
         $registered_actions = dt_network_dashboard_registered_actions( true );
 
         // query last record in activity log
-        $last_record_id = $wpdb->get_var($wpdb->prepare( "SELECT MAX( site_record_id ) FROM $wpdb->dt_movement_log WHERE site_id = %s", $site['partner_id'] ) );
+        $last_record_id = $wpdb->get_var( $wpdb->prepare( "SELECT MAX( site_record_id ) FROM $wpdb->dt_movement_log WHERE site_id = %s", $site['partner_id'] ) );
         if ( is_wp_error( $last_record_id ) ){
             dt_save_log( $file, 'FAIL ID: ' . $site['type_id'] );
-            dt_save_log($last_record_id);
+            dt_save_log( $last_record_id );
             return false;
         }
 

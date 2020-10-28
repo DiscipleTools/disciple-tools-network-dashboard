@@ -20,29 +20,29 @@ class DT_Network_Dashboard_Snapshot_Locations {
 
         $report_data['locations'] = [
             'data_types' => self::location_data_types(),
-            'countries' => self::get_locations_list(true),
+            'countries' => self::get_locations_list( true ),
             'current_state' => self::get_locations_current_state(),
             'list' => self::get_locations_list(),
             'contacts' => [
                 'all' => Disciple_Tools_Mapping_Queries::query_contacts_location_grid_totals(),
-                'active' => Disciple_Tools_Mapping_Queries::query_contacts_location_grid_totals('active'),
-                'paused' => Disciple_Tools_Mapping_Queries::query_contacts_location_grid_totals('paused'),
-                'closed' => Disciple_Tools_Mapping_Queries::query_contacts_location_grid_totals('closed'),
+                'active' => Disciple_Tools_Mapping_Queries::query_contacts_location_grid_totals( 'active' ),
+                'paused' => Disciple_Tools_Mapping_Queries::query_contacts_location_grid_totals( 'paused' ),
+                'closed' => Disciple_Tools_Mapping_Queries::query_contacts_location_grid_totals( 'closed' ),
             ],
             'groups' => [
                 'all' => Disciple_Tools_Mapping_Queries::query_groups_location_grid_totals(),
-                'active' => Disciple_Tools_Mapping_Queries::query_groups_location_grid_totals('active'),
-                'inactive' => Disciple_Tools_Mapping_Queries::query_groups_location_grid_totals('inactive'),
+                'active' => Disciple_Tools_Mapping_Queries::query_groups_location_grid_totals( 'active' ),
+                'inactive' => Disciple_Tools_Mapping_Queries::query_groups_location_grid_totals( 'inactive' ),
             ],
             'churches' => [
                 'all' => Disciple_Tools_Mapping_Queries::query_church_location_grid_totals(),
-                'active' => Disciple_Tools_Mapping_Queries::query_church_location_grid_totals('active'),
-                'inactive' => Disciple_Tools_Mapping_Queries::query_church_location_grid_totals('inactive'),
+                'active' => Disciple_Tools_Mapping_Queries::query_church_location_grid_totals( 'active' ),
+                'inactive' => Disciple_Tools_Mapping_Queries::query_church_location_grid_totals( 'inactive' ),
             ],
             'users' => [
                 'all' => Disciple_Tools_Mapping_Queries::query_user_location_grid_totals(),
-                'active' => Disciple_Tools_Mapping_Queries::query_user_location_grid_totals('active'),
-                'inactive' => Disciple_Tools_Mapping_Queries::query_user_location_grid_totals('inactive'),
+                'active' => Disciple_Tools_Mapping_Queries::query_user_location_grid_totals( 'active' ),
+                'inactive' => Disciple_Tools_Mapping_Queries::query_user_location_grid_totals( 'inactive' ),
             ]
         ];
 
@@ -50,8 +50,7 @@ class DT_Network_Dashboard_Snapshot_Locations {
     }
 
 
-    public static function location_data_types($preset = false)
-    {
+    public static function location_data_types( $preset = false) {
         if ($preset) {
             return [
                 'contacts' => 0,
@@ -69,8 +68,7 @@ class DT_Network_Dashboard_Snapshot_Locations {
         }
     }
 
-    public static function get_locations_list($countries_only = false)
-    {
+    public static function get_locations_list( $countries_only = false) {
 
         $data = [];
 
@@ -80,21 +78,21 @@ class DT_Network_Dashboard_Snapshot_Locations {
             $results = Disciple_Tools_Mapping_Queries::get_location_grid_totals();
         }
 
-        if (!empty($results)) {
+        if ( !empty( $results )) {
             foreach ($results as $item) {
                 // skip custom location_grid. Their totals are represented in the standard parents.
                 if ($item['grid_id'] > 1000000000) {
                     continue;
                 }
                 // set array, if not set
-                if (!isset($data[$item['grid_id']])) {
-                    $data[$item['grid_id']] = self::location_data_types(true);
+                if ( !isset( $data[$item['grid_id']] )) {
+                    $data[$item['grid_id']] = self::location_data_types( true );
                 }
                 // increment existing item type or add new
-                if (isset($data[$item['grid_id']][$item['type']])) {
-                    $data[$item['grid_id']][$item['type']] = (int)$data[$item['grid_id']][$item['type']] + (int)$item['count'];
+                if (isset( $data[$item['grid_id']][$item['type']] )) {
+                    $data[$item['grid_id']][$item['type']] = (int) $data[$item['grid_id']][$item['type']] + (int) $item['count'];
                 } else {
-                    $data[$item['grid_id']][$item['type']] = (int)$item['count'];
+                    $data[$item['grid_id']][$item['type']] = (int) $item['count'];
                 }
             }
         }
@@ -102,8 +100,7 @@ class DT_Network_Dashboard_Snapshot_Locations {
         return $data;
     }
 
-    public static function get_locations_current_state()
-    {
+    public static function get_locations_current_state() {
         $data = [
             'active_admin0' => 0,
             'active_admin0_grid_ids' => [],
@@ -114,32 +111,32 @@ class DT_Network_Dashboard_Snapshot_Locations {
         ];
 
         $results = DT_Network_Dashboard_Snapshot_Queries::locations_current_state();
-        if (!empty($results['active_countries'])) {
-            $data['active_countries'] = (int)$results['active_countries'];
+        if ( !empty( $results['active_countries'] )) {
+            $data['active_countries'] = (int) $results['active_countries'];
         }
-        if (!empty($results['active_countries'])) {
-            $data['active_admin1'] = (int)$results['active_admin1'];
+        if ( !empty( $results['active_countries'] )) {
+            $data['active_admin1'] = (int) $results['active_admin1'];
         }
-        if (!empty($results['active_countries'])) {
-            $data['active_admin2'] = (int)$results['active_admin2'];
+        if ( !empty( $results['active_countries'] )) {
+            $data['active_admin2'] = (int) $results['active_admin2'];
         }
 
         $active_admin0_grid_ids = Disciple_Tools_Mapping_Queries::active_admin0_grid_ids();
-        if (!empty($active_admin0_grid_ids)) {
+        if ( !empty( $active_admin0_grid_ids )) {
             foreach ($active_admin0_grid_ids as $grid_id) {
-                $data['active_admin0_grid_ids'][] = (int)$grid_id;
+                $data['active_admin0_grid_ids'][] = (int) $grid_id;
             }
         }
         $active_admin1_grid_ids = Disciple_Tools_Mapping_Queries::active_admin1_grid_ids();
-        if (!empty($active_admin1_grid_ids)) {
+        if ( !empty( $active_admin1_grid_ids )) {
             foreach ($active_admin1_grid_ids as $grid_id) {
-                $data['active_admin1_grid_ids'][] = (int)$grid_id;
+                $data['active_admin1_grid_ids'][] = (int) $grid_id;
             }
         }
         $active_admin2_grid_ids = Disciple_Tools_Mapping_Queries::active_admin2_grid_ids();
-        if (!empty($active_admin2_grid_ids)) {
+        if ( !empty( $active_admin2_grid_ids )) {
             foreach ($active_admin2_grid_ids as $grid_id) {
-                $data['active_admin2_grid_ids'][] = (int)$grid_id;
+                $data['active_admin2_grid_ids'][] = (int) $grid_id;
             }
         }
 

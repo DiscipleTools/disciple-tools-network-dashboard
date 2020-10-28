@@ -3,24 +3,24 @@
  * Scheduled Cron Service
  */
 
-if (!wp_next_scheduled('dt_network_dashboard_collect_remote_sites')) {
-    wp_schedule_event(strtotime('tomorrow 5am'), 'daily', 'dt_network_dashboard_collect_remote_sites');
+if ( !wp_next_scheduled( 'dt_network_dashboard_collect_remote_sites' )) {
+    wp_schedule_event( strtotime( 'tomorrow 5am' ), 'daily', 'dt_network_dashboard_collect_remote_sites' );
 }
-add_action('dt_network_dashboard_collect_remote_sites', 'dt_network_dashboard_collect_remote_sites');
+add_action( 'dt_network_dashboard_collect_remote_sites', 'dt_network_dashboard_collect_remote_sites' );
 
 function dt_network_dashboard_collect_remote_sites() {
     $limit = 20;  // set max loops before spawning new cron
 
     $file = 'remote';
     if ( ! dt_is_todays_log( $file ) ) {
-        dt_reset_log($file);
+        dt_reset_log( $file );
 
-        dt_save_log($file, '', false);
-        dt_save_log($file, '*********************************************', false);
-        dt_save_log($file, 'RECENT SNAPSHOT LOGS', false);
-        dt_save_log($file, 'Timestamp: ' . date( 'Y-m-d', time()), false);
-        dt_save_log($file, '*********************************************', false);
-        dt_save_log($file, '', false);
+        dt_save_log( $file, '', false );
+        dt_save_log( $file, '*********************************************', false );
+        dt_save_log( $file, 'RECENT SNAPSHOT LOGS', false );
+        dt_save_log( $file, 'Timestamp: ' . date( 'Y-m-d', time() ), false );
+        dt_save_log( $file, '*********************************************', false );
+        dt_save_log( $file, '', false );
     }
 
     // Get list of sites
@@ -32,7 +32,7 @@ function dt_network_dashboard_collect_remote_sites() {
 
     if ( count( $sites ) > $limit ) {
         /* if more than the limit of sites, spawn another event to process. This will keep spawning until all sites are reduced.*/
-        wp_schedule_single_event( strtotime('+20 minutes'), 'dt_network_dashboard_collect_remote_sites' );
+        wp_schedule_single_event( strtotime( '+20 minutes' ), 'dt_network_dashboard_collect_remote_sites' );
     }
 
     // Loop sites through a second async task, so that each will become and individual async process.

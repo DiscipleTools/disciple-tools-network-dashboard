@@ -19,11 +19,11 @@ class DT_Network_Dashboard_Migration_0007 extends DT_Network_Dashboard_Migration
 
         $site_id = dt_network_site_id();
 
-        $full_results = $wpdb->get_results("SELECT object_id as post_id, hist_time, pm.meta_value as type FROM $wpdb->dt_activity_log as al LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=al.object_id AND pm.meta_key = 'type' WHERE object_type = 'groups' AND action = 'created';", ARRAY_A);
+        $full_results = $wpdb->get_results( "SELECT object_id as post_id, hist_time, pm.meta_value as type FROM $wpdb->dt_activity_log as al LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=al.object_id AND pm.meta_key = 'type' WHERE object_type = 'groups' AND action = 'created';", ARRAY_A );
         $converted = $wpdb->get_col( $wpdb->prepare( "SELECT site_object_id FROM $wpdb->dt_movement_log WHERE site_id = %s AND ( action = 'new_pre-group' OR action = 'new_group' OR action = 'new_church' OR action = 'new_team'   )", $site_id ) );
 
-        $hunk = array_chunk($full_results, 100 );
-        foreach( $hunk as $results ) {
+        $hunk = array_chunk( $full_results, 100 );
+        foreach ( $hunk as $results ) {
             if ( empty( $results ) ){
                 continue;
             }
@@ -46,28 +46,28 @@ class DT_Network_Dashboard_Migration_0007 extends DT_Network_Dashboard_Migration
                         VALUES ";
 
             $index = 0;
-            foreach( $results as $value ){
+            foreach ( $results as $value ){
                 if ( ! in_array( $value['post_id'], $converted ) ){
                     $index++;
                     $location = DT_Network_Activity_Log::get_location_details( $value['post_id'] );
                     $data = [
                         'site_id' => $site_id,
-                        'site_record_id' => NULL,
+                        'site_record_id' => null,
                         'site_object_id' => $value['post_id'],
                         'action' => empty( $value['type'] ) ? 'new_group' : 'new_'.$value['type'],
                         'category' => '',
-                        'lng' => empty( $location['location_value'] ) ? NULL : $location['location_value']['lng'] ?? NULL,
-                        'lat' => empty( $location['location_value'] ) ? NULL : $location['location_value']['lat'] ?? NULL,
-                        'level' => empty( $location['location_value'] ) ? NULL : $location['location_value']['level'] ?? NULL,
-                        'label' => empty( $location['location_value'] ) ? NULL : $location['location_value']['label'] ?? NULL,
-                        'grid_id' => empty( $location['location_value'] ) ? NULL : $location['location_value']['grid_id'] ?? NULL,
+                        'lng' => empty( $location['location_value'] ) ? null : $location['location_value']['lng'] ?? null,
+                        'lat' => empty( $location['location_value'] ) ? null : $location['location_value']['lat'] ?? null,
+                        'level' => empty( $location['location_value'] ) ? null : $location['location_value']['level'] ?? null,
+                        'label' => empty( $location['location_value'] ) ? null : $location['location_value']['label'] ?? null,
+                        'grid_id' => empty( $location['location_value'] ) ? null : $location['location_value']['grid_id'] ?? null,
                         'payload' => [
                             'language' => get_locale(),
                         ],
                         'timestamp' => $value['hist_time'],
                     ];
                     $data['payload'] = serialize( $data['payload'] );
-                    $data['hash'] = hash('sha256', serialize( $data ) );
+                    $data['hash'] = hash( 'sha256', serialize( $data ) );
                     $query .= $wpdb->prepare( "( %s, %s, %s, %s, %s, %d, %d, %s, %s, %d, %s, %s, %s ), ",
                         $data["site_id"],
                         $data["site_record_id"],

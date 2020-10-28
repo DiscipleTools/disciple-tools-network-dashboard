@@ -27,11 +27,15 @@ class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics_Ba
     }
 
     public function add_scripts() {
-        wp_enqueue_script( $this->js_object_name .'_script', plugin_dir_url(__FILE__) . $this->js_file_name, [
+        wp_enqueue_script( $this->js_object_name .'_script',
+            plugin_dir_url( __FILE__ ) . $this->js_file_name,
+            [
             'jquery',
             'network_base_script',
             'datatable',
-        ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
+            ],
+            filemtime( plugin_dir_path( __FILE__ ) . $this->js_file_name ),
+        true );
     }
 
     public function menu( $tree ){

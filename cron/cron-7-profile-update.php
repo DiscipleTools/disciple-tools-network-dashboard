@@ -13,35 +13,34 @@
 /**
  * Scheduled Cron Service
  */
-if (!wp_next_scheduled('dt_network_dashboard_profile_update')) {
-    wp_schedule_event(strtotime('tomorrow 6 am'), 'daily', 'dt_network_dashboard_profile_update');
+if ( !wp_next_scheduled( 'dt_network_dashboard_profile_update' )) {
+    wp_schedule_event( strtotime( 'tomorrow 6 am' ), 'daily', 'dt_network_dashboard_profile_update' );
 }
-add_action('dt_network_dashboard_profile_update', 'dt_network_dashboard_profiles_update');
+add_action( 'dt_network_dashboard_profile_update', 'dt_network_dashboard_profiles_update' );
 
 
 /**
  * Run collection process
  */
-function dt_network_dashboard_profiles_update()
-{
+function dt_network_dashboard_profiles_update() {
 
     $file = 'profile-collection';
 
-    if (!dt_is_todays_log($file)) {
-        dt_reset_log($file);
+    if ( !dt_is_todays_log( $file )) {
+        dt_reset_log( $file );
 
-        dt_save_log($file, '', false);
-        dt_save_log($file, '*********************************************', false);
-        dt_save_log($file, 'PROFILE LOGS', false);
-        dt_save_log($file, 'Timestamp: ' . date('Y-m-d', time()), false);
-        dt_save_log($file, '*********************************************', false);
-        dt_save_log($file, '', false);
+        dt_save_log( $file, '', false );
+        dt_save_log( $file, '*********************************************', false );
+        dt_save_log( $file, 'PROFILE LOGS', false );
+        dt_save_log( $file, 'Timestamp: ' . date( 'Y-m-d', time() ), false );
+        dt_save_log( $file, '*********************************************', false );
+        dt_save_log( $file, '', false );
     }
 
     // Get list of sites
     $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-    if (empty($sites)) {
-        dt_save_log($file, 'No sites found to collect.', false);
+    if (empty( $sites )) {
+        dt_save_log( $file, 'No sites found to collect.', false );
         return false;
     }
 
@@ -55,7 +54,7 @@ function dt_network_dashboard_profiles_update()
         }
 
         DT_Network_Dashboard_Site_Post_Type::update_remote_site_profile_by_id( $site['type_id'] );
-        dt_save_log($file, 'Updated Site ' . $site['name'], false);
+        dt_save_log( $file, 'Updated Site ' . $site['name'], false );
     }
 
     /* Multisite Collection */
@@ -77,7 +76,7 @@ function dt_network_dashboard_profiles_update()
 
             if ( ! empty( $profile ) ) {
                 update_post_meta( $site['id'], 'profile', $profile );
-                dt_save_log($file, 'Updated Site ' . $site['name'], false);
+                dt_save_log( $file, 'Updated Site ' . $site['name'], false );
             }
         }
     }

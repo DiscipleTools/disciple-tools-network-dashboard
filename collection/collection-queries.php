@@ -62,7 +62,8 @@ class DT_Network_Dashboard_Queries {
 					AND pm.meta_key = 'partner_id'
 				WHERE p.post_type = 'site_link_system'
                   AND p.post_status = 'publish'
-                  AND pm.meta_value = %s", $partner_id)  );
+                  AND pm.meta_value = %s",
+        $partner_id)  );
 
         if ( empty( $results ) ) {
             $results = 0;

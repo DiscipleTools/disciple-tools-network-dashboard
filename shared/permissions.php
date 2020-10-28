@@ -38,9 +38,9 @@ function dt_network_dashboard_has_permission(){
 // Adds the type of network connection to the site link system
 add_filter( 'site_link_type', 'dt_network_dashboard_site_link_type', 10, 1 );
 function dt_network_dashboard_site_link_type( $type ) {
-    $type['network_dashboard_both'] = __('Network Dashboard Transfer Both Ways');
+    $type['network_dashboard_both'] = __( 'Network Dashboard Transfer Both Ways' );
     $type['network_dashboard_receiving'] = __( 'Network Dashboard Receiving Only' );
-    $type['network_dashboard_sending'] = __('Network Dashboard Sending Only');
+    $type['network_dashboard_sending'] = __( 'Network Dashboard Sending Only' );
     return $type;
 }
 
@@ -117,11 +117,11 @@ function dt_is_current_multisite_dashboard_approved() :bool {
     return true;
 }
 
-function dt_is_network_dashboard_plugin_active( $site_id = NULL ) :bool {
+function dt_is_network_dashboard_plugin_active( $site_id = null ) :bool {
 
     if ( is_multisite() ){
         $active_plugins = get_blog_option( $site_id, 'active_plugins' );
-        if ( in_array('disciple-tools-network-dashboard/disciple-tools-network-dashboard.php', $active_plugins ) ){
+        if ( in_array( 'disciple-tools-network-dashboard/disciple-tools-network-dashboard.php', $active_plugins ) ){
             return true;
         }
         if ( is_plugin_active_for_network( 'disciple-tools-network-dashboard/disciple-tools-network-dashboard.php' ) ) {
@@ -129,7 +129,7 @@ function dt_is_network_dashboard_plugin_active( $site_id = NULL ) :bool {
         }
     } else {
         $active_plugins = get_option( 'active_plugins' );
-        if ( in_array('disciple-tools-network-dashboard/disciple-tools-network-dashboard.php', $active_plugins ) ){
+        if ( in_array( 'disciple-tools-network-dashboard/disciple-tools-network-dashboard.php', $active_plugins ) ){
             return true;
         }
     }

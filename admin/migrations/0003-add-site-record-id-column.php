@@ -13,8 +13,8 @@ class DT_Network_Dashboard_Migration_0003 extends DT_Network_Dashboard_Migration
         global $wpdb;
         $table = $wpdb->prefix . 'dt_movement_log';
 
-        if ( empty( $wpdb->get_results("SHOW COLUMNS FROM {$table} LIKE 'site_record_id';") ) ){
-            $wpdb->query( "ALTER TABLE {$table} ADD `site_record_id` BIGINT(22)  NULL  DEFAULT NULL  AFTER `site_id`;");
+        if ( empty( $wpdb->get_results( "SHOW COLUMNS FROM {$table} LIKE 'site_record_id';" ) ) ){
+            $wpdb->query( "ALTER TABLE {$table} ADD `site_record_id` BIGINT(22)  NULL  DEFAULT NULL  AFTER `site_id`;" );
         }
 
     }

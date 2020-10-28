@@ -43,8 +43,8 @@ class DT_Network_Dashboard_Site_Post_Type {
      * @return array|int|string|WP_Error
      */
     public static function update_remote_site_profile_by_id( $id ) {
-        $site = Site_Link_System::get_site_connection_vars( $id, 'post_id');
-        if ( is_wp_error($site) ) {
+        $site = Site_Link_System::get_site_connection_vars( $id, 'post_id' );
+        if ( is_wp_error( $site ) ) {
             return $site;
         }
 
@@ -56,25 +56,25 @@ class DT_Network_Dashboard_Site_Post_Type {
             ]
         ];
         $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/profile', $args );
-        if ( is_wp_error($result)) {
+        if ( is_wp_error( $result )) {
             return $result;
         }
         if ( ! isset( $result['body'] ) || empty( $result['body'] ) ) {
-            return new WP_Error(__METHOD__, 'Remote API did not return properly configured body response.');
+            return new WP_Error( __METHOD__, 'Remote API did not return properly configured body response.' );
         }
 
         /* site profile returned */
         $site_profile = json_decode( $result['body'], true );
         if ( ! isset( $site_profile['partner_id'] ) || empty( $site_profile['partner_id'] ) ){
-            return new WP_Error(__METHOD__, 'Remote API did not return a proper partner id.');
+            return new WP_Error( __METHOD__, 'Remote API did not return a proper partner id.' );
         }
 
         $site_profile = recursive_sanitize_text_field( $site_profile );
 
         $dt_network_dashboard_id = get_post_meta( $id, 'dt_network_dashboard', true );
-        if ( empty( $dt_network_dashboard_id )  || ! get_post_meta( $dt_network_dashboard_id, 'type_id', true ) ) {
-            $dt_network_dashboard_id =  self::create( $site_profile, 'remote', $id );
-            if ( is_wp_error($dt_network_dashboard_id)) {
+        if ( empty( $dt_network_dashboard_id ) || ! get_post_meta( $dt_network_dashboard_id, 'type_id', true ) ) {
+            $dt_network_dashboard_id = self::create( $site_profile, 'remote', $id );
+            if ( is_wp_error( $dt_network_dashboard_id )) {
                 return $dt_network_dashboard_id;
             }
         }
@@ -84,7 +84,7 @@ class DT_Network_Dashboard_Site_Post_Type {
 
         $profile = get_post_meta( $dt_network_dashboard_id, 'profile', true );
         if ( ! is_array( $profile ) ) {
-            return new WP_Error(__METHOD__, 'Could not return profile array');
+            return new WP_Error( __METHOD__, 'Could not return profile array' );
         }
 
         return $profile;
@@ -101,9 +101,10 @@ class DT_Network_Dashboard_Site_Post_Type {
             "SELECT ID 
                     FROM $wpdb->posts 
                     WHERE post_type = %s 
-                      AND post_title = %s"
-            , self::get_token(), $partner_id ) );
-        if ( ! empty( $multisite_post_id  ) ) {
+                      AND post_title = %s",
+            self::get_token(),
+        $partner_id ) );
+        if ( ! empty( $multisite_post_id ) ) {
             update_post_meta( $id, 'dt_network_dashboard', $multisite_post_id );
             return $multisite_post_id;
         }
@@ -126,7 +127,7 @@ class DT_Network_Dashboard_Site_Post_Type {
             'ping_status' => 'closed',
             'meta_input' => [
                 'partner_id' => $partner_id,
-                'name' => $site_profile['partner_name'] ?? get_bloginfo('name'),
+                'name' => $site_profile['partner_name'] ?? get_bloginfo( 'name' ),
                 'visibility' => 'show',
                 'send_activity' => 'yes',
                 'location_precision' => 'none',
@@ -151,7 +152,9 @@ class DT_Network_Dashboard_Site_Post_Type {
             "SELECT ID 
                     FROM $wpdb->posts 
                     WHERE post_type = %s 
-                      AND post_title = %s", self::get_token(), $partner_id ) );
+                      AND post_title = %s",
+            self::get_token(),
+        $partner_id ) );
         if ( empty( $partner_post_id ) ) {
             return new WP_Error( __METHOD__, 'No partner found with this id.' );
         }
@@ -190,18 +193,18 @@ class DT_Network_Dashboard_Site_Post_Type {
     public static function get_profile( $partner_post_id ){
         $profile = get_post_meta( $partner_post_id, 'profile', true );
         if ( empty( $profile ) ){
-            $snapshot = self::get_snapshot($partner_post_id);
+            $snapshot = self::get_snapshot( $partner_post_id );
             if ( isset( $snapshot['profile'] ) ) {
                 self::update_profile( $partner_post_id, $profile );
                 $profile = $snapshot['profile'];
             } else {
-                return new WP_Error(__METHOD__, 'No profile found' );
+                return new WP_Error( __METHOD__, 'No profile found' );
             }
         }
         return $profile;
     }
 
-    public static function update_profile( $partner_post_id, array $profile  ){
+    public static function update_profile( $partner_post_id, array $profile ){
         return update_post_meta( $partner_post_id, 'profile', $profile );
     }
 
@@ -223,7 +226,7 @@ class DT_Network_Dashboard_Site_Post_Type {
     public static function get_site_name( $partner_post_id ){
         $name = get_post_meta( $partner_post_id, 'name', true );
         if ( empty( $name ) ) {
-            $snapshot = self::get_snapshot($partner_post_id);
+            $snapshot = self::get_snapshot( $partner_post_id );
             if ( isset( $snapshot['profile']['partner_name'] ) ) {
                 self::update_site_name( $partner_post_id, $snapshot['profile']['partner_name'] );
                 $name = $snapshot['profile']['partner_name'];
@@ -320,7 +323,7 @@ class DT_Network_Dashboard_Site_Post_Type {
     public static function all_sites() : array {
 
         if (wp_cache_get( __METHOD__ )) {
-            return wp_cache_get( __METHOD__  );
+            return wp_cache_get( __METHOD__ );
         }
         global $wpdb;
 
@@ -383,14 +386,14 @@ class DT_Network_Dashboard_Site_Post_Type {
                 WHERE a.post_type = 'dt_network_dashboard'
                 ORDER BY name;
             ",
-            ARRAY_A );
+        ARRAY_A );
 
         if ( empty( $results ) ) {
             $results = [];
         }
 
         $sites = [];
-        foreach( $results as $result ){
+        foreach ( $results as $result ){
             $result['snapshot'] = maybe_unserialize( $result['snapshot'] );
             $result['profile'] = maybe_unserialize( $result['profile'] );
             $sites[$result['partner_id']] = $result;
@@ -407,7 +410,7 @@ class DT_Network_Dashboard_Site_Post_Type {
                 'partner_id' => $profile['partner_id'],
                 'site_id' => $profile['partner_id'],
                 'snapshot' => DT_Network_Dashboard_Snapshot::snapshot_report(),
-                'snapshot_timestamp' => get_option('dt_snapshot_report_timestamp'),
+                'snapshot_timestamp' => get_option( 'dt_snapshot_report_timestamp' ),
                 'profile' => $profile,
                 'receive_activity' => '',
                 'visibility' => 'show',
@@ -428,8 +431,8 @@ class DT_Network_Dashboard_Site_Post_Type {
     public static function all_remote_sites(){
         $all_sites = self::all_sites();
         $sites = [];
-        foreach( $all_sites as $site ){
-            if( 'remote' === $site['type'] ){
+        foreach ( $all_sites as $site ){
+            if ( 'remote' === $site['type'] ){
                 $sites[] = $site;
             }
         }
@@ -439,8 +442,8 @@ class DT_Network_Dashboard_Site_Post_Type {
     public static function all_multisite_sites(){
         $all_sites = self::all_sites();
         $sites = [];
-        foreach( $all_sites as $site ){
-            if( 'multisite' === $site['type'] ){
+        foreach ( $all_sites as $site ){
+            if ( 'multisite' === $site['type'] ){
                 $sites[] = $site;
             }
         }
@@ -465,7 +468,7 @@ class DT_Network_Dashboard_Site_Post_Type {
             $results = [];
         }
 
-        return hash( 'sha256', serialize($results) );
+        return hash( 'sha256', serialize( $results ) );
     }
 
     /**
@@ -489,7 +492,7 @@ class DT_Network_Dashboard_Site_Post_Type {
                   AND c.meta_key = 'type_id'
                 WHERE a.post_type = 'dt_network_dashboard';
             ",
-            ARRAY_A );
+        ARRAY_A );
 
         if ( empty( $results ) ) {
             $results = [];
@@ -504,7 +507,7 @@ class DT_Network_Dashboard_Site_Post_Type {
      * @return array
      */
     public static function all_multisite_blog_ids( $active_dashboards_only = false ) : array {
-        if( ! is_multisite() ){
+        if ( ! is_multisite() ){
             return [];
         }
         global $wpdb;
@@ -525,7 +528,7 @@ class DT_Network_Dashboard_Site_Post_Type {
             if ( $active_dashboards_only ) {
                 // reject blogs without network dashboards active
                 $plugin = 'disciple-tools-network-dashboard/disciple-tools-network-dashboard.php';
-                if ( in_array( $plugin, (array) get_blog_option( $id,'active_plugins', array() ), true ) || file_exists( WP_CONTENT_DIR . 'mu-plugins/' . $plugin ) ) {
+                if ( in_array( $plugin, (array) get_blog_option( $id, 'active_plugins', array() ), true ) || file_exists( WP_CONTENT_DIR . 'mu-plugins/' . $plugin ) ) {
                     $dt_sites[$id] = $id;
                 }
                 else if ( function_exists( 'is_plugin_active_for_network' ) && is_plugin_active_for_network( $plugin ) ) {
@@ -561,7 +564,8 @@ class DT_Network_Dashboard_Site_Post_Type {
 				  AND pm1.meta_key = 'dt_network_dashboard'
                 WHERE p.post_type = 'site_link_system'
                   AND pm.meta_value LIKE 'network_dashboard%'
-            ", ARRAY_A );
+            ",
+        ARRAY_A );
 
         if ( empty( $results ) ) {
             $results = [];
@@ -574,7 +578,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         $sites = self::all_sites();
 
         $list = [];
-        foreach( $sites as $site ){
+        foreach ( $sites as $site ){
             if ( $site['send_activity'] === $timing ) {
                 $list[$site['type']] = $site['type_id'];
             }
@@ -592,7 +596,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         $connections = self::all_sites();
 
         // delete all multisites not permitted or removed
-        foreach( $connections as $connection ){
+        foreach ( $connections as $connection ){
             if ( 'multisite' !== $connection['type'] ){
                 continue;
             }
@@ -606,13 +610,13 @@ class DT_Network_Dashboard_Site_Post_Type {
 
         // add all multisites not previously added
         $type_ids = [];
-        foreach( $connections as $connection ){
+        foreach ( $connections as $connection ){
             if ( 'multisite' !== $connection['type'] ){
                 continue;
             }
             $type_ids[] = $connection['type_id'];
         }
-        foreach( $multisites as $multisite ){
+        foreach ( $multisites as $multisite ){
             if ( in_array( $multisite, $type_ids ) ) {
                 continue;
             }
@@ -634,10 +638,10 @@ class DT_Network_Dashboard_Site_Post_Type {
         $dashboards = self::all_dashboard_ids();
 
         // delete all remotes not permitted or removed
-        foreach( $remotes as $item ){
+        foreach ( $remotes as $item ){
             $remote_ids[] = $item['id'];
         }
-        foreach( $dashboards as $dashboard ){
+        foreach ( $dashboards as $dashboard ){
             if ( 'remote' !== $dashboard['type'] ){
                 continue;
             }
@@ -651,13 +655,13 @@ class DT_Network_Dashboard_Site_Post_Type {
 
         // add all remotes not previously added
         $type_ids = [];
-        foreach( $dashboards as $dashboard ){
+        foreach ( $dashboards as $dashboard ){
             if ( 'remote' !== $dashboard['type'] ){
                 continue;
             }
             $type_ids[] = $dashboard['type_id'];
         }
-        foreach( $remotes as $remote ){
+        foreach ( $remotes as $remote ){
             if ( in_array( $remote['id'], $type_ids ) ) {
                 continue;
             }
@@ -677,7 +681,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         $sites = self::all_sites();
 
         $needs_update = [];
-        foreach( $sites as $site ){
+        foreach ( $sites as $site ){
             if ( $site['type'] !== 'multisite' ){
                 continue;
             }
@@ -700,7 +704,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         $sites = self::all_sites();
 
         $needs_update = [];
-        foreach( $sites as $site ){
+        foreach ( $sites as $site ){
             if ( $site['type'] !== 'multisite' ){
                 continue;
             }
@@ -723,7 +727,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         $sites = self::all_sites();
 
         $needs_update = [];
-        foreach( $sites as $site ){
+        foreach ( $sites as $site ){
             if ( $site['type'] !== 'remote' ){
                 continue;
             }

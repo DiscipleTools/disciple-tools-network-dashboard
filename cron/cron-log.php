@@ -32,11 +32,11 @@ function dt_get_log_location( $name, $type = null ) {
         mkdir( WP_CONTENT_DIR . '/uploads/network-dashboard/', 0777, true );
     }
     if ( 'url' === $type ) {
-        return set_url_scheme( WP_CONTENT_URL, 'https' ) . '/uploads/network-dashboard/' . hash('sha256', dt_network_site_id() ) . '-' . $name . '.txt';
+        return set_url_scheme( WP_CONTENT_URL, 'https' ) . '/uploads/network-dashboard/' . hash( 'sha256', dt_network_site_id() ) . '-' . $name . '.txt';
     }
     else {
         // default returns path
-        return WP_CONTENT_DIR . '/uploads/network-dashboard/' . hash('sha256', dt_network_site_id() ) . '-' . $name . '.txt';
+        return WP_CONTENT_DIR . '/uploads/network-dashboard/' . hash( 'sha256', dt_network_site_id() ) . '-' . $name . '.txt';
     }
 }
 
@@ -52,7 +52,7 @@ function dt_is_todays_log( $name ) : bool {
         return false;
     }
 
-    $time = filemtime( $file);
+    $time = filemtime( $file );
 
     return ( $time < strtotime( 'today' ) );
 }

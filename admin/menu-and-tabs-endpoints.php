@@ -65,7 +65,7 @@ class DT_Network_Dashboard_Admin_Endpoints
             return new WP_Error( __METHOD__, 'Permission Error' );
         }
 
-        dt_network_dashboard_multisite_snapshot_async( );
+        dt_network_dashboard_multisite_snapshot_async();
 
         return true;
     }

@@ -28,10 +28,14 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
     }
 
     public function add_scripts() {
-        wp_enqueue_script( $this->js_object_name .'_script', plugin_dir_url(__FILE__) . $this->js_file_name, [
+        wp_enqueue_script( $this->js_object_name .'_script',
+            plugin_dir_url( __FILE__ ) . $this->js_file_name,
+            [
             'jquery',
             'network_base_script',
-        ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
+            ],
+            filemtime( plugin_dir_path( __FILE__ ) . $this->js_file_name ),
+        true );
 
         $this->load_grid_mapping_scripts();
     }
@@ -54,7 +58,9 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
 
     public function add_api_routes() {
         register_rest_route(
-            $this->namespace, '/' . $this->url . '/', [
+            $this->namespace,
+            '/' . $this->url . '/',
+            [
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'endpoint' ],
