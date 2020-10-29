@@ -8,10 +8,10 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
         parent::__construct();
 
         $this->base_slug = 'activity';
-        $this->slug = 'feed';
-        $this->base_title = __( 'Feed', 'disciple_tools' );
-        $this->title = __( 'Feed', 'disciple_tools' );
-        $this->menu_title = 'Feed';
+        $this->slug = 'stream';
+        $this->base_title = __( 'Log', 'disciple_tools' );
+        $this->title = __( 'Log', 'disciple_tools' );
+        $this->menu_title = 'Log';
         $this->url = $this->root_slug . '/' . $this->base_slug . '/'  . $this->slug;
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';
