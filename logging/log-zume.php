@@ -14,7 +14,7 @@ function zume_log_actions( $activity_log ){
         }
 
         if ( 'leading' === substr( $log['action'], 0, 7 ) ) {
-            $activity_log[$index]['message'] = $log['site_name'] . '  is leading a group through session '.substr( $log['action'], -1, 1 ).'! (' . $log['payload']['country'] . ')';
+            $activity_log[$index]['message'] = $log['site_name'] . '  is leading a group through session '. str_replace( '_', '', substr( $log['action'], -2, 2 ) ).'! (' . $log['payload']['country'] . ')';
         }
 
         if ( 'zume_training' === $log['action'] && 'joining' === $log['category'] ) {
@@ -23,6 +23,10 @@ function zume_log_actions( $activity_log ){
 
         if ( 'zume_vision' === $log['action'] && 'joining' === $log['category'] ) {
             $activity_log[$index]['message'] = 'XX is registering for Zúme Community! (' . $log['payload']['country'] . ')';
+        }
+
+        if ( 'updated_3_month' === $log['action'] ) {
+            $activity_log[$index]['message'] = 'XX is updating there Zúme Training 3 month plan! (' . $log['payload']['country'] . ')';
         }
     }
 
