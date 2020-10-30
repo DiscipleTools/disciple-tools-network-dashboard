@@ -20,6 +20,20 @@ if ( !function_exists( 'dt_write_log' ) ) {
         }
     }
 }
+if ( ! function_exists( 'recursive_sanitize_text_field') ) {
+    function recursive_sanitize_text_field( array $array ) : array {
+        foreach ( $array as $key => &$value ) {
+            if ( is_array( $value ) ) {
+                $value = recursive_sanitize_text_field( $value );
+            }
+            else {
+                $value = sanitize_text_field( wp_unslash( $value ) );
+            }
+        }
+        return $array;
+    }
+}
+
 
 /**
  * @link https://stackoverflow.com/questions/45421976/wordpress-rest-api-slow-response-time
