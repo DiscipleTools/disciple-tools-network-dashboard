@@ -66,7 +66,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         /* site profile returned */
         $site_profile = json_decode( $result['body'], true );
         if ( ! isset( $site_profile['partner_id'] ) || empty( $site_profile['partner_id'] ) ){
-            return new WP_Error( __METHOD__, 'Remote API did not return a proper partner id.' );
+            return new WP_Error( __METHOD__, 'Remote API did not return a proper partner id.', ['data' => $site_profile ] );
         }
 
         $site_profile = recursive_sanitize_text_field( $site_profile );
