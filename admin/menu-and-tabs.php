@@ -372,6 +372,7 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                         <?php
 
                         if ( dt_is_current_multisite_dashboard_approved() ) {
+
                             $this->process_full_list();
                             $this->main_column();
 
@@ -1069,11 +1070,11 @@ class DT_Network_Dashboard_Tab_System
                     <div id="post-body-content">
                         <!-- Main Column -->
 
-                        <?php $this->box_system_details() ?>
+                        <?php $this->box_site_project_details() ?>
                         <?php $this->box_registered_key_list() ?>
-                        <?php $this->logging_viewer() ?>
-                        <?php $this->metabox_cron_list() ?>
-                        <?php $this->box_instructions() ?>
+                        <?php $this->box_cron_list() ?>
+                        <?php $this->box_txt_log_list() ?>
+                        <?php $this->box_cron_instructions() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -1083,87 +1084,7 @@ class DT_Network_Dashboard_Tab_System
         <?php
     }
 
-    public function metabox_cron_list() {
-
-        if ( isset( $_POST['cron_run_nonce'] )
-            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['cron_run_nonce'] ) ), 'cron_run_' . get_current_user_id() )
-             ) {
-
-            if ( isset( $_POST['run_now'] ) ){
-                $hook = sanitize_text_field( wp_unslash( $_POST['run_now'] ) );
-                $timestamp = wp_next_scheduled( $hook );
-                wp_unschedule_event( $timestamp, $hook );
-            }
-
-            if ( isset( $_POST['trigger'] ) ) {
-                dt_network_dashboard_trigger_sites();
-            }
-        }
-        $cron_list = _get_cron_array();
-        ?>
-        <!-- Box -->
-
-        <table class="widefat striped">
-            <thead>
-            <tr>
-                <th>External Cron Schedule</th>
-                <th></th>
-                <th></th>
-                <th></th>
-                <th>
-                <form method="post">
-                   <span style="float:right;">
-                   <?php wp_nonce_field( 'cron_run_' . get_current_user_id(), 'cron_run_nonce' ) ?><button type="submit" class="button" value="trigger" name="trigger">Trigger Sites</button>
-                   </span>
-                </form>
-                </th>
-            </tr>
-            </thead>
-            <tbody>
-            <?php
-            foreach ( $cron_list as $time => $time_array ){
-                foreach ( $time_array as $token => $token_array ){
-                    if ( 'dt_' === substr( $token, 0, 3 ) ){
-                        foreach ( $token_array as $key => $items ) {
-                            ?>
-                            <tr>
-                                <td>
-                                    <?php echo 'Next event in ' . round( ( $time - time() ) / 60 / 60, 1 ) . ' hours' ?><br>
-                                    <?php echo date( 'Y-m-d H:i:s', $time )?><br>
-                                </td>
-                                <td>
-                                    <?php echo $token ?>
-                                </td>
-                                <td>
-                                    <?php echo $key ?>
-                                </td>
-                                <td>
-                                    <?php echo $items['schedule'] ?? '' ?><br>
-                                    Every <?php echo isset( $items['interval'] ) ? $items['interval'] / 60 . ' minutes' : '' ?><br>
-                                    <?php echo ! empty( $items['args'] ) ? serialize( $items['args'] ) : '' ?><br>
-                                </td>
-                                <td>
-                                    <form method="post">
-                                        <?php wp_nonce_field( 'cron_run_' . get_current_user_id(), 'cron_run_nonce' ) ?>
-                                        <button type="submit" name="run_now" value="<?php echo $token ?>" class="button">Delete and Respawn</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            <?php
-                        }
-                    }
-                }
-            }
-            ?>
-            </tbody>
-        </table>
-
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function box_system_details() {
+    public function box_site_project_details() {
         if ( isset( $_POST['refresh_profiles'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['refresh_profiles'] ) ), 'refresh_profiles'.get_current_user_id() ) && isset( $_POST['refresh'] ) && ! empty( $_POST['refresh'] ) ) {
             if ( ! function_exists( 'dt_network_dashboard_profiles_update' ) ) {
                 require_once( plugin_dir_path( __DIR__ ) . 'cron/cron-7-profile-update.php' );
@@ -1310,7 +1231,194 @@ class DT_Network_Dashboard_Tab_System
         <?php
     }
 
-    public function logging_viewer() {
+    public function box_manage_sites_data() {
+        if ( isset( $_POST['manage_sites_data'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['manage_sites_data'] ) ), 'manage_sites_data'.get_current_user_id() ) ) {
+           dt_write_log($_POST);
+
+        }
+        ?>
+        <form method="POST">
+            <?php wp_nonce_field( 'manage_sites_data'.esc_html( get_current_user_id() ), 'manage_sites_data' ) ?>
+            <table class="widefat striped">
+                <thead>
+                <tr>
+                    <th>Manage Site Snapshots & Activity Log</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" class="button">Update</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+        <br>
+        <?php
+    }
+
+    public function box_local_site_data() {
+        if ( isset( $_POST['local_site_data'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['local_site_data'] ) ), 'local_site_data'.get_current_user_id() ) ) {
+           dt_write_log($_POST);
+
+        }
+        ?>
+        <form method="POST">
+            <?php wp_nonce_field( 'local_site_data'.esc_html( get_current_user_id() ), 'local_site_data' ) ?>
+            <table class="widefat striped">
+                <thead>
+                <tr>
+                    <th>Manage Local Snapshot & Activity Log</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <button type="submit" class="button">Update</button>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+        <br>
+        <?php
+    }
+
+    public function box_registered_key_list() {
+        $actions = dt_network_dashboard_registered_actions();
+        $current_site_id = dt_network_site_id();
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <tr><th>Activity Log Registered Key List</th><td></td><td>Items for This Site</td><td>Other Sites</td></tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach ( $actions as $value ){
+                ?>
+                <tr>
+                    <td>
+                        <?php echo esc_attr( $value['key'] ) ?>
+                    </td>
+                    <td>
+                        <?php echo esc_attr( $value['label'] ) ?>
+                    </td>
+                    <td>
+                        <?php
+                         global $wpdb;
+                         echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id = %s", $value['key'], $current_site_id ) );
+                        ?>
+                    </td>
+                    <td>
+                        <?php
+                         global $wpdb;
+                         echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id != %s", $value['key'], $current_site_id ) );
+                        ?>
+                    </td>
+                </tr>
+                <?php
+            }
+            ?>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function box_cron_list() {
+
+        if ( isset( $_POST['cron_run_nonce'] )
+            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['cron_run_nonce'] ) ), 'cron_run_' . get_current_user_id() )
+             ) {
+
+            if ( isset( $_POST['run_now'] ) ){
+                $hook = sanitize_text_field( wp_unslash( $_POST['run_now'] ) );
+                $timestamp = wp_next_scheduled( $hook );
+                wp_unschedule_event( $timestamp, $hook );
+            }
+
+            if ( isset( $_POST['trigger'] ) ) {
+                dt_network_dashboard_trigger_sites();
+            }
+        }
+        $cron_list = _get_cron_array();
+        ?>
+        <!-- Box -->
+
+        <table class="widefat striped">
+            <thead>
+            <tr>
+                <th>External Cron Schedule</th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th>
+                <form method="post">
+                   <span style="float:right;">
+                   <?php wp_nonce_field( 'cron_run_' . get_current_user_id(), 'cron_run_nonce' ) ?><button type="submit" class="button" value="trigger" name="trigger">Trigger Sites</button>
+                   </span>
+                </form>
+                </th>
+            </tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach ( $cron_list as $time => $time_array ){
+                foreach ( $time_array as $token => $token_array ){
+                    if ( 'dt_' === substr( $token, 0, 3 ) ){
+                        foreach ( $token_array as $key => $items ) {
+                            ?>
+                            <tr>
+                                <td>
+                                    <?php echo 'Next event in ' . round( ( $time - time() ) / 60 / 60, 1 ) . ' hours' ?><br>
+                                    <?php echo date( 'Y-m-d H:i:s', $time )?><br>
+                                </td>
+                                <td>
+                                    <?php echo $token ?>
+                                </td>
+                                <td>
+                                    <?php echo $key ?>
+                                </td>
+                                <td>
+                                    <?php echo $items['schedule'] ?? '' ?><br>
+                                    Every <?php echo isset( $items['interval'] ) ? $items['interval'] / 60 . ' minutes' : '' ?><br>
+                                    <?php echo ! empty( $items['args'] ) ? serialize( $items['args'] ) : '' ?><br>
+                                </td>
+                                <td>
+                                    <form method="post">
+                                        <?php wp_nonce_field( 'cron_run_' . get_current_user_id(), 'cron_run_nonce' ) ?>
+                                        <button type="submit" name="run_now" value="<?php echo $token ?>" class="button">Delete and Respawn</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                }
+            }
+            ?>
+            </tbody>
+        </table>
+
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
+    public function box_txt_log_list() {
         if ( isset( $_POST['reset-logs'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['reset-logs'] ) ), 'reset-logs'.get_current_user_id() ) ) {
             dt_reset_log( 'multisite' );
             dt_reset_log( 'activity-remote' );
@@ -1354,7 +1462,7 @@ class DT_Network_Dashboard_Tab_System
         <?php
     }
 
-    public function box_instructions() {
+    public function box_cron_instructions() {
         ?>
         <!-- Box -->
         <table class="widefat striped">
@@ -1408,48 +1516,7 @@ class DT_Network_Dashboard_Tab_System
         <?php
     }
 
-    public function box_registered_key_list() {
-        $actions = dt_network_dashboard_registered_actions();
-        $current_site_id = dt_network_site_id();
-        ?>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <tr><th>Activity Log Registered Key List</th><td></td><td>Items for This Site</td><td>Other Sites</td></tr>
-            </thead>
-            <tbody>
-            <?php
-            foreach ( $actions as $value ){
-                ?>
-                <tr>
-                    <td>
-                        <?php echo esc_attr( $value['key'] ) ?>
-                    </td>
-                    <td>
-                        <?php echo esc_attr( $value['label'] ) ?>
-                    </td>
-                    <td>
-                        <?php
-                         global $wpdb;
-                         echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id = %s", $value['key'], $current_site_id ) );
-                        ?>
-                    </td>
-                    <td>
-                        <?php
-                         global $wpdb;
-                         echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id != %s", $value['key'], $current_site_id ) );
-                        ?>
-                    </td>
-                </tr>
-                <?php
-            }
-            ?>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
+
 }
 
 /**

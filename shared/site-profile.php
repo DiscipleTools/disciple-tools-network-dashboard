@@ -125,6 +125,7 @@ class DT_Network_Dashboard_Site_Link_Metabox {
             Failed to refresh remote site profile. Check connection. Error has been logged. (Remote 1)
             <span style="float:right">Status: <strong><span id="fail-profile-status" class="fail-read" style="color:red;">Failed connection to remote Network Dashboard. (Profile)</span></strong></span>
             <?php
+            echo maybe_serialize($refreshed_profile );
             return;
         }
 
