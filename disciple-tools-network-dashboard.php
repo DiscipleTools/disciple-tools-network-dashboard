@@ -405,14 +405,16 @@ function dt_network_dashboard_ajax_notice_handler() {
     update_option( 'dismissed-' . $type, true );
 }
 
-function recursive_sanitize_text_field( array $array ) : array {
-    foreach ( $array as $key => &$value ) {
-        if ( is_array( $value ) ) {
-            $value = recursive_sanitize_text_field( $value );
+if ( ! function_exists( 'recursive_sanitize_text_field') ) {
+    function recursive_sanitize_text_field( array $array ) : array {
+        foreach ( $array as $key => &$value ) {
+            if ( is_array( $value ) ) {
+                $value = recursive_sanitize_text_field( $value );
+            }
+            else {
+                $value = sanitize_text_field( wp_unslash( $value ) );
+            }
         }
-        else {
-            $value = sanitize_text_field( wp_unslash( $value ) );
-        }
+        return $array;
     }
-    return $array;
 }
