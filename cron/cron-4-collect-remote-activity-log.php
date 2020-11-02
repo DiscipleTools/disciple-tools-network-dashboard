@@ -79,6 +79,10 @@ function dt_network_dashboard_collect_remote_activity_single( $site ) {
         return false;
     }
 
+    if ( $site['non_wp'] === '1' ){ // if remote connection to non-disciple-tools system
+        return false;
+    }
+
     $file = 'activity-remote';
 
     $site_vars = Site_Link_System::get_site_connection_vars( $site['type_id'], 'post_id' );

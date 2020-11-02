@@ -485,33 +485,6 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
              ) {
 
-            if ( isset( $_POST['new-snapshot'] ) ){
-                dt_save_log( 'multisite', '', false );
-                dt_save_log( 'multisite', 'REFRESH SNAPSHOT', false );
-
-                if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) ) ) {
-                    $message = [ 'notice-success','Successful collection of new snapshot' ];
-                }
-                else {
-                    $message = [ 'notice-error', 'Failed collection' ];
-                }
-            }
-
-            if ( isset( $_POST['new-activity'] ) ){
-                dt_save_log( 'multisite-activity', '', false );
-                dt_save_log( 'multisite-activity', 'REFRESH ACTIVITY', false );
-
-                $id = sanitize_text_field( wp_unslash( $_POST['new-activity'] ) );
-
-                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-                foreach ( $sites as $site ){
-                    if ( $id === $site['id'] ){
-                        dt_network_dashboard_collect_multisite_activity( $site );
-                        break;
-                    }
-                }
-            }
-
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
                 $partner = recursive_sanitize_text_field( $_POST['partner'] );
 
@@ -528,13 +501,8 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                     }
                 }
             }
-
-            // reset ui transient caches with new parameters
-
         }
         // Get list of sites
-
-
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
 
         /** Message */
@@ -555,9 +523,6 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                 <th>Domain</th>
                 <th>Show in Metrics</th>
                 <th>Receive Live Activity</th>
-                <th>Last Snapshot</th>
-                <th>Snapshot</th>
-                <th>Activity</th>
                 <th>Profile</th>
                 </thead>
                 <tbody>
@@ -567,7 +532,6 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                         if ( $site['type'] !== 'multisite' ){
                             continue;
                         }
-                        $snapshot = maybe_unserialize( $site['snapshot'] );
                         $profile = maybe_unserialize( $site['profile'] );
                         ?>
                         <tr>
@@ -592,22 +556,6 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                                 <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][receive_activity]" value="reject" <?php echo ( $site['receive_activity'] === 'reject' ) ? 'checked' : '' ?>/> Reject
                             </td>
 
-                            <td>
-                                <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
-                                <?php echo ( ! empty( $site['snapshot_timestamp'] ) ) ? date( 'Y-m-d H:i:s', $site['snapshot_timestamp'] ) : '---' ?>
-                                <?php
-                                if ( ! empty( $fail ) ){
-                                    ?>
-                                    <a href="javascript:void(0)" onclick="jQuery('#<?php echo esc_attr( $partner_id ) ?>').toggle()">Show error</a>
-                                    <span id="fail-<?php echo esc_attr( $partner_id ) ?>" style="display:none;"><?php echo $fail ?></span>
-                                    <?php
-                                }
-                                ?>
-                            </td>
-                            <td><button name="new-snapshot" type="submit" value="<?php echo esc_attr( $site['type_id'] ) ?>" class="button" >Refresh</button></td>
-                            <td>
-                                <button name="new-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Sync</button>
-                            </td>
                              <td>
                                 <button name="update-profile"  value="<?php echo esc_attr( $site['id'] ) ?>" type="submit" class="button">Update Profile</button>
                             </td>
@@ -723,34 +671,6 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
              ) {
 
-            /* new snapshot */
-            if ( isset( $_POST['new-snapshot'] ) ){
-                dt_save_log( 'remote', '', false );
-                dt_save_log( 'remote', 'REFRESH SNAPSHOT', false );
-                $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) );
-                if ( $result ) {
-                    $message = [ 'notice-success','Successful collection of new snapshot.' ];
-                }
-                else {
-                    $message = [ 'notice-error', 'Failed collection' ];
-                }
-            }
-
-            if ( isset( $_POST['new-activity'] ) ){
-                dt_save_log( 'remote-activity', '', false );
-                dt_save_log( 'remote-activity', 'REFRESH ACTIVITY', false );
-
-                $id = sanitize_text_field( wp_unslash( $_POST['new-activity'] ) );
-
-                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-                foreach ( $sites as $site ){
-                    if ( $id === $site['id'] ){
-                        dt_network_dashboard_collect_remote_activity_single( $site );
-                        break;
-                    }
-                }
-            }
-
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
                 $partner = recursive_sanitize_text_field( $_POST['partner'] );
 
@@ -792,9 +712,6 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                     <th>Domain</th>
                     <th>Show in Metrics</th>
                     <th>Receive Live Activity</th>
-                    <th>Last Snapshot</th>
-                    <th>Snaphot</th>
-                    <th>Activity</th>
                     <th>Profile</th>
                 </thead>
                 <tbody>
@@ -804,7 +721,7 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                         if ( $site['type'] !== 'remote' ){
                             continue;
                         }
-                        $snapshot = maybe_unserialize( $site['snapshot'] );
+                        $non_wp = empty( $site['non_wp'] );
                         $profile = maybe_unserialize( $site['profile'] );
 
                         ?>
@@ -826,26 +743,10 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                                 <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="hide" <?php echo ( isset( $site['visibility'] ) && $site['visibility'] === 'hide' ) ? 'checked' : '' ?>/> Hide
                             </td>
                             <td>
+                                <?php if ( $non_wp ) : ?>
                                 <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][receive_activity]" value="allow" <?php echo ( $site['receive_activity'] === 'allow' || $site['receive_activity'] === '' ) ? 'checked' : '' ?>/> Allow |
                                 <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][receive_activity]" value="reject" <?php echo ( $site['receive_activity'] === 'reject' ) ? 'checked' : '' ?>/> Reject
-                            </td>
-
-                            <td>
-                                <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
-                                <?php echo ( ! empty( $snapshot ) ) ? date( 'Y-m-d H:i:s', $snapshot['timestamp'] ) : '----' ?><br>
-                                <?php
-                                if ( ! empty( $fail ) ){
-                                    ?>
-                                    <a href="javascript:void(0)" onclick="jQuery('#<?php echo $site['id'] ?>').toggle()">Show error</a>
-                                    <span id="fail-<?php echo $site['id'] ?>" style="display:none;"><?php echo $fail ?></span>
-                                    <?php
-                                }
-                                ?>
-
-                            </td>
-                            <td><button value="<?php echo esc_attr( $site['type_id'] ) ?>" name="new-snapshot" type="submit" class="button" >Refresh</button></td>
-                            <td>
-                                <button name="new-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Sync</button>
+                                <?php endif; ?>
                             </td>
                             <td>
                                 <button value="<?php echo esc_attr( $site['id'] ) ?>" name="update-profile" type="submit" class="button" >Update Profile</button>
@@ -1071,6 +972,8 @@ class DT_Network_Dashboard_Tab_System
                         <!-- Main Column -->
 
                         <?php $this->box_site_project_details() ?>
+                        <?php $this->box_manage_sites_data() ?>
+                        <?php $this->box_local_site_data(); ?>
                         <?php $this->box_registered_key_list() ?>
                         <?php $this->box_cron_list() ?>
                         <?php $this->box_txt_log_list() ?>
@@ -1173,6 +1076,7 @@ class DT_Network_Dashboard_Tab_System
                 if ( 'multisite' === $site['type'] && ! dt_network_dashboard_multisite_is_approved() ){
                     continue;
                 }
+                $non_wp = empty( $site['non_wp'] ) ;
                 ?>
                     <tr>
                     <td>
@@ -1180,7 +1084,9 @@ class DT_Network_Dashboard_Tab_System
                     </td>
                     <td>
                     <?php
-                    echo date( 'Y-m-d H:i:s', $site['snapshot_timestamp'] );
+                    if ( $non_wp ) {
+                        echo date( 'Y-m-d H:i:s', $site['snapshot_timestamp'] );
+                    }
                     ?>
                     </td>
                     <td>
@@ -1232,34 +1138,194 @@ class DT_Network_Dashboard_Tab_System
     }
 
     public function box_manage_sites_data() {
-        if ( isset( $_POST['manage_sites_data'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['manage_sites_data'] ) ), 'manage_sites_data'.get_current_user_id() ) ) {
-           dt_write_log($_POST);
+        global $wpdb;
+
+        $message = false;
+        if ( isset( $_POST['network_dashboard_nonce'] )
+            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
+             ) {
+
+            if ( isset( $_POST['new-multisite-snapshot'] ) ){
+                dt_save_log( 'multisite', '', false );
+                dt_save_log( 'multisite', 'REFRESH SNAPSHOT', false );
+
+                if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) ) ) {
+                    $message = [ 'notice-success','Successful collection of new snapshot' ];
+                }
+                else {
+                    $message = [ 'notice-error', 'Failed collection' ];
+                }
+            }
+
+            /* new snapshot */
+            if ( isset( $_POST['new-remote-snapshot'] ) ){
+                dt_save_log( 'remote', '', false );
+                dt_save_log( 'remote', 'REFRESH SNAPSHOT', false );
+                $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) );
+                if ( $result ) {
+                    $message = [ 'notice-success','Successful collection of new snapshot.' ];
+                }
+                else {
+                    $message = [ 'notice-error', 'Failed collection' ];
+                }
+            }
+            
+
+            if ( isset( $_POST['new-multisite-activity'] ) ){
+                dt_save_log( 'multisite-activity', '', false );
+                dt_save_log( 'multisite-activity', 'REFRESH ACTIVITY', false );
+
+                $id = sanitize_text_field( wp_unslash( $_POST['new-activity'] ) );
+
+                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+                foreach ( $sites as $site ){
+                    if ( $id === $site['id'] ){
+                        dt_network_dashboard_collect_multisite_activity( $site );
+                        break;
+                    }
+                }
+            }
+            if ( isset( $_POST['new-remote-activity'] ) ){
+                dt_save_log( 'remote-activity', '', false );
+                dt_save_log( 'remote-activity', 'REFRESH ACTIVITY', false );
+
+                $id = sanitize_text_field( wp_unslash( $_POST['new-activity'] ) );
+
+                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+                foreach ( $sites as $site ){
+                    if ( $id === $site['id'] ){
+                        dt_network_dashboard_collect_remote_activity_single( $site );
+                        break;
+                    }
+                }
+            }
+
+            if ( isset( $_POST['delete-remote-activity'] ) ){
+                // @todo delete remote records
+//                dt_save_log( 'remote', '', false );
+//                dt_save_log( 'remote', 'REFRESH SNAPSHOT', false );
+//                $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) );
+//                if ( $result ) {
+//                    $message = [ 'notice-success','Successful collection of new snapshot.' ];
+//                }
+//                else {
+//                    $message = [ 'notice-error', 'Failed collection' ];
+//                }
+            }
+
+            if ( isset( $_POST['delete-multisite-activity'] ) ){
+                // @todo delete multisite records
+//                dt_save_log( 'remote-activity', '', false );
+//                dt_save_log( 'remote-activity', 'REFRESH ACTIVITY', false );
+
+//                $id = sanitize_text_field( wp_unslash( $_POST['new-activity'] ) );
+//
+//                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+//                foreach ( $sites as $site ){
+//                    if ( $id === $site['id'] ){
+//                        dt_network_dashboard_collect_remote_activity_single( $site );
+//                        break;
+//                    }
+//                }
+            }
 
         }
+
+        // Get list of sites
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+
+        /** Message */
+        if ( $message ) {
+            echo '<div class="notice '.esc_attr( $message[0] ).'">'.esc_html( $message[1] ).'</div>';
+        }
+
+        /** Box */
         ?>
-        <form method="POST">
-            <?php wp_nonce_field( 'manage_sites_data'.esc_html( get_current_user_id() ), 'manage_sites_data' ) ?>
+        <form method="post">
+            <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
+            <p><strong>Manage Site Snapshots and Activity Database</strong></p>
             <table class="widefat striped">
                 <thead>
-                <tr>
-                    <th>Manage Site Snapshots & Activity Log</th>
-                </tr>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nickname</th>
+                        <th>Domain</th>
+                        <th style="width:150px;">Snapshot</th>
+                        <th></th>
+                        <th style="width:100px;">Activity</th>
+                        <th></th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr>
-                    <td>
+                <?php
+                if ( ! empty( $sites ) ) {
+                    foreach ( $sites as $partner_id => $site ) {
+                        if ( $site['id'] === 0 ) {
+                            continue; // if it is a local site, handle in the next section
+                        }
+                        if ( ! empty( $site['non_wp'] ) ) {
+                            continue; // if it is a non-dt remote site it has no log or snapshot to transfer
+                        }
+                        $snapshot = maybe_unserialize( $site['snapshot'] );
+                        $profile = maybe_unserialize( $site['profile'] );
+                        ?>
+                        <tr>
+                            <td>
+                                <?php echo esc_html( $site['id'] ) ?>
+                            </td>
+                            <td>
+                                <?php echo esc_html( $site['name'] ) ?>
+                            </td>
+                            <td>
+                                <?php echo '<a href="'. esc_url( $profile['partner_url'] ) .'" target="_blank">' . esc_url( $profile['partner_url'] ) . '</a>' ?>
+                            </td>
+                            <td>
+                                <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
+                                <?php echo ( ! empty( $site['snapshot_timestamp'] ) ) ? date( 'Y-m-d H:i:s', $site['snapshot_timestamp'] ) : '---' ?>
+                                <?php
+                                if ( ! empty( $fail ) ){
+                                    ?>
+                                    <a href="javascript:void(0)" onclick="jQuery('#<?php echo esc_attr( $partner_id ) ?>').toggle()">Show error</a>
+                                    <span id="fail-<?php echo esc_attr( $partner_id ) ?>" style="display:none;"><?php echo $fail ?></span>
+                                    <?php
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <button name="new-<?php echo esc_attr( $site['type'] ) ?>-snapshot" type="submit" value="<?php echo esc_attr( $site['type_id'] ) ?>" class="button" >Refresh Snapshot</button>
+                            </td>
+                            <td>
+                                Records:
+                                 <?php
+                                     echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE site_id = %s", $site['site_id'] ) );
+                                 ?>
+                            </td>
 
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button type="submit" class="button">Update</button>
-                    </td>
-                </tr>
+                            <td>
+                                <button name="delete-<?php echo esc_attr( $site['type'] ) ?>-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Delete All Site Activity</button>
+                                <button name="new-<?php echo esc_attr( $site['type'] ) ?>-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Collect New Activity</button>
+                            </td>
+                        </tr>
+                        <?php
+                    } // end foreach
+                }
+                else {
+                    ?>
+                    <tr>
+                        <td colspan="6">
+                            No dashboard sites found.
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+
                 </tbody>
             </table>
+            <div style="display:none;padding:2em;" id="fail-error"></div>
         </form>
         <br>
+        <!-- End Box -->
         <?php
     }
 

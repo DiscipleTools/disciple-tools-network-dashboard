@@ -345,7 +345,8 @@ class DT_Network_Dashboard_Site_Post_Type {
                   j.meta_value as visibility,
                   k.meta_value as connection_type,
                   i.meta_value as send_activity,
-                  m.meta_value as location_precision
+                  m.meta_value as location_precision,
+                  n.meta_value as non_wp
                 FROM $wpdb->posts as a
                 LEFT JOIN $wpdb->postmeta as c
                   ON a.ID=c.post_id
@@ -383,6 +384,9 @@ class DT_Network_Dashboard_Site_Post_Type {
                  LEFT JOIN $wpdb->postmeta as m
                   ON a.ID=m.post_id
                   AND m.meta_key = 'location_precision'
+                 LEFT JOIN $wpdb->postmeta as n
+                  ON n.post_id=f.meta_value
+                  AND n.meta_key = 'non_wp'
                 WHERE a.post_type = 'dt_network_dashboard'
                 ORDER BY name;
             ",
@@ -729,6 +733,10 @@ class DT_Network_Dashboard_Site_Post_Type {
         $needs_update = [];
         foreach ( $sites as $site ){
             if ( $site['type'] !== 'remote' ){
+                continue;
+            }
+
+            if ( $site['non_wp'] === '1' ){ // if remote connection to non-disciple-tools system
                 continue;
             }
 
