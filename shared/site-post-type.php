@@ -312,7 +312,6 @@ class DT_Network_Dashboard_Site_Post_Type {
     }
 
     public static function delete( $partner_post_id ) {
-
         return wp_delete_post( $partner_post_id );
     }
 
@@ -750,7 +749,23 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $needs_update;
     }
 
+    /**
+     * Delete Activity by Partner/Site ID
+     * @param $id
+     * @param string $type
+     */
+    public static function delete_activity( $id, $type = 'partner_id' ){
+        global $wpdb;
+        switch( $type ){
+            case 'site_id':
+            case 'partner_id':
+                $wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->dt_movement_log WHERE site_id = %s", $id) );
+                break;
+            default:
+                break;
+        }
 
+    }
 
 }
 DT_Network_Dashboard_Site_Post_Type::instance();

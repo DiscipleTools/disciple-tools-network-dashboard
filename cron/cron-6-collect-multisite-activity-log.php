@@ -111,6 +111,8 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
         // store to local multisite post id
         update_post_meta( $site['id'], 'activity_timestamp', time() );
 
+        dt_save_log( $file, 'Number of collected records: ' . count( $results ) );
+
         dt_save_log( $file, 'SUCCESS ID: ' . $site['type_id'] );
 
         return true;

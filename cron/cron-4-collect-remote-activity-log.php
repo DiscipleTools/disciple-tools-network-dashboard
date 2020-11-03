@@ -133,9 +133,7 @@ function dt_network_dashboard_collect_remote_activity_single( $site ) {
     if ( ! empty( $data['data'] ) ){
         DT_Network_Activity_Log::transfer_insert_multiple( $data['data'], $site['partner_id'] );
     }
-    dt_write_log( count( $data['data'] ) );
-    dt_write_log( $site['partner_id'] );
-
+    dt_write_log( 'Number of collected records: ' . count( $data['data'] ) );
     dt_save_log( $file, 'SUCCESS ID: ' . $site['type_id'] );
 
     return true;

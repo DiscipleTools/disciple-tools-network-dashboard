@@ -1145,23 +1145,23 @@ class DT_Network_Dashboard_Tab_System
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
              ) {
 
+            /* SNAPSHOT */
             if ( isset( $_POST['new-multisite-snapshot'] ) ){
-                dt_save_log( 'multisite', '', false );
-                dt_save_log( 'multisite', 'REFRESH SNAPSHOT', false );
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'REFRESH MULTISITE SNAPSHOT', false );
 
-                if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) ) ) {
+                if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-multisite-snapshot'] ) ) ) ) ) {
                     $message = [ 'notice-success','Successful collection of new snapshot' ];
                 }
                 else {
                     $message = [ 'notice-error', 'Failed collection' ];
                 }
             }
-
-            /* new snapshot */
             if ( isset( $_POST['new-remote-snapshot'] ) ){
-                dt_save_log( 'remote', '', false );
-                dt_save_log( 'remote', 'REFRESH SNAPSHOT', false );
-                $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) );
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'REFRESH REMOTE SNAPSHOT', false );
+
+                $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-remote-snapshot'] ) ) ) );
                 if ( $result ) {
                     $message = [ 'notice-success','Successful collection of new snapshot.' ];
                 }
@@ -1169,66 +1169,78 @@ class DT_Network_Dashboard_Tab_System
                     $message = [ 'notice-error', 'Failed collection' ];
                 }
             }
-            
 
+            /* DELETE ACTIVITY */
+             if ( isset( $_POST['delete-multisite-activity'] ) ){
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'DELETE MULTISITE ACTIVITY', false );
+
+                $id = sanitize_text_field( wp_unslash( $_POST['delete-multisite-activity'] ) );
+
+                dt_save_log( 'management', 'Start ID: ' . $id, false );
+
+                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+                foreach ( $sites as $site ){
+                    if ( $id === $site['id'] ){
+                        DT_Network_Dashboard_Site_Post_Type::delete_activity( $site['partner_id'] );
+                        dt_save_log( 'management', 'End ID: ' . $id, false );
+                        break;
+                    }
+                }
+            }
+            if ( isset( $_POST['delete-remote-activity'] ) ){
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'DELETE REMOTE SNAPSHOT', false );
+
+                $id = sanitize_text_field( wp_unslash( $_POST['delete-remote-activity'] ) );
+
+                dt_save_log( 'management', 'Start ID: ' . $id, false );
+
+                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+                foreach ( $sites as $site ){
+                    if ( $id === $site['id'] ){
+                        DT_Network_Dashboard_Site_Post_Type::delete_activity( $site['partner_id'] );
+                        dt_save_log( 'management', 'End ID: ' . $id, false );
+                        break;
+                    }
+                }
+            }
+
+            /* REBUILD ACTIVITY */
             if ( isset( $_POST['new-multisite-activity'] ) ){
-                dt_save_log( 'multisite-activity', '', false );
-                dt_save_log( 'multisite-activity', 'REFRESH ACTIVITY', false );
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'REBUILD MULTISITE ACTIVITY', false );
 
-                $id = sanitize_text_field( wp_unslash( $_POST['new-activity'] ) );
+                $id = sanitize_text_field( wp_unslash( $_POST['new-multisite-activity'] ) );
+
+                dt_save_log( 'management', 'Start ID: ' . $id, false );
 
                 $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
                 foreach ( $sites as $site ){
                     if ( $id === $site['id'] ){
                         dt_network_dashboard_collect_multisite_activity( $site );
+                        dt_save_log( 'management', 'End ID: ' . $id, false );
                         break;
                     }
                 }
             }
             if ( isset( $_POST['new-remote-activity'] ) ){
-                dt_save_log( 'remote-activity', '', false );
-                dt_save_log( 'remote-activity', 'REFRESH ACTIVITY', false );
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'REBUILD REMOTE ACTIVITY', false );
 
-                $id = sanitize_text_field( wp_unslash( $_POST['new-activity'] ) );
+                $id = sanitize_text_field( wp_unslash( $_POST['new-remote-activity'] ) );
+
+                dt_save_log( 'management', 'Start ID: ' . $id, false );
 
                 $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
                 foreach ( $sites as $site ){
                     if ( $id === $site['id'] ){
                         dt_network_dashboard_collect_remote_activity_single( $site );
+                        dt_save_log( 'management', 'End ID: ' . $id, false );
                         break;
                     }
                 }
             }
-
-            if ( isset( $_POST['delete-remote-activity'] ) ){
-                // @todo delete remote records
-//                dt_save_log( 'remote', '', false );
-//                dt_save_log( 'remote', 'REFRESH SNAPSHOT', false );
-//                $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-snapshot'] ) ) ) );
-//                if ( $result ) {
-//                    $message = [ 'notice-success','Successful collection of new snapshot.' ];
-//                }
-//                else {
-//                    $message = [ 'notice-error', 'Failed collection' ];
-//                }
-            }
-
-            if ( isset( $_POST['delete-multisite-activity'] ) ){
-                // @todo delete multisite records
-//                dt_save_log( 'remote-activity', '', false );
-//                dt_save_log( 'remote-activity', 'REFRESH ACTIVITY', false );
-
-//                $id = sanitize_text_field( wp_unslash( $_POST['new-activity'] ) );
-//
-//                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-//                foreach ( $sites as $site ){
-//                    if ( $id === $site['id'] ){
-//                        dt_network_dashboard_collect_remote_activity_single( $site );
-//                        break;
-//                    }
-//                }
-            }
-
         }
 
         // Get list of sites
@@ -1271,7 +1283,8 @@ class DT_Network_Dashboard_Tab_System
                         ?>
                         <tr>
                             <td>
-                                <?php echo esc_html( $site['id'] ) ?>
+                                <?php echo esc_html( $site['id'] ) ?><br>
+                                <?php echo esc_html( $site['partner_id'] ) ?>
                             </td>
                             <td>
                                 <?php echo esc_html( $site['name'] ) ?>
@@ -1489,6 +1502,7 @@ class DT_Network_Dashboard_Tab_System
             dt_reset_log( 'multisite' );
             dt_reset_log( 'activity-remote' );
             dt_reset_log( 'remote' );
+            dt_reset_log( 'management' );
             dt_reset_log( 'activity-multisite' );
             dt_reset_log( 'profile-collection' );
         }
@@ -1515,6 +1529,7 @@ class DT_Network_Dashboard_Tab_System
                         <a href="<?php echo dt_get_log_location( 'activity-multisite', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'activity-multisite', 'url' ) ?></a><br>
                         <?php endif; ?>
 
+                        <a href="<?php echo dt_get_log_location( 'management', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'management', 'url' ) ?></a><br>
                         <a href="<?php echo dt_get_log_location( 'remote', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'remote', 'url' ) ?></a><br>
                         <a href="<?php echo dt_get_log_location( 'activity-remote', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'activity-remote', 'url' ) ?></a><br>
                         <a href="<?php echo dt_get_log_location( 'profile-collection', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'profile-collection', 'url' ) ?></a><br>
