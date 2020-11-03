@@ -1302,7 +1302,7 @@ class DT_Network_Dashboard_Tab_System
                 $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
                 foreach ( $sites as $site ){
                     if ( $id === $site['id'] ){
-                        DT_Network_Dashboard_Site_Post_Type::delete_activity( $site['partner_id'] );
+                        DT_Network_Activity_Log::delete_activity( $site['partner_id'] );
                         dt_save_log( 'management', 'End ID: ' . $id, false );
                         break;
                     }
@@ -1319,7 +1319,7 @@ class DT_Network_Dashboard_Tab_System
                 $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
                 foreach ( $sites as $site ){
                     if ( $id === $site['id'] ){
-                        DT_Network_Dashboard_Site_Post_Type::delete_activity( $site['partner_id'] );
+                        DT_Network_Activity_Log::delete_activity( $site['partner_id'] );
                         dt_save_log( 'management', 'End ID: ' . $id, false );
                         break;
                     }
