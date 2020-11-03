@@ -420,6 +420,7 @@ class DT_Network_Dashboard_Site_Post_Type {
                 'connection_type' => '',
                 'send_activity' => '',
                 'location_precision' => '',
+                'non_wp' => '0'
             ];
 
 
@@ -747,24 +748,6 @@ class DT_Network_Dashboard_Site_Post_Type {
         }
 
         return $needs_update;
-    }
-
-    /**
-     * Delete Activity by Partner/Site ID
-     * @param $id
-     * @param string $type
-     */
-    public static function delete_activity( $id, $type = 'partner_id' ){
-        global $wpdb;
-        switch( $type ){
-            case 'site_id':
-            case 'partner_id':
-                $wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->dt_movement_log WHERE site_id = %s", $id) );
-                break;
-            default:
-                break;
-        }
-
     }
 
 }

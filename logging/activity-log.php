@@ -558,7 +558,7 @@ class DT_Network_Activity_Log {
             foreach ( $results as $value ){
                 if ( ! in_array( $value['site_object_id'], $converted ) ){
                     $index++;
-                    $query .= $wpdb->prepare( "( %s, %s, %s, %s, %s, %d, %d, %s, %s, %d, %s, %s, %s ), ",
+                    $query .= $wpdb->prepare( "( %s, %s, %s, %s, %s, %f, %f, %s, %s, %d, %s, %s, %s ), ",
                         $value["site_id"],
                         $value["id"], // the site id becomes the next site's site_record_id (foreign key)
                         $value["site_object_id"],
@@ -574,6 +574,88 @@ class DT_Network_Activity_Log {
                         $value["hash"]
                     );
                 }
+            }
+
+            $query .= ';';
+            $query = str_replace( ", ;", ";", $query ); //remove last comma
+            if ( $index > 0 ){
+                $wpdb->query( $query ); //phpcs:ignore
+            }
+        }
+    }
+
+    /**
+     * Rows must have:
+     * site_object_id
+     * action
+     * timestamp
+     *
+     * @param $results
+     */
+    public static function local_bulk_insert( $results ) {
+        global $wpdb;
+        $site_id = dt_network_site_id();
+        $hunk = array_chunk( $results, 100 );
+        foreach ( $hunk as $results ) {
+            if ( empty( $results ) ){
+                continue;
+            }
+            $query = " INSERT INTO $wpdb->dt_movement_log
+                        ( 
+                            site_id,
+                            site_record_id,
+                            site_object_id,
+                            action,
+                            category,
+                            lng,
+                            lat,
+                            level,
+                            label,
+                            grid_id,
+                            payload,
+                            timestamp,
+                            hash 
+                            )
+                        VALUES ";
+
+            $index = 0;
+            foreach ( $results as $value ){
+                $index++;
+                $location = DT_Network_Activity_Log::get_location_details( $value['site_object_id'] );
+                $data = [
+                    'site_id' => $site_id,
+                    'site_record_id' => null,
+                    'site_object_id' => $value['site_object_id'],
+                    'action' => $value['action'],
+                    'category' => '',
+                    'lng' => empty( $location['location_value'] ) ? null : $location['location_value']['lng'] ?? null,
+                    'lat' => empty( $location['location_value'] ) ? null : $location['location_value']['lat'] ?? null,
+                    'level' => empty( $location['location_value'] ) ? null : $location['location_value']['level'] ?? null,
+                    'label' => empty( $location['location_value'] ) ? null : $location['location_value']['label'] ?? null,
+                    'grid_id' => empty( $location['location_value'] ) ? null : $location['location_value']['grid_id'] ?? null,
+                    'payload' => [
+                        'language' => get_locale(),
+                    ],
+                    'timestamp' => $value['timestamp'],
+                ];
+                $data['payload'] = serialize( $data['payload'] );
+                $data['hash'] = hash( 'sha256', serialize( $data ) );
+
+                $query .= $wpdb->prepare( "( %s, %s, %s, %s, %s, %f, %f, %s, %s, %d, %s, %s, %s ), ",
+                    $data["site_id"],
+                    $data["site_record_id"],
+                    $data["site_object_id"],
+                    $data["action"],
+                    $data["category"],
+                    $data["lng"],
+                    $data["lat"],
+                    $data["level"],
+                    $data["label"],
+                    $data["grid_id"],
+                    $data["payload"],
+                    $data["timestamp"],
+                    $data["hash"]
+                );
             }
 
             $query .= ';';
@@ -623,4 +705,185 @@ class DT_Network_Activity_Log {
 
         return $location;
     }
+
+    /**
+     * Query gets all new contacts with site_object_id, action, and timestamp from dt_activity_log
+     *
+     * site_object_id (post_id)
+     * action
+     * timestamp
+     *
+     * @return array|object|null
+     */
+    public static function query_new_contacts(){
+        global $wpdb;
+        $site_id = dt_network_site_id();
+        return $wpdb->get_results( $wpdb->prepare( "
+                SELECT 
+                   a.object_id as site_object_id, 
+                   'new_contact' as action, 
+                   a.hist_time as timestamp
+                FROM $wpdb->dt_activity_log as a
+                LEFT JOIN $wpdb->dt_movement_log as m
+                    ON a.object_id=m.site_object_id
+                    AND m.site_id = %s
+                    AND m.action = 'new_contact'
+                WHERE a.object_type = 'contacts' 
+                    AND a.action = 'created'
+                    AND m.id IS NULL
+                ORDER BY a.object_id;", $site_id ),
+            ARRAY_A );
+    }
+
+    /**
+     * Query gets all new groups by types with site_object_id, action, and timestamp from dt_activity_log
+     *
+     * site_object_id (post_id)
+     * action
+     * timestamp
+     *
+     * @return array|object|null
+     */
+    public static function query_new_groups(){
+        global $wpdb;
+        $site_id = dt_network_site_id();
+        return $results = $wpdb->get_results( $wpdb->prepare( "
+            SELECT a.object_id as site_object_id, 
+            CASE 
+                WHEN pm.meta_value = 'pre-group'  THEN 'new_pre-group'
+                WHEN pm.meta_value = 'group'  THEN 'new_group'
+                WHEN pm.meta_value = 'church'  THEN 'new_church'
+                WHEN pm.meta_value = 'team'  THEN 'new_team'
+                ELSE 'new_group'
+            END as action,
+            a.hist_time as timestamp 
+            FROM $wpdb->dt_activity_log as a
+            LEFT JOIN $wpdb->postmeta as pm ON a.object_id=pm.post_id
+                AND pm.meta_key = 'group_type'
+            LEFT JOIN $wpdb->dt_movement_log as m
+                ON a.object_id=m.site_object_id
+                AND m.site_id = %s
+                AND ( m.action = 'new_pre-group' OR m.action = 'new_group' OR m.action = 'new_church' OR m.action = 'new_team' )
+            WHERE a.object_type = 'groups' 
+            AND a.action = 'created'
+            AND m.id IS NULL
+            ORDER BY a.object_id;", $site_id ), ARRAY_A );
+    }
+
+    /**
+     * Query gets all new baptisms by types with site_object_id, action, and timestamp from dt_activity_log
+     *
+     * site_object_id (post_id)
+     * action
+     * timestamp
+     *
+     * @return array|object|null
+     */
+    public static function query_new_baptism(){
+        global $wpdb;
+        $site_id = dt_network_site_id();
+        return $results = $wpdb->get_results( $wpdb->prepare( "
+            SELECT 
+                DISTINCT( al.object_id ) as site_object_id, 
+                'new_baptism' as action, 
+                al.hist_time as timestamp
+            FROM $wpdb->dt_activity_log as al
+            LEFT JOIN $wpdb->dt_movement_log as m
+                ON al.object_id=m.site_object_id
+                AND m.site_id = %s
+                AND m.action = 'new_baptism'
+            WHERE al.object_type = 'contacts' 
+                AND al.meta_value = 'milestone_baptized'
+                AND m.id IS NULL
+            ORDER BY al.object_id;", $site_id), ARRAY_A );
+    }
+
+    /**
+     * Query gets all new baptisms by types with site_object_id, action, and timestamp from dt_activity_log
+     *
+     * site_object_id (post_id)
+     * action
+     * timestamp
+     *
+     * @return array|object|null
+     */
+    public static function query_new_coaching(){
+        global $wpdb;
+        $site_id = dt_network_site_id();
+        return $results = $wpdb->get_results( $wpdb->prepare( "
+           SELECT 
+                DISTINCT( al.object_id ) as site_object_id, 
+                'new_coaching' as action, 
+                al.hist_time as timestamp
+            FROM $wpdb->dt_activity_log as al
+            LEFT JOIN $wpdb->dt_movement_log as m
+                ON al.object_id=m.site_object_id
+                AND m.site_id = %s
+                AND m.action = 'new_coaching'
+            WHERE al.object_type = 'contacts' 
+                AND al.meta_key = 'contacts_to_contacts'
+                AND al.field_type = 'connection from'
+                AND m.id IS NULL
+            ORDER BY al.object_id;", $site_id), ARRAY_A );
+    }
+
+    /**
+     * Query gets all new baptisms by types with site_object_id, action, and timestamp from dt_activity_log
+     *
+     * site_object_id (post_id)
+     * action
+     * timestamp
+     *
+     * @return array|object|null
+     */
+    public static function query_new_group_generations(){
+        global $wpdb;
+        $site_id = dt_network_site_id();
+        return $results = $wpdb->get_results( $wpdb->prepare( "
+            SELECT 
+                DISTINCT( al.object_id ) as site_object_id, 
+                CASE 
+                    WHEN pm.meta_value = 'pre-group'  THEN 'generation_pre-group'
+                    WHEN pm.meta_value = 'group'  THEN 'generation_group'
+                    WHEN pm.meta_value = 'church'  THEN 'generation_church'
+                    WHEN pm.meta_value = 'team'  THEN 'generation_team'
+                    ELSE 'generation_group'
+                END as action,
+                al.hist_time as timestamp,
+                al.object_subtype
+            FROM $wpdb->dt_activity_log as al
+            LEFT JOIN $wpdb->postmeta as pm ON al.object_id=pm.post_id
+                AND pm.meta_key = 'group_type'
+            LEFT JOIN $wpdb->dt_movement_log as m
+                ON al.object_id=m.site_object_id
+                AND m.site_id = %s
+                AND ( m.action = 'generation_pre-group' OR m.action = 'generation_group' OR m.action = 'generation_church' OR m.action = 'generation_team' )
+            WHERE al.object_type = 'groups' 
+                AND al.meta_key = 'groups_to_groups'
+                AND al.field_type = 'connection from'
+                AND m.id IS NULL
+            ORDER BY al.object_id;", $site_id), ARRAY_A );
+    }
+
+
+
+    /**
+     * Delete Activity by Partner/Site ID
+     * @param $id
+     * @param string $type
+     */
+    public static function delete_activity( $id, $type = 'partner_id' ){
+        global $wpdb;
+        switch( $type ){
+            case 'site_id':
+            case 'partner_id':
+                $wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->dt_movement_log WHERE site_id = %s", $id) );
+                break;
+            default:
+                break;
+        }
+
+    }
+
+
 }

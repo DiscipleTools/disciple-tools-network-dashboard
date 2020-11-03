@@ -971,10 +971,11 @@ class DT_Network_Dashboard_Tab_System
                     <div id="post-body-content">
                         <!-- Main Column -->
 
-                        <?php $this->box_site_project_details() ?>
+                        <?php $this->box_local_site_data();?>
                         <?php $this->box_manage_sites_data() ?>
-                        <?php $this->box_local_site_data(); ?>
+                        <?php $this->box_site_project_details() ?>
                         <?php $this->box_registered_key_list() ?>
+                        <?php $this->box_utilities() ?>
                         <?php $this->box_cron_list() ?>
                         <?php $this->box_txt_log_list() ?>
                         <?php $this->box_cron_instructions() ?>
@@ -984,6 +985,475 @@ class DT_Network_Dashboard_Tab_System
                 </div><!-- post-body meta box container -->
             </div><!--poststuff end -->
         </div><!-- wrap end -->
+        <?php
+    }
+
+    public function box_local_site_data() {
+        global $wpdb;
+
+        $profile = dt_network_site_profile();
+        $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report();
+
+        if ( isset( $_POST['local_site_data'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['local_site_data'] ) ), 'local_site_data'.get_current_user_id() ) ) {
+           dt_write_log($_POST);
+
+           if ( isset( $_POST['new-local-snapshot'] ) ) {
+                $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report( true );
+           }
+
+           if ( isset( $_POST['delete-local-activity'] ) ) {
+                DT_Network_Activity_Log::delete_activity( $profile['partner_id'] );
+           }
+
+        }
+
+        ?>
+        <p><strong>Manage Local Site</strong></p>
+        <form method="POST">
+            <?php wp_nonce_field( 'local_site_data'.esc_html( get_current_user_id() ), 'local_site_data' ) ?>
+            <table class="widefat striped">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Domain</th>
+                    <th>Snapshot</th>
+                    <th></th>
+                    <th>Activity</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>
+                        <strong><?php echo esc_html( $profile['partner_name'] ) ?></strong><br>
+                        <?php echo esc_html( $profile['partner_id'] ) ?>
+                    </td>
+                    <td>
+                        <a href="<?php echo esc_html( $profile['partner_url'] ) ?>"><?php echo esc_html( $profile['partner_url'] ) ?></a>
+                    </td>
+                    <td style="width:150px; border-left: 1px solid lightgrey;">
+                        <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
+                        <?php echo ( ! empty( $snapshot['timestamp'] ) ) ? date( 'Y-m-d H:i:s', $snapshot['timestamp'] ) : '---' ?>
+                    </td>
+                    <td>
+                        <button name="new-local-snapshot" type="submit" value="new-local-snapshot" class="button" >Refresh Snapshot</button>
+                    </td>
+                    <td style="width:100px; border-left: 1px solid lightgrey;">
+                        Records:
+                         <?php
+                             echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE site_id = %s", $profile['partner_id'] ) );
+                         ?>
+                    </td>
+                    <td>
+                        <button name="delete-local-activity" type="submit" value="delete-local-activity" class="button" >Delete All Local Activity</button>
+                        <a href="<?php echo esc_url( admin_url() ) ?>/admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=0" type="submit" value="new-local-activity" class="button" >Rebuild Local Activity</a>
+                    </td>
+                </tr>
+                <?php
+
+                    /* Start Loop 0 */
+                    if ( isset( $_GET['rebuild_activity'] ) && '0' === $_GET['rebuild_activity'] ) :
+                        ?>
+                        <tr>
+                            <td colspan="6"><img src="<?php echo esc_url( get_theme_file_uri() ) ?>/spinner.svg" width="30px" alt="spinner" /></td>
+                        </tr>
+                        <script type="text/javascript">
+                            <!--
+                            function nextpage() {
+                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=1&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                            }
+                            setTimeout( "nextpage()", 1500 );
+                            //-->
+                        </script>
+                        <?php
+                    endif; // 0
+
+                    /* New Contact 1 */
+                    if ( isset( $_GET['rebuild_activity'] ) && '1' === $_GET['rebuild_activity'] ) :
+                        $results = DT_Network_Activity_Log::query_new_contacts();
+                        DT_Network_Activity_Log::local_bulk_insert( $results );
+                        ?>
+                        <tr>
+                            <td colspan="6">New Contacts</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><img src="<?php echo esc_url( get_theme_file_uri() ) ?>/spinner.svg" width="30px" alt="spinner" /></td>
+                        </tr>
+                        <script type="text/javascript">
+                            <!--
+                            function nextpage() {
+                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=2&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                            }
+                            setTimeout( "nextpage()", 1500 );
+                            //-->
+                        </script>
+                        <?php
+                    endif; // 1
+
+                    /* New Groups 2 */
+                    if ( isset( $_GET['rebuild_activity'] ) && '2' === $_GET['rebuild_activity'] ) :
+                        $results = DT_Network_Activity_Log::query_new_groups();
+                        DT_Network_Activity_Log::local_bulk_insert( $results );
+                        ?>
+                        <tr>
+                            <td colspan="6">New Contacts</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Groups (pre-group,group,church,team)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><img src="<?php echo esc_url( get_theme_file_uri() ) ?>/spinner.svg" width="30px" alt="spinner" /></td>
+                        </tr>
+                        <script type="text/javascript">
+                            <!--
+                            function nextpage() {
+                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=3&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                            }
+                            setTimeout( "nextpage()", 1500 );
+                            //-->
+                        </script>
+                        <?php
+                    endif; // 2
+
+                    /* New Groups 3 */
+                    if ( isset( $_GET['rebuild_activity'] ) && '3' === $_GET['rebuild_activity'] ) :
+                        $results = DT_Network_Activity_Log::query_new_baptism();
+                        DT_Network_Activity_Log::local_bulk_insert( $results );
+                        ?>
+                        <tr>
+                            <td colspan="6">New Contacts</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Groups (pre-group,group,church,team)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Baptisms</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><img src="<?php echo esc_url( get_theme_file_uri() ) ?>/spinner.svg" width="30px" alt="spinner" /></td>
+                        </tr>
+                        <script type="text/javascript">
+                            <!--
+                            function nextpage() {
+                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=4&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                            }
+                            setTimeout( "nextpage()", 1500 );
+                            //-->
+                        </script>
+                        <?php
+                    endif; // 3
+
+
+                    /* New Groups 4 */
+                    if ( isset( $_GET['rebuild_activity'] ) && '4' === $_GET['rebuild_activity'] ) :
+                        $results = DT_Network_Activity_Log::query_new_coaching();
+                        DT_Network_Activity_Log::local_bulk_insert( $results );
+                        ?>
+                        <tr>
+                            <td colspan="6">New Contacts</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Groups (pre-group,group,church,team)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Baptisms</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Coaching</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><img src="<?php echo esc_url( get_theme_file_uri() ) ?>/spinner.svg" width="30px" alt="spinner" /></td>
+                        </tr>
+                        <script type="text/javascript">
+                            <!--
+                            function nextpage() {
+                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=5&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                            }
+                            setTimeout( "nextpage()", 1500 );
+                            //-->
+                        </script>
+                        <?php
+                    endif; // 4
+
+
+                    /* New Generations 5 */
+                    if ( isset( $_GET['rebuild_activity'] ) && '5' === $_GET['rebuild_activity'] ) :
+                        $results = DT_Network_Activity_Log::query_new_group_generations();
+                        DT_Network_Activity_Log::local_bulk_insert( $results );
+                        ?>
+                        <tr>
+                            <td colspan="6">New Contacts</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Groups (pre-group,group,church,team)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Baptisms</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Coaching</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">Reported Generations (pre-group, group, church, team)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><img src="<?php echo esc_url( get_theme_file_uri() ) ?>/spinner.svg" width="30px" alt="spinner" /></td>
+                        </tr>
+                        <script type="text/javascript">
+                            <!--
+                            function nextpage() {
+                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=6&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                            }
+                            setTimeout( "nextpage()", 1500 );
+                            //-->
+                        </script>
+                        <?php
+                    endif; // 5
+
+
+                    /* New Plugins 6 */
+                    if ( isset( $_GET['rebuild_activity'] ) && '6' === $_GET['rebuild_activity'] ) :
+                        do_action( 'dt_network_dashboard_rebuild_activity' );
+                        ?>
+                        <tr>
+                            <td colspan="6">New Contacts</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Groups (pre-group,group,church,team)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Baptisms</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">New Coaching</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">Reported Generations (pre-group, group, church, team)</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6">Plugins</td>
+                        </tr>
+                        <tr>
+                            <td colspan="6"><img src="<?php echo esc_url( get_theme_file_uri() ) ?>/spinner.svg" width="30px" alt="spinner" /></td>
+                        </tr>
+                        <script type="text/javascript">
+                            <!--
+                            function nextpage() {
+                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=7&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                            }
+                            setTimeout( "nextpage()", 1500 );
+                            //-->
+                        </script>
+                        <?php
+                    endif; // 6
+
+
+
+                    ?>
+                </tbody>
+            </table>
+        </form>
+        <br>
+        <?php
+    }
+
+    public function box_manage_sites_data() {
+        global $wpdb;
+
+        $message = false;
+        if ( isset( $_POST['network_dashboard_nonce'] )
+            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
+             ) {
+
+            /* SNAPSHOT */
+            if ( isset( $_POST['new-multisite-snapshot'] ) ){
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'REFRESH MULTISITE SNAPSHOT', false );
+
+                if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-multisite-snapshot'] ) ) ) ) ) {
+                    $message = [ 'notice-success','Successful collection of new snapshot' ];
+                }
+                else {
+                    $message = [ 'notice-error', 'Failed collection' ];
+                }
+            }
+            if ( isset( $_POST['new-remote-snapshot'] ) ){
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'REFRESH REMOTE SNAPSHOT', false );
+
+                $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-remote-snapshot'] ) ) ) );
+                if ( $result ) {
+                    $message = [ 'notice-success','Successful collection of new snapshot.' ];
+                }
+                else {
+                    $message = [ 'notice-error', 'Failed collection' ];
+                }
+            }
+
+            /* DELETE ACTIVITY */
+             if ( isset( $_POST['delete-multisite-activity'] ) ){
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'DELETE MULTISITE ACTIVITY', false );
+
+                $id = sanitize_text_field( wp_unslash( $_POST['delete-multisite-activity'] ) );
+
+                dt_save_log( 'management', 'Start ID: ' . $id, false );
+
+                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+                foreach ( $sites as $site ){
+                    if ( $id === $site['id'] ){
+                        DT_Network_Dashboard_Site_Post_Type::delete_activity( $site['partner_id'] );
+                        dt_save_log( 'management', 'End ID: ' . $id, false );
+                        break;
+                    }
+                }
+            }
+            if ( isset( $_POST['delete-remote-activity'] ) ){
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'DELETE REMOTE SNAPSHOT', false );
+
+                $id = sanitize_text_field( wp_unslash( $_POST['delete-remote-activity'] ) );
+
+                dt_save_log( 'management', 'Start ID: ' . $id, false );
+
+                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+                foreach ( $sites as $site ){
+                    if ( $id === $site['id'] ){
+                        DT_Network_Dashboard_Site_Post_Type::delete_activity( $site['partner_id'] );
+                        dt_save_log( 'management', 'End ID: ' . $id, false );
+                        break;
+                    }
+                }
+            }
+
+            /* REBUILD ACTIVITY */
+            if ( isset( $_POST['new-multisite-activity'] ) ){
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'REBUILD MULTISITE ACTIVITY', false );
+
+                $id = sanitize_text_field( wp_unslash( $_POST['new-multisite-activity'] ) );
+
+                dt_save_log( 'management', 'Start ID: ' . $id, false );
+
+                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+                foreach ( $sites as $site ){
+                    if ( $id === $site['id'] ){
+                        dt_network_dashboard_collect_multisite_activity( $site );
+                        dt_save_log( 'management', 'End ID: ' . $id, false );
+                        break;
+                    }
+                }
+            }
+            if ( isset( $_POST['new-remote-activity'] ) ){
+                dt_save_log( 'management', '', false );
+                dt_save_log( 'management', 'REBUILD REMOTE ACTIVITY', false );
+
+                $id = sanitize_text_field( wp_unslash( $_POST['new-remote-activity'] ) );
+
+                dt_save_log( 'management', 'Start ID: ' . $id, false );
+
+                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+                foreach ( $sites as $site ){
+                    if ( $id === $site['id'] ){
+                        dt_network_dashboard_collect_remote_activity_single( $site );
+                        dt_save_log( 'management', 'End ID: ' . $id, false );
+                        break;
+                    }
+                }
+            }
+        }
+
+        // Get list of sites
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+
+        /** Message */
+        if ( $message ) {
+            echo '<div class="notice '.esc_attr( $message[0] ).'">'.esc_html( $message[1] ).'</div>';
+        }
+
+        /** Box */
+        ?>
+        <form method="post">
+            <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
+            <p><strong>Manage Site Snapshots and Activity Database</strong></p>
+            <table class="widefat striped">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Domain</th>
+                        <th style="width:150px;">Snapshot</th>
+                        <th></th>
+                        <th>Activity</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                <?php
+                if ( ! empty( $sites ) ) {
+                    foreach ( $sites as $partner_id => $site ) {
+                        if ( $site['id'] === 0 ) {
+                            continue; // if it is a local site, handle in the next section
+                        }
+                        if ( ! empty( $site['non_wp'] ) ) {
+                            continue; // if it is a non-dt remote site it has no log or snapshot to transfer
+                        }
+                        $snapshot = maybe_unserialize( $site['snapshot'] );
+                        $profile = maybe_unserialize( $site['profile'] );
+                        ?>
+                        <tr>
+                            <td>
+                                <strong><?php echo esc_html( $site['name'] ) ?></strong><br>
+                                <?php echo esc_html( $site['partner_id'] ) ?>
+                            </td>
+                            <td>
+                                <?php echo '<a href="'. esc_url( $profile['partner_url'] ) .'" target="_blank">' . esc_url( $profile['partner_url'] ) . '</a>' ?>
+                            </td>
+                            <td style="border-left: 1px solid lightgrey">
+                                <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
+                                <?php echo ( ! empty( $site['snapshot_timestamp'] ) ) ? date( 'Y-m-d H:i:s', $site['snapshot_timestamp'] ) : '---' ?>
+                                <?php
+                                if ( ! empty( $fail ) ){
+                                    ?>
+                                    <a href="javascript:void(0)" onclick="jQuery('#<?php echo esc_attr( $partner_id ) ?>').toggle()">Show error</a>
+                                    <span id="fail-<?php echo esc_attr( $partner_id ) ?>" style="display:none;"><?php echo $fail ?></span>
+                                    <?php
+                                }
+                                ?>
+                            </td>
+                            <td>
+                                <button name="new-<?php echo esc_attr( $site['type'] ) ?>-snapshot" type="submit" value="<?php echo esc_attr( $site['type_id'] ) ?>" class="button" >Refresh Snapshot</button>
+                            </td>
+                            <td style="width:100px; border-left: 1px solid lightgrey;">
+                                Records:
+                                 <?php
+                                     echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE site_id = %s", $site['site_id'] ) );
+                                 ?>
+                            </td>
+
+                            <td>
+                                <button name="delete-<?php echo esc_attr( $site['type'] ) ?>-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Delete All Site Activity</button>
+                                <button name="new-<?php echo esc_attr( $site['type'] ) ?>-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Collect New Activity</button>
+                            </td>
+                        </tr>
+                        <?php
+                    } // end foreach
+                }
+                else {
+                    ?>
+                    <tr>
+                        <td colspan="6">
+                            No dashboard sites found.
+                        </td>
+                    </tr>
+                    <?php
+                }
+                ?>
+                </tbody>
+            </table>
+            <div style="display:none;padding:2em;" id="fail-error"></div>
+        </form>
+        <br>
+        <!-- End Box -->
         <?php
     }
 
@@ -1003,6 +1473,7 @@ class DT_Network_Dashboard_Tab_System
         $current_profile = dt_network_site_profile();
         ?>
         <!-- Box -->
+        <p><strong>System Details</strong></p>
         <form method="POST">
         <?php wp_nonce_field( 'refresh_profiles'.get_current_user_id(), 'refresh_profiles' ) ?>
 
@@ -1137,251 +1608,15 @@ class DT_Network_Dashboard_Tab_System
         <?php
     }
 
-    public function box_manage_sites_data() {
-        global $wpdb;
-
-        $message = false;
-        if ( isset( $_POST['network_dashboard_nonce'] )
-            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
-             ) {
-
-            /* SNAPSHOT */
-            if ( isset( $_POST['new-multisite-snapshot'] ) ){
-                dt_save_log( 'management', '', false );
-                dt_save_log( 'management', 'REFRESH MULTISITE SNAPSHOT', false );
-
-                if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-multisite-snapshot'] ) ) ) ) ) {
-                    $message = [ 'notice-success','Successful collection of new snapshot' ];
-                }
-                else {
-                    $message = [ 'notice-error', 'Failed collection' ];
-                }
-            }
-            if ( isset( $_POST['new-remote-snapshot'] ) ){
-                dt_save_log( 'management', '', false );
-                dt_save_log( 'management', 'REFRESH REMOTE SNAPSHOT', false );
-
-                $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-remote-snapshot'] ) ) ) );
-                if ( $result ) {
-                    $message = [ 'notice-success','Successful collection of new snapshot.' ];
-                }
-                else {
-                    $message = [ 'notice-error', 'Failed collection' ];
-                }
-            }
-
-            /* DELETE ACTIVITY */
-             if ( isset( $_POST['delete-multisite-activity'] ) ){
-                dt_save_log( 'management', '', false );
-                dt_save_log( 'management', 'DELETE MULTISITE ACTIVITY', false );
-
-                $id = sanitize_text_field( wp_unslash( $_POST['delete-multisite-activity'] ) );
-
-                dt_save_log( 'management', 'Start ID: ' . $id, false );
-
-                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-                foreach ( $sites as $site ){
-                    if ( $id === $site['id'] ){
-                        DT_Network_Dashboard_Site_Post_Type::delete_activity( $site['partner_id'] );
-                        dt_save_log( 'management', 'End ID: ' . $id, false );
-                        break;
-                    }
-                }
-            }
-            if ( isset( $_POST['delete-remote-activity'] ) ){
-                dt_save_log( 'management', '', false );
-                dt_save_log( 'management', 'DELETE REMOTE SNAPSHOT', false );
-
-                $id = sanitize_text_field( wp_unslash( $_POST['delete-remote-activity'] ) );
-
-                dt_save_log( 'management', 'Start ID: ' . $id, false );
-
-                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-                foreach ( $sites as $site ){
-                    if ( $id === $site['id'] ){
-                        DT_Network_Dashboard_Site_Post_Type::delete_activity( $site['partner_id'] );
-                        dt_save_log( 'management', 'End ID: ' . $id, false );
-                        break;
-                    }
-                }
-            }
-
-            /* REBUILD ACTIVITY */
-            if ( isset( $_POST['new-multisite-activity'] ) ){
-                dt_save_log( 'management', '', false );
-                dt_save_log( 'management', 'REBUILD MULTISITE ACTIVITY', false );
-
-                $id = sanitize_text_field( wp_unslash( $_POST['new-multisite-activity'] ) );
-
-                dt_save_log( 'management', 'Start ID: ' . $id, false );
-
-                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-                foreach ( $sites as $site ){
-                    if ( $id === $site['id'] ){
-                        dt_network_dashboard_collect_multisite_activity( $site );
-                        dt_save_log( 'management', 'End ID: ' . $id, false );
-                        break;
-                    }
-                }
-            }
-            if ( isset( $_POST['new-remote-activity'] ) ){
-                dt_save_log( 'management', '', false );
-                dt_save_log( 'management', 'REBUILD REMOTE ACTIVITY', false );
-
-                $id = sanitize_text_field( wp_unslash( $_POST['new-remote-activity'] ) );
-
-                dt_save_log( 'management', 'Start ID: ' . $id, false );
-
-                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-                foreach ( $sites as $site ){
-                    if ( $id === $site['id'] ){
-                        dt_network_dashboard_collect_remote_activity_single( $site );
-                        dt_save_log( 'management', 'End ID: ' . $id, false );
-                        break;
-                    }
-                }
-            }
-        }
-
-        // Get list of sites
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-
-        /** Message */
-        if ( $message ) {
-            echo '<div class="notice '.esc_attr( $message[0] ).'">'.esc_html( $message[1] ).'</div>';
-        }
-
-        /** Box */
-        ?>
-        <form method="post">
-            <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
-            <p><strong>Manage Site Snapshots and Activity Database</strong></p>
-            <table class="widefat striped">
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nickname</th>
-                        <th>Domain</th>
-                        <th style="width:150px;">Snapshot</th>
-                        <th></th>
-                        <th style="width:100px;">Activity</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                <?php
-                if ( ! empty( $sites ) ) {
-                    foreach ( $sites as $partner_id => $site ) {
-                        if ( $site['id'] === 0 ) {
-                            continue; // if it is a local site, handle in the next section
-                        }
-                        if ( ! empty( $site['non_wp'] ) ) {
-                            continue; // if it is a non-dt remote site it has no log or snapshot to transfer
-                        }
-                        $snapshot = maybe_unserialize( $site['snapshot'] );
-                        $profile = maybe_unserialize( $site['profile'] );
-                        ?>
-                        <tr>
-                            <td>
-                                <?php echo esc_html( $site['id'] ) ?><br>
-                                <?php echo esc_html( $site['partner_id'] ) ?>
-                            </td>
-                            <td>
-                                <?php echo esc_html( $site['name'] ) ?>
-                            </td>
-                            <td>
-                                <?php echo '<a href="'. esc_url( $profile['partner_url'] ) .'" target="_blank">' . esc_url( $profile['partner_url'] ) . '</a>' ?>
-                            </td>
-                            <td>
-                                <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
-                                <?php echo ( ! empty( $site['snapshot_timestamp'] ) ) ? date( 'Y-m-d H:i:s', $site['snapshot_timestamp'] ) : '---' ?>
-                                <?php
-                                if ( ! empty( $fail ) ){
-                                    ?>
-                                    <a href="javascript:void(0)" onclick="jQuery('#<?php echo esc_attr( $partner_id ) ?>').toggle()">Show error</a>
-                                    <span id="fail-<?php echo esc_attr( $partner_id ) ?>" style="display:none;"><?php echo $fail ?></span>
-                                    <?php
-                                }
-                                ?>
-                            </td>
-                            <td>
-                                <button name="new-<?php echo esc_attr( $site['type'] ) ?>-snapshot" type="submit" value="<?php echo esc_attr( $site['type_id'] ) ?>" class="button" >Refresh Snapshot</button>
-                            </td>
-                            <td>
-                                Records:
-                                 <?php
-                                     echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE site_id = %s", $site['site_id'] ) );
-                                 ?>
-                            </td>
-
-                            <td>
-                                <button name="delete-<?php echo esc_attr( $site['type'] ) ?>-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Delete All Site Activity</button>
-                                <button name="new-<?php echo esc_attr( $site['type'] ) ?>-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Collect New Activity</button>
-                            </td>
-                        </tr>
-                        <?php
-                    } // end foreach
-                }
-                else {
-                    ?>
-                    <tr>
-                        <td colspan="6">
-                            No dashboard sites found.
-                        </td>
-                    </tr>
-                    <?php
-                }
-                ?>
-
-                </tbody>
-            </table>
-            <div style="display:none;padding:2em;" id="fail-error"></div>
-        </form>
-        <br>
-        <!-- End Box -->
-        <?php
-    }
-
-    public function box_local_site_data() {
-        if ( isset( $_POST['local_site_data'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['local_site_data'] ) ), 'local_site_data'.get_current_user_id() ) ) {
-           dt_write_log($_POST);
-
-        }
-        ?>
-        <form method="POST">
-            <?php wp_nonce_field( 'local_site_data'.esc_html( get_current_user_id() ), 'local_site_data' ) ?>
-            <table class="widefat striped">
-                <thead>
-                <tr>
-                    <th>Manage Local Snapshot & Activity Log</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr>
-                    <td>
-
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <button type="submit" class="button">Update</button>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-        </form>
-        <br>
-        <?php
-    }
-
     public function box_registered_key_list() {
         $actions = dt_network_dashboard_registered_actions();
         $current_site_id = dt_network_site_id();
         ?>
         <!-- Box -->
+        <p><strong>Activity Keys and Counts</strong></p>
         <table class="widefat striped">
             <thead>
-            <tr><th>Activity Log Registered Key List</th><td></td><td>Items for This Site</td><td>Other Sites</td></tr>
+            <tr><th>Key</th><td>Labels</td><td>This Site</td><td>Other Sites</td></tr>
             </thead>
             <tbody>
             <?php
@@ -1417,6 +1652,59 @@ class DT_Network_Dashboard_Tab_System
         <?php
     }
 
+    public function box_utilities() {
+        $trigger_refresh = false;
+        if ( isset( $_POST['utilities_nonce'] )
+            && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['utilities_nonce'] ) ), 'utilities_' . get_current_user_id() )
+             ) {
+
+            if ( isset( $_POST['trigger'] ) ) {
+                dt_network_dashboard_trigger_sites();
+            }
+
+            if ( isset( $_POST['migrations'] ) ) {
+                delete_option( 'dt_network_dashboard_migration_lock' );
+                delete_option( 'dt_network_dashboard_migration_number' );
+                $trigger_refresh = true;
+            }
+        }
+        ?>
+        <!-- Box -->
+        <p><strong>System Utilities</strong></p>
+        <form method="POST">
+        <?php wp_nonce_field( 'utilities_' . get_current_user_id(), 'utilities_nonce' ) ?>
+        <table class="widefat striped">
+            <thead>
+            <tr>
+                <th></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        Trigger all remote sites to wake up and rebuild snapshot and activity collection. Sites that have not had traffic recently, may not have been triggered to rebuild their snapshot.
+                    </td>
+                    <td>
+                        <button type="submit" class="button" style="float:right;" value="trigger" name="trigger">Trigger Sites</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        Rebuild stuck migrations. Current migration number: <?php echo get_option('dt_network_dashboard_migration_number' ) ?> <?php echo ( $trigger_refresh ) ? '<a href="" class="button">Refresh The Page For An Accurtate Migration Number</a>' : ''; ?>
+                    </td>
+                    <td>
+                        <button type="submit" class="button" style="float:right;" value="migrations" name="migrations">Rebuild Migrations</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        </form>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+
     public function box_cron_list() {
 
         if ( isset( $_POST['cron_run_nonce'] )
@@ -1436,21 +1724,14 @@ class DT_Network_Dashboard_Tab_System
         $cron_list = _get_cron_array();
         ?>
         <!-- Box -->
-
+        <p><strong>Collection Schedule</strong></p>
         <table class="widefat striped">
             <thead>
             <tr>
-                <th>External Cron Schedule</th>
+                <th>Next Collection</th>
+                <th>Collection Name</th>
+                <th>Schedule Definition</th>
                 <th></th>
-                <th></th>
-                <th></th>
-                <th>
-                <form method="post">
-                   <span style="float:right;">
-                   <?php wp_nonce_field( 'cron_run_' . get_current_user_id(), 'cron_run_nonce' ) ?><button type="submit" class="button" value="trigger" name="trigger">Trigger Sites</button>
-                   </span>
-                </form>
-                </th>
             </tr>
             </thead>
             <tbody>
@@ -1469,9 +1750,6 @@ class DT_Network_Dashboard_Tab_System
                                     <?php echo $token ?>
                                 </td>
                                 <td>
-                                    <?php echo $key ?>
-                                </td>
-                                <td>
                                     <?php echo $items['schedule'] ?? '' ?><br>
                                     Every <?php echo isset( $items['interval'] ) ? $items['interval'] / 60 . ' minutes' : '' ?><br>
                                     <?php echo ! empty( $items['args'] ) ? serialize( $items['args'] ) : '' ?><br>
@@ -1479,7 +1757,7 @@ class DT_Network_Dashboard_Tab_System
                                 <td>
                                     <form method="post">
                                         <?php wp_nonce_field( 'cron_run_' . get_current_user_id(), 'cron_run_nonce' ) ?>
-                                        <button type="submit" name="run_now" value="<?php echo $token ?>" class="button">Delete and Respawn</button>
+                                        <button type="submit" name="run_now" style="float:right;" value="<?php echo $token ?>" class="button">Delete and Respawn</button>
                                     </form>
                                 </td>
                             </tr>
@@ -1507,13 +1785,13 @@ class DT_Network_Dashboard_Tab_System
             dt_reset_log( 'profile-collection' );
         }
         ?>
-        <a id="logs"></a>
+        <p><strong>Cron Logs</strong></p>
         <form method="POST">
             <?php wp_nonce_field( 'reset-logs'.get_current_user_id(), 'reset-logs' ) ?>
             <table class="widefat striped">
                 <thead>
                 <tr>
-                    <th>Recent Cron Log
+                    <th>
                     <span style="float:right;">
                         <button type="submit" name="refresh" value="true" class="button">Refresh</button>
                     </span>
@@ -1596,7 +1874,6 @@ class DT_Network_Dashboard_Tab_System
         <!-- End Box -->
         <?php
     }
-
 
 }
 
