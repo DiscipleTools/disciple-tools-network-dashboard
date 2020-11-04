@@ -166,14 +166,15 @@ class DT_Network_Dashboard_Metrics_Base {
         // mapbox
         if ( DT_Mapbox_API::get_key() ){
             DT_Mapbox_API::load_mapbox_header_scripts();
-            wp_localize_script(
-                'network_base_script',
-                'network_base_script',
-                array(
-                    'map_key' => DT_Mapbox_API::get_key(),
-                )
-            );
         }
+        wp_localize_script(
+            'network_base_script',
+            'network_base_script',
+            [
+                'map_key' => DT_Mapbox_API::get_key(),
+                'trans' => $this->translations(),
+            ]
+        );
 
         // amcharts
         wp_register_script( 'amcharts-core', 'https://www.amcharts.com/lib/4/core.js', false, '4' );
@@ -213,6 +214,52 @@ class DT_Network_Dashboard_Metrics_Base {
         }
     }
 
+    public function translations() {
+        return [
+            'base_1' => __('ID', 'dt_network_dashboard'),
+            'base_2' => __('Site', 'dt_network_dashboard'),
+            'base_3' => __('Contacts', 'dt_network_dashboard'),
+            'base_4' => __('Groups', 'dt_network_dashboard'),
+            'base_5' => __('Users', 'dt_network_dashboard'),
+            'base_6' => __('Timestamp', 'dt_network_dashboard'),
+            'base_7' => __('Visit', 'dt_network_dashboard'),
+            'base_8' => __('View', 'dt_network_dashboard'),
+            'site_1' => __('Active Snapshot', 'dt_network_dashboard'),
+            'site_2' => __('Generations', 'dt_network_dashboard'),
+            'site_3' => __('Follow-up Funnel', 'dt_network_dashboard'),
+            'site_4' => __('On-Going Meetings', 'dt_network_dashboard'),
+            'site_5' => __('Coaching', 'dt_network_dashboard'),
+            'site_6' => __('Baptized', 'dt_network_dashboard'),
+            'site_7' => __('Active Groups', 'dt_network_dashboard'),
+            'site_8' => __('Church', 'dt_network_dashboard'),
+            'site_9' => __('Health Metrics', 'dt_network_dashboard'),
+
+            'contacts' => __('Contacts', 'dt_network_dashboard'),
+            'contact' => __('Contact', 'dt_network_dashboard'),
+            'group' => __('Group', 'dt_network_dashboard'),
+            'groups' => __('Groups', 'dt_network_dashboard'),
+            'users' => __('Users', 'dt_network_dashboard'),
+            'baptisms' => __('Baptisms', 'dt_network_dashboard'),
+            'churches' => __('Churches', 'dt_network_dashboard'),
+            'location' => __('Location', 'dt_network_dashboard'),
+
+
+            'active_contacts' => __('Active Contacts', 'dt_network_dashboard'),
+            'paused_contacts' => __('Paused Contacts', 'dt_network_dashboard'),
+            'closed_contacts' => __('Closed Contacts', 'dt_network_dashboard'),
+            'total_contacts' => __('Total Contacts', 'dt_network_dashboard'),
+            'new_contacts' => __('New Contacts', 'dt_network_dashboard'),
+
+            'new_groups' => __('New Groups', 'dt_network_dashboard'),
+
+            'last_7_days' => __('Last 7 Days', 'dt_network_dashboard'),
+            'last_30_days' => __('Last 30 Days', 'dt_network_dashboard'),
+            'last_60_days' => __('Last 60 Days', 'dt_network_dashboard'),
+            'last_12_months' => __('Last 12 Months', 'dt_network_dashboard'),
+            'last_24_months' => __('Last 24 Months', 'dt_network_dashboard'),
+
+        ];
+    }
 
     public static function get_sites( $reset = false ) {
         if ( $reset ){
