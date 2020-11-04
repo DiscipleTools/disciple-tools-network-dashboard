@@ -361,24 +361,24 @@ function show_single_site(id, name) {
               
               <!-- USERS -->
               
-              <span class="section-header">Users</span>
+              <span class="section-header">${network_base_script.trans.users /*Users*/}</span>
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell">
                       <div class="grid-x callout">
                           <div class="medium-3 cell center">
-                          <h4>Total Users<br><span class="total_contacts">${data.users.current_state.total_users}</span></h4>
+                          <h4>${network_base_script.trans.site_10 /*Total Users*/}<br><span class="total_contacts">${data.users.current_state.total_users}</span></h4>
                           </div>
                           <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                          <h4>Responders<br><span id="total_users">${data.users.current_state.roles.responders}</span></h4>
+                          <h4>${network_base_script.trans.site_11 /*Responders*/}<br><span id="total_users">${data.users.current_state.roles.responders}</span></h4>
                           </div>
                           <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                          <h4>Dispatchers<br><span id="total_users">${data.users.current_state.roles.dispatchers}</span></h4>
+                          <h4>${network_base_script.trans.site_12 /*Dispatchers*/}<br><span id="total_users">${data.users.current_state.roles.dispatchers}</span></h4>
                           </div>
                           <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                          <h4>Multipliers<br><span class="total_groups">${data.users.current_state.roles.multipliers}</span></h4>
+                          <h4>${network_base_script.trans.site_13 /*Multipliers*/}<br><span class="total_groups">${data.users.current_state.roles.multipliers}</span></h4>
                           </div>
                           <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                          <h4>Admins<br><span id="total_users">${data.users.current_state.roles.admins}</span></h4>
+                          <h4>${network_base_script.trans.site_14 /*Admins*/}<br><span id="total_users">${data.users.current_state.roles.admins}</span></h4>
                           </div>
                       </div>
                   </div>
@@ -386,19 +386,19 @@ function show_single_site(id, name) {
               
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell">
-                      User Login Activity <br>
-                      <button class="button hollow active-user-buttons" id="ua-7-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 7 );set_buttons('active-user-buttons', 'ua-7-days' )">Last 7 days</button> 
-                      <button class="button active-user-buttons" id="ua-30-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 30 );set_buttons('active-user-buttons', 'ua-30-days' )">Last 30 days</button> 
-                      <button class="button hollow active-user-buttons" id="ua-60-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 60 );set_buttons('active-user-buttons', 'ua-60-days' )">Last 60 days</button> 
-                      <button class="button hollow active-user-buttons" id="ua-12-months" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'months', 12 );set_buttons('active-user-buttons', 'ua-12-months' )">Last 12 Months</button>
-                      <button class="button hollow active-user-buttons" id="ua-24-months" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'months', 24 );set_buttons('active-user-buttons', 'ua-24-months' )">Last 24 Months</button>
+                      ${network_base_script.trans.site_15 /*User Login Activity*/}<br>
+                      <button class="button hollow active-user-buttons" id="ua-7-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 7 );set_buttons('active-user-buttons', 'ua-7-days' )">${network_base_script.trans.last_7_days /*Last 7 days*/}</button> 
+                      <button class="button active-user-buttons" id="ua-30-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 30 );set_buttons('active-user-buttons', 'ua-30-days' )">${network_base_script.trans.last_30_days /*Last 30 days*/}</button> 
+                      <button class="button hollow active-user-buttons" id="ua-60-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 60 );set_buttons('active-user-buttons', 'ua-60-days' )">${network_base_script.trans.last_60_days /*Last 60 days*/}</button> 
+                      <button class="button hollow active-user-buttons" id="ua-12-months" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'months', 12 );set_buttons('active-user-buttons', 'ua-12-months' )">${network_base_script.trans.last_12_months /*Last 12 Months*/}</button>
+                      <button class="button hollow active-user-buttons" id="ua-24-months" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'months', 24 );set_buttons('active-user-buttons', 'ua-24-months' )">${network_base_script.trans.last_24_months /*Last 24 Months*/}</button>
                       <div id="user-activity-chart-div" style="height:500px;width:100%;"></div>
                   </div>
               </div>
               
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell medium-6">
-                      Users Active in the Last 30 Days
+                      ${network_base_script.trans.site_16 /*Users Active in the Last 30 Days*/}
                       <div id="system-engagement-pie-chart-div" style="height:400px;width:100%;"></div>
                   </div>
                   <div class="cell medium-6">
@@ -562,8 +562,8 @@ function health_stacked_bar_chart(div, values) {
         return series;
     }
 
-    createSeries('practicing', 'Practicing')
-    createSeries('not_practicing', 'Not Practicing')
+    createSeries('practicing', network_base_script.trans.site_17 ) /*Practicing*/
+    createSeries('not_practicing', network_base_script.trans.site_18 ) /*Not Practicing*/
 
 
     // Legend
