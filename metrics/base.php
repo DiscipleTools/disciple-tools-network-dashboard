@@ -1183,9 +1183,10 @@ class DT_Network_Dashboard_Metrics_Base {
                 ];
             }
             else {
+                $location = ( empty( $result['label'] ) ) ? '' : ' (' . $result['label'] . ')';
                 $data[$result['day']]['list'][] = [
                     'time' => $result['time'],
-                    'message' => '('. $result['time'].') ' .  ucwords( str_replace( '_', ' ', $result['action'] ) ) . ' (' . $result['label'] . ')',
+                    'message' => $result['site_name'] . ' reporting ' . str_replace( '_', ' ', $result['action'] ) . $location,
                     'action' => $result['action'],
                     'site_id' => $result['site_id'],
                 ];
