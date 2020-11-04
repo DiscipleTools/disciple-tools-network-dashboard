@@ -256,7 +256,7 @@ class DT_Network_Dashboard {
      * @return void
      */
     public function __clone() {
-        _doing_it_wrong( __FUNCTION__, esc_html__( 'Whoah, partner!', 'dt_network_dashboard' ), '0.1' );
+        _doing_it_wrong( __FUNCTION__, esc_html( 'Whoah, partner!' ), '0.1' );
     }
 
     /**
@@ -267,7 +267,7 @@ class DT_Network_Dashboard {
      * @return void
      */
     public function __wakeup() {
-        _doing_it_wrong( __FUNCTION__, esc_html__( 'Whoah, partner!', 'dt_network_dashboard' ), '0.1' );
+        _doing_it_wrong( __FUNCTION__, esc_html( 'Whoah, partner!' ), '0.1' );
     }
 
     /**
@@ -305,7 +305,7 @@ register_deactivation_hook( __FILE__, [ 'DT_Network_Dashboard', 'deactivation' ]
 function dt_network_dashboard_no_disciple_tools_theme_found() {
     ?>
     <div class="notice notice-error">
-        <p><?php esc_html_e( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard' plugin.", "dt_network_dashboard" ); ?></p>
+        <p><?php esc_html_e( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard'.", "dt_network_dashboard" ); ?></p>
     </div>
     <?php
 }
