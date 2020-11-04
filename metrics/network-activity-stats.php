@@ -19,7 +19,6 @@ class DT_Network_Dashboard_Metrics_Activity_Chart extends DT_Network_Dashboard_M
 
         add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 55 );
         add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
-//        add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
 
         if ( $this->url === $this->url_path ) {
             add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
@@ -69,25 +68,6 @@ class DT_Network_Dashboard_Metrics_Activity_Chart extends DT_Network_Dashboard_M
         return $template_for_url;
     }
 
-//    public function add_api_routes() {
-//        register_rest_route(
-//            $this->namespace, '/' . $this->url . '/', [
-//                [
-//                    'methods'  => WP_REST_Server::CREATABLE,
-//                    'callback' => [ $this, 'endpoint' ],
-//                ],
-//            ]
-//        );
-//    }
-//
-//    public function endpoint( WP_REST_Request $request ){
-//        if ( !$this->has_permission() ) {
-//            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
-//        }
-//        $params = $request->get_params();
-//
-//        return $params;
-//    }
 
 }
 new DT_Network_Dashboard_Metrics_Activity_Chart();

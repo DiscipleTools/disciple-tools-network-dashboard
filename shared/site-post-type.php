@@ -443,6 +443,17 @@ class DT_Network_Dashboard_Site_Post_Type {
         return $sites;
     }
 
+    public static function all_visible_sites(){
+        $all_sites = self::all_sites();
+        $sites = [];
+        foreach ( $all_sites as $site ){
+            if ( 'hide' !== $site['visibility'] ){
+                $sites[] = $site;
+            }
+        }
+        return $sites;
+    }
+
     public static function all_multisite_sites(){
         $all_sites = self::all_sites();
         $sites = [];

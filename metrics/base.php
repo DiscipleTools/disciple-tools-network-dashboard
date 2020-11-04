@@ -503,7 +503,7 @@ class DT_Network_Dashboard_Metrics_Base {
             return wp_cache_get( __METHOD__, $hash );
         }
 
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_visible_sites();
         $sites_id_list = [];
         foreach ( $sites as $site ){
             $sites_id_list[] = $site['partner_id'];
@@ -627,7 +627,7 @@ class DT_Network_Dashboard_Metrics_Base {
             'actions_totals' => [],
         ];
 
-        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_visible_sites();
         foreach ( $sites as $site ){
             $stats['sites'][$site['partner_id']] = $site['name'];
         }

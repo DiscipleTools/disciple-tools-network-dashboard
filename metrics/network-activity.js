@@ -5,17 +5,9 @@ window.load_activity_filter = () => {
     `)
     jQuery('#activity-filter-wrapper').html(`
         <div class="grid-x" id="filters_section">
-        <div class="cell"><h3>Filters</h3></div>
+        <div class="cell"><button type="button" id="filter_list_button" class="button small hollow">Filter List</button> <span class="loading-spinner"></span></div>
         <div class="cell" id="filters">${spinner}</div>
         <div class="cell"><hr></div>
-        <div class="cell">
-            <strong>Sites</strong>
-            <div id="site-list">${spinner}</div>
-        </div>
-        <div class="cell">
-            <strong>Types</strong>
-            <div id="action-filter">${spinner}</div>
-        </div>
         <div class="cell">
             <strong>Time</strong><br>
             <select name="time_range" id="time_range">
@@ -30,9 +22,17 @@ window.load_activity_filter = () => {
                 <option value="2000">2000</option>
                 <option value="5000">5000</option>
                 <option value="10000">10000</option>
-                <option value="100000">100000</option>
             </select>
         </div>
+        <div class="cell">
+            <p><strong>Sites</strong> <a style="float:right;" onclick="jQuery('.sites').addClass('hollow');">uncheck</a></p>
+            <div id="site-list">${spinner}</div>
+        </div>
+        <div class="cell">
+            <p><strong>Types</strong> <a style="float:right;"  onclick="jQuery('.actions').addClass('hollow');">uncheck</a></p>
+            <div id="action-filter">${spinner}</div>
+        </div>
+        
     </div>
     <div class="grid-x">
         <div class="cell">

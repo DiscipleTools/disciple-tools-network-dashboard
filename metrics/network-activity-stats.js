@@ -7,12 +7,7 @@ jQuery(document).ready(function(){
 
     // write page layout with spinners
     chartDiv.empty().html(`
-            <style>
-            #activity-filter-wrapper {
-                height: ${window.innerHeight - 175}px !important;
-                overflow: scroll;
-            }
-            </style>
+            
             <span class="section-header">Stats</span>
             <hr style="max-width:100%;">
             <div class="grid-x grid-padding-x">
@@ -66,7 +61,7 @@ jQuery(document).ready(function(){
 
         let list = jQuery('#action-type-table-wrapper')
         list.empty().html(`
-            <table id="action-type-table" class="display" style="cursor:pointer;" data-order='[[ 1, "asc" ]]' data-page-length='25'>
+            <table id="action-type-table" class="display" style="cursor:pointer;" data-order='[[ 1, "asc" ]]' data-page-length='20'>
               <thead>
                 <th>Key</th>
                 <th>Name</th>
