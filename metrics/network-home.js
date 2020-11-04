@@ -34,7 +34,7 @@ jQuery(document).ready(function(){
                     <h4>Countries<br><a href="/network/maps/locationlist"><span id="total_countries">${spinner}</span></a></h4>
                   </div>
                   <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                    <h4>Events (30 Days)<br><a href="/network/activity/feed"><span class="total_activity">${spinner}</span></a></h4>
+                    <h4>Events (30 Days)<br><a href="/network/activity/stream"><span class="total_activity">${spinner}</span></a></h4>
                   </div>
                 </div>
               </div>
