@@ -600,12 +600,14 @@ class DT_Network_Dashboard_Site_Post_Type {
         $connections = self::all_sites();
 
         // delete all multisites not permitted or removed
+        $already_skipped = [];
         foreach ( $connections as $connection ){
             if ( 'multisite' !== $connection['type'] ){
                 continue;
             }
 
-            if ( in_array( $connection['type_id'], $multisites ) ) {
+            if ( in_array( $connection['type_id'], $multisites ) && ! in_array( $connection['type_id'], $already_skipped ) && 65 >= strlen( $connection['partner_id'] ) ) {
+                $already_skipped[] = $connection['type_id'];
                 continue;
             }
 

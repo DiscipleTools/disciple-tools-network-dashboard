@@ -479,7 +479,6 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
 
     public function main_column() {
         DT_Network_Dashboard_Site_Post_Type::sync_all_multisites_to_post_type();
-
         $message = false;
         if ( isset( $_POST['network_dashboard_nonce'] )
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
@@ -552,7 +551,7 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                                 <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][visibility]" value="hide" <?php echo ( isset( $site['visibility'] ) && $site['visibility'] === 'hide' ) ? 'checked' : '' ?>/> Hide
                             </td>
                             <td>
-                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][receive_activity]" value="allow" <?php echo ( $site['receive_activity'] === 'allow' || $site['receive_activity'] === '' ) ? 'checked' : '' ?>/> Allow |
+                                <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][receive_activity]" value="allow" <?php echo ( $site['receive_activity'] === 'allow' || empty( $site['receive_activity'] ) ) ? 'checked' : '' ?>/> Allow |
                                 <input type="radio" name="partner[<?php echo esc_attr( $site['id'] ) ?>][receive_activity]" value="reject" <?php echo ( $site['receive_activity'] === 'reject' ) ? 'checked' : '' ?>/> Reject
                             </td>
 
@@ -963,6 +962,7 @@ class DT_Network_Dashboard_Tab_Outgoing
 class DT_Network_Dashboard_Tab_System
 {
     public function content() {
+
         DT_Network_Dashboard_Snapshot::snapshot_report();
         ?>
         <div class="wrap">
