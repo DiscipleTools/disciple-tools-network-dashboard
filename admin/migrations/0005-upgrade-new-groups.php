@@ -3,9 +3,9 @@ declare(strict_types=1);
 if ( ! defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly
 
 /**
- * Class DT_Network_Dashboard_Migration_0009
+ * Class DT_Network_Dashboard_Migration_0005
  */
-class DT_Network_Dashboard_Migration_0009 extends DT_Network_Dashboard_Migration {
+class DT_Network_Dashboard_Migration_0005 extends DT_Network_Dashboard_Migration {
     /**
      * @throws \Exception  Got error when creating table $name.
      */
@@ -21,7 +21,7 @@ class DT_Network_Dashboard_Migration_0009 extends DT_Network_Dashboard_Migration
             require_once( trailingslashit( WP_CONTENT_DIR ) . 'plugins/disciple-tools-network-dashboard/logging/activity-log.php' );
         }
 
-        $results = DT_Network_Activity_Log::query_new_group_generations();
+        $results = DT_Network_Activity_Log::query_new_groups();
         DT_Network_Activity_Log::local_bulk_insert( $results );
 
     }
