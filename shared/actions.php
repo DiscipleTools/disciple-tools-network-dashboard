@@ -10,10 +10,10 @@
  * @return array | string
  */
 function dt_network_dashboard_registered_actions( $prepare_for_sql = false ) {
-    $actions = apply_filters( 'dt_network_dashboard_register_actions', [] );
+    $actions = apply_filters( 'dt_network_dashboard_register_actions', array() );
 
     if ( empty( $actions ) ){
-        return ( $prepare_for_sql ) ? '' : [];
+        return ( $prepare_for_sql ) ? '' : array();
     }
 
     if ( $prepare_for_sql ) {

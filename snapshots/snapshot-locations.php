@@ -13,38 +13,38 @@ class DT_Network_Dashboard_Snapshot_Locations {
     }
 
     public function __construct() {
-        add_filter( 'dt_network_dashboard_snapshot_report', [ $this, 'report' ], 10, 1 );
+        add_filter( 'dt_network_dashboard_snapshot_report', array( $this, 'report' ), 10, 1 );
     }
 
     public function report( $report_data ) {
 
-        $report_data['locations'] = [
+        $report_data['locations'] = array(
             'data_types' => self::location_data_types(),
             'countries' => self::get_locations_list( true ),
             'current_state' => self::get_locations_current_state(),
             'list' => self::get_locations_list(),
-            'contacts' => [
+            'contacts' => array(
                 'all' => Disciple_Tools_Mapping_Queries::query_contacts_location_grid_totals(),
                 'active' => Disciple_Tools_Mapping_Queries::query_contacts_location_grid_totals( 'active' ),
                 'paused' => Disciple_Tools_Mapping_Queries::query_contacts_location_grid_totals( 'paused' ),
                 'closed' => Disciple_Tools_Mapping_Queries::query_contacts_location_grid_totals( 'closed' ),
-            ],
-            'groups' => [
+            ),
+            'groups' => array(
                 'all' => Disciple_Tools_Mapping_Queries::query_groups_location_grid_totals(),
                 'active' => Disciple_Tools_Mapping_Queries::query_groups_location_grid_totals( 'active' ),
                 'inactive' => Disciple_Tools_Mapping_Queries::query_groups_location_grid_totals( 'inactive' ),
-            ],
-            'churches' => [
+            ),
+            'churches' => array(
                 'all' => Disciple_Tools_Mapping_Queries::query_church_location_grid_totals(),
                 'active' => Disciple_Tools_Mapping_Queries::query_church_location_grid_totals( 'active' ),
                 'inactive' => Disciple_Tools_Mapping_Queries::query_church_location_grid_totals( 'inactive' ),
-            ],
-            'users' => [
+            ),
+            'users' => array(
                 'all' => Disciple_Tools_Mapping_Queries::query_user_location_grid_totals(),
                 'active' => Disciple_Tools_Mapping_Queries::query_user_location_grid_totals( 'active' ),
                 'inactive' => Disciple_Tools_Mapping_Queries::query_user_location_grid_totals( 'inactive' ),
-            ]
-        ];
+            )
+        );
 
         return $report_data;
     }
@@ -52,25 +52,25 @@ class DT_Network_Dashboard_Snapshot_Locations {
 
     public static function location_data_types( $preset = false) {
         if ($preset) {
-            return [
+            return array(
                 'contacts' => 0,
                 'groups' => 0,
                 'churches' => 0,
                 'users' => 0,
-            ];
+            );
         } else {
-            return [
+            return array(
                 'contacts',
                 'groups',
                 'churches',
                 'users',
-            ];
+            );
         }
     }
 
     public static function get_locations_list( $countries_only = false) {
 
-        $data = [];
+        $data = array();
 
         if ($countries_only) {
             $results = Disciple_Tools_Mapping_Queries::get_location_grid_totals_for_countries();
@@ -101,14 +101,14 @@ class DT_Network_Dashboard_Snapshot_Locations {
     }
 
     public static function get_locations_current_state() {
-        $data = [
+        $data = array(
             'active_admin0' => 0,
-            'active_admin0_grid_ids' => [],
+            'active_admin0_grid_ids' => array(),
             'active_admin1' => 0,
-            'active_admin1_grid_ids' => [],
+            'active_admin1_grid_ids' => array(),
             'active_admin2' => 0,
-            'active_admin2_grid_ids' => [],
-        ];
+            'active_admin2_grid_ids' => array(),
+        );
 
         $results = DT_Network_Dashboard_Snapshot_Queries::locations_current_state();
         if ( !empty( $results['active_countries'] )) {

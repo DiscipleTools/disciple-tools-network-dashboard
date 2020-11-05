@@ -6,41 +6,41 @@
 add_action( 'dt_network_dashboard_register_actions', 'dt_network_dashboard_register_action_new_posts', 10, 1 );
 function dt_network_dashboard_register_action_new_posts( $actions ){
 
-    $actions['new_contact'] = [
+    $actions['new_contact'] = array(
         'key' => 'new_contact',
         'label' => 'New Contact',
-        'message_pattern' => []
-    ];
-    $actions['new_pre-group'] = [
+        'message_pattern' => array()
+    );
+    $actions['new_pre-group'] = array(
         'key' => 'new_pre-group',
         'label' => 'New Pre-Group',
-        'message_pattern' => []
-    ];
-    $actions['new_group'] = [
+        'message_pattern' => array()
+    );
+    $actions['new_group'] = array(
         'key' => 'new_group',
         'label' => 'New Group',
-        'message_pattern' => []
-    ];
-    $actions['new_church'] = [
+        'message_pattern' => array()
+    );
+    $actions['new_church'] = array(
         'key' => 'new_church',
         'label' => 'New Church',
-        'message_pattern' => []
-    ];
-    $actions['new_team'] = [
+        'message_pattern' => array()
+    );
+    $actions['new_team'] = array(
         'key' => 'new_team',
         'label' => 'New Team',
-        'message_pattern' => []
-    ];
-    $actions['new_baptism'] = [
+        'message_pattern' => array()
+    );
+    $actions['new_baptism'] = array(
         'key' => 'new_baptism',
         'label' => 'New Baptism',
-        'message_pattern' => []
-    ];
-    $actions['new_coaching'] = [
+        'message_pattern' => array()
+    );
+    $actions['new_coaching'] = array(
         'key' => 'new_coaching',
         'label' => 'New Coaching',
-        'message_pattern' => []
-    ];
+        'message_pattern' => array()
+    );
 
     return $actions;
 }
@@ -61,20 +61,20 @@ function dt_network_dashboard_log_create_posts( $post_type, $post_id, $initial_f
         }
 
         $location = DT_Network_Activity_Log::get_location_details( $post_id );
-        $data = [
-            [
+        $data = array(
+            array(
                 'site_id' => dt_network_site_id(),
                 'site_object_id' => $post_id,
                 'action' => 'new_' . $action,
                 'category' => '',
                 'location_type' => $location['location_type'], // id, grid, lnglat, no_location
                 'location_value' => $location['location_value'],
-                'payload' => [
+                'payload' => array(
                     'language' => get_locale(),
-                ],
+                ),
                 'timestamp' => time()
-            ]
-        ];
+            )
+        );
 
         DT_Network_Activity_Log::insert_log( $data );
     }
@@ -83,20 +83,20 @@ function dt_network_dashboard_log_create_posts( $post_type, $post_id, $initial_f
     if ( $post_type === 'contacts' ) {
 
         $location = DT_Network_Activity_Log::get_location_details( $post_id );
-        $data = [
-            [
+        $data = array(
+            array(
                 'site_id' => dt_network_site_id(),
                 'site_object_id' => $post_id,
                 'action' => 'new_contact',
                 'category' => '',
                 'location_type' => $location['location_type'], // id, grid, lnglat, no_location
                 'location_value' => $location['location_value'],
-                'payload' => [
+                'payload' => array(
                     'language' => get_locale(),
-                ],
+                ),
                 'timestamp' => time()
-            ]
-        ];
+            )
+        );
 
         DT_Network_Activity_Log::insert_log( $data );
     }
@@ -110,20 +110,20 @@ function dt_network_dashboard_log_update_posts( $post_type, $post_id, $initial_f
     if ( $post_type === 'contacts' && isset( $initial_fields['baptized_by'] ) ) {
 
         $location = DT_Network_Activity_Log::get_location_details( $post_id );
-        $data = [
-            [
+        $data = array(
+            array(
                 'site_id' => dt_network_site_id(),
                 'site_object_id' => $post_id,
                 'action' => 'new_baptism',
                 'category' => '',
                 'location_type' => $location['location_type'], // id, grid, lnglat, no_location
                 'location_value' => $location['location_value'],
-                'payload' => [
+                'payload' => array(
                     'language' => get_locale(),
-                ],
+                ),
                 'timestamp' => time()
-            ]
-        ];
+            )
+        );
 
         DT_Network_Activity_Log::insert_log( $data );
     }
@@ -132,20 +132,20 @@ function dt_network_dashboard_log_update_posts( $post_type, $post_id, $initial_f
     if ( $post_type === 'contacts' && ( isset( $initial_fields['coached_by'] ) || isset( $initial_fields['coaching'] ) ) ) {
 
         $location = DT_Network_Activity_Log::get_location_details( $post_id );
-        $data = [
-            [
+        $data = array(
+            array(
                 'site_id' => dt_network_site_id(),
                 'site_object_id' => $post_id,
                 'action' => 'new_coaching',
                 'category' => '',
                 'location_type' => $location['location_type'], // id, grid, lnglat, no_location
                 'location_value' => $location['location_value'],
-                'payload' => [
+                'payload' => array(
                     'language' => get_locale(),
-                ],
+                ),
                 'timestamp' => time()
-            ]
-        ];
+            )
+        );
 
         DT_Network_Activity_Log::insert_log( $data );
     }

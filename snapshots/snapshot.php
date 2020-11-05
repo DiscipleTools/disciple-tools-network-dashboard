@@ -25,10 +25,10 @@ class DT_Network_Dashboard_Snapshot
 
         $profile = dt_network_site_profile();
 
-        $report_data = [
+        $report_data = array(
             'partner_id' => $profile['partner_id'],
             'profile' => $profile,
-        ];
+        );
 
         /**
          * Primary filter to hook and add elements to the snapshot

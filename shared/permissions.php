@@ -90,7 +90,7 @@ function dt_network_dashboard_multisite_is_approved() :bool {
  */
 function dt_dashboard_approved_sites( $type = 'get', $data = null ) {
     if ( $type === 'get' ) {
-        return get_site_option( 'dt_dashboard_approved_sites', [] );
+        return get_site_option( 'dt_dashboard_approved_sites', array() );
     } else if ( $type === 'update' ) {
         return update_site_option( 'dt_dashboard_approved_sites', $data );
     } else if ( $type === 'delete' ) {
@@ -147,5 +147,5 @@ function dt_get_dashboard_approved_sites_by_id( int $id ) :array {
     if ( isset( $approved_sites[$id] ) ) {
         return $approved_sites[$id];
     }
-    return [];
+    return array();
 }

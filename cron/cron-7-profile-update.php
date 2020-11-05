@@ -32,7 +32,7 @@ function dt_network_dashboard_profiles_update() {
         dt_save_log( $file, '', false );
         dt_save_log( $file, '*********************************************', false );
         dt_save_log( $file, 'PROFILE LOGS', false );
-        dt_save_log( $file, 'Timestamp: ' . date( 'Y-m-d', time() ), false );
+        dt_save_log( $file, 'Timestamp: ' . gmdate( 'Y-m-d', time() ), false );
         dt_save_log( $file, '*********************************************', false );
         dt_save_log( $file, '', false );
     }

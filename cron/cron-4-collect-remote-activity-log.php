@@ -33,7 +33,7 @@ function dt_network_dashboard_collect_remote_activity_logs() {
         dt_save_log( $file, '', false );
         dt_save_log( $file, '*********************************************', false );
         dt_save_log( $file, 'REMOTE ACTIVITY LOGS', false );
-        dt_save_log( $file, 'Timestamp: ' . date( 'Y-m-d', time() ), false );
+        dt_save_log( $file, 'Timestamp: ' . gmdate( 'Y-m-d', time() ), false );
         dt_save_log( $file, '*********************************************', false );
         dt_save_log( $file, '', false );
     }
@@ -105,14 +105,14 @@ function dt_network_dashboard_collect_remote_activity_single( $site ) {
     $registered_actions = dt_network_dashboard_registered_actions();
     $action_keys = array_keys( $registered_actions );
 
-    $args = [
+    $args = array(
         'method' => 'POST',
-        'body' => [
+        'body' => array(
             'transfer_token' => $site_vars['transfer_token'],
             'last_site_record_id' => $last_site_record_id,
             'actions' => $action_keys,
-        ]
-    ];
+        )
+    );
 
     $results = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-json/dt-public/v1/network_dashboard/activity', $args );
     if (is_wp_error( $results ) ) {

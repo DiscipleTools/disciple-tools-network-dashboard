@@ -28,25 +28,25 @@ class DT_Network_Dashboard_Admin_Endpoints
     public function __construct() {
         $this->namespace = "dt/v1";
         $this->public_namespace = "dt-public/v1";
-        add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
+        add_action( 'rest_api_init', array( $this, 'add_api_routes' ) );
     } // End __construct()
 
     public function add_api_routes() {
         register_rest_route(
             $this->namespace,
             '/network/admin/trigger_snapshot_collection',
-            [
+            array(
                 'methods'  => 'POST',
-                'callback' => [ $this, 'trigger_snapshot_collection' ],
-            ]
+                'callback' => array( $this, 'trigger_snapshot_collection' ),
+            )
         );
         register_rest_route(
             $this->namespace,
             '/network/admin/trigger_multisite_snapshot_collection',
-            [
+            array(
                 'methods'  => 'POST',
-                'callback' => [ $this, 'trigger_multisite_snapshot_collection' ],
-            ]
+                'callback' => array( $this, 'trigger_multisite_snapshot_collection' ),
+            )
         );
     }
 

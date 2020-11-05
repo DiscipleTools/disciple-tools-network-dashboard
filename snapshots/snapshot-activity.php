@@ -28,7 +28,7 @@ class DT_Network_Dashboard_Snapshot_Activity {
 
         $site_id = dt_network_site_id();
 
-        $timestamp = strtotime('-30 days' );
+        $timestamp = strtotime( '-30 days' );
         $results = $wpdb->get_results( $wpdb->prepare( "
                 SELECT action, category, lng, lat, label, payload, timestamp FROM $wpdb->dt_movement_log WHERE timestamp > %s AND site_id = %s ORDER BY timestamp DESC
                 ", $timestamp, $site_id ), ARRAY_A );
@@ -45,7 +45,7 @@ class DT_Network_Dashboard_Snapshot_Activity {
 //        $report_data['activity']['actions'] = array_keys( $actions );
 
         // 30 day list
-        $report_data['activity']['thirty_days'] = empty( $results ) ? [] : $results ;
+        $report_data['activity']['thirty_days'] = empty( $results ) ? [] : $results;
 
         return $report_data;
     }

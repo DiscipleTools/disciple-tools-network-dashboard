@@ -25,7 +25,7 @@ class DT_Network_Dashboard_Queries {
         ARRAY_A );
 
         if ( empty( $results ) ) {
-            $results = [];
+            $results = array();
         }
 
         return $results;
@@ -35,10 +35,10 @@ class DT_Network_Dashboard_Queries {
 
         $sites = self::remote_site_id_list();
         if ( empty( $sites ) ){
-            return [];
+            return array();
         }
 
-        $snapshots_needing_refreshed = [];
+        $snapshots_needing_refreshed = array();
         foreach ( $sites as $site ) {
             if ( get_option( $site['id'], 'snapshot_date' ) >= strtotime( 'today' ) ) {
                 continue;
@@ -138,7 +138,7 @@ class DT_Network_Dashboard_Queries {
         ARRAY_A );
 
         if ( empty( $results ) ) {
-            $results = [];
+            $results = array();
         }
 
         return $results;
@@ -150,7 +150,7 @@ class DT_Network_Dashboard_Queries {
         $results = $wpdb->get_col( "SELECT blog_id FROM $table" );
 
         if ( empty( $results ) ) {
-            $results = [];
+            $results = array();
         }
 
         return $results;
@@ -158,12 +158,12 @@ class DT_Network_Dashboard_Queries {
 
     public static function multisite_snapshots() {
         if ( ! dt_is_current_multisite_dashboard_approved() ) {
-            return [];
+            return array();
         }
 
         $site_ids = self::all_multisite_blog_ids();
 
-        $snapshot = [];
+        $snapshot = array();
         foreach ( $site_ids as $id ) {
             if ( get_blog_option( $id, 'current_theme' ) !== 'Disciple Tools' ) {
                 continue;
@@ -182,12 +182,12 @@ class DT_Network_Dashboard_Queries {
      */
     public static function multisite_sites_needing_snapshot_refreshed() {
         if ( ! dt_is_current_multisite_dashboard_approved() ) {
-            return [];
+            return array();
         }
 
         $site_ids = self::all_multisite_blog_ids();
 
-        $snapshots_needing_refreshed = [];
+        $snapshots_needing_refreshed = array();
         foreach ( $site_ids as $id ) {
             if ( get_blog_option( $id, 'current_theme' ) !== 'Disciple Tools' ) {
                 continue;

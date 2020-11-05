@@ -31,7 +31,7 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
             dt_save_log( $file, '', false );
             dt_save_log( $file, '*********************************************', false );
             dt_save_log( $file, 'MULTISITE ACTIVITY LOGS', false );
-            dt_save_log( $file, 'Timestamp: ' . date( 'Y-m-d', time() ), false );
+            dt_save_log( $file, 'Timestamp: ' . gmdate( 'Y-m-d', time() ), false );
             dt_save_log( $file, '*********************************************', false );
             dt_save_log( $file, '', false );
         }
@@ -66,8 +66,6 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
         return true;
     }
 
-
-
     /**
      * @param $blog_id
      *
@@ -101,7 +99,9 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
             $prefix = $wpdb->get_blog_prefix( $site['type_id'] );
             $table = $prefix . 'dt_movement_log';
 
+            // @phpcs:disable
             $results = $wpdb->get_results( $wpdb->prepare( "SELECT * FROM {$table} WHERE site_id = %s AND id > %s AND action IN ($registered_actions) ORDER BY id LIMIT 10000", $site['partner_id'], $last_record_id ), ARRAY_A );
+            // @phpcs:enable
 
         restore_current_blog();
 

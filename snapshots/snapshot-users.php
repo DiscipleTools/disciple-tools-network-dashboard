@@ -13,19 +13,19 @@ class DT_Network_Dashboard_Snapshot_Users {
     }
 
     public function __construct() {
-        add_filter( 'dt_network_dashboard_snapshot_report', [ $this, 'report' ], 10, 1 );
+        add_filter( 'dt_network_dashboard_snapshot_report', array( $this, 'report' ), 10, 1 );
     }
 
     public function report( $report_data ) {
 
-        $report_data['users'] = [
+        $report_data['users'] = array(
             'current_state' => self::users_current_state(),
-            'login_activity' => [
+            'login_activity' => array(
                 'sixty_days' => DT_Network_Dashboard_Snapshot_Queries::counted_by_day( 'logged_in' ),
                 'twenty_four_months' => DT_Network_Dashboard_Snapshot_Queries::counted_by_month( 'logged_in' ),
-            ],
+            ),
             'last_thirty_day_engagement' => self::user_logins_last_thirty_days(),
-        ];
+        );
 
         return $report_data;
     }
@@ -41,31 +41,31 @@ class DT_Network_Dashboard_Snapshot_Users {
             $inactive = 0;
         }
 
-        $data = [
-            [
+        $data = array(
+            array(
                 'label' => 'Active',
                 'value' => $active,
-            ],
-            [
+            ),
+            array(
                 'label' => 'Inactive',
                 'value' => $inactive,
-            ]
-        ];
+            )
+        );
 
         return $data;
     }
 
     public static function users_current_state() {
-        $data = [
+        $data = array(
             'total_users' => 0,
-            'roles' => [
+            'roles' => array(
                 'responders' => 0,
                 'dispatchers' => 0,
                 'multipliers' => 0,
                 'strategists' => 0,
                 'admins' => 0,
-            ],
-        ];
+            ),
+        );
 
         // Add types and status
         $users = count_users();

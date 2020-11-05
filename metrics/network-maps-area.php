@@ -21,35 +21,41 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';
         $this->js_object_name = $this->key;
 
-        add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 50 );
-        add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
-        add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
+        add_filter( 'dt_network_dashboard_build_menu', array( $this, 'menu' ), 50 );
+        add_filter( 'dt_templates_for_urls', array( $this, 'add_url' ), 199 );
+        add_action( 'rest_api_init', array( $this, 'add_api_routes' ) );
 
         if ( $this->url === substr( $this->url_path, 0, 17 ) ) {
-            add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
+            add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ), 99 );
         }
 
-        if ( dt_is_rest('network') ){
-            add_filter('dashboard_cluster_geojson', [$this, 'cluster_geojson_contacts'], 10, 3 );
-            add_filter('dashboard_cluster_geojson', [$this, 'cluster_geojson_groups'], 10, 3);
+        if ( dt_is_rest( 'network' ) ){
+            add_filter( 'dashboard_cluster_geojson', array( $this, 'cluster_geojson_contacts' ), 10, 3 );
+            add_filter( 'dashboard_cluster_geojson', array( $this, 'cluster_geojson_groups' ), 10, 3 );
 
-            add_filter('dashboard_grid_totals', [$this, 'grid_totals_contacts'], 10, 3);
-            add_filter('dashboard_grid_totals', [$this, 'grid_totals_groups'], 10, 3);
-            add_filter('dashboard_grid_totals', [$this, 'grid_totals_by_type'], 10, 3);
+            add_filter( 'dashboard_grid_totals', array( $this, 'grid_totals_contacts' ), 10, 3 );
+            add_filter( 'dashboard_grid_totals', array( $this, 'grid_totals_groups' ), 10, 3 );
+            add_filter( 'dashboard_grid_totals', array( $this, 'grid_totals_by_type' ), 10, 3 );
 
-            add_filter('dashboard_points_geojson', [$this, 'points_geojson_contacts'], 10, 3);
-            add_filter('dashboard_points_geojson', [$this, 'points_geojson_groups'], 10, 3);
+            add_filter( 'dashboard_points_geojson', array( $this, 'points_geojson_contacts' ), 10, 3 );
+            add_filter( 'dashboard_points_geojson', array( $this, 'points_geojson_groups' ), 10, 3 );
         }
 
     }
 
     public function add_scripts() {
-        wp_enqueue_script( $this->js_object_name .'_script', plugin_dir_url(__FILE__) . $this->js_file_name, [
+        wp_enqueue_script( $this->js_object_name .'_script',
+            plugin_dir_url( __FILE__ ) . $this->js_file_name,
+            array(
             'jquery',
             'network_base_script',
-        ], filemtime( plugin_dir_path(__FILE__) . $this->js_file_name ), true );
+            ),
+            filemtime( plugin_dir_path( __FILE__ ) . $this->js_file_name ),
+        true );
         wp_localize_script(
-            $this->js_object_name .'_script', $this->js_object_name, [
+            $this->js_object_name .'_script',
+            $this->js_object_name,
+            array(
                 'endpoint' => $this->url,
                 'map_key' => DT_Mapbox_API::get_key(),
                 'theme_uri' => trailingslashit( get_stylesheet_directory_uri() ),
@@ -61,62 +67,75 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 "translations" => array(
                     'add' => __( 'add', 'disciple-tools' )
                 ),
-                'contact_settings' => [
+                'contact_settings' => array(
                     'post_type' => 'contacts',
                     'title' => __( 'Contacts', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'paused'=> [ "label" => 'Paused' ], 'closed'=> [ "label" => 'Closed' ] ]
-                ],
-                'group_settings' => [
+                    'status_list' => array(
+            'active' => array( "label" => 'Active' ),
+            'paused' => array( "label" => 'Paused' ),
+            'closed' => array( "label" => 'Closed' )
+                )
+                ),
+                'group_settings' => array(
                     'post_type' => 'groups',
                     'title' => __( 'Groups', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
-                ],
-                'user_settings' => [
+                    'status_list' => array(
+            'active' => array( "label" => 'Active' ),
+            'inactive' => array( "label" => 'Inactive' )
+                )
+                ),
+                'user_settings' => array(
                     'post_type' => 'users',
                     'title' => __( 'Users', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
-                ],
-                'church_settings' => [
+                    'status_list' => array(
+            'active' => array( "label" => 'Active' ),
+            'inactive' => array( "label" => 'Inactive' )
+                )
+                ),
+                'church_settings' => array(
                     'post_type' => 'churches',
                     'title' => __( 'Churches', "disciple_tools" ),
-                    'status_list' => ['active'=> [ "label" => 'Active' ], 'inactive'=> [ "label" => 'Inactive' ] ]
-                ]
-            ]
+                    'status_list' => array(
+            'active' => array( "label" => 'Active' ),
+            'inactive' => array( "label" => 'Inactive' )
+                )
+                )
+            )
         );
     }
 
     public function menu( $tree ){
-        $tree[$this->base_slug]['children'][$this->slug] = [
+        $tree[$this->base_slug]['children'][$this->slug] = array(
             'key' => $this->key,
             'label' => $this->menu_title,
             'url' => '/'.$this->url,
-            'children' => [
-                [
+            'children' => array(
+                array(
                     'key' => $this->key . '_contacts',
                     'label' => 'Contacts',
                     'url' => '/'.$this->url . '/contacts',
-                    'children' => []
-                ],
-                [
+                    'children' => array()
+                ),
+                array(
                     'key' => $this->key . '_groups',
                     'label' => 'Groups',
                     'url' => '/'.$this->url. '/groups',
-                    'children' => []
-                ],
-                [
+                    'children' => array()
+                ),
+                array(
                     'key' => $this->key . '_churches',
                     'label' => 'Churches',
                     'url' => '/'.$this->url. '/churches',
-                    'children' => []
-                ],
-                [
+                    'children' => array()
+                ),
+                array(
                     'key' => $this->key . '_users',
                     'label' => 'Users',
                     'url' => '/'.$this->url. '/users',
-                    'children' => []
-                ],
-            ]
-        ];
+                    'children' => array()
+                ),
+            )
+        );
         return $tree;
     }
 
@@ -131,52 +150,62 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
 
     public function add_api_routes() {
         register_rest_route(
-            $this->namespace, '/' . $this->url . '/', [
-                [
+            $this->namespace,
+            '/' . $this->url . '/',
+            array(
+                array(
                     'methods'  => WP_REST_Server::CREATABLE,
-                    'callback' => [ $this, 'endpoint' ],
-                ],
-            ]
+                    'callback' => array( $this, 'endpoint' ),
+                ),
+            )
         );
 
 
         register_rest_route(
-            $this->namespace, '/' . $this->url . '/grid_totals/', [
-                [
+            $this->namespace,
+            '/' . $this->url . '/grid_totals/',
+            array(
+                array(
                     'methods'  => WP_REST_Server::CREATABLE,
-                    'callback' => [ $this, 'grid_totals' ],
-                ],
-            ]
+                    'callback' => array( $this, 'grid_totals' ),
+                ),
+            )
         );
         register_rest_route(
-            $this->namespace, '/' . $this->url . '/get_grid_list', [
-                [
+            $this->namespace,
+            '/' . $this->url . '/get_grid_list',
+            array(
+                array(
                     'methods'  => WP_REST_Server::CREATABLE,
-                    'callback' => [ $this, 'get_grid_list' ],
-                ],
-            ]
+                    'callback' => array( $this, 'get_grid_list' ),
+                ),
+            )
         );
         register_rest_route(
-            $this->namespace, '/' . $this->url . '/grid_country_totals', [
-                [
+            $this->namespace,
+            '/' . $this->url . '/grid_country_totals',
+            array(
+                array(
                     'methods'  => WP_REST_Server::CREATABLE,
-                    'callback' => [ $this, 'grid_country_totals' ],
-                ],
-            ]
+                    'callback' => array( $this, 'grid_country_totals' ),
+                ),
+            )
         );
         register_rest_route(
-            $this->namespace, '/' . $this->url . '/points_geojson', [
-                [
+            $this->namespace,
+            '/' . $this->url . '/points_geojson',
+            array(
+                array(
                     'methods'  => WP_REST_Server::CREATABLE,
-                    'callback' => [ $this, 'points_geojson' ],
-                ],
-            ]
+                    'callback' => array( $this, 'points_geojson' ),
+                ),
+            )
         );
     }
 
     public function endpoint( WP_REST_Request $request ){
         if ( !$this->has_permission() ) {
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Permissions", array( 'status' => 400 ) );
         }
         $params = $request->get_params();
 
@@ -185,11 +214,11 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
 
     public function grid_totals( WP_REST_Request $request ) {
         if ( !$this->has_permission() ){
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Permissions", array( 'status' => 400 ) );
         }
         $params = $request->get_json_params() ?? $request->get_body_params();
         if ( ! isset( $params['post_type'] ) || empty( $params['post_type'] ) ) {
-            return new WP_Error( __METHOD__, "Missing Post Types", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Post Types", array( 'status' => 400 ) );
         }
         $post_type = sanitize_text_field( wp_unslash( $params['post_type'] ) );
 
@@ -198,7 +227,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             $status = sanitize_text_field( wp_unslash( $params['status'] ) );
         }
 
-        return apply_filters( 'dashboard_grid_totals', $grid_list = [], $post_type, $status );
+        return apply_filters( 'dashboard_grid_totals', $grid_list = array(), $post_type, $status );
 
     }
     public function grid_totals_contacts( $grid_list, $post_type, $status ) {
@@ -206,20 +235,20 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             return $grid_list;
         }
 
-        if ( array_search( $status, ['all', 'active', 'paused', 'closed' ] ) === false ) {
+        if ( array_search( $status, array( 'all', 'active', 'paused', 'closed' ) ) === false ) {
             $status = 'all';
         }
 
         $sites = $this->get_sites();
-        $grid_list = [];
+        $grid_list = array();
         if ( ! empty( $sites ) ) {
             foreach ( $sites as $key => $site ) {
-                foreach( $site['locations'][$post_type][$status] as $grid ) {
+                foreach ( $site['locations'][$post_type][$status] as $grid ) {
                     if ( ! isset( $grid_list[$grid['grid_id']] ) ) {
-                        $grid_list[$grid['grid_id']] = [
+                        $grid_list[$grid['grid_id']] = array(
                             'grid_id' => $grid['grid_id'],
                             'count' => 0
-                        ];
+                        );
                     }
 
                     $grid_list[$grid['grid_id']]['count'] = $grid_list[$grid['grid_id']]['count'] + $grid['count'];
@@ -234,20 +263,20 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             return $grid_list;
         }
 
-        if ( array_search( $status, ['all', 'active', 'inactive' ] ) === false ) {
+        if ( array_search( $status, array( 'all', 'active', 'inactive' ) ) === false ) {
             $status = 'all';
         }
 
         $sites = $this->get_sites();
-        $grid_list = [];
+        $grid_list = array();
         if ( ! empty( $sites ) ) {
             foreach ( $sites as $key => $site ) {
-                foreach( $site['locations'][$post_type][$status] as $grid ) {
+                foreach ( $site['locations'][$post_type][$status] as $grid ) {
                     if ( ! isset( $grid_list[$grid['grid_id']] ) ) {
-                        $grid_list[$grid['grid_id']] = [
+                        $grid_list[$grid['grid_id']] = array(
                             'grid_id' => $grid['grid_id'],
                             'count' => 0
-                        ];
+                        );
                     }
 
                     $grid_list[$grid['grid_id']]['count'] = $grid_list[$grid['grid_id']]['count'] + $grid['count'];
@@ -258,20 +287,20 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         return $grid_list;
     }
     public function grid_totals_by_type( $grid_list, $type, $status ) {
-        if ( array_search( $type, ['contacts', 'groups', 'churches', 'users' ] ) === false ) {
+        if ( array_search( $type, array( 'contacts', 'groups', 'churches', 'users' ) ) === false ) {
             return $grid_list;
         }
 
-        switch( $type ) {
+        switch ( $type ) {
             case 'contacts':
-                if ( array_search( $status, ['all', 'active', 'paused', 'closed' ] ) === false ) {
+                if ( array_search( $status, array( 'all', 'active', 'paused', 'closed' ) ) === false ) {
                     $status = 'all';
                 }
                 break;
             case 'groups':
             case 'churches':
             case 'users':
-                if ( array_search( $status, ['all', 'active', 'inactive' ] ) === false ) {
+                if ( array_search( $status, array( 'all', 'active', 'inactive' ) ) === false ) {
                     $status = 'all';
                 }
                 break;
@@ -281,15 +310,15 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         }
 
         $sites = $this->get_sites();
-        $grid_list = [];
+        $grid_list = array();
         if ( ! empty( $sites ) ) {
             foreach ( $sites as $key => $site ) {
-                foreach( $site['locations'][$type][$status] as $grid ) {
+                foreach ( $site['locations'][$type][$status] as $grid ) {
                     if ( ! isset( $grid_list[$grid['grid_id']] ) ) {
-                        $grid_list[$grid['grid_id']] = [
+                        $grid_list[$grid['grid_id']] = array(
                             'grid_id' => $grid['grid_id'],
                             'count' => 0
-                        ];
+                        );
                     }
 
                     $grid_list[$grid['grid_id']]['count'] = $grid_list[$grid['grid_id']]['count'] + $grid['count'];
@@ -306,11 +335,11 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
 
     public function points_geojson( WP_REST_Request $request ) {
         if ( ! $this->has_permission() ){
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Permissions", array( 'status' => 400 ) );
         }
         $params = $request->get_json_params() ?? $request->get_body_params();
         if ( ! isset( $params['post_type'] ) || empty( $params['post_type'] ) ) {
-            return new WP_Error( __METHOD__, "Missing Post Types", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Post Types", array( 'status' => 400 ) );
         }
 
         $status = null;
@@ -337,10 +366,11 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                  LEFT JOIN $wpdb->dt_location_grid as lg ON lg.grid_id=lgm.grid_id   
             WHERE lgm.post_type = 'trainings' 
             LIMIT 40000;
-            ", ARRAY_A );
+            ",
+        ARRAY_A );
 
-        $results = [
-            [
+        $results = array(
+            array(
                 'lng' => 0,
                 'lat' => 0,
                 'l' => 'label',
@@ -348,10 +378,10 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 "n" => 'name',
                 "a0" => 'a0',
                 "a1" => 'a1'
-            ]
-        ];
+            )
+        );
 
-        $features = [];
+        $features = array();
         foreach ( $results as $result ) {
             $features[] = array(
                 'type' => 'Feature',
@@ -391,13 +421,13 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
     public function _empty_geojson() {
         return array(
             'type' => 'FeatureCollection',
-            'features' => []
+            'features' => array()
         );
     }
 
     public function get_groups_geojson( $status = null ) {
         if ( ! $this->has_permission() ){
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Permissions", array( 'status' => 400 ) );
         }
         global $wpdb;
 
@@ -407,17 +437,20 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             FROM $wpdb->dt_location_grid_meta as lg 
                 JOIN $wpdb->posts as p ON p.ID=lg.post_id 
                 LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=p.ID AND pm.meta_key = 'group_status'
-            WHERE lg.post_type = 'groups' AND pm.meta_value = %s", $status), ARRAY_A );
+            WHERE lg.post_type = 'groups' AND pm.meta_value = %s",
+                $status),
+            ARRAY_A );
         } else {
             $results = $wpdb->get_results("
             SELECT lg.label as address, p.post_title as name, lg.post_id, lg.lng, lg.lat 
             FROM $wpdb->dt_location_grid_meta as lg 
                 JOIN $wpdb->posts as p ON p.ID=lg.post_id 
                 LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=p.ID AND pm.meta_key = 'group_status'
-            WHERE lg.post_type = 'groups'", ARRAY_A);
+            WHERE lg.post_type = 'groups'",
+            ARRAY_A);
         }
 
-        $features = [];
+        $features = array();
         foreach ( $results as $result ) {
             $features[] = array(
                 'type' => 'Feature',
@@ -447,7 +480,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
 
     public function get_contacts_geojson( $status = null ) {
         if ( ! $this->has_permission() ){
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Permissions", array( 'status' => 400 ) );
         }
         global $wpdb;
 
@@ -459,7 +492,9 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=p.ID AND pm.meta_key = 'overall_status'
             WHERE lg.post_type = 'contacts'
             AND pm.post_id NOT IN (SELECT u.post_id FROM $wpdb->postmeta as u WHERE u.meta_key = 'corresponds_to_user' AND u.meta_value != '' )
-            AND pm.meta_value = %s ", $status), ARRAY_A );
+            AND pm.meta_value = %s ",
+                $status),
+            ARRAY_A );
         } else {
             $results = $wpdb->get_results("
             SELECT lg.label as address, p.post_title as name, lg.post_id, lg.lng, lg.lat 
@@ -467,10 +502,11 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 JOIN $wpdb->posts as p ON p.ID=lg.post_id 
                 LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=p.ID AND pm.meta_key = 'overall_status'
             WHERE lg.post_type = 'contacts'
-            AND pm.post_id NOT IN (SELECT u.post_id FROM $wpdb->postmeta as u WHERE ( u.meta_key = 'corresponds_to_user' AND u.meta_value != '') OR ( u.meta_key = 'overall_status' AND u.meta_value = 'closed') )", ARRAY_A);
+            AND pm.post_id NOT IN (SELECT u.post_id FROM $wpdb->postmeta as u WHERE ( u.meta_key = 'corresponds_to_user' AND u.meta_value != '') OR ( u.meta_key = 'overall_status' AND u.meta_value = 'closed') )",
+            ARRAY_A);
         }
 
-        $features = [];
+        $features = array();
         foreach ( $results as $result ) {
             $features[] = array(
                 'type' => 'Feature',
@@ -500,12 +536,12 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
 
     public function get_grid_list( WP_REST_Request $request ){
         if ( !$this->has_permission() ){
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Permissions", array( 'status' => 400 ) );
         }
 
         $params = $request->get_json_params() ?? $request->get_body_params();
         if ( ! isset( $params['post_type'] ) || empty( $params['post_type'] ) ) {
-            return new WP_Error( __METHOD__, "Missing Post Types", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Post Types", array( 'status' => 400 ) );
         }
 
         $status = null;
@@ -519,14 +555,14 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         } else if ( $post_type === 'groups' ) {
             return $this->get_groups_grid_list( $status );
         } else {
-            return new WP_Error( __METHOD__, "Invalid post type", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Invalid post type", array( 'status' => 400 ) );
         }
 
     }
 
     public function get_contacts_grid_list( $status = null ) {
         if ( !$this->has_permission() ){
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Permissions", array( 'status' => 400 ) );
         }
 
         global $wpdb;
@@ -540,7 +576,9 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             AND po.ID NOT IN (SELECT DISTINCT(u.post_id) FROM $wpdb->postmeta as u WHERE u.meta_key = 'corresponds_to_user' AND u.meta_value != '')
                 AND lgm.grid_id IS NOT NULL 
                 ORDER BY po.post_title
-            ;", $status ), ARRAY_A );
+            ;",
+                $status ),
+            ARRAY_A );
         } else {
             $results = $wpdb->get_results( "
             SELECT DISTINCT lgm.grid_id as grid_id, lgm.grid_meta_id, lgm.post_id, po.post_title as name 
@@ -550,14 +588,15 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 AND po.ID NOT IN (SELECT DISTINCT(u.post_id) FROM $wpdb->postmeta as u WHERE ( u.meta_key = 'corresponds_to_user' AND u.meta_value != '') OR ( u.meta_key = 'overall_status' AND u.meta_value = 'closed'))
                 AND lgm.grid_id IS NOT NULL 
                 ORDER BY po.post_title
-            ;", ARRAY_A );
+            ;",
+            ARRAY_A );
         }
 
 
-        $list = [];
+        $list = array();
         foreach ( $results as $result ) {
             if ( ! isset( $list[$result['grid_id']] ) ) {
-                $list[$result['grid_id']] = [];
+                $list[$result['grid_id']] = array();
             }
             $list[$result['grid_id']][] = $result;
         }
@@ -567,7 +606,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
 
     public function get_groups_grid_list( $status = null ) {
         if ( !$this->has_permission() ){
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Permissions", array( 'status' => 400 ) );
         }
 
         global $wpdb;
@@ -579,12 +618,13 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             WHERE lgm.post_type ='groups' 
             	AND lgm.grid_id IS NOT NULL 
             	ORDER BY po.post_title
-            ;", ARRAY_A );
+            ;",
+        ARRAY_A );
 
-        $list = [];
+        $list = array();
         foreach ( $results as $result ) {
             if ( ! isset( $list[$result['grid_id']] ) ) {
-                $list[$result['grid_id']] = [];
+                $list[$result['grid_id']] = array();
             }
             $list[$result['grid_id']][] = $result;
         }
@@ -594,7 +634,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
 
     public function grid_country_totals( WP_REST_Request $request ) {
         if ( !$this->has_permission() ){
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Permissions", array( 'status' => 400 ) );
         }
         global $wpdb;
         $results = $wpdb->get_results( "
@@ -603,9 +643,10 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
              SELECT lg.admin0_grid_id FROM $wpdb->dt_location_grid as lg LEFT JOIN $wpdb->dt_location_grid_meta as lgm ON lg.grid_id=lgm.grid_id WHERE lgm.post_type = 'trainings'
             ) as t0
             GROUP BY t0.admin0_grid_id
-            ", ARRAY_A );
+            ",
+        ARRAY_A );
 
-        $list = [];
+        $list = array();
         foreach ( $results as $result ) {
             $list[$result['grid_id']] = $result;
         }

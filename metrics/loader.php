@@ -21,7 +21,7 @@ function dt_network_dashboard_top_nav_desktop() {
  * @return bool
  */
 function dt_network_dashboard_has_metrics_permissions() : bool {
-    $permissions = [ 'view_any_contacts', 'view_project_metrics' ];
+    $permissions = array( 'view_any_contacts', 'view_project_metrics' );
     foreach ( $permissions as $permission ){
         if ( current_user_can( $permission ) ){
             return true;
@@ -60,7 +60,7 @@ foreach ( $dir as $file ){
  */
 add_filter( 'dt_metrics_menu', 'dt_network_dashboard_build_menu', 10 );
 function dt_network_dashboard_build_menu( $content ){
-    $menu = apply_filters( 'dt_network_dashboard_build_menu', [] );
+    $menu = apply_filters( 'dt_network_dashboard_build_menu', array() );
 
     // l1
     foreach ( $menu as $key => $value ){

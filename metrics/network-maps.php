@@ -15,17 +15,17 @@ class DT_Network_Dashboard_Metrics_Maps extends DT_Network_Dashboard_Metrics_Bas
         $this->url = $this->root_slug . '/' . $this->base_slug;
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
 
-        add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 40 );
+        add_filter( 'dt_network_dashboard_build_menu', array( $this, 'menu' ), 40 );
 
     }
 
     public function menu( $tree ){
-        $tree[$this->base_slug] = [
+        $tree[$this->base_slug] = array(
             'key' => $this->key,
             'label' => $this->menu_title,
             'url' => '/'.$this->url,
-            'children' => []
-        ];
+            'children' => array()
+        );
         return $tree;
     }
 }

@@ -54,20 +54,20 @@ function dt_network_dashboard_trigger_sites() {
         return false;
     }
 
-    $remotes = [];
-    $multisites = [];
+    $remotes = array();
+    $multisites = array();
     foreach ( $sites as $site ) {
         if ( 'remote' === $site['type'] ){
-            $remotes[] = [
+            $remotes[] = array(
             'name' => $site['name'],
             'type_id' => $site['type_id']
-            ];
+            );
         }
         if ( 'multisite' === $site['type'] ){
-            $multisites[] = [
+            $multisites[] = array(
             'name' => $site['name'],
             'type_id' => $site['type_id']
-            ];
+            );
         }
     }
 
@@ -77,9 +77,9 @@ function dt_network_dashboard_trigger_sites() {
             try {
                 $task = new DT_Network_Dashboard_Cron_Trigger_Remotes();
                 $task->launch(
-                    [
+                    array(
                         'list' => $list,
-                    ]
+                    )
                 );
             } catch ( Exception $e ) {
                 dt_write_log( $e );
@@ -93,9 +93,9 @@ function dt_network_dashboard_trigger_sites() {
             try {
                 $task = new DT_Network_Dashboard_Cron_Trigger_Multisite();
                 $task->launch(
-                    [
+                    array(
                         'list' => $list,
-                    ]
+                    )
                 );
             } catch ( Exception $e ) {
                 dt_write_log( $e );
@@ -114,10 +114,10 @@ class DT_Network_Dashboard_Cron_Trigger_Remotes extends Disciple_Tools_Async_Tas
     }
 
     public function get_trigger_remotes() {
-        if ( isset( $_POST[0]['list'] ) ) {
+        if ( isset( $_POST[0]['list'] ) ) { // phpcs:ignore
 
             $file = 'trigger';
-            $list = recursive_sanitize_text_field( $_POST[0]['list'] );
+            $list = recursive_sanitize_text_field( $_POST[0]['list'] ); // phpcs:ignore
 
             foreach ( $list as $item ) {
                 try {
@@ -130,9 +130,9 @@ class DT_Network_Dashboard_Cron_Trigger_Remotes extends Disciple_Tools_Async_Tas
                     dt_save_log( $file, 'START: ' . $item['name'] . ' ('. $site_vars['url'] .')' );
 
                     // Send remote request
-                    $args = [
+                    $args = array(
                         'method' => 'GET',
-                    ];
+                    );
                     $result = wp_remote_get( 'https://' . $site_vars['url'] . '/wp-cron.php', $args );
                     if ( is_wp_error( $result ) ) {
                         dt_save_log( $file, 'FAIL: ' . $item['name'] . ' (Failed in connection to remote site.)' );
@@ -198,9 +198,9 @@ class DT_Network_Dashboard_Cron_Trigger_Multisite extends Disciple_Tools_Async_T
                     dt_save_log( $file, 'START: ' . $item['name'] . ' ('. $site_url .')' );
 
                     // Send remote request
-                    $args = [
+                    $args = array(
                         'method' => 'GET',
-                    ];
+                    );
                     $result = wp_remote_get( trailingslashit( $site_url ) . 'wp-cron.php', $args );
                     if ( is_wp_error( $result ) ) {
                         dt_save_log( $file, 'FAIL: ' . $item['name'] . ' (Failed in connection to remote site.)' );

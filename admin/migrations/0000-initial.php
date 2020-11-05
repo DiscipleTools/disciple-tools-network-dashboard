@@ -19,9 +19,9 @@ class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration
         add_role(
             'network_dashboard_viewer',
             __( 'Network Dashboard Viewer' ),
-            [
+            array(
                 'view_network_dashboard' => true
-            ]
+            )
         );
 
         // extend cap to strategist role

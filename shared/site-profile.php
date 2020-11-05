@@ -10,12 +10,12 @@ if ( ! function_exists( 'dt_network_site_profile' ) ) {
         $profile = get_option( 'dt_site_profile' );
 
         if ( empty( $profile ) || empty( $profile['partner_id'] || ! isset( $profile['partner_id'] ) ) ) {
-            $profile = [
+            $profile = array(
                 'partner_id' => dt_network_site_id(),
                 'partner_name' => get_option( 'blogname' ),
                 'partner_description' => get_option( 'blogdescription' ),
                 'partner_url' => site_url()
-            ];
+            );
             update_option( 'dt_site_profile', $profile, true );
         }
 
@@ -51,7 +51,7 @@ if ( ! function_exists( 'dt_network_site_system' ) ) {
     function dt_network_site_system() : array {
         global $wp_version, $wp_db_version;
 
-        $system = [
+        $system = array(
             'network_dashboard_version' => DT_Network_Dashboard::get_instance()->version ?? 0,
             'network_dashboard_migration' => get_option( 'dt_network_dashboard_migration_number' ),
             'network_dashboard_migration_lock' => get_option( 'dt_network_dashboard_migration_lock' ),
@@ -64,7 +64,7 @@ if ( ! function_exists( 'dt_network_site_system' ) ) {
             'php_version' => phpversion(),
             'wp_version' => $wp_version,
             'wp_db_version' => $wp_db_version,
-        ];
+        );
 
         return $system;
     }
@@ -90,13 +90,13 @@ class DT_Network_Dashboard_Site_Link_Metabox {
 
             if ( 'network_dashboard' === substr( get_post_meta( $post_id, 'type', true ), 0, 17 )
             ) {
-                add_action( 'admin_menu', [ $this, 'meta_box_setup' ], 20 );
+                add_action( 'admin_menu', array( $this, 'meta_box_setup' ), 20 );
             }
         }
     }
 
     public function meta_box_setup() {
-        add_meta_box( 'site_link_network_dashboard_box', __( 'Network Dashboard Site Profile', 'disciple_tools' ), [ $this, 'load_site_profile_meta_box' ], 'site_link_system', 'normal', 'low' );
+        add_meta_box( 'site_link_network_dashboard_box', __( 'Network Dashboard Site Profile', 'disciple_tools' ), array( $this, 'load_site_profile_meta_box' ), 'site_link_system', 'normal', 'low' );
     }
 
     public function load_site_profile_meta_box( $post = null ) {
@@ -123,9 +123,8 @@ class DT_Network_Dashboard_Site_Link_Metabox {
             dt_write_log( $refreshed_profile );
             ?>
             Failed to refresh remote site profile. Check connection. Error has been logged. (Remote 1)
-            <span style="float:right">Status: <strong><span id="fail-profile-status" class="fail-read" style="color:red;">Failed connection to remote Network Dashboard. (Profile)</span></strong></span>
-            <?php
-            echo maybe_serialize($refreshed_profile );
+            <span style="float:right">Status: <strong><span id="fail-profile-status" class="fail-read" style="color:red;">Failed connection to remote Network Dashboard. (Profile)</span></strong></span><br><br>
+            <?php echo esc_html( maybe_serialize( $refreshed_profile ) );
             return;
         }
 
@@ -153,17 +152,17 @@ class DT_Network_Dashboard_Site_Link_Metabox {
         <table>
             <tr>
                 <td>
-                    <?php echo $site_profile['partner_name'] ?? 'Partner Name' ?>
+                    <?php echo esc_html( $site_profile['partner_name'] ?? 'Partner Name' ) ?>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <?php echo $site_profile['partner_url'] ?? 'Partner URL' ?>
+                    <?php echo esc_html( $site_profile['partner_url'] ?? 'Partner URL' ) ?>
                 </td>
             </tr>
             <tr>
                 <td>
-                    <?php echo $site_profile['partner_id'] ?? 'Partner ID' ?>
+                    <?php echo esc_html( $site_profile['partner_id'] ?? 'Partner ID' ) ?>
                 </td>
             </tr>
         </table>
@@ -230,7 +229,7 @@ class DT_Network_Dashboard_Site_Link_Metabox {
                                         if ( 0 !== $i ){
                                             echo ', ';
                                         }
-                                        echo $label['label'];
+                                        echo esc_html( $label['label'] );
                                         $i++;
                                     }
                                 }
@@ -268,26 +267,26 @@ class DT_Network_Dashboard_Site_Links_Endpoint extends DT_Network_Dashboard_Endp
 
     public function __construct() {
         parent::__construct();
-        add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
+        add_action( 'rest_api_init', array( $this, 'add_api_routes' ) );
     } // End __construct()
 
     public function add_api_routes() {
         register_rest_route(
             $this->public_namespace,
             '/network_dashboard/profile',
-            [
+            array(
                 'methods'  => 'POST',
-                'callback' => [ $this, 'profile' ],
-            ]
+                'callback' => array( $this, 'profile' ),
+            )
         );
     }
     public function profile( WP_REST_Request $request ) {
         $params = $this->process_token( $request );
         if ( is_wp_error( $params ) ) {
-            return [
+            return array(
                 'status' => 'FAIL',
                 'error' => $params,
-            ];
+            );
         }
         return dt_network_site_profile();
     }

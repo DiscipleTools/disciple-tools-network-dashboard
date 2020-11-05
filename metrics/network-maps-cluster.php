@@ -35,29 +35,29 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
     public function add_scripts() {
         wp_enqueue_script( $this->js_object_name .'_script',
             plugin_dir_url( __FILE__ ) . $this->js_file_name,
-            [
+            array(
             'jquery',
             'network_base_script',
-            ],
+            ),
             filemtime( plugin_dir_path( __FILE__ ) . $this->js_file_name ),
         true );
         wp_localize_script(
             $this->js_object_name .'_script',
             $this->js_object_name,
-            [
+            array(
                 'endpoint' => $this->url,
                 'map_key' => DT_Mapbox_API::get_key(),
-            ]
+            )
         );
     }
 
     public function menu( $tree ){
-        $tree[$this->base_slug]['children'][$this->slug] = [
+        $tree[$this->base_slug]['children'][$this->slug] = array(
             'key' => $this->key,
             'label' => $this->menu_title,
             'url' => '/'.$this->url,
-            'children' => []
-        ];
+            'children' => array()
+        );
         return $tree;
     }
 
@@ -70,24 +70,24 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         register_rest_route(
             $this->namespace,
             '/' . $this->url . '/',
-            [
-                [
+            array(
+                array(
                     'methods'  => WP_REST_Server::CREATABLE,
-                    'callback' => [ $this, 'endpoint' ],
-                ],
-            ]
+                    'callback' => array( $this, 'endpoint' ),
+                ),
+            )
         );
 
     }
 
     public function endpoint( WP_REST_Request $request ){
         if ( !$this->has_permission() ) {
-            return new WP_Error( __METHOD__, "Missing Permissions", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Permissions", array( 'status' => 400 ) );
         }
 
         $params = $request->get_json_params() ?? $request->get_body_params();
         if ( ! isset( $params['post_type'] ) || empty( $params['post_type'] ) ) {
-            return new WP_Error( __METHOD__, "Missing Post Types", [ 'status' => 400 ] );
+            return new WP_Error( __METHOD__, "Missing Post Types", array( 'status' => 400 ) );
         }
 
         $post_type = sanitize_text_field( wp_unslash( $params['post_type'] ) );
@@ -104,7 +104,7 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         global $wpdb;
 
         $sites = $this->get_sites();
-        $list = [];
+        $list = array();
         foreach ( $sites as $site ){
             if ( ! isset( $site['locations']['contacts']['active'] ) ) {
                 continue;
@@ -118,12 +118,12 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         }
 
         $grid = $wpdb->get_results( "SELECT grid_id, longitude, latitude FROM $wpdb->dt_location_grid", ARRAY_A );
-        $grid_list = [];
+        $grid_list = array();
         foreach ( $grid as $g ){
             $grid_list[$g['grid_id']] = $g;
         }
 
-        $features = [];
+        $features = array();
         foreach ( $list as $grid_id => $value ) {
 //            if ( ! isset( $grid_list[$grid_id] ) || empty( $grid_list[$grid_id] ) ) {
 //                continue;

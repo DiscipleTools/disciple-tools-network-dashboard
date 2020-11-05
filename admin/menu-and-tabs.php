@@ -57,7 +57,7 @@ class DT_Network_Dashboard_Menu {
             __( 'Extensions (DT)', 'disciple_tools' ),
             'manage_dt',
             'dt_extensions',
-            [ $this, 'extensions_menu' ],
+            array( $this, 'extensions_menu' ),
             'dashicons-admin-generic',
         59 );
         add_submenu_page( 'dt_extensions',
@@ -65,7 +65,7 @@ class DT_Network_Dashboard_Menu {
             __( 'Network Dashboard', 'dt_network_dashboard' ),
             'manage_dt',
             $this->token,
-        [ $this, 'content' ] );
+        array( $this, 'content' ) );
     }
 
 
@@ -250,7 +250,7 @@ class DT_Network_Dashboard_Tab_Profile
         </style>
         <table class="widefat striped" id="network-map">
             <thead>
-            <tr><td>Network Map (Incoming and Outgoing Reports) <span style="float:right;"><a href="<?php echo admin_url() ?>edit.php?post_type=site_link_system">Add Remote Dashboard</a></span></td></tr>
+            <tr><td>Network Map (Incoming and Outgoing Reports) <span style="float:right;"><a href="<?php echo esc_url( admin_url() ) ?>edit.php?post_type=site_link_system">Add Remote Dashboard</a></span></td></tr>
             </thead>
             <tbody>
                 <tr>
@@ -331,7 +331,7 @@ class DT_Network_Dashboard_Tab_Profile
             </thead>
             <tbody>
             <tr>
-                <td style="width:115px;"><img src="<?php echo plugin_dir_url( __FILE__ ) ?>images/tab-screen.png" height="40px" /></td>
+                <td style="width:115px;"><img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) ) ?>images/tab-screen.png" height="40px" /></td>
                 <td>
                     <select name="tab">
                         <option value="hide" <?php echo ( 'hide' === $tab || empty( $tab ) ) ? 'selected' : ''; ?>>Hide</option>
@@ -440,7 +440,7 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
             <tr>
                 <td>
                     <button class="button" id="rerun-collection" type="button">Refresh All Snapshots</button>
-                    &nbsp;<span id="rerun-collection-spinner" style="display: none;"><img src="<?php echo plugin_dir_url( __DIR__ ) ?>spinner.svg" width="25px" /></span>
+                    &nbsp;<span id="rerun-collection-spinner" style="display: none;"><img src="<?php echo esc_url( plugin_dir_url( __DIR__ ) ) ?>spinner.svg" width="25px" /></span>
                     &nbsp;<span id="result-message"></span>
                 </td>
             </tr>
@@ -485,7 +485,7 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
              ) {
 
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
-                $partner = recursive_sanitize_text_field( $_POST['partner'] );
+                $partner = recursive_sanitize_text_field( $_POST['partner'] ); // @phpcs:ignore
 
                 foreach ( $partner as $key => $value ){
                     DT_Network_Dashboard_Site_Post_Type::update_multisite_profile( $key );
@@ -624,10 +624,10 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                 <tr>
                     <td>
                         <button class="button" id="rerun-collection" type="button">Refresh All Snapshots</button>
-                        &nbsp;<span id="rerun-collection-spinner" style="display: none;"><img src="<?php echo plugin_dir_url( __DIR__ ) ?>spinner.svg" width="25px" /></span>
+                        &nbsp;<span id="rerun-collection-spinner" style="display: none;"><img src="<?php echo esc_url( plugin_dir_url( __DIR__ ) ) ?>spinner.svg" width="25px" /></span>
                         &nbsp;<span id="result-message"></span>
 
-                        <span style="float:right;"><a href="<?php echo admin_url() ?>edit.php?post_type=site_link_system">Add Remote Dashboard</a></span>
+                        <span style="float:right;"><a href="<?php echo esc_url( admin_url() ) ?>edit.php?post_type=site_link_system">Add Remote Dashboard</a></span>
                     </td>
                 </tr>
             </tbody>
@@ -671,7 +671,7 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
              ) {
 
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
-                $partner = recursive_sanitize_text_field( $_POST['partner'] );
+                $partner = recursive_sanitize_text_field( $_POST['partner'] ); // @phpcs:ignore
 
                 foreach ( $partner as $key => $value ){
                     if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
@@ -726,7 +726,7 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                         ?>
                         <tr>
                             <td style="width:10px;">
-                                <?php echo $site['id'] ?>
+                                <?php echo esc_html( $site['id'] ) ?>
                             </td>
                             <td>
                                 <strong><?php echo esc_html( $profile['partner_name'] ) ?></strong>
@@ -810,13 +810,15 @@ class DT_Network_Dashboard_Tab_Outgoing
         if ( isset( $_POST['activity-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['activity-nonce'] ) ), 'activity'. get_current_user_id() ) ) {
 
             if ( isset( $_POST['send_activity'] ) && ! empty( $_POST['send_activity'] ) && is_array( $_POST['send_activity'] ) ) {
-                foreach ($_POST['send_activity'] as $i => $v ) {
+                $send_activity = recursive_sanitize_text_field( $_POST['send_activity'] ); // @phpcs:ignore
+                foreach ($send_activity as $i => $v ) {
                     DT_Network_Dashboard_Site_Post_Type::update_send_activity( sanitize_text_field( wp_unslash( $i ) ), sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
 
             if ( isset( $_POST['location_precision'] ) && ! empty( $_POST['location_precision'] ) && is_array( $_POST['location_precision'] ) ) {
-                foreach ($_POST['location_precision'] as $i => $v ) {
+                $location_precision = recursive_sanitize_text_field( $_POST['location_precision'] ); // @phpcs:ignore
+                foreach ( $location_precision as $i => $v ) {
                     DT_Network_Dashboard_Site_Post_Type::update_location_precision( sanitize_text_field( wp_unslash( $i ) ), sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
@@ -995,16 +997,15 @@ class DT_Network_Dashboard_Tab_System
         $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report();
 
         if ( isset( $_POST['local_site_data'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['local_site_data'] ) ), 'local_site_data'.get_current_user_id() ) ) {
-           dt_write_log($_POST);
+            dt_write_log( $_POST );
 
-           if ( isset( $_POST['new-local-snapshot'] ) ) {
+            if ( isset( $_POST['new-local-snapshot'] ) ) {
                 $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report( true );
-           }
+            }
 
-           if ( isset( $_POST['delete-local-activity'] ) ) {
+            if ( isset( $_POST['delete-local-activity'] ) ) {
                 DT_Network_Activity_Log::delete_activity( $profile['partner_id'] );
-           }
-
+            }
         }
 
         ?>
@@ -1033,7 +1034,7 @@ class DT_Network_Dashboard_Tab_System
                     </td>
                     <td style="width:150px; border-left: 1px solid lightgrey;">
                         <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
-                        <?php echo ( ! empty( $snapshot['timestamp'] ) ) ? date( 'Y-m-d H:i:s', $snapshot['timestamp'] ) : '---' ?>
+                        <?php echo ( ! empty( $snapshot['timestamp'] ) ) ? esc_html( gmdate( 'Y-m-d H:i:s', $snapshot['timestamp'] ) ) : '---' ?>
                     </td>
                     <td>
                         <button name="new-local-snapshot" type="submit" value="new-local-snapshot" class="button" >Refresh Snapshot</button>
@@ -1041,8 +1042,8 @@ class DT_Network_Dashboard_Tab_System
                     <td style="width:100px; border-left: 1px solid lightgrey;">
                         Records:
                          <?php
-                             echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE site_id = %s", $profile['partner_id'] ) );
-                         ?>
+                             echo esc_html( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE site_id = %s", $profile['partner_id'] ) ) );
+                            ?>
                     </td>
                     <td>
                         <button name="delete-local-activity" type="submit" value="delete-local-activity" class="button" >Delete All Local Activity</button>
@@ -1052,15 +1053,15 @@ class DT_Network_Dashboard_Tab_System
                 <?php
 
                     /* Start Loop 0 */
-                    if ( isset( $_GET['rebuild_activity'] ) && '0' === $_GET['rebuild_activity'] ) :
-                        ?>
+                if ( isset( $_GET['rebuild_activity'] ) && '0' === $_GET['rebuild_activity'] ) :
+                    ?>
                         <tr>
                             <td colspan="6"><img src="<?php echo esc_url( get_theme_file_uri() ) ?>/spinner.svg" width="30px" alt="spinner" /></td>
                         </tr>
                         <script type="text/javascript">
                             <!--
                             function nextpage() {
-                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=1&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                                location.href = "<?php echo esc_url( admin_url() ) ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=1&nonce=<?php echo esc_attr( wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ) ?>";
                             }
                             setTimeout( "nextpage()", 1500 );
                             //-->
@@ -1069,10 +1070,10 @@ class DT_Network_Dashboard_Tab_System
                     endif; // 0
 
                     /* New Contact 1 */
-                    if ( isset( $_GET['rebuild_activity'] ) && '1' === $_GET['rebuild_activity'] ) :
-                        $results = DT_Network_Activity_Log::query_new_contacts();
-                        DT_Network_Activity_Log::local_bulk_insert( $results );
-                        ?>
+                if ( isset( $_GET['rebuild_activity'] ) && '1' === $_GET['rebuild_activity'] ) :
+                    $results = DT_Network_Activity_Log::query_new_contacts();
+                    DT_Network_Activity_Log::local_bulk_insert( $results );
+                    ?>
                         <tr>
                             <td colspan="6">New Contacts</td>
                         </tr>
@@ -1082,7 +1083,7 @@ class DT_Network_Dashboard_Tab_System
                         <script type="text/javascript">
                             <!--
                             function nextpage() {
-                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=2&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                                location.href = "<?php echo esc_attr( admin_url() ) ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=2&nonce=<?php echo esc_attr( wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ) ?>";
                             }
                             setTimeout( "nextpage()", 1500 );
                             //-->
@@ -1091,10 +1092,10 @@ class DT_Network_Dashboard_Tab_System
                     endif; // 1
 
                     /* New Groups 2 */
-                    if ( isset( $_GET['rebuild_activity'] ) && '2' === $_GET['rebuild_activity'] ) :
-                        $results = DT_Network_Activity_Log::query_new_groups();
-                        DT_Network_Activity_Log::local_bulk_insert( $results );
-                        ?>
+                if ( isset( $_GET['rebuild_activity'] ) && '2' === $_GET['rebuild_activity'] ) :
+                    $results = DT_Network_Activity_Log::query_new_groups();
+                    DT_Network_Activity_Log::local_bulk_insert( $results );
+                    ?>
                         <tr>
                             <td colspan="6">New Contacts</td>
                         </tr>
@@ -1107,7 +1108,7 @@ class DT_Network_Dashboard_Tab_System
                         <script type="text/javascript">
                             <!--
                             function nextpage() {
-                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=3&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                                location.href = "<?php echo esc_attr( admin_url() ) ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=3&nonce=<?php echo esc_attr( wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ) ?>";
                             }
                             setTimeout( "nextpage()", 1500 );
                             //-->
@@ -1116,10 +1117,10 @@ class DT_Network_Dashboard_Tab_System
                     endif; // 2
 
                     /* New Groups 3 */
-                    if ( isset( $_GET['rebuild_activity'] ) && '3' === $_GET['rebuild_activity'] ) :
-                        $results = DT_Network_Activity_Log::query_new_baptism();
-                        DT_Network_Activity_Log::local_bulk_insert( $results );
-                        ?>
+                if ( isset( $_GET['rebuild_activity'] ) && '3' === $_GET['rebuild_activity'] ) :
+                    $results = DT_Network_Activity_Log::query_new_baptism();
+                    DT_Network_Activity_Log::local_bulk_insert( $results );
+                    ?>
                         <tr>
                             <td colspan="6">New Contacts</td>
                         </tr>
@@ -1135,7 +1136,7 @@ class DT_Network_Dashboard_Tab_System
                         <script type="text/javascript">
                             <!--
                             function nextpage() {
-                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=4&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                                location.href = "<?php echo esc_attr( admin_url() ) ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=4&nonce=<?php echo esc_attr( wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ) ?>";
                             }
                             setTimeout( "nextpage()", 1500 );
                             //-->
@@ -1145,10 +1146,10 @@ class DT_Network_Dashboard_Tab_System
 
 
                     /* New Groups 4 */
-                    if ( isset( $_GET['rebuild_activity'] ) && '4' === $_GET['rebuild_activity'] ) :
-                        $results = DT_Network_Activity_Log::query_new_coaching();
-                        DT_Network_Activity_Log::local_bulk_insert( $results );
-                        ?>
+                if ( isset( $_GET['rebuild_activity'] ) && '4' === $_GET['rebuild_activity'] ) :
+                    $results = DT_Network_Activity_Log::query_new_coaching();
+                    DT_Network_Activity_Log::local_bulk_insert( $results );
+                    ?>
                         <tr>
                             <td colspan="6">New Contacts</td>
                         </tr>
@@ -1167,7 +1168,7 @@ class DT_Network_Dashboard_Tab_System
                         <script type="text/javascript">
                             <!--
                             function nextpage() {
-                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=5&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                                location.href = "<?php echo esc_attr( admin_url() ) ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=5&nonce=<?php echo esc_attr( wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ) ?>";
                             }
                             setTimeout( "nextpage()", 1500 );
                             //-->
@@ -1177,10 +1178,10 @@ class DT_Network_Dashboard_Tab_System
 
 
                     /* New Generations 5 */
-                    if ( isset( $_GET['rebuild_activity'] ) && '5' === $_GET['rebuild_activity'] ) :
-                        $results = DT_Network_Activity_Log::query_new_group_generations();
-                        DT_Network_Activity_Log::local_bulk_insert( $results );
-                        ?>
+                if ( isset( $_GET['rebuild_activity'] ) && '5' === $_GET['rebuild_activity'] ) :
+                    $results = DT_Network_Activity_Log::query_new_group_generations();
+                    DT_Network_Activity_Log::local_bulk_insert( $results );
+                    ?>
                         <tr>
                             <td colspan="6">New Contacts</td>
                         </tr>
@@ -1202,7 +1203,7 @@ class DT_Network_Dashboard_Tab_System
                         <script type="text/javascript">
                             <!--
                             function nextpage() {
-                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=6&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                                location.href = "<?php echo esc_attr( admin_url() ) ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=6&nonce=<?php echo esc_attr( wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ) ?>";
                             }
                             setTimeout( "nextpage()", 1500 );
                             //-->
@@ -1212,9 +1213,9 @@ class DT_Network_Dashboard_Tab_System
 
 
                     /* New Plugins 6 */
-                    if ( isset( $_GET['rebuild_activity'] ) && '6' === $_GET['rebuild_activity'] ) :
-                        do_action( 'dt_network_dashboard_rebuild_activity' );
-                        ?>
+                if ( isset( $_GET['rebuild_activity'] ) && '6' === $_GET['rebuild_activity'] ) :
+                    do_action( 'dt_network_dashboard_rebuild_activity' );
+                    ?>
                         <tr>
                             <td colspan="6">New Contacts</td>
                         </tr>
@@ -1239,17 +1240,14 @@ class DT_Network_Dashboard_Tab_System
                         <script type="text/javascript">
                             <!--
                             function nextpage() {
-                                location.href = "<?php echo admin_url() ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=7&nonce=<?php echo wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ?>";
+                                location.href = "<?php echo esc_attr( admin_url() ) ?>admin.php?page=dt_network_dashboard&tab=system&rebuild_activity=7&nonce=<?php echo esc_attr( wp_create_nonce( 'rebuild_activity'.get_current_user_id() ) ) ?>";
                             }
                             setTimeout( "nextpage()", 1500 );
                             //-->
                         </script>
                         <?php
                     endif; // 6
-
-
-
-                    ?>
+                ?>
                 </tbody>
             </table>
         </form>
@@ -1271,10 +1269,10 @@ class DT_Network_Dashboard_Tab_System
                 dt_save_log( 'management', 'REFRESH MULTISITE SNAPSHOT', false );
 
                 if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-multisite-snapshot'] ) ) ) ) ) {
-                    $message = [ 'notice-success','Successful collection of new snapshot' ];
+                    $message = array( 'notice-success','Successful collection of new snapshot' );
                 }
                 else {
-                    $message = [ 'notice-error', 'Failed collection' ];
+                    $message = array( 'notice-error', 'Failed collection' );
                 }
             }
             if ( isset( $_POST['new-remote-snapshot'] ) ){
@@ -1283,15 +1281,15 @@ class DT_Network_Dashboard_Tab_System
 
                 $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-remote-snapshot'] ) ) ) );
                 if ( $result ) {
-                    $message = [ 'notice-success','Successful collection of new snapshot.' ];
+                    $message = array( 'notice-success','Successful collection of new snapshot.' );
                 }
                 else {
-                    $message = [ 'notice-error', 'Failed collection' ];
+                    $message = array( 'notice-error', 'Failed collection' );
                 }
             }
 
             /* DELETE ACTIVITY */
-             if ( isset( $_POST['delete-multisite-activity'] ) ){
+            if ( isset( $_POST['delete-multisite-activity'] ) ){
                 dt_save_log( 'management', '', false );
                 dt_save_log( 'management', 'DELETE MULTISITE ACTIVITY', false );
 
@@ -1410,7 +1408,7 @@ class DT_Network_Dashboard_Tab_System
                             </td>
                             <td style="border-left: 1px solid lightgrey">
                                 <?php echo ( ! empty( $snapshot ) ) ? '&#9989;' : '&#x2718;' ?>
-                                <?php echo ( ! empty( $site['snapshot_timestamp'] ) ) ? date( 'Y-m-d H:i:s', $site['snapshot_timestamp'] ) : '---' ?>
+                                <?php echo ( ! empty( $site['snapshot_timestamp'] ) ) ? esc_html( gmdate( 'Y-m-d H:i:s', $site['snapshot_timestamp'] ) ) : '---' ?>
                                 <?php
                                 if ( ! empty( $fail ) ){
                                     ?>
@@ -1426,8 +1424,8 @@ class DT_Network_Dashboard_Tab_System
                             <td style="width:100px; border-left: 1px solid lightgrey;">
                                 Records:
                                  <?php
-                                     echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE site_id = %s", $site['site_id'] ) );
-                                 ?>
+                                     echo esc_html( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE site_id = %s", $site['site_id'] ) ) );
+                                    ?>
                             </td>
 
                             <td>
@@ -1499,7 +1497,7 @@ class DT_Network_Dashboard_Tab_System
                 <td>
                     <?php
                     $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report();
-                    echo date( 'Y-m-d H:i:s', $snapshot['timestamp'] );
+                    echo esc_html( gmdate( 'Y-m-d H:i:s', $snapshot['timestamp'] ) );
                     ?>
                 </td>
                 <td>
@@ -1509,7 +1507,7 @@ class DT_Network_Dashboard_Tab_System
                             if ( 'network' !== substr( $key, 0, 7 ) ){
                                 continue;
                             }
-                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
+                            echo esc_html( ucwords( str_replace( '_', ' ', $key ) ) ) . ': ' . esc_html( $label ) . '<br>';
                         }
                     }
                     ?>
@@ -1521,7 +1519,7 @@ class DT_Network_Dashboard_Tab_System
                             if ( 'dt_' !== substr( $key, 0, 3 ) ){
                                 continue;
                             }
-                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
+                            echo esc_html( ucwords( str_replace( '_', ' ', $key ) ) ) . ': ' . esc_html( $label ) . '<br>';
                         }
                     }
                     ?>
@@ -1533,7 +1531,7 @@ class DT_Network_Dashboard_Tab_System
                             if ( 'dt_' === substr( $key, 0, 3 ) || 'network' === substr( $key, 0, 7 ) ){
                                 continue;
                             }
-                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
+                            echo esc_html( ucwords( str_replace( '_', ' ', $key ) ) ) . ': ' . esc_html( $label ) . '<br>';
                         }
                     }
                     ?>
@@ -1547,7 +1545,7 @@ class DT_Network_Dashboard_Tab_System
                 if ( 'multisite' === $site['type'] && ! dt_network_dashboard_multisite_is_approved() ){
                     continue;
                 }
-                $non_wp = empty( $site['non_wp'] ) ;
+                $non_wp = empty( $site['non_wp'] );
                 ?>
                     <tr>
                     <td>
@@ -1556,7 +1554,7 @@ class DT_Network_Dashboard_Tab_System
                     <td>
                     <?php
                     if ( $non_wp ) {
-                        echo date( 'Y-m-d H:i:s', $site['snapshot_timestamp'] );
+                        echo esc_html( gmdate( 'Y-m-d H:i:s', $site['snapshot_timestamp'] ) );
                     }
                     ?>
                     </td>
@@ -1567,7 +1565,7 @@ class DT_Network_Dashboard_Tab_System
                             if ( 'network' !== substr( $key, 0, 7 ) ){
                                 continue;
                             }
-                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
+                            echo esc_html( ucwords( str_replace( '_', ' ', $key ) ) ) . ': ' . esc_html( $label ) . '<br>';
                         }
                     }
                     ?>
@@ -1579,7 +1577,7 @@ class DT_Network_Dashboard_Tab_System
                             if ( 'dt_' !== substr( $key, 0, 3 ) ){
                                 continue;
                             }
-                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
+                            echo esc_html( ucwords( str_replace( '_', ' ', $key ) ) ) . ': ' . $label . '<br>';
                         }
                     }
                     ?>
@@ -1591,7 +1589,7 @@ class DT_Network_Dashboard_Tab_System
                             if ( 'dt_' === substr( $key, 0, 3 ) || 'network' === substr( $key, 0, 7 ) ){
                                 continue;
                             }
-                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . $label . '<br>';
+                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . esc_html( $label ) . '<br>';
                         }
                     }
                     ?>
@@ -1632,13 +1630,13 @@ class DT_Network_Dashboard_Tab_System
                     <td>
                         <?php
                          global $wpdb;
-                         echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id = %s", $value['key'], $current_site_id ) );
+                         echo esc_html( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id = %s", $value['key'], $current_site_id ) ) );
                         ?>
                     </td>
                     <td>
                         <?php
                          global $wpdb;
-                         echo $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id != %s", $value['key'], $current_site_id ) );
+                         echo esc_html( $wpdb->get_var( $wpdb->prepare( "SELECT COUNT(id) FROM $wpdb->dt_movement_log WHERE action = %s AND site_id != %s", $value['key'], $current_site_id ) ) );
                         ?>
                     </td>
                 </tr>
@@ -1691,7 +1689,7 @@ class DT_Network_Dashboard_Tab_System
                 </tr>
                 <tr>
                     <td>
-                        Rebuild stuck migrations. Current migration number: <?php echo get_option('dt_network_dashboard_migration_number' ) ?> <?php echo ( $trigger_refresh ) ? '<a href="" class="button">Refresh The Page For An Accurtate Migration Number</a>' : ''; ?>
+                        Rebuild stuck migrations. Current migration number: <?php echo get_option( 'dt_network_dashboard_migration_number' ) ?> <?php echo ( $trigger_refresh ) ? '<a href="" class="button">Refresh The Page For An Accurtate Migration Number</a>' : ''; ?>
                     </td>
                     <td>
                         <button type="submit" class="button" style="float:right;" value="migrations" name="migrations">Rebuild Migrations</button>
@@ -1744,7 +1742,7 @@ class DT_Network_Dashboard_Tab_System
                             <tr>
                                 <td>
                                     <?php echo 'Next event in ' . round( ( $time - time() ) / 60 / 60, 1 ) . ' hours' ?><br>
-                                    <?php echo date( 'Y-m-d H:i:s', $time )?><br>
+                                    <?php echo gmdate( 'Y-m-d H:i:s', $time )?><br>
                                 </td>
                                 <td>
                                     <?php echo $token ?>
@@ -1803,14 +1801,14 @@ class DT_Network_Dashboard_Tab_System
                     <td>
 
                         <?php if ( dt_network_dashboard_multisite_is_approved() ) : ?>
-                        <a href="<?php echo dt_get_log_location( 'multisite', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'multisite', 'url' ) ?></a><br>
-                        <a href="<?php echo dt_get_log_location( 'activity-multisite', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'activity-multisite', 'url' ) ?></a><br>
+                        <a href="<?php echo esc_url( dt_get_log_location( 'multisite', 'url' ) ) ?>" target="_blank"><?php echo esc_url( dt_get_log_location( 'multisite', 'url' ) ) ?></a><br>
+                        <a href="<?php echo esc_url( dt_get_log_location( 'activity-multisite', 'url' ) ) ?>" target="_blank"><?php echo esc_url( dt_get_log_location( 'activity-multisite', 'url' ) ) ?></a><br>
                         <?php endif; ?>
 
-                        <a href="<?php echo dt_get_log_location( 'management', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'management', 'url' ) ?></a><br>
-                        <a href="<?php echo dt_get_log_location( 'remote', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'remote', 'url' ) ?></a><br>
-                        <a href="<?php echo dt_get_log_location( 'activity-remote', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'activity-remote', 'url' ) ?></a><br>
-                        <a href="<?php echo dt_get_log_location( 'profile-collection', 'url' ) ?>" target="_blank"><?php echo dt_get_log_location( 'profile-collection', 'url' ) ?></a><br>
+                        <a href="<?php echo esc_url( dt_get_log_location( 'management', 'url' ) ) ?>" target="_blank"><?php echo esc_url( dt_get_log_location( 'management', 'url' ) ) ?></a><br>
+                        <a href="<?php echo esc_url( dt_get_log_location( 'remote', 'url' ) ) ?>" target="_blank"><?php echo esc_url( dt_get_log_location( 'remote', 'url' ) ) ?></a><br>
+                        <a href="<?php echo esc_url( dt_get_log_location( 'activity-remote', 'url' ) ) ?>" target="_blank"><?php echo esc_url( dt_get_log_location( 'activity-remote', 'url' ) ) ?></a><br>
+                        <a href="<?php echo esc_url( dt_get_log_location( 'profile-collection', 'url' ) ) ?>" target="_blank"><?php echo esc_url( dt_get_log_location( 'profile-collection', 'url' ) ) ?></a><br>
 
                     </td>
                 </tr>
@@ -2039,11 +2037,11 @@ class DT_Network_Dashboard_Tab_Tutorial
             <tr>
                 <td>
                     <dl>
-                        <dt>Title</dt>
-                        <dd>Content</dd>
+                        <dt></dt>
+                        <dd></dd>
 
-                        <dt>Title</dt>
-                        <dd>Content</dd>
+                        <dt></dt>
+                        <dd></dd>
                     </dl>
                 </td>
             </tr>
@@ -2074,6 +2072,3 @@ class DT_Network_Dashboard_Tab_Tutorial
         <?php
     }
 }
-
-
-

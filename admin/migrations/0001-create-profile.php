@@ -24,12 +24,12 @@ class DT_Network_Dashboard_Migration_0001 extends DT_Network_Dashboard_Migration
         }
 
         if ( empty( $profile ) || empty( $profile['partner_id'] || ! isset( $profile['partner_id'] ) ) ) {
-            $profile = [
+            $profile = array(
                 'partner_id' => $this->dt_network_site_id(),
                 'partner_name' => get_option( 'blogname' ),
                 'partner_description' => get_option( 'blogdescription' ),
                 'partner_url' => site_url()
-            ];
+            );
             update_option( 'dt_site_profile', $profile, true );
         }
 

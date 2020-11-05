@@ -50,25 +50,25 @@ class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpo
     public function __construct() {
         parent::__construct();
 
-        add_action( 'rest_api_init', [ $this, 'add_api_routes' ] );
+        add_action( 'rest_api_init', array( $this, 'add_api_routes' ) );
     } // End __construct()
 
     public function add_api_routes() {
         register_rest_route(
             $this->public_namespace,
             '/network_dashboard/live_stats',
-            [
+            array(
                 'methods'  => 'POST',
-                'callback' => [ $this, 'live_stats' ],
-            ]
+                'callback' => array( $this, 'live_stats' ),
+            )
         );
         register_rest_route(
             $this->public_namespace,
             '/network_dashboard/profile',
-            [
+            array(
                 'methods'  => 'POST',
-                'callback' => [ $this, 'profile' ],
-            ]
+                'callback' => array( $this, 'profile' ),
+            )
         );
 
     }
@@ -76,10 +76,10 @@ class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpo
     public function live_stats( WP_REST_Request $request ) {
         $params = $this->process_token( $request );
         if ( is_wp_error( $params ) ) {
-            return [
+            return array(
                 'status' => 'FAIL',
                 'error' => $params,
-            ];
+            );
         }
 
         $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report();
@@ -92,10 +92,10 @@ class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpo
     public function profile( WP_REST_Request $request ) {
         $params = $this->process_token( $request );
         if ( is_wp_error( $params ) ) {
-            return [
+            return array(
                 'status' => 'FAIL',
                 'error' => $params,
-            ];
+            );
         }
 
         return dt_network_site_profile();

@@ -18,7 +18,7 @@ function dt_network_dashboard_collect_remote_sites() {
         dt_save_log( $file, '', false );
         dt_save_log( $file, '*********************************************', false );
         dt_save_log( $file, 'RECENT SNAPSHOT LOGS', false );
-        dt_save_log( $file, 'Timestamp: ' . date( 'Y-m-d', time() ), false );
+        dt_save_log( $file, 'Timestamp: ' . gmdate( 'Y-m-d', time() ), false );
         dt_save_log( $file, '*********************************************', false );
         dt_save_log( $file, '', false );
     }
@@ -41,9 +41,9 @@ function dt_network_dashboard_collect_remote_sites() {
         try {
             $task = new DT_Get_Single_Site_Snapshot();
             $task->launch(
-                [
+                array(
                     'site_post_id' => $site,
-                ]
+                )
             );
         } catch ( Exception $e ) {
             dt_write_log( $e );
@@ -88,8 +88,8 @@ class DT_Get_Single_Site_Snapshot extends Disciple_Tools_Async_Task
     }
 
     public function get_site_snapshot() {
-        if ( isset( $_POST[0]['site_post_id'] ) ) {
-            dt_get_site_snapshot( sanitize_key( wp_unslash( $_POST[0]['site_post_id'] ) ) );
+        if ( isset( $_POST[0]['site_post_id'] ) ) { // @phpcs:ignore
+            dt_get_site_snapshot( sanitize_key( wp_unslash( $_POST[0]['site_post_id'] ) ) ); // @phpcs:ignore
         }
         else {
             dt_write_log( __METHOD__ . ' : Failed on post array' );
@@ -123,12 +123,12 @@ function dt_get_site_snapshot( $site_post_id ) {
     }
 
     // Send remote request
-    $args = [
+    $args = array(
         'method' => 'POST',
-        'body' => [
+        'body' => array(
             'transfer_token' => $site['transfer_token'],
-        ]
-    ];
+        )
+    );
     $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/live_stats', $args );
     if ( is_wp_error( $result ) ) {
         // retry connection in 3 seconds

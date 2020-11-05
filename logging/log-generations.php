@@ -6,29 +6,29 @@
 add_action( 'dt_network_dashboard_register_actions', 'dt_network_dashboard_register_action_generations', 10, 1 );
 function dt_network_dashboard_register_action_generations( $actions ){
 
-    $actions['generation_pre-group'] = [
+    $actions['generation_pre-group'] = array(
         'key' => 'generation_pre-group',
         'label' => 'Pre-Group Generations',
-        'message_pattern' => []
-    ];
+        'message_pattern' => array()
+    );
 
-    $actions['generation_group'] = [
+    $actions['generation_group'] = array(
         'key' => 'generation_group',
         'label' => 'Group Generations',
-        'message_pattern' => []
-    ];
+        'message_pattern' => array()
+    );
 
-    $actions['generation_church'] = [
+    $actions['generation_church'] = array(
         'key' => 'generation_church',
         'label' => 'Church Generations',
-        'message_pattern' => []
-    ];
+        'message_pattern' => array()
+    );
 
-    $actions['generation_team'] = [
+    $actions['generation_team'] = array(
         'key' => 'generation_team',
         'label' => 'Team Generations',
-        'message_pattern' => []
-    ];
+        'message_pattern' => array()
+    );
 
     return $actions;
 }
@@ -43,20 +43,20 @@ function dt_network_dashboard_log_generations( $post_type, $post_id, $initial_fi
     if ( $post_type === 'groups' && ( isset( $initial_fields['child_groups'] ) || isset( $initial_fields['parent_groups'] ) ) ) {
 
         $location = DT_Network_Activity_Log::get_location_details( $post_id );
-        $data = [
-            [
+        $data = array(
+            array(
                 'site_id' => dt_network_site_id(),
                 'site_object_id' => $post_id,
                 'action' => 'generation_' . $post['group_type']['key'],
                 'category' => '',
                 'location_type' => $location['location_type'], // id, grid, lnglat, no_location
                 'location_value' => $location['location_value'],
-                'payload' => [
+                'payload' => array(
                     'language' => get_locale(),
-                ],
+                ),
                 'timestamp' => time()
-            ]
-        ];
+            )
+        );
 
         DT_Network_Activity_Log::insert_log( $data );
     }

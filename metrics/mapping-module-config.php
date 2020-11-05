@@ -18,21 +18,21 @@ class DT_Network_Mapping_Module_Config
              *
              * @see    mapping.php:56
              */
-            add_filter( 'dt_mapping_module_has_permissions', [ $this, 'custom_permission_check' ] );
+            add_filter( 'dt_mapping_module_has_permissions', array( $this, 'custom_permission_check' ) );
 
             /**
              * dt_mapping_module_translations
              *
              * @see     mapping.php:119 125
              */
-            add_filter( 'dt_mapping_module_translations', [ $this, 'custom_translations_filter' ] );
+            add_filter( 'dt_mapping_module_translations', array( $this, 'custom_translations_filter' ) );
 
             /**
              * dt_mapping_module_settings
              *
              * @see     mapping.php:241
              */
-            add_filter( 'dt_mapping_module_settings', [ $this, 'custom_settings_filter' ] );
+            add_filter( 'dt_mapping_module_settings', array( $this, 'custom_settings_filter' ) );
 
             /**
              * Use this filter to add data to sub levels by location_grid
@@ -40,27 +40,27 @@ class DT_Network_Mapping_Module_Config
              *
              * @see     mapping.php:389
              */
-            add_filter( 'dt_mapping_module_map_level_by_location_grid', [ $this, 'map_level_by_location_grid_filter' ], 10, 1 );
+            add_filter( 'dt_mapping_module_map_level_by_location_grid', array( $this, 'map_level_by_location_grid_filter' ), 10, 1 );
 
             /**
              * dt_mapping_module_url_base
              *
              * @see     mapping.php:102
              */
-            add_filter( 'dt_mapping_module_url_base', [ $this, 'custom_url_base' ] );
+            add_filter( 'dt_mapping_module_url_base', array( $this, 'custom_url_base' ) );
 
             /**
              * dt_mapping_module_endpoints
              *
              * @see     mapping.php:77
              */
-            add_filter( 'dt_mapping_module_endpoints', [ $this, 'add_custom_endpoints' ], 10, 1 );
+            add_filter( 'dt_mapping_module_endpoints', array( $this, 'add_custom_endpoints' ), 10, 1 );
 
 
             /**
              * Enqueue mapping scripts
              */
-            add_action( 'wp_enqueue_scripts', [ $this, 'scripts' ], 99 );
+            add_action( 'wp_enqueue_scripts', array( $this, 'scripts' ), 99 );
 
         }
     }
@@ -123,7 +123,7 @@ class DT_Network_Mapping_Module_Config
         /**
          * Add filter here
          */
-        $data = [];
+        $data = array();
         return $data;
     }
 
@@ -193,7 +193,7 @@ class DT_Network_Mapping_Module_Config
         $mapping_module = DT_Mapping_Module::instance()->localize_script();
 
         if ( dt_network_dashboard_denied() ) {
-            return [];
+            return array();
         } else {
             return $mapping_module;
         }

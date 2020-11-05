@@ -296,7 +296,7 @@ class DT_Network_Dashboard {
 // end main plugin class
 
 // Register activation hook.
-register_deactivation_hook( __FILE__, [ 'DT_Network_Dashboard', 'deactivation' ] );
+register_deactivation_hook( __FILE__, array( 'DT_Network_Dashboard', 'deactivation' ) );
 
 
 /**
@@ -405,7 +405,7 @@ function dt_network_dashboard_ajax_notice_handler() {
     update_option( 'dismissed-' . $type, true );
 }
 
-if ( ! function_exists( 'recursive_sanitize_text_field') ) {
+if ( ! function_exists( 'recursive_sanitize_text_field' ) ) {
     function recursive_sanitize_text_field( array $array ) : array {
         foreach ( $array as $key => &$value ) {
             if ( is_array( $value ) ) {

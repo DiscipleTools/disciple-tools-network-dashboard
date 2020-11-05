@@ -15,10 +15,10 @@ function dt_network_dashboard_push_snapshots() {
         return false;
     }
 
-    $status = [
+    $status = array(
         'success' => 0,
         'fail' => 0,
-    ];
+    );
 
     $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report();
     if ( is_wp_error( $snapshot ) ){
@@ -41,13 +41,13 @@ function dt_network_dashboard_push_snapshots() {
             }
 
             // Send remote request
-            $args = [
+            $args = array(
                 'method' => 'POST',
-                'body' => [
+                'body' => array(
                     'transfer_token' => $site_vars['transfer_token'],
                     'snapshot' => $snapshot
-                ]
-            ];
+                )
+            );
             $result = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-json/dt-public/v1/network_dashboard/collector', $args );
             if (is_wp_error( $result )) {
                 dt_write_log( __METHOD__, 'FAIL ID: ' . $site_post_id . ' (Failed in connection to remote site.)' );

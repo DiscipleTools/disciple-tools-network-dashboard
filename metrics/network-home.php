@@ -17,25 +17,25 @@ class DT_Network_Dashboard_Metrics_Home extends DT_Network_Dashboard_Metrics_Bas
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '.js';
         $this->js_object_name = $this->key;
 
-        add_filter( 'dt_network_dashboard_build_menu', [ $this, 'menu' ], 1 );
-        add_filter( 'dt_templates_for_urls', [ $this, 'add_url' ], 199 );
-        add_filter( 'dt_mapping_module_data', [ $this, 'filter_mapping_module_data' ], 50, 1 );
+        add_filter( 'dt_network_dashboard_build_menu', array( $this, 'menu' ), 1 );
+        add_filter( 'dt_templates_for_urls', array( $this, 'add_url' ), 199 );
+        add_filter( 'dt_mapping_module_data', array( $this, 'filter_mapping_module_data' ), 50, 1 );
 
         if ( $this->root_slug === $this->url_path || $this->url === $this->url_path ) {
-            add_action( 'wp_enqueue_scripts', [ $this, 'add_scripts' ], 99 );
+            add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ), 99 );
         }
     }
 
     public function add_scripts() {
         wp_enqueue_script( $this->js_object_name .'_script',
             plugin_dir_url( __FILE__ ) . $this->js_file_name,
-            [
+            array(
             'jquery',
             'datatable',
             'mapping-drill-down',
             'dt_mapping_js',
             'network_base_script',
-            ],
+            ),
             filemtime( plugin_dir_path( __FILE__ ) . $this->js_file_name ),
         true );
 
@@ -43,12 +43,12 @@ class DT_Network_Dashboard_Metrics_Home extends DT_Network_Dashboard_Metrics_Bas
     }
 
     public function menu( $tree ){
-        $tree[$this->base_slug] = [
+        $tree[$this->base_slug] = array(
             'key' => $this->key,
             'label' => $this->menu_title,
             'url' => '/' . $this->url,
-            'children' => []
-        ];
+            'children' => array()
+        );
         return $tree;
     }
 

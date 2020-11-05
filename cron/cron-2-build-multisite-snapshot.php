@@ -32,7 +32,7 @@ if ( is_multisite() ){
             dt_save_log( $file, '', false );
             dt_save_log( $file, '*********************************************', false );
             dt_save_log( $file, 'MULTISITE SNAPSHOT LOGS', false );
-            dt_save_log( $file, 'Timestamp: ' . date( 'Y-m-d', time() ), false );
+            dt_save_log( $file, 'Timestamp: ' . gmdate( 'Y-m-d', time() ), false );
             dt_save_log( $file, '*********************************************', false );
             dt_save_log( $file, '', false );
         }
@@ -96,6 +96,7 @@ if ( is_multisite() ){
             $prefix = $wpdb->get_blog_prefix( $blog_id );
             $posts_table = $prefix . 'posts';
             $postmeta_table = $prefix . 'postmeta';
+            // @phpcs:disable
             $allowed = $wpdb->get_var($wpdb->prepare( "
                 SELECT pm1.meta_value 
                 FROM {$posts_table} as p 
@@ -107,6 +108,7 @@ if ( is_multisite() ){
                     AND pm2.meta_value = %s
                     ",
             $source_blog_id ) );
+            // phpcs:enable
             if ( ! empty( $allowed ) && 'none' === $allowed ){
                 restore_current_blog();
                 return false;
@@ -120,7 +122,7 @@ if ( is_multisite() ){
             // retry connection in 3 seconds
             sleep( 5 );
             dt_save_log( $file, 'RETRY ID: ' . $blog_id . ' (Payload = FAIL)' );
-            $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report( true ); // @todo remove true after development
+            $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report();
             if ( $snapshot['status'] == 'FAIL' ) {
                 dt_save_log( $file, 'FAIL ID: ' . $blog_id . ' (Unable to run snapshot report for '.$blog_id.')' );
                 dt_save_log( $file, maybe_serialize( $snapshot ) );

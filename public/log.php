@@ -6,7 +6,7 @@ if (defined( 'ABSPATH' )) {
 
 function _dt_network_doing_it_wrong( string $message ) {
     header( 'Content-type: application/json' );
-    echo json_encode( [ 'error' => $message ] );
+    echo json_encode( array( 'error' => $message ) );
     exit();
 }
 if ( !function_exists( 'dt_write_log' ) ) {
@@ -20,7 +20,7 @@ if ( !function_exists( 'dt_write_log' ) ) {
         }
     }
 }
-if ( ! function_exists( 'recursive_sanitize_text_field') ) {
+if ( ! function_exists( 'recursive_sanitize_text_field' ) ) {
     function recursive_sanitize_text_field( array $array ) : array {
         foreach ( $array as $key => &$value ) {
             if ( is_array( $value ) ) {
@@ -79,7 +79,7 @@ if (file_exists( $theme_path . 'dt-core/admin/site-link-post-type.php' )) {
     _dt_network_doing_it_wrong( 'did not find site linking file' );
 }
 
-$params = $_POST;
+$params = $_POST; // @phpcs:ignore
 
 // Validate Transfer Token
 if ( ! Site_Link_System::verify_transfer_token( $params['transfer_token'] ) ) {
@@ -91,7 +91,6 @@ if ( ! ( isset( $params['data'] ) && ! empty( $params['data'] ) && is_array( $pa
     _dt_network_doing_it_wrong( 'no data id found or data is not an array' );
 }
 
-dt_write_log( $params );
 // LOOP THROUGH ACTIVITY ELEMENTS
 $process_status = DT_Network_Activity_Log::insert_log( $params['data'] );
 

@@ -621,7 +621,7 @@ class DT_Network_Activity_Log {
             $index = 0;
             foreach ( $results as $value ){
                 $index++;
-                $location = DT_Network_Activity_Log::get_location_details( $value['site_object_id'] );
+                $location = self::get_location_details( $value['site_object_id'] );
                 $data = [
                     'site_id' => $site_id,
                     'site_record_id' => null,
@@ -672,7 +672,8 @@ class DT_Network_Activity_Log {
             'location_value' => [],
         ];
 
-        if ( $grid_meta = get_post_meta( $post_id, 'location_grid_meta', true ) ) {
+        $grid_meta = get_post_meta( $post_id, 'location_grid_meta', true );
+        if ( $grid_meta ) {
             $row = Location_Grid_Meta::get_location_grid_meta_by_id( $grid_meta );
             if ( $row ) {
                 $location = [
@@ -687,7 +688,8 @@ class DT_Network_Activity_Log {
                 ];
             }
         }
-        else if ( $grid = get_post_meta( $post_id, 'location_grid', true ) ){
+        else if ( get_post_meta( $post_id, 'location_grid', true ) ){
+            $grid = get_post_meta( $post_id, 'location_grid', true );
             $row = Disciple_Tools_Mapping_Queries::get_by_grid_id( $grid );
             $object = new Location_Grid_Geocoder();
             $label = $object->_format_full_name( $row );
@@ -732,7 +734,7 @@ class DT_Network_Activity_Log {
                     AND a.action = 'created'
                     AND m.id IS NULL
                 ORDER BY a.object_id;", $site_id ),
-            ARRAY_A );
+        ARRAY_A );
     }
 
     /**
@@ -874,10 +876,10 @@ class DT_Network_Activity_Log {
      */
     public static function delete_activity( $id, $type = 'partner_id' ){
         global $wpdb;
-        switch( $type ){
+        switch ( $type ){
             case 'site_id':
             case 'partner_id':
-                $wpdb->query( $wpdb->prepare("DELETE FROM $wpdb->dt_movement_log WHERE site_id = %s", $id) );
+                $wpdb->query( $wpdb->prepare( "DELETE FROM $wpdb->dt_movement_log WHERE site_id = %s", $id ) );
                 break;
             default:
                 break;

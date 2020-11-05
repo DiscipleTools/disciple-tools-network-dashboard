@@ -12,7 +12,7 @@ class DT_Network_Dashboard_Site_Post_Type {
 
     public function __construct() {
         $this->token = self::get_token();
-        add_action( 'init', [ $this, 'register_network_dashboard_post_type' ] );
+        add_action( 'init', array( $this, 'register_network_dashboard_post_type' ) );
     } // End __construct()
 
     public static function get_token(){
@@ -49,12 +49,12 @@ class DT_Network_Dashboard_Site_Post_Type {
         }
 
         // Send remote request
-        $args = [
+        $args = array(
             'method' => 'POST',
-            'body' => [
+            'body' => array(
                 'transfer_token' => $site['transfer_token'],
-            ]
-        ];
+            )
+        );
         $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/profile', $args );
         if ( is_wp_error( $result )) {
             return $result;
@@ -66,7 +66,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         /* site profile returned */
         $site_profile = json_decode( $result['body'], true );
         if ( ! isset( $site_profile['partner_id'] ) || empty( $site_profile['partner_id'] ) ){
-            return new WP_Error( __METHOD__, 'Remote API did not return a proper partner id.', ['data' => $site_profile ] );
+            return new WP_Error( __METHOD__, 'Remote API did not return a proper partner id.', array( 'data' => $site_profile ) );
         }
 
         $site_profile = recursive_sanitize_text_field( $site_profile );
@@ -117,7 +117,7 @@ class DT_Network_Dashboard_Site_Post_Type {
             return new WP_Error( __METHOD__, 'Id must be a number' );
         }
 
-        $multisite_post_id = wp_insert_post([
+        $multisite_post_id = wp_insert_post(array(
             'post_title' => $partner_id,
             'guid' => $partner_id,
             'post_content' => 'Network Dashboard site',
@@ -125,7 +125,7 @@ class DT_Network_Dashboard_Site_Post_Type {
             'post_status' => 'show',
             'comment_status' => 'closed',
             'ping_status' => 'closed',
-            'meta_input' => [
+            'meta_input' => array(
                 'partner_id' => $partner_id,
                 'name' => $site_profile['partner_name'] ?? get_bloginfo( 'name' ),
                 'visibility' => 'show',
@@ -134,8 +134,8 @@ class DT_Network_Dashboard_Site_Post_Type {
                 'profile' => $site_profile,
                 'type' => $connection_type,
                 'type_id' => $id
-            ]
-        ]);
+            )
+        ));
 
         if ( 'remote' === $connection_type ) {
             update_post_meta( $id, 'dt_network_dashboard', $multisite_post_id );
@@ -293,10 +293,10 @@ class DT_Network_Dashboard_Site_Post_Type {
     }
 
     public static function get_type( $partner_post_id ){
-        return [
+        return array(
             'type' => get_post_meta( $partner_post_id, 'type', true ),
             'id' => get_post_meta( $partner_post_id, 'type_id', true ),
-        ];
+        );
     }
 
     public static function update_type( $partner_post_id, $type, $id ){
@@ -392,10 +392,10 @@ class DT_Network_Dashboard_Site_Post_Type {
         ARRAY_A );
 
         if ( empty( $results ) ) {
-            $results = [];
+            $results = array();
         }
 
-        $sites = [];
+        $sites = array();
         foreach ( $results as $result ){
             $result['snapshot'] = maybe_unserialize( $result['snapshot'] );
             $result['profile'] = maybe_unserialize( $result['profile'] );
@@ -405,7 +405,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         if ( true /* include self metrics */ ){
             $profile = dt_network_site_profile();
 
-            $self = [
+            $self = array(
                 'id' => 0,
                 'name' => $profile['partner_name'],
                 'type' => 'local',
@@ -421,7 +421,7 @@ class DT_Network_Dashboard_Site_Post_Type {
                 'send_activity' => '',
                 'location_precision' => '',
                 'non_wp' => '0'
-            ];
+            );
 
 
             $sites[$profile['partner_id']] = $self;
@@ -434,7 +434,7 @@ class DT_Network_Dashboard_Site_Post_Type {
 
     public static function all_remote_sites(){
         $all_sites = self::all_sites();
-        $sites = [];
+        $sites = array();
         foreach ( $all_sites as $site ){
             if ( 'remote' === $site['type'] ){
                 $sites[] = $site;
@@ -445,7 +445,7 @@ class DT_Network_Dashboard_Site_Post_Type {
 
     public static function all_visible_sites(){
         $all_sites = self::all_sites();
-        $sites = [];
+        $sites = array();
         foreach ( $all_sites as $site ){
             if ( 'hide' !== $site['visibility'] ){
                 $sites[] = $site;
@@ -456,7 +456,7 @@ class DT_Network_Dashboard_Site_Post_Type {
 
     public static function all_multisite_sites(){
         $all_sites = self::all_sites();
-        $sites = [];
+        $sites = array();
         foreach ( $all_sites as $site ){
             if ( 'multisite' === $site['type'] ){
                 $sites[] = $site;
@@ -480,7 +480,7 @@ class DT_Network_Dashboard_Site_Post_Type {
             " );
 
         if ( ! is_array( $results ) ) {
-            $results = [];
+            $results = array();
         }
 
         return hash( 'sha256', serialize( $results ) );
@@ -510,7 +510,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         ARRAY_A );
 
         if ( empty( $results ) ) {
-            $results = [];
+            $results = array();
         }
 
         return $results;
@@ -523,17 +523,17 @@ class DT_Network_Dashboard_Site_Post_Type {
      */
     public static function all_multisite_blog_ids( $active_dashboards_only = false ) : array {
         if ( ! is_multisite() ){
-            return [];
+            return array();
         }
         global $wpdb;
         $table = $wpdb->base_prefix . 'blogs';
-        $results = $wpdb->get_col( "SELECT blog_id FROM $table" );
+        $results = $wpdb->get_col( "SELECT blog_id FROM {$table}" ); // @phpcs:ignore
 
         if ( empty( $results ) ) {
-            $results = [];
+            $results = array();
         }
 
-        $dt_sites = [];
+        $dt_sites = array();
         foreach ( $results as $id ) {
             // reject non-dt blogs
             if ( get_blog_option( $id, 'current_theme' ) !== 'Disciple Tools' ) {
@@ -583,7 +583,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         ARRAY_A );
 
         if ( empty( $results ) ) {
-            $results = [];
+            $results = array();
         }
 
         return $results;
@@ -592,7 +592,7 @@ class DT_Network_Dashboard_Site_Post_Type {
     public static function dashboards_to_send_activity( $timing = 'daily' ) : array {
         $sites = self::all_sites();
 
-        $list = [];
+        $list = array();
         foreach ( $sites as $site ){
             if ( $site['send_activity'] === $timing ) {
                 $list[$site['type']] = $site['type_id'];
@@ -603,15 +603,15 @@ class DT_Network_Dashboard_Site_Post_Type {
     }
 
     public static function sync_all_multisites_to_post_type() : array {
-        $result = [
-            'delete' => [],
-            'create' => [],
-        ];
+        $result = array(
+            'delete' => array(),
+            'create' => array(),
+        );
         $multisites = self::all_multisite_blog_ids();
         $connections = self::all_sites();
 
         // delete all multisites not permitted or removed
-        $already_skipped = [];
+        $already_skipped = array();
         foreach ( $connections as $connection ){
             if ( 'multisite' !== $connection['type'] ){
                 continue;
@@ -626,7 +626,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         }
 
         // add all multisites not previously added
-        $type_ids = [];
+        $type_ids = array();
         foreach ( $connections as $connection ){
             if ( 'multisite' !== $connection['type'] ){
                 continue;
@@ -645,11 +645,11 @@ class DT_Network_Dashboard_Site_Post_Type {
     }
 
     public static function sync_all_remotes_to_post_type() : array {
-        $result = [
-            'delete' => [],
-            'create' => [],
-        ];
-        $remote_ids = [];
+        $result = array(
+            'delete' => array(),
+            'create' => array(),
+        );
+        $remote_ids = array();
 
         $remotes = self::all_site_to_site_ids();
         $dashboards = self::all_dashboard_ids();
@@ -671,7 +671,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         }
 
         // add all remotes not previously added
-        $type_ids = [];
+        $type_ids = array();
         foreach ( $dashboards as $dashboard ){
             if ( 'remote' !== $dashboard['type'] ){
                 continue;
@@ -692,12 +692,12 @@ class DT_Network_Dashboard_Site_Post_Type {
 
     public static function multisite_sites_needing_snapshot_refreshed() {
         if ( ! dt_is_current_multisite_dashboard_approved() ) {
-            return [];
+            return array();
         }
 
         $sites = self::all_sites();
 
-        $needs_update = [];
+        $needs_update = array();
         foreach ( $sites as $site ){
             if ( $site['type'] !== 'multisite' ){
                 continue;
@@ -715,12 +715,12 @@ class DT_Network_Dashboard_Site_Post_Type {
 
     public static function multisite_sites_needing_activity_refreshed() {
         if ( ! dt_is_current_multisite_dashboard_approved() ) {
-            return [];
+            return array();
         }
 
         $sites = self::all_sites();
 
-        $needs_update = [];
+        $needs_update = array();
         foreach ( $sites as $site ){
             if ( $site['type'] !== 'multisite' ){
                 continue;
@@ -743,7 +743,7 @@ class DT_Network_Dashboard_Site_Post_Type {
     public static function remote_sites_needing_snapshot_refreshed() {
         $sites = self::all_sites();
 
-        $needs_update = [];
+        $needs_update = array();
         foreach ( $sites as $site ){
             if ( $site['type'] !== 'remote' ){
                 continue;
