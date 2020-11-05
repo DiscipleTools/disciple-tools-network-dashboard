@@ -13,6 +13,7 @@ class DT_Network_Dashboard_Migration_0003 extends DT_Network_Dashboard_Migration
         global $wpdb;
         $table = $wpdb->prefix . 'dt_movement_log';
 
+        //@phpcs:disable
         if ( empty( $wpdb->get_results( "SHOW COLUMNS FROM {$table} LIKE 'site_record_id';" ) ) ){
             $wpdb->query( "ALTER TABLE {$table} ADD `site_record_id` BIGINT(22) DEFAULT NULL AFTER `site_id`;" );
         }
@@ -30,7 +31,7 @@ class DT_Network_Dashboard_Migration_0003 extends DT_Network_Dashboard_Migration
         $wpdb->query( "ALTER TABLE {$table} CHANGE `label` `label` VARCHAR(255) NOT NULL DEFAULT '';" );
         $wpdb->query( "ALTER TABLE {$table} CHANGE `timestamp` `timestamp` INT(11) NOT NULL;" );
         $wpdb->query( "ALTER TABLE {$table} CHANGE `hash` `hash` VARCHAR(65) NOT NULL DEFAULT '';" );
-
+        // @phpcs:enable
     }
 
     /**

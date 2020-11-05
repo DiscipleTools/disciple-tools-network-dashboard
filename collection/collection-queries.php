@@ -147,7 +147,7 @@ class DT_Network_Dashboard_Queries {
     public static function all_multisite_blog_ids() : array {
         global $wpdb;
         $table = $wpdb->base_prefix . 'blogs';
-        $results = $wpdb->get_col( "SELECT blog_id FROM $table" );
+        $results = $wpdb->get_col( "SELECT blog_id FROM {$table}" ); // @phpcs:ignore
 
         if ( empty( $results ) ) {
             $results = array();

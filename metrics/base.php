@@ -217,102 +217,102 @@ class DT_Network_Dashboard_Metrics_Base {
 
     public function translations() {
         return [
-            'base_1' => __('ID', 'dt_network_dashboard'),
-            'base_2' => __('Site', 'dt_network_dashboard'),
-            'base_3' => __('Contacts', 'dt_network_dashboard'),
-            'base_4' => __('Groups', 'dt_network_dashboard'),
-            'base_5' => __('Users', 'dt_network_dashboard'),
-            'base_6' => __('Timestamp', 'dt_network_dashboard'),
-            'base_7' => __('Visit', 'dt_network_dashboard'),
-            'base_8' => __('View', 'dt_network_dashboard'),
+            'base_1' => __( 'ID', 'dt_network_dashboard' ),
+            'base_2' => __( 'Site', 'dt_network_dashboard' ),
+            'base_3' => __( 'Contacts', 'dt_network_dashboard' ),
+            'base_4' => __( 'Groups', 'dt_network_dashboard' ),
+            'base_5' => __( 'Users', 'dt_network_dashboard' ),
+            'base_6' => __( 'Timestamp', 'dt_network_dashboard' ),
+            'base_7' => __( 'Visit', 'dt_network_dashboard' ),
+            'base_8' => __( 'View', 'dt_network_dashboard' ),
 
-            'site_1' => __('Active Snapshot', 'dt_network_dashboard'),
-            'site_2' => __('Generations', 'dt_network_dashboard'),
-            'site_3' => __('Follow-up Funnel', 'dt_network_dashboard'),
-            'site_4' => __('On-Going Meetings', 'dt_network_dashboard'),
-            'site_5' => __('Coaching', 'dt_network_dashboard'),
-            'site_6' => __('Baptized', 'dt_network_dashboard'),
-            'site_7' => __('Active Groups', 'dt_network_dashboard'),
-            'site_8' => __('Church', 'dt_network_dashboard'),
-            'site_9' => __('Health Metrics', 'dt_network_dashboard'),
-            'site_10' => __('Total Users', 'dt_network_dashboard'),
-            'site_11' => __('Responders', 'dt_network_dashboard'),
-            'site_12' => __('Dispatchers', 'dt_network_dashboard'),
-            'site_13' => __('Multipliers', 'dt_network_dashboard'),
-            'site_14' => __('Admins', 'dt_network_dashboard'),
-            'site_15' => __('User Login Activity', 'dt_network_dashboard'),
-            'site_16' => __('Users Active in the Last 30 Days', 'dt_network_dashboard'),
-            'site_17' => __('Practicing', 'dt_network_dashboard'),
-            'site_18' => __('Not Practicing', 'dt_network_dashboard'),
-            'site_19' => __('Chart Funnel', 'dt_network_dashboard'),
+            'site_1' => __( 'Active Snapshot', 'dt_network_dashboard' ),
+            'site_2' => __( 'Generations', 'dt_network_dashboard' ),
+            'site_3' => __( 'Follow-up Funnel', 'dt_network_dashboard' ),
+            'site_4' => __( 'On-Going Meetings', 'dt_network_dashboard' ),
+            'site_5' => __( 'Coaching', 'dt_network_dashboard' ),
+            'site_6' => __( 'Baptized', 'dt_network_dashboard' ),
+            'site_7' => __( 'Active Groups', 'dt_network_dashboard' ),
+            'site_8' => __( 'Church', 'dt_network_dashboard' ),
+            'site_9' => __( 'Health Metrics', 'dt_network_dashboard' ),
+            'site_10' => __( 'Total Users', 'dt_network_dashboard' ),
+            'site_11' => __( 'Responders', 'dt_network_dashboard' ),
+            'site_12' => __( 'Dispatchers', 'dt_network_dashboard' ),
+            'site_13' => __( 'Multipliers', 'dt_network_dashboard' ),
+            'site_14' => __( 'Admins', 'dt_network_dashboard' ),
+            'site_15' => __( 'User Login Activity', 'dt_network_dashboard' ),
+            'site_16' => __( 'Users Active in the Last 30 Days', 'dt_network_dashboard' ),
+            'site_17' => __( 'Practicing', 'dt_network_dashboard' ),
+            'site_18' => __( 'Not Practicing', 'dt_network_dashboard' ),
+            'site_19' => __( 'Chart Funnel', 'dt_network_dashboard' ),
 
-            'contacts' => __('Contacts', 'dt_network_dashboard'),
-            'contact' => __('Contact', 'dt_network_dashboard'),
-            'group' => __('Group', 'dt_network_dashboard'),
-            'groups' => __('Groups', 'dt_network_dashboard'),
-            'user' => __('User', 'dt_network_dashboard'),
-            'users' => __('Users', 'dt_network_dashboard'),
-            'site' => __('Site', 'dt_network_dashboard'),
-            'sites' => __('Sites', 'dt_network_dashboard'),
-            'baptisms' => __('Baptisms', 'dt_network_dashboard'),
-            'church' => __('Church', 'dt_network_dashboard'),
-            'churches' => __('Churches', 'dt_network_dashboard'),
-            'location' => __('Location', 'dt_network_dashboard'),
-            'types' => __('Types', 'dt_network_dashboard'),
+            'contacts' => __( 'Contacts', 'dt_network_dashboard' ),
+            'contact' => __( 'Contact', 'dt_network_dashboard' ),
+            'group' => __( 'Group', 'dt_network_dashboard' ),
+            'groups' => __( 'Groups', 'dt_network_dashboard' ),
+            'user' => __( 'User', 'dt_network_dashboard' ),
+            'users' => __( 'Users', 'dt_network_dashboard' ),
+            'site' => __( 'Site', 'dt_network_dashboard' ),
+            'sites' => __( 'Sites', 'dt_network_dashboard' ),
+            'baptisms' => __( 'Baptisms', 'dt_network_dashboard' ),
+            'church' => __( 'Church', 'dt_network_dashboard' ),
+            'churches' => __( 'Churches', 'dt_network_dashboard' ),
+            'location' => __( 'Location', 'dt_network_dashboard' ),
+            'types' => __( 'Types', 'dt_network_dashboard' ),
 
-            'modify_filter' => __('modify filter', 'dt_network_dashboard'),
-            'filter_list' => __('Filter List', 'dt_network_dashboard'),
-            'reset_data' => __('reset data', 'dt_network_dashboard'),
+            'modify_filter' => __( 'modify filter', 'dt_network_dashboard' ),
+            'filter_list' => __( 'Filter List', 'dt_network_dashboard' ),
+            'reset_data' => __( 'reset data', 'dt_network_dashboard' ),
 
-            'status' => __('Status', 'dt_network_dashboard'),
-            'status_all' => __('Status - All', 'dt_network_dashboard'),
+            'status' => __( 'Status', 'dt_network_dashboard' ),
+            'status_all' => __( 'Status - All', 'dt_network_dashboard' ),
 
-            'zoom_level' => __('Zoom Level', 'dt_network_dashboard'),
-            'auto_zoom' => __('Auto Zoom', 'dt_network_dashboard'),
-            'world' => __('World', 'dt_network_dashboard'),
-            'country' => __('Country', 'dt_network_dashboard'),
-            'state' => __('State', 'dt_network_dashboard'),
+            'zoom_level' => __( 'Zoom Level', 'dt_network_dashboard' ),
+            'auto_zoom' => __( 'Auto Zoom', 'dt_network_dashboard' ),
+            'world' => __( 'World', 'dt_network_dashboard' ),
+            'country' => __( 'Country', 'dt_network_dashboard' ),
+            'state' => __( 'State', 'dt_network_dashboard' ),
 
-            'active_contacts' => __('Active Contacts', 'dt_network_dashboard'),
-            'paused_contacts' => __('Paused Contacts', 'dt_network_dashboard'),
-            'closed_contacts' => __('Closed Contacts', 'dt_network_dashboard'),
-            'total_contacts' => __('Total Contacts', 'dt_network_dashboard'),
-            'new_contacts' => __('New Contacts', 'dt_network_dashboard'),
+            'active_contacts' => __( 'Active Contacts', 'dt_network_dashboard' ),
+            'paused_contacts' => __( 'Paused Contacts', 'dt_network_dashboard' ),
+            'closed_contacts' => __( 'Closed Contacts', 'dt_network_dashboard' ),
+            'total_contacts' => __( 'Total Contacts', 'dt_network_dashboard' ),
+            'new_contacts' => __( 'New Contacts', 'dt_network_dashboard' ),
 
-            'new_baptisms' => __('New Baptisms', 'dt_network_dashboard'),
-            'baptism_generations' => __('Baptism Generations', 'dt_network_dashboard'),
-            'select_location' => __('Select Location', 'dt_network_dashboard'),
+            'new_baptisms' => __( 'New Baptisms', 'dt_network_dashboard' ),
+            'baptism_generations' => __( 'Baptism Generations', 'dt_network_dashboard' ),
+            'select_location' => __( 'Select Location', 'dt_network_dashboard' ),
 
-            'new_groups' => __('New Groups', 'dt_network_dashboard'),
-            'pre_group' => __('Pre-Group', 'dt_network_dashboard'),
+            'new_groups' => __( 'New Groups', 'dt_network_dashboard' ),
+            'pre_group' => __( 'Pre-Group', 'dt_network_dashboard' ),
 
-            'last_7_days' => __('Last 7 Days', 'dt_network_dashboard'),
-            'last_30_days' => __('Last 30 Days', 'dt_network_dashboard'),
-            'last_60_days' => __('Last 60 Days', 'dt_network_dashboard'),
-            'last_12_months' => __('Last 12 Months', 'dt_network_dashboard'),
-            'last_24_months' => __('Last 24 Months', 'dt_network_dashboard'),
-            'this_year' => __('This Year', 'dt_network_dashboard'),
+            'last_7_days' => __( 'Last 7 Days', 'dt_network_dashboard' ),
+            'last_30_days' => __( 'Last 30 Days', 'dt_network_dashboard' ),
+            'last_60_days' => __( 'Last 60 Days', 'dt_network_dashboard' ),
+            'last_12_months' => __( 'Last 12 Months', 'dt_network_dashboard' ),
+            'last_24_months' => __( 'Last 24 Months', 'dt_network_dashboard' ),
+            'this_year' => __( 'This Year', 'dt_network_dashboard' ),
 
-            'activity_1' => __('Activity Map', 'dt_network_dashboard'),
-            'activity_2' => __('Stats', 'dt_network_dashboard'),
-            'activity_3' => __('Activities', 'dt_network_dashboard'),
-            'activity_4' => __('Actions', 'dt_network_dashboard'),
-            'activity_5'=> __('Sites', 'dt_network_dashboard'),
-            'activity_6'=> __('By Action Type', 'dt_network_dashboard'),
-            'activity_7'=> __('Key', 'dt_network_dashboard'),
-            'activity_8'=> __('Name', 'dt_network_dashboard'),
-            'activity_9'=> __('Total Activities', 'dt_network_dashboard'),
-            'activity_10'=> __('Feed', 'dt_network_dashboard'),
-            'activity_11'=> __('Time', 'dt_network_dashboard'),
-            'activity_12'=> __('Result Limit', 'dt_network_dashboard'),
-            'activity_13'=> __('uncheck', 'dt_network_dashboard'),
+            'activity_1' => __( 'Activity Map', 'dt_network_dashboard' ),
+            'activity_2' => __( 'Stats', 'dt_network_dashboard' ),
+            'activity_3' => __( 'Activities', 'dt_network_dashboard' ),
+            'activity_4' => __( 'Actions', 'dt_network_dashboard' ),
+            'activity_5' => __( 'Sites', 'dt_network_dashboard' ),
+            'activity_6' => __( 'By Action Type', 'dt_network_dashboard' ),
+            'activity_7' => __( 'Key', 'dt_network_dashboard' ),
+            'activity_8' => __( 'Name', 'dt_network_dashboard' ),
+            'activity_9' => __( 'Total Activities', 'dt_network_dashboard' ),
+            'activity_10' => __( 'Feed', 'dt_network_dashboard' ),
+            'activity_11' => __( 'Time', 'dt_network_dashboard' ),
+            'activity_12' => __( 'Result Limit', 'dt_network_dashboard' ),
+            'activity_13' => __( 'uncheck', 'dt_network_dashboard' ),
 
-            'home_1'=> __('Active Totals for All Sites', 'dt_network_dashboard'),
-            'home_2'=> __('Countries', 'dt_network_dashboard'),
-            'home_3'=> __('Events (30 Days)', 'dt_network_dashboard'),
+            'home_1' => __( 'Active Totals for All Sites', 'dt_network_dashboard' ),
+            'home_2' => __( 'Countries', 'dt_network_dashboard' ),
+            'home_3' => __( 'Events (30 Days)', 'dt_network_dashboard' ),
 
-            'stats_1'=> __('All Active/Inactive', 'dt_network_dashboard'),
-            'map_1'=> __('Hover Map', 'dt_network_dashboard'),
+            'stats_1' => __( 'All Active/Inactive', 'dt_network_dashboard' ),
+            'map_1' => __( 'Hover Map', 'dt_network_dashboard' ),
         ];
     }
 
@@ -401,7 +401,7 @@ class DT_Network_Dashboard_Metrics_Base {
                         'contacts' => $snapshot['contacts']['current_state']['status']['active'],
                         'groups' => $snapshot['groups']['current_state']['total_active'],
                         'users' => $snapshot['users']['current_state']['total_users'],
-                        'date' => date( 'Y-m-d H:i:s', $snapshot['date'] ),
+                        'date' => gmdate( 'Y-m-d H:i:s', $snapshot['date'] ),
                     ];
                 }
             }
@@ -423,7 +423,7 @@ class DT_Network_Dashboard_Metrics_Base {
                         'contacts' => $snapshot['contacts']['current_state']['status']['active'],
                         'groups' => $snapshot['groups']['current_state']['total_active'],
                         'users' => $snapshot['users']['current_state']['total_users'],
-                        'date' => date( 'Y-m-d H:i:s', $snapshot['date'] ),
+                        'date' => gmdate( 'Y-m-d H:i:s', $snapshot['date'] ),
                     ];
                 }
             }
@@ -671,11 +671,12 @@ class DT_Network_Dashboard_Metrics_Base {
         }
 
         /* handle local site */
+        // @phpcs:disable
         $profile = dt_network_site_profile();
         $results = $wpdb->get_results( $wpdb->prepare( "
                 SELECT ml.*, 
-                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%Y-%c-%e') AS day, 
-                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%H:%i %p') AS time,
+                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%%Y-%%c-%%e') AS day, 
+                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%%H:%%i %%p') AS time,
                        CASE
                            WHEN pname.meta_value != '' THEN pname.meta_value
                            WHEN ml.site_id = %s THEN %s
@@ -705,6 +706,7 @@ class DT_Network_Dashboard_Metrics_Base {
             $filter['offset']
             ),
         ARRAY_A );
+        // @phpcs:enable
 
         foreach ( $results as $index => $result ){
             $results[$index]['payload'] = maybe_unserialize( $result['payload'] );
@@ -822,8 +824,8 @@ class DT_Network_Dashboard_Metrics_Base {
     public static function get_day_list( $number_of_days = 60) {
         $d = [];
         for ($i = 0; $i < $number_of_days; $i++) {
-            $d[date( "Y-m-d", strtotime( '-' . $i . ' days' ) )] = [
-                'date' => date( "Y-m-d", strtotime( '-' . $i . ' days' ) ),
+            $d[gmdate( "Y-m-d", strtotime( '-' . $i . ' days' ) )] = [
+                'date' => gmdate( "Y-m-d", strtotime( '-' . $i . ' days' ) ),
                 'value' => 0,
             ];
         }
@@ -842,8 +844,8 @@ class DT_Network_Dashboard_Metrics_Base {
     public static function get_month_list( $number_of_months = 25) {
         $d = [];
         for ($i = 0; $i < $number_of_months; $i++) {
-            $d[date( "Y-m", strtotime( '-' . $i . ' months' ) ) . '-01'] = [
-                'date' => date( "Y-m", strtotime( '-' . $i . ' months' ) ) . '-01',
+            $d[gmdate( "Y-m", strtotime( '-' . $i . ' months' ) ) . '-01'] = [
+                'date' => gmdate( "Y-m", strtotime( '-' . $i . ' months' ) ) . '-01',
                 'value' => 0,
             ];
         }
@@ -1303,10 +1305,10 @@ class DT_Network_Dashboard_Metrics_Base {
         $week_ago = strtotime( '-7 days' );
 
         if ( $current_day > $week_ago ) {
-            $time_string = date( 'l', $current_day );
+            $time_string = gmdate( 'l', $current_day );
         }
         else {
-            $time_string = date( 'M j, Y', $current_day );
+            $time_string = gmdate( 'M j, Y', $current_day );
         }
         return $time_string;
     }

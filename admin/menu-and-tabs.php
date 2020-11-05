@@ -1413,7 +1413,7 @@ class DT_Network_Dashboard_Tab_System
                                 if ( ! empty( $fail ) ){
                                     ?>
                                     <a href="javascript:void(0)" onclick="jQuery('#<?php echo esc_attr( $partner_id ) ?>').toggle()">Show error</a>
-                                    <span id="fail-<?php echo esc_attr( $partner_id ) ?>" style="display:none;"><?php echo $fail ?></span>
+                                    <span id="fail-<?php echo esc_attr( $partner_id ) ?>" style="display:none;"><?php echo esc_html( $fail ) ?></span>
                                     <?php
                                 }
                                 ?>
@@ -1577,7 +1577,7 @@ class DT_Network_Dashboard_Tab_System
                             if ( 'dt_' !== substr( $key, 0, 3 ) ){
                                 continue;
                             }
-                            echo esc_html( ucwords( str_replace( '_', ' ', $key ) ) ) . ': ' . $label . '<br>';
+                            echo esc_html( ucwords( str_replace( '_', ' ', $key ) ) ) . ': ' . esc_html( $label ) . '<br>';
                         }
                     }
                     ?>
@@ -1589,7 +1589,7 @@ class DT_Network_Dashboard_Tab_System
                             if ( 'dt_' === substr( $key, 0, 3 ) || 'network' === substr( $key, 0, 7 ) ){
                                 continue;
                             }
-                            echo ucwords( str_replace( '_', ' ', $key ) ) . ': ' . esc_html( $label ) . '<br>';
+                            echo esc_html( ucwords( str_replace( '_', ' ', $key ) ) ) . ': ' . esc_html( $label ) . '<br>';
                         }
                     }
                     ?>
@@ -1689,7 +1689,7 @@ class DT_Network_Dashboard_Tab_System
                 </tr>
                 <tr>
                     <td>
-                        Rebuild stuck migrations. Current migration number: <?php echo get_option( 'dt_network_dashboard_migration_number' ) ?> <?php echo ( $trigger_refresh ) ? '<a href="" class="button">Refresh The Page For An Accurtate Migration Number</a>' : ''; ?>
+                        Rebuild stuck migrations. Current migration number: <?php echo esc_html( get_option( 'dt_network_dashboard_migration_number' ) ) ?> <?php echo ( $trigger_refresh ) ? '<a href="" class="button">Refresh The Page For An Accurtate Migration Number</a>' : ''; ?>
                     </td>
                     <td>
                         <button type="submit" class="button" style="float:right;" value="migrations" name="migrations">Rebuild Migrations</button>
@@ -1741,21 +1741,21 @@ class DT_Network_Dashboard_Tab_System
                             ?>
                             <tr>
                                 <td>
-                                    <?php echo 'Next event in ' . round( ( $time - time() ) / 60 / 60, 1 ) . ' hours' ?><br>
-                                    <?php echo gmdate( 'Y-m-d H:i:s', $time )?><br>
+                                    <?php echo 'Next event in ' . esc_html( round( ( $time - time() ) / 60 / 60, 1 ) ) . ' hours' ?><br>
+                                    <?php echo esc_html( gmdate( 'Y-m-d H:i:s', $time ) ) ?><br>
                                 </td>
                                 <td>
-                                    <?php echo $token ?>
+                                    <?php echo esc_attr( $token ) ?>
                                 </td>
                                 <td>
-                                    <?php echo $items['schedule'] ?? '' ?><br>
-                                    Every <?php echo isset( $items['interval'] ) ? $items['interval'] / 60 . ' minutes' : '' ?><br>
-                                    <?php echo ! empty( $items['args'] ) ? serialize( $items['args'] ) : '' ?><br>
+                                    <?php echo esc_html( $items['schedule'] ?? '' ) ?><br>
+                                    Every <?php echo isset( $items['interval'] ) ? esc_html( $items['interval'] / 60 ) . ' minutes' : '' ?><br>
+                                    <?php echo ! empty( $items['args'] ) ? esc_html( serialize( $items['args'] ) ) : '' ?><br>
                                 </td>
                                 <td>
                                     <form method="post">
                                         <?php wp_nonce_field( 'cron_run_' . get_current_user_id(), 'cron_run_nonce' ) ?>
-                                        <button type="submit" name="run_now" style="float:right;" value="<?php echo $token ?>" class="button">Delete and Respawn</button>
+                                        <button type="submit" name="run_now" style="float:right;" value="<?php echo esc_attr( $token ) ?>" class="button">Delete and Respawn</button>
                                     </form>
                                 </td>
                             </tr>

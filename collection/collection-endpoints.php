@@ -186,6 +186,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
         $raw_actions = recursive_sanitize_text_field( $params['actions'] );
         $actions = dt_array_to_sql( $raw_actions );
 
+        // @phpcs:disable
         global $wpdb;
         $activity = $wpdb->get_results( $wpdb->prepare( "
                 SELECT * 
@@ -201,6 +202,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             $last_site_record_id
         ),
         ARRAY_A );
+        // @phpcs:enable
         if ( is_wp_error( $activity ) ) {
             return array(
                 'status' => 'FAIL',

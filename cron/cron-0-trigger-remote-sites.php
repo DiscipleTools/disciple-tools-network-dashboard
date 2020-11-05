@@ -185,10 +185,10 @@ class DT_Network_Dashboard_Cron_Trigger_Multisite extends Disciple_Tools_Async_T
     }
 
     public function get_trigger_multisites() {
-        if ( isset( $_POST[0]['list'] ) ) {
+        if ( isset( $_POST[0]['list'] ) ) { // @phpcs:ignore
 
             $file = 'trigger';
-            $list = recursive_sanitize_text_field( $_POST[0]['list'] );
+            $list = recursive_sanitize_text_field( $_POST[0]['list'] ); // @phpcs:ignore
 
             foreach ( $list as $item ) {
                 try {

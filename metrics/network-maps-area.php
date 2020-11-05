@@ -437,8 +437,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             FROM $wpdb->dt_location_grid_meta as lg 
                 JOIN $wpdb->posts as p ON p.ID=lg.post_id 
                 LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=p.ID AND pm.meta_key = 'group_status'
-            WHERE lg.post_type = 'groups' AND pm.meta_value = %s",
-                $status),
+            WHERE lg.post_type = 'groups' AND pm.meta_value = %s", $status),
             ARRAY_A );
         } else {
             $results = $wpdb->get_results("
@@ -492,8 +491,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=p.ID AND pm.meta_key = 'overall_status'
             WHERE lg.post_type = 'contacts'
             AND pm.post_id NOT IN (SELECT u.post_id FROM $wpdb->postmeta as u WHERE u.meta_key = 'corresponds_to_user' AND u.meta_value != '' )
-            AND pm.meta_value = %s ",
-                $status),
+            AND pm.meta_value = %s ", $status),
             ARRAY_A );
         } else {
             $results = $wpdb->get_results("
@@ -576,8 +574,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             AND po.ID NOT IN (SELECT DISTINCT(u.post_id) FROM $wpdb->postmeta as u WHERE u.meta_key = 'corresponds_to_user' AND u.meta_value != '')
                 AND lgm.grid_id IS NOT NULL 
                 ORDER BY po.post_title
-            ;",
-                $status ),
+            ;", $status ),
             ARRAY_A );
         } else {
             $results = $wpdb->get_results( "
