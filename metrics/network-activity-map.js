@@ -56,7 +56,8 @@ jQuery(document).ready(function(){
 
     window.load_activity_filter()
 
-    jQuery('#filter_list_button').on('click', function(){
+    jQuery('.filter_list_button').on('click', function(){
+        console.log('')
         $('#activity-filter-modal').foundation('close');
         setTimeout(
             function()
@@ -92,6 +93,20 @@ jQuery(document).ready(function(){
             minZoom: 0,
             zoom: 0
         });
+
+        // SET BOUNDS
+        window.map_bounds_token = 'network_activity_map'
+        window.map_start = get_map_start( window.map_bounds_token )
+        if ( window.map_start ) {
+            map.fitBounds( window.map_start, {duration: 0});
+        }
+        map.on('zoomend', function() {
+            set_map_start( window.map_bounds_token, map.getBounds() )
+        })
+        map.on('dragend', function() {
+            set_map_start( window.map_bounds_token, map.getBounds() )
+        })
+        // end set bounds
 
         map.on('load', function() {
             map.addSource('layer-source-contacts', {
@@ -150,8 +165,6 @@ jQuery(document).ready(function(){
                     'circle-stroke-color': '#fff'
                 }
             });
-
-
         });
 
         map.on('zoomend', function(e){

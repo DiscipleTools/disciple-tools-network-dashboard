@@ -129,6 +129,20 @@ function write_cluster( settings ) {
         zoom: 0
     });
 
+    // SET BOUNDS
+    window.map_bounds_token = 'network_maps_cluster'
+    window.map_start = get_map_start( window.map_bounds_token )
+    if ( window.map_start ) {
+        map.fitBounds( window.map_start, {duration: 0});
+    }
+    map.on('zoomend', function() {
+        set_map_start( window.map_bounds_token, map.getBounds() )
+    })
+    map.on('dragend', function() {
+        set_map_start( window.map_bounds_token, map.getBounds() )
+    })
+    // end set bounds
+
     map.on('load', function() {
         makeRequest( "POST", `network/maps/cluster`, { post_type: 'contacts', status: null} )
             .then(data=>{
@@ -208,147 +222,4 @@ function write_cluster( settings ) {
             })
     });
 
-
-    // makeRequest( "POST", `network/maps/cluster/cluster_geojson`, { post_type: post_type, status: null} )
-    //     .then(data=>{
-    //         console.log(data)
-    //
-    //
-    //
-    //         set_info_boxes()
-    //         function set_info_boxes() {
-    //             let map_wrapper = jQuery('#map-wrapper')
-    //             jQuery('.legend').css( 'width', map_wrapper.innerWidth() - 20 )
-    //             jQuery( window ).resize(function() {
-    //                 jQuery('.legend').css( 'width', map_wrapper.innerWidth() - 20 )
-    //             });
-    //         }
-    //
-    //
-    //
-    //
-    //
-    //         jQuery('#status').on('change', function() {
-    //             window.current_status = jQuery('#status').val()
-    //             makeRequest( "POST", `network/maps/cluster/cluster_geojson`, { post_type: post_type, status: window.current_status} )
-    //                 .then(data=> {
-    //                     clear_layer()
-    //                     load_layer( data )
-    //                 })
-    //         })
-    //
-    //         function clear_layer() {
-    //             map.removeLayer( 'clusters' )
-    //             map.removeLayer( 'cluster-count' )
-    //             map.removeLayer( 'unclustered-point' )
-    //             map.removeSource( post_type )
-    //         }
-    //
-    //         function load_layer( geojson ) {
-    //             map.addSource(post_type, {
-    //                 type: 'geojson',
-    //                 data: geojson,
-    //                 cluster: true,
-    //                 clusterMaxZoom: 14,
-    //                 clusterRadius: 50
-    //             });
-    //             map.addLayer({
-    //                 id: 'clusters',
-    //                 type: 'circle',
-    //                 source: post_type,
-    //                 filter: ['has', 'point_count'],
-    //                 paint: {
-    //                     'circle-color': [
-    //                         'step',
-    //                         ['get', 'point_count'],
-    //                         '#51bbd6',
-    //                         100,
-    //                         '#f1f075',
-    //                         750,
-    //                         '#f28cb1'
-    //                     ],
-    //                     'circle-radius': [
-    //                         'step',
-    //                         ['get', 'point_count'],
-    //                         20,
-    //                         100,
-    //                         30,
-    //                         750,
-    //                         40
-    //                     ]
-    //                 }
-    //             });
-    //             map.addLayer({
-    //                 id: 'cluster-count',
-    //                 type: 'symbol',
-    //                 source: post_type,
-    //                 filter: ['has', 'point_count'],
-    //                 layout: {
-    //                     'text-field': '{point_count_abbreviated}',
-    //                     'text-font': ['DIN Offc Pro Medium', 'Arial Unicode MS Bold'],
-    //                     'text-size': 12
-    //                 }
-    //             });
-    //             map.addLayer({
-    //                 id: 'unclustered-point',
-    //                 type: 'circle',
-    //                 source: post_type,
-    //                 filter: ['!', ['has', 'point_count']],
-    //                 paint: {
-    //                     'circle-color': '#11b4da',
-    //                     'circle-radius':12,
-    //                     'circle-stroke-width': 1,
-    //                     'circle-stroke-color': '#fff'
-    //                 }
-    //             });
-    //             map.on('click', 'clusters', function(e) {
-    //                 var features = map.queryRenderedFeatures(e.point, {
-    //                     layers: ['clusters']
-    //                 });
-    //
-    //                 var clusterId = features[0].properties.cluster_id;
-    //                 map.getSource(post_type).getClusterExpansionZoom(
-    //                     clusterId,
-    //                     function(err, zoom) {
-    //                         if (err) return;
-    //
-    //                         map.easeTo({
-    //                             center: features[0].geometry.coordinates,
-    //                             zoom: zoom
-    //                         });
-    //                     }
-    //                 );
-    //             })
-    //             map.on('click', 'unclustered-point', function(e) {
-    //
-    //                 let content = jQuery('#geocode-details-content')
-    //                 content.empty()
-    //
-    //                 jQuery('#geocode-details').show()
-    //
-    //                 jQuery.each( e.features, function(i,v) {
-    //                     var address = v.properties.address;
-    //                     var post_id = v.properties.post_id;
-    //                     var name = v.properties.name
-    //
-    //                     content.append(`<p><a href="/trainings/${post_id}">${name}</a><br>${address}</p>`)
-    //                 })
-    //
-    //             });
-    //             map.on('mouseenter', 'clusters', function() {
-    //                 map.getCanvas().style.cursor = 'pointer';
-    //             });
-    //             map.on('mouseleave', 'clusters', function() {
-    //                 map.getCanvas().style.cursor = '';
-    //             });
-    //         }
-    //
-    //         jQuery('.close-details').on('click', function() {
-    //             jQuery('#geocode-details').hide()
-    //         })
-    //
-    //     }).catch(err=>{
-    //     console.log("error")
-    //     console.log(err)
-    // })
 }

@@ -98,16 +98,6 @@ function write_area( settings ) {
                                     ${status_list}
                                 </select> 
                             </div>
-                            <div class="cell small-5 center border-left info-bar-font">
-                                
-                            </div>
-                            
-                            <div class="cell small-1 center border-left">
-                                <div class="grid-y">
-                                    <div class="cell center" id="admin">${network_base_script.trans.world /*World*/}</div>
-                                    <div class="cell center" id="zoom" >0</div>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div id="spinner">${spinner}</div>
@@ -133,6 +123,20 @@ function write_area( settings ) {
                 minZoom: 1,
                 zoom: 1.8
             });
+
+            // SET BOUNDS
+            window.map_bounds_token = 'network_maps_area'
+            window.map_start = get_map_start( window.map_bounds_token )
+            if ( window.map_start ) {
+                map.fitBounds( window.map_start, {duration: 0});
+            }
+            map.on('zoomend', function() {
+                set_map_start( window.map_bounds_token, map.getBounds() )
+            })
+            map.on('dragend', function() {
+                set_map_start( window.map_bounds_token, map.getBounds() )
+            })
+            // end set bounds
 
             // disable map rotation using right click + drag
             map.dragRotate.disable();
@@ -161,53 +165,58 @@ function write_area( settings ) {
             // default load state
             map.on('load', function() {
 
-                window.previous_grid_id = '1'
-                window.previous_grid_list.push('1')
-                jQuery.get('https://storage.googleapis.com/location-grid-mirror/collection/1.geojson', null, null, 'json')
-                    .done(function (geojson) {
+                if ( window.map_start ) {
+                    let lnglat = map.getCenter()
+                    load_layer( lnglat.lng, lnglat.lat, 'zoom' )
+                } else {
+                    window.previous_grid_id = '1'
+                    window.previous_grid_list.push('1')
+                    jQuery.get('https://storage.googleapis.com/location-grid-mirror/collection/1.geojson', null, null, 'json')
+                        .done(function (geojson) {
 
-                        jQuery.each(geojson.features, function (i, v) {
-                            if (window.grid_data[geojson.features[i].properties.id]) {
-                                geojson.features[i].properties.value = parseInt(window.grid_data[geojson.features[i].properties.id].count)
-                            } else {
-                                geojson.features[i].properties.value = 0
-                            }
+                            jQuery.each(geojson.features, function (i, v) {
+                                if (window.grid_data[geojson.features[i].properties.id]) {
+                                    geojson.features[i].properties.value = parseInt(window.grid_data[geojson.features[i].properties.id].count)
+                                } else {
+                                    geojson.features[i].properties.value = 0
+                                }
+                            })
+                            map.addSource('1', {
+                                'type': 'geojson',
+                                'data': geojson
+                            });
+                            map.addLayer({
+                                'id': '1',
+                                'type': 'fill',
+                                'source': '1',
+                                'paint': {
+                                    'fill-color': [
+                                        'interpolate',
+                                        ['linear'],
+                                        ['get', 'value'],
+                                        0,
+                                        'rgba(0, 0, 0, 0)',
+                                        1,
+                                        '#547df8',
+                                        50,
+                                        '#3754ab',
+                                        100,
+                                        '#22346a'
+                                    ],
+                                    'fill-opacity': 0.75
+                                }
+                            });
+                            map.addLayer({
+                                'id': '1line',
+                                'type': 'line',
+                                'source': '1',
+                                'paint': {
+                                    'line-color': 'black',
+                                    'line-width': 1
+                                }
+                            });
                         })
-                        map.addSource('1', {
-                            'type': 'geojson',
-                            'data': geojson
-                        });
-                        map.addLayer({
-                            'id': '1',
-                            'type': 'fill',
-                            'source': '1',
-                            'paint': {
-                                'fill-color': [
-                                    'interpolate',
-                                    ['linear'],
-                                    ['get', 'value'],
-                                    0,
-                                    'rgba(0, 0, 0, 0)',
-                                    1,
-                                    '#547df8',
-                                    50,
-                                    '#3754ab',
-                                    100,
-                                    '#22346a'
-                                ],
-                                'fill-opacity': 0.75
-                            }
-                        });
-                        map.addLayer({
-                            'id': '1line',
-                            'type': 'line',
-                            'source': '1',
-                            'paint': {
-                                'line-color': 'black',
-                                'line-width': 1
-                            }
-                        });
-                    })
+                }
             })
 
             // update info box on zoom
