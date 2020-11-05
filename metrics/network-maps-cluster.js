@@ -105,9 +105,7 @@ function write_cluster( settings ) {
                 <div id='map'></div>
                 <div id='legend' class='legend'>
                     <div class="grid-x grid-margin-x grid-padding-x">
-                        <div class="cell small-1 center info-bar-font">
-                            Contacts: Red 
-                        </div>
+                        
                     </div>
                 </div>
                 <div id="spinner">${spinner}</div>

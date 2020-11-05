@@ -153,12 +153,13 @@ class DT_Network_Dashboard_Metrics_Base {
         wp_enqueue_script( 'network_base_script',
             plugin_dir_url( __FILE__ ) . 'base.js',
             [
-            'jquery',
-            'amcharts-core',
-            'amcharts-charts',
-            'amcharts-animated',
-            'amcharts-maps',
-            'datatable',
+                'jquery',
+                'amcharts-core',
+                'amcharts-charts',
+                'amcharts-animated',
+                'amcharts-maps',
+                'datatable',
+                'lodash'
             ],
             filemtime( plugin_dir_path( __FILE__ ) . 'base.js' ),
         true );
@@ -224,6 +225,7 @@ class DT_Network_Dashboard_Metrics_Base {
             'base_6' => __('Timestamp', 'dt_network_dashboard'),
             'base_7' => __('Visit', 'dt_network_dashboard'),
             'base_8' => __('View', 'dt_network_dashboard'),
+
             'site_1' => __('Active Snapshot', 'dt_network_dashboard'),
             'site_2' => __('Generations', 'dt_network_dashboard'),
             'site_3' => __('Follow-up Funnel', 'dt_network_dashboard'),
@@ -252,6 +254,7 @@ class DT_Network_Dashboard_Metrics_Base {
             'site' => __('Site', 'dt_network_dashboard'),
             'sites' => __('Sites', 'dt_network_dashboard'),
             'baptisms' => __('Baptisms', 'dt_network_dashboard'),
+            'church' => __('Church', 'dt_network_dashboard'),
             'churches' => __('Churches', 'dt_network_dashboard'),
             'location' => __('Location', 'dt_network_dashboard'),
             'modify_filter' => __('modify filter', 'dt_network_dashboard'),
@@ -265,14 +268,18 @@ class DT_Network_Dashboard_Metrics_Base {
             'country' => __('Country', 'dt_network_dashboard'),
             'state' => __('State', 'dt_network_dashboard'),
 
-
             'active_contacts' => __('Active Contacts', 'dt_network_dashboard'),
             'paused_contacts' => __('Paused Contacts', 'dt_network_dashboard'),
             'closed_contacts' => __('Closed Contacts', 'dt_network_dashboard'),
             'total_contacts' => __('Total Contacts', 'dt_network_dashboard'),
             'new_contacts' => __('New Contacts', 'dt_network_dashboard'),
 
+            'new_baptisms' => __('New Baptisms', 'dt_network_dashboard'),
+            'baptism_generations' => __('Baptism Generations', 'dt_network_dashboard'),
+            'select_location' => __('Select Location', 'dt_network_dashboard'),
+
             'new_groups' => __('New Groups', 'dt_network_dashboard'),
+            'pre_group' => __('Pre-Group', 'dt_network_dashboard'),
 
             'last_7_days' => __('Last 7 Days', 'dt_network_dashboard'),
             'last_30_days' => __('Last 30 Days', 'dt_network_dashboard'),
@@ -295,6 +302,8 @@ class DT_Network_Dashboard_Metrics_Base {
             'home_2'=> __('Countries', 'dt_network_dashboard'),
             'home_3'=> __('Events (30 Days)', 'dt_network_dashboard'),
 
+            'stats_1'=> __('All Active/Inactive', 'dt_network_dashboard'),
+            'map_1'=> __('Hover Map', 'dt_network_dashboard'),
         ];
     }
 

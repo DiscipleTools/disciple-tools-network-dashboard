@@ -59,7 +59,7 @@ jQuery(document).ready(function(){
               <hr id="map_hr_2" class="map_hr">
             </div> <!-- end widget -->
             
-            <div><button class="button clear" onclick="reset()">${network_base_script.trans.reset_data /*reset data*/}</button> <span class="reset-spinner"></span></div>
+            <div><button class="button clear" onclick="reset()">${_.escape( network_base_script.trans.reset_data ) /*reset data*/}</button> <span class="reset-spinner"></span></div>
           `);
 
         if ( LISTDATA.data ){
@@ -123,7 +123,7 @@ jQuery(document).ready(function(){
                     // multiple child
                     jQuery('#section_title').empty()
                     jQuery('#current_level').empty()
-                    jQuery('#location_list').empty().append('Select Location')
+                    jQuery('#location_list').empty().append( `${ _.escape( network_base_script.trans.select_location ) /* select location */ }` )
                     DRILLDOWN.hide_spinner()
                     return;
                 }
