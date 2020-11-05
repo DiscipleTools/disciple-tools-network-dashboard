@@ -67,7 +67,7 @@ jQuery(document).ready(function(){
                 </div>
                 
                 <hr style="max-width:100%;">
-                <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
+                <div><button class="button clear" onclick="reset()">${network_base_script.trans.reset_data /*reset data*/}</button> <span class="reset-spinner"></span></div>
             `)
 
     // call for data

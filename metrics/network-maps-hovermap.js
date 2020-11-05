@@ -12,7 +12,7 @@ jQuery(document).ready(function(){
             <hr style="max-width:100%;">
             <div id="mapping_chart">${spinner}</div>
             
-            <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
+            <div><button class="button clear" onclick="reset()">${network_base_script.trans.reset_data /*reset data*/}</button> <span class="reset-spinner"></span></div>
         `)
 
     makeRequest('POST', 'network/base', {'type': 'locations_list'} )

@@ -5,7 +5,7 @@ window.load_activity_filter = () => {
     `)
     jQuery('#activity-filter-wrapper').html(`
         <div class="grid-x" id="filters_section">
-        <div class="cell"><button type="button" id="filter_list_button" class="button small hollow">Filter List</button> <span class="loading-spinner"></span></div>
+        <div class="cell"><button type="button" id="filter_list_button" class="button small filter_list_button hollow">Filter List</button> <span class="loading-spinner"></span></div>
         <div class="cell" id="filters">${spinner}</div>
         <div class="cell"><hr></div>
         <div class="cell">
@@ -37,8 +37,8 @@ window.load_activity_filter = () => {
     <div class="grid-x">
         <div class="cell">
              <hr>
-             <button type="button" id="filter_list_button" class="button small hollow">Filter List</button> <span class="loading-spinner"></span>
-             <button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span>
+             <button type="button" id="filter_list_button" class="button small filter_list_button hollow">Filter List</button> <span class="loading-spinner"></span>
+             <button class="button clear" onclick="reset()">${network_base_script.trans.reset_data /*reset data*/}</button> <span class="reset-spinner"></span>
         </div>
     </div>
     `)
@@ -113,14 +113,14 @@ window.load_activity_filter = () => {
             } else {
                 item.addClass('hollow')
             }
-            jQuery('#filter_list_button').removeClass('hollow').addClass('warning')
+            jQuery('.filter_list_button').removeClass('hollow').addClass('warning')
         })
         jQuery('#filters_section select').on('change', function(){
-            jQuery('#filter_list_button').removeClass('hollow').addClass('warning')
+            jQuery('.filter_list_button').removeClass('hollow').addClass('warning')
         })
 
         // list to refresh filter button
-        jQuery('#filter_list_button').on('click', function(){
+        jQuery('.filter_list_button').on('click', function(){
             jQuery('#filters').empty().html(spinner)
             jQuery('#activity-list').prepend(spinner)
 
@@ -162,7 +162,7 @@ window.load_activity_filter = () => {
 
             load_data()
             load_filters()
-            jQuery('#filter_list_button').removeClass('warning').addClass('hollow')
+            jQuery('.filter_list_button').removeClass('warning').addClass('hollow')
         })
     }
 }

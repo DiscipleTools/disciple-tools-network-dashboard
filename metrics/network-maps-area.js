@@ -34,9 +34,9 @@ function write_area( settings ) {
 
     /* build status list */
     let status_list = `<option value="none" disabled></option>
-                      <option value="none" disabled>Status</option>
+                      <option value="none" disabled>${network_base_script.trans.status /*Status*/}</option>
                       <option value="none"></option>
-                      <option value="all" selected>Status - All</option>
+                      <option value="all" selected>${network_base_script.trans.status_all /*Status - All*/}</option>
                       <option value="none" disabled>-----</option>
                       `
     jQuery.each(status, function(i,v){
@@ -83,13 +83,13 @@ function write_area( settings ) {
                             <div class="cell small-2 center border-left">
                                 <select id="level" class="small" style="width:170px;">
                                     <option value="none" disabled></option>
-                                    <option value="none" disabled>Zoom Level</option>
+                                    <option value="none" disabled>${network_base_script.trans.zoom_level /*Zoom Level*/}</option>
                                     <option value="none"></option>
-                                    <option value="auto" selected>Auto Zoom</option>
+                                    <option value="auto" selected>${network_base_script.trans.auto_zoom /*Auto Zoom*/}</option>
                                     <option value="none" disabled>-----</option>
-                                    <option value="world">World</option>
-                                    <option value="admin0">Country</option>
-                                    <option value="admin1">State</option>
+                                    <option value="world">${network_base_script.trans.world /*World*/}</option>
+                                    <option value="admin0">${network_base_script.trans.country /*Country*/}</option>
+                                    <option value="admin1">${network_base_script.trans.state /*State*/}</option>
                                     <option value="none" disabled></option>
                                 </select> 
                             </div>
@@ -104,7 +104,7 @@ function write_area( settings ) {
                             
                             <div class="cell small-1 center border-left">
                                 <div class="grid-y">
-                                    <div class="cell center" id="admin">World</div>
+                                    <div class="cell center" id="admin">${network_base_script.trans.world /*World*/}</div>
                                     <div class="cell center" id="zoom" >0</div>
                                 </div>
                             </div>
@@ -249,7 +249,6 @@ function write_area( settings ) {
             jQuery('#status').on('change', function() {
                 window.current_status = jQuery('#status').val()
 
-                // makeRequest( "POST", `grid_totals`, { status: window.current_status }, 'user-management/v1/')
                 makeRequest( "POST", `network/maps/area/grid_totals`, { post_type: post_type, status: window.current_status} )
                     .done(grid_data=>{
                         window.previous_grid_id = 0
@@ -444,10 +443,8 @@ function write_area( settings ) {
 
                             if ( details.admin2_grid_id in window.grid_data ) {
                                 jQuery('#admin2_count').html(window.grid_data[details.admin2_grid_id].count)
-
                             }
                         }
-
                         /* end hierarchy list */
 
                     }); // end geocode
@@ -501,7 +498,6 @@ function write_area( settings ) {
                 jQuery( window ).resize(function() {
                     jQuery('.legend').css( 'width', map_wrapper.innerWidth() - 20 )
                 });
-                // jQuery('#geocode-details').css('height', map_wrapper.innerHeight() - 125 )
             }
             function close_geocode_details() {
                 jQuery('#geocode-details').hide()
@@ -517,5 +513,3 @@ function write_area( settings ) {
     })
 
 }
-
-

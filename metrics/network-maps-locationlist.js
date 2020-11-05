@@ -59,7 +59,7 @@ jQuery(document).ready(function(){
               <hr id="map_hr_2" class="map_hr">
             </div> <!-- end widget -->
             
-            <div><button class="button clear" onclick="reset()">reset data</button> <span class="reset-spinner"></span></div>
+            <div><button class="button clear" onclick="reset()">${network_base_script.trans.reset_data /*reset data*/}</button> <span class="reset-spinner"></span></div>
           `);
 
         if ( LISTDATA.data ){

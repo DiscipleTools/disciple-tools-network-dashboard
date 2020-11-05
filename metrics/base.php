@@ -247,10 +247,23 @@ class DT_Network_Dashboard_Metrics_Base {
             'contact' => __('Contact', 'dt_network_dashboard'),
             'group' => __('Group', 'dt_network_dashboard'),
             'groups' => __('Groups', 'dt_network_dashboard'),
+            'user' => __('User', 'dt_network_dashboard'),
             'users' => __('Users', 'dt_network_dashboard'),
+            'site' => __('Site', 'dt_network_dashboard'),
+            'sites' => __('Sites', 'dt_network_dashboard'),
             'baptisms' => __('Baptisms', 'dt_network_dashboard'),
             'churches' => __('Churches', 'dt_network_dashboard'),
             'location' => __('Location', 'dt_network_dashboard'),
+            'modify_filter' => __('modify filter', 'dt_network_dashboard'),
+            'reset_data' => __('reset data', 'dt_network_dashboard'),
+            'status' => __('Status', 'dt_network_dashboard'),
+            'status_all' => __('Status - All', 'dt_network_dashboard'),
+
+            'zoom_level' => __('Zoom Level', 'dt_network_dashboard'),
+            'auto_zoom' => __('Auto Zoom', 'dt_network_dashboard'),
+            'world' => __('World', 'dt_network_dashboard'),
+            'country' => __('Country', 'dt_network_dashboard'),
+            'state' => __('State', 'dt_network_dashboard'),
 
 
             'active_contacts' => __('Active Contacts', 'dt_network_dashboard'),
@@ -266,6 +279,21 @@ class DT_Network_Dashboard_Metrics_Base {
             'last_60_days' => __('Last 60 Days', 'dt_network_dashboard'),
             'last_12_months' => __('Last 12 Months', 'dt_network_dashboard'),
             'last_24_months' => __('Last 24 Months', 'dt_network_dashboard'),
+
+            'activity_1' => __('Activity Map', 'dt_network_dashboard'),
+            'activity_2' => __('Stats', 'dt_network_dashboard'),
+            'activity_3' => __('Activities', 'dt_network_dashboard'),
+            'activity_4' => __('Actions', 'dt_network_dashboard'),
+            'activity_5'=> __('Sites', 'dt_network_dashboard'),
+            'activity_6'=> __('By Action Type', 'dt_network_dashboard'),
+            'activity_7'=> __('Key', 'dt_network_dashboard'),
+            'activity_8'=> __('Name', 'dt_network_dashboard'),
+            'activity_9'=> __('Total Activities', 'dt_network_dashboard'),
+            'activity_10'=> __('Feed', 'dt_network_dashboard'),
+
+            'home_1'=> __('Active Totals for All Sites', 'dt_network_dashboard'),
+            'home_2'=> __('Countries', 'dt_network_dashboard'),
+            'home_3'=> __('Events (30 Days)', 'dt_network_dashboard'),
 
         ];
     }
