@@ -5,19 +5,19 @@ window.load_activity_filter = () => {
     `)
     jQuery('#activity-filter-wrapper').html(`
         <div class="grid-x" id="filters_section">
-        <div class="cell"><button type="button" id="filter_list_button" class="button small filter_list_button hollow">Filter List</button> <span class="loading-spinner"></span></div>
+        <div class="cell"><button type="button" id="filter_list_button" class="button small filter_list_button hollow">${_.escape( network_base_script.trans.filter_list ) /*Filter List*/}</button> <span class="loading-spinner"></span></div>
         <div class="cell" id="filters">${spinner}</div>
         <div class="cell"><hr></div>
         <div class="cell">
-            <strong>Time</strong><br>
+            <strong>${_.escape( network_base_script.trans.activity_11 ) /*Time*/}</strong><br>
             <select name="time_range" id="time_range">
-                <option value="7">Last 7 Days</option>
-                <option value="30">Last 30 Days</option>
-                <option value="this_year">This Year</option>
+                <option value="7">${_.escape( network_base_script.trans.last_7_days ) /*Last 7 Days*/}</option>
+                <option value="30">${_.escape( network_base_script.trans.last_30_days ) /*Last 30 Days*/}</option>
+                <option value="this_year">${_.escape( network_base_script.trans.this_year ) /*This Year*/}</option>
             </select>
         </div>
         <div class="cell">
-            <strong>Result Limit</strong><br>
+            <strong>${_.escape( network_base_script.trans.activity_12 ) /*Result Limit*/}</strong><br>
             <select name="record_limit" id="record_limit">
                 <option value="2000">2000</option>
                 <option value="5000">5000</option>
@@ -25,11 +25,11 @@ window.load_activity_filter = () => {
             </select>
         </div>
         <div class="cell">
-            <p><strong>Sites</strong> <a style="float:right;" onclick="jQuery('.sites').addClass('hollow');">uncheck</a></p>
+            <p><strong>${_.escape( network_base_script.trans.sites ) /*Sites*/}</strong> <a style="float:right;" onclick="jQuery('.sites').addClass('hollow');">${_.escape( network_base_script.trans.activity_13 ) /*uncheck*/}</a></p>
             <div id="site-list">${spinner}</div>
         </div>
         <div class="cell">
-            <p><strong>Types</strong> <a style="float:right;"  onclick="jQuery('.actions').addClass('hollow');">uncheck</a></p>
+            <p><strong>${_.escape( network_base_script.trans.types ) /*Types*/}</strong> <a style="float:right;" onclick="jQuery('.actions').addClass('hollow');">${_.escape( network_base_script.trans.activity_13 ) /*uncheck*/}</a></p>
             <div id="action-filter">${spinner}</div>
         </div>
         
@@ -37,8 +37,8 @@ window.load_activity_filter = () => {
     <div class="grid-x">
         <div class="cell">
              <hr>
-             <button type="button" id="filter_list_button" class="button small filter_list_button hollow">Filter List</button> <span class="loading-spinner"></span>
-             <button class="button clear" onclick="reset()">${network_base_script.trans.reset_data /*reset data*/}</button> <span class="reset-spinner"></span>
+             <button type="button" id="filter_list_button" class="button small filter_list_button hollow">${_.escape( network_base_script.trans.filter_list ) /*Filter List*/}</button> <span class="loading-spinner"></span>
+             <button class="button clear" onclick="reset()">${_.escape( network_base_script.trans.reset_data ) /*reset data*/}</button> <span class="reset-spinner"></span>
         </div>
     </div>
     `)
@@ -92,7 +92,7 @@ window.load_activity_filter = () => {
             if ( typeof window.activity_filter.sites !== 'undefined' && jQuery.inArray( sli, window.activity_filter.sites ) < 0 ){
                 hollow = 'hollow'
             }
-            site_list.append(`<button class="button small sites ${hollow}" value="${sli}">${slv}</button> `)
+            site_list.append(`<button class="button small sites ${hollow}" value="${sli}">${_.escape( slv )}</button> `)
         })
 
         let action_list = jQuery('#action-filter')
@@ -102,7 +102,7 @@ window.load_activity_filter = () => {
             if ( typeof window.activity_filter.actions !== 'undefined' && jQuery.inArray( ali, window.activity_filter.actions ) < 0 ){
                 hollow = 'hollow'
             }
-            action_list.append(`<button class="button small actions ${hollow}" value="${ali}">${alv.label}</button> `)
+            action_list.append(`<button class="button small actions ${hollow}" value="${ali}">${_.escape( alv.label )}</button> `)
         })
 
         // list to button changes

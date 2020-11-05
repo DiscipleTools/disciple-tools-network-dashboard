@@ -244,6 +244,7 @@ class DT_Network_Dashboard_Metrics_Base {
             'site_16' => __('Users Active in the Last 30 Days', 'dt_network_dashboard'),
             'site_17' => __('Practicing', 'dt_network_dashboard'),
             'site_18' => __('Not Practicing', 'dt_network_dashboard'),
+            'site_19' => __('Chart Funnel', 'dt_network_dashboard'),
 
             'contacts' => __('Contacts', 'dt_network_dashboard'),
             'contact' => __('Contact', 'dt_network_dashboard'),
@@ -257,8 +258,12 @@ class DT_Network_Dashboard_Metrics_Base {
             'church' => __('Church', 'dt_network_dashboard'),
             'churches' => __('Churches', 'dt_network_dashboard'),
             'location' => __('Location', 'dt_network_dashboard'),
+            'types' => __('Types', 'dt_network_dashboard'),
+
             'modify_filter' => __('modify filter', 'dt_network_dashboard'),
+            'filter_list' => __('Filter List', 'dt_network_dashboard'),
             'reset_data' => __('reset data', 'dt_network_dashboard'),
+
             'status' => __('Status', 'dt_network_dashboard'),
             'status_all' => __('Status - All', 'dt_network_dashboard'),
 
@@ -286,6 +291,7 @@ class DT_Network_Dashboard_Metrics_Base {
             'last_60_days' => __('Last 60 Days', 'dt_network_dashboard'),
             'last_12_months' => __('Last 12 Months', 'dt_network_dashboard'),
             'last_24_months' => __('Last 24 Months', 'dt_network_dashboard'),
+            'this_year' => __('This Year', 'dt_network_dashboard'),
 
             'activity_1' => __('Activity Map', 'dt_network_dashboard'),
             'activity_2' => __('Stats', 'dt_network_dashboard'),
@@ -297,6 +303,9 @@ class DT_Network_Dashboard_Metrics_Base {
             'activity_8'=> __('Name', 'dt_network_dashboard'),
             'activity_9'=> __('Total Activities', 'dt_network_dashboard'),
             'activity_10'=> __('Feed', 'dt_network_dashboard'),
+            'activity_11'=> __('Time', 'dt_network_dashboard'),
+            'activity_12'=> __('Result Limit', 'dt_network_dashboard'),
+            'activity_13'=> __('uncheck', 'dt_network_dashboard'),
 
             'home_1'=> __('Active Totals for All Sites', 'dt_network_dashboard'),
             'home_2'=> __('Countries', 'dt_network_dashboard'),

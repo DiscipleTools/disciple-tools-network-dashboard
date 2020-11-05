@@ -26,7 +26,7 @@ jQuery(document).ready(function(){
                     height: ${window.innerHeight - 175}px !important;
                 }
             </style>
-            <span class="section-header float-left" >${network_base_script.trans.activity_1 /*Activity Map*/}</span><span class="float-right"><button class="button small" data-open="activity-filter-modal">${network_base_script.trans.modify_filter /*modify_filter*/}</button></span>
+            <span class="section-header float-left" >${_.escape( network_base_script.trans.activity_1 ) /*Activity Map*/}</span><span class="float-right"><button class="button small" data-open="activity-filter-modal">${_.escape( network_base_script.trans.modify_filter ) /*modify_filter*/}</button></span>
                 <hr style="max-width:100%;">
                 <div class="grid-x grid-padding-x">
                 <div class="medium-9 cell">

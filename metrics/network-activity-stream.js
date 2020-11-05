@@ -13,7 +13,7 @@ jQuery(document).ready(function(){
                     overflow: scroll;
                 }
             </style>
-            <span class="section-header">${network_base_script.trans.activity_10 /*Feed*/}</span>
+            <span class="section-header">${_.escape( network_base_script.trans.activity_10 ) /*Feed*/}</span>
                 <hr style="max-width:100%;">
                 <div class="grid-x grid-padding-x">
                     <div class="medium-3 cell">
