@@ -285,6 +285,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
             'new_groups' => __( 'New Groups', 'dt_network_dashboard' ),
             'pre_group' => __( 'Pre-Group', 'dt_network_dashboard' ),
+            'pre_groups' => __( 'Pre-Groups', 'dt_network_dashboard' ),
 
             'last_7_days' => __( 'Last 7 Days', 'dt_network_dashboard' ),
             'last_30_days' => __( 'Last 30 Days', 'dt_network_dashboard' ),
@@ -307,7 +308,7 @@ class DT_Network_Dashboard_Metrics_Base {
             'activity_12' => __( 'Result Limit', 'dt_network_dashboard' ),
             'activity_13' => __( 'uncheck', 'dt_network_dashboard' ),
 
-            'home_1' => __( 'Active Totals for All Sites', 'dt_network_dashboard' ),
+            'home_1' => __( 'Home', 'dt_network_dashboard' ),
             'home_2' => __( 'Countries', 'dt_network_dashboard' ),
             'home_3' => __( 'Events (30 Days)', 'dt_network_dashboard' ),
 

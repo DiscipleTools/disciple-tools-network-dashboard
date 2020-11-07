@@ -316,7 +316,7 @@ function show_single_site(id, name) {
                           <h4>${_.escape( network_base_script.trans.site_7 ) /*Active Groups*/}<br><span class="total_contacts">${_.escape( data.groups.current_state.all )}</span></h4>
                           </div>
                           <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.site_8 ) /*Pre-Group*/}<br><span class="total_groups">${_.escape( data.groups.current_state.active.pre_group )}</span></h4>
+                          <h4>${_.escape( network_base_script.trans.pre_groups ) /*Pre-Group*/}<br><span class="total_groups">${_.escape( data.groups.current_state.active.pre_group )}</span></h4>
                           </div>
                           <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
                           <h4>${_.escape( network_base_script.trans.group ) /*Group*/}<br><span id="total_users">${_.escape( data.groups.current_state.active.group )}</span></h4>

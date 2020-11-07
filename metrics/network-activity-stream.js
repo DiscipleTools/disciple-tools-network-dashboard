@@ -3,7 +3,7 @@ jQuery(document).ready(function(){
     let spinner = '<span class="loading-spinner active"></span>'
 
     // add highlight to menu
-    jQuery('#network_activity_feed').prop('style', 'font-weight:900;')
+    jQuery('#network_activity_stream').prop('style', 'font-weight:900;')
 
     // write page layout with spinners
     chartDiv.empty().html(`

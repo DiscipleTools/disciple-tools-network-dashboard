@@ -220,20 +220,20 @@ function write_area( settings ) {
             })
 
             // update info box on zoom
-            map.on('zoom', function() {
-                document.getElementById('zoom').innerHTML = Math.floor(map.getZoom())
-
-                let level = get_level()
-                let name = ''
-                if ( level === 'world') {
-                    name = 'World'
-                } else if ( level === 'admin0') {
-                    name = 'Country'
-                } else if ( level === 'admin1' ) {
-                    name = 'State'
-                }
-                document.getElementById('admin').innerHTML = name
-            })
+            // map.on('zoom', function() {
+            //     document.getElementById('zoom').innerHTML = Math.floor(map.getZoom())
+            //
+            //     let level = get_level()
+            //     let name = ''
+            //     if ( level === 'world') {
+            //         name = 'World'
+            //     } else if ( level === 'admin0') {
+            //         name = 'Country'
+            //     } else if ( level === 'admin1' ) {
+            //         name = 'State'
+            //     }
+            //     document.getElementById('admin').innerHTML = name
+            // })
 
             // click controls
             window.click_behavior = 'layer'

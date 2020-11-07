@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Disciple Tools - Network Dashboard\n"
-"POT-Creation-Date: 2020-11-04 14:57-0700\n"
+"POT-Creation-Date: 2020-11-05 16:10-0700\n"
 "PO-Revision-Date: 2020-11-04 14:51-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -55,142 +55,324 @@ msgid ""
 "Network Dashboard'."
 msgstr ""
 
-#: metrics/base.php:219
+#: metrics/base.php:220
 msgid "ID"
 msgstr ""
 
-#: metrics/base.php:220
+#: metrics/base.php:221 metrics/base.php:255
 msgid "Site"
 msgstr ""
 
-#: metrics/base.php:221 metrics/base.php:237 metrics/network-maps-area.php:66
+#: metrics/base.php:222 metrics/base.php:249 metrics/network-maps-area.php:72
 #: metrics/network-statistics-contacts.php:12
 #: metrics/network-statistics-contacts.php:13
 msgid "Contacts"
 msgstr ""
 
-#: metrics/base.php:222 metrics/base.php:240 metrics/network-maps-area.php:71
+#: metrics/base.php:223 metrics/base.php:252 metrics/network-maps-area.php:81
 #: metrics/network-statistics-groups.php:12
 #: metrics/network-statistics-groups.php:13
 msgid "Groups"
 msgstr ""
 
-#: metrics/base.php:223 metrics/base.php:241 metrics/network-maps-area.php:76
+#: metrics/base.php:224 metrics/base.php:254 metrics/network-maps-area.php:89
 #: metrics/network-statistics-users.php:12
 #: metrics/network-statistics-users.php:13
 msgid "Users"
 msgstr ""
 
-#: metrics/base.php:224
+#: metrics/base.php:225
 msgid "Timestamp"
 msgstr ""
 
-#: metrics/base.php:225
+#: metrics/base.php:226
 msgid "Visit"
 msgstr ""
 
-#: metrics/base.php:226
+#: metrics/base.php:227
 msgid "View"
 msgstr ""
 
-#: metrics/base.php:227
+#: metrics/base.php:229
 msgid "Active Snapshot"
 msgstr ""
 
-#: metrics/base.php:228
+#: metrics/base.php:230
 msgid "Generations"
 msgstr ""
 
-#: metrics/base.php:229
+#: metrics/base.php:231
 msgid "Follow-up Funnel"
 msgstr ""
 
-#: metrics/base.php:230
+#: metrics/base.php:232
 msgid "On-Going Meetings"
 msgstr ""
 
-#: metrics/base.php:231
+#: metrics/base.php:233
 msgid "Coaching"
 msgstr ""
 
-#: metrics/base.php:232
+#: metrics/base.php:234
 msgid "Baptized"
 msgstr ""
 
-#: metrics/base.php:233
+#: metrics/base.php:235
 msgid "Active Groups"
 msgstr ""
 
-#: metrics/base.php:234
+#: metrics/base.php:236 metrics/base.php:258
 msgid "Church"
 msgstr ""
 
-#: metrics/base.php:235
+#: metrics/base.php:237
 msgid "Health Metrics"
 msgstr ""
 
 #: metrics/base.php:238
-msgid "Contact"
+msgid "Total Users"
 msgstr ""
 
 #: metrics/base.php:239
-msgid "Group"
+msgid "Responders"
+msgstr ""
+
+#: metrics/base.php:240
+msgid "Dispatchers"
+msgstr ""
+
+#: metrics/base.php:241
+msgid "Multipliers"
 msgstr ""
 
 #: metrics/base.php:242
-msgid "Baptisms"
+msgid "Admins"
 msgstr ""
 
-#: metrics/base.php:243 metrics/network-maps-area.php:81
-msgid "Churches"
+#: metrics/base.php:243
+msgid "User Login Activity"
 msgstr ""
 
 #: metrics/base.php:244
-msgid "Location"
+msgid "Users Active in the Last 30 Days"
+msgstr ""
+
+#: metrics/base.php:245
+msgid "Practicing"
+msgstr ""
+
+#: metrics/base.php:246
+msgid "Not Practicing"
 msgstr ""
 
 #: metrics/base.php:247
-msgid "Active Contacts"
-msgstr ""
-
-#: metrics/base.php:248
-msgid "Paused Contacts"
-msgstr ""
-
-#: metrics/base.php:249
-msgid "Closed Contacts"
+msgid "Chart Funnel"
 msgstr ""
 
 #: metrics/base.php:250
-msgid "Total Contacts"
+msgid "Contact"
 msgstr ""
 
 #: metrics/base.php:251
-msgid "New Contacts"
+msgid "Group"
 msgstr ""
 
 #: metrics/base.php:253
-msgid "New Groups"
+msgid "User"
 msgstr ""
 
-#: metrics/base.php:255
-msgid "Last 7 Days"
-msgstr ""
-
-#: metrics/base.php:256
-msgid "Last 30 Days"
+#: metrics/base.php:256 metrics/base.php:300
+msgid "Sites"
 msgstr ""
 
 #: metrics/base.php:257
+msgid "Baptisms"
+msgstr ""
+
+#: metrics/base.php:259 metrics/network-maps-area.php:97
+msgid "Churches"
+msgstr ""
+
+#: metrics/base.php:260
+msgid "Location"
+msgstr ""
+
+#: metrics/base.php:261
+msgid "Types"
+msgstr ""
+
+#: metrics/base.php:263
+msgid "modify filter"
+msgstr ""
+
+#: metrics/base.php:264
+msgid "Filter List"
+msgstr ""
+
+#: metrics/base.php:265
+msgid "reset data"
+msgstr ""
+
+#: metrics/base.php:267
+msgid "Status"
+msgstr ""
+
+#: metrics/base.php:268
+msgid "Status - All"
+msgstr ""
+
+#: metrics/base.php:270
+msgid "Zoom Level"
+msgstr ""
+
+#: metrics/base.php:271
+msgid "Auto Zoom"
+msgstr ""
+
+#: metrics/base.php:272
+msgid "World"
+msgstr ""
+
+#: metrics/base.php:273
+msgid "Country"
+msgstr ""
+
+#: metrics/base.php:274
+msgid "State"
+msgstr ""
+
+#: metrics/base.php:276
+msgid "Active Contacts"
+msgstr ""
+
+#: metrics/base.php:277
+msgid "Paused Contacts"
+msgstr ""
+
+#: metrics/base.php:278
+msgid "Closed Contacts"
+msgstr ""
+
+#: metrics/base.php:279
+msgid "Total Contacts"
+msgstr ""
+
+#: metrics/base.php:280
+msgid "New Contacts"
+msgstr ""
+
+#: metrics/base.php:282
+msgid "New Baptisms"
+msgstr ""
+
+#: metrics/base.php:283
+msgid "Baptism Generations"
+msgstr ""
+
+#: metrics/base.php:284
+msgid "Select Location"
+msgstr ""
+
+#: metrics/base.php:286
+msgid "New Groups"
+msgstr ""
+
+#: metrics/base.php:287
+msgid "Pre-Group"
+msgstr ""
+
+#: metrics/base.php:289
+msgid "Last 7 Days"
+msgstr ""
+
+#: metrics/base.php:290
+msgid "Last 30 Days"
+msgstr ""
+
+#: metrics/base.php:291
 msgid "Last 60 Days"
 msgstr ""
 
-#: metrics/base.php:258
+#: metrics/base.php:292
 msgid "Last 12 Months"
 msgstr ""
 
-#: metrics/base.php:259
+#: metrics/base.php:293
 msgid "Last 24 Months"
+msgstr ""
+
+#: metrics/base.php:294
+msgid "This Year"
+msgstr ""
+
+#: metrics/base.php:296
+msgid "Activity Map"
+msgstr ""
+
+#: metrics/base.php:297 metrics/network-activity-stats.php:12
+#: metrics/network-activity-stats.php:13
+msgid "Stats"
+msgstr ""
+
+#: metrics/base.php:298
+msgid "Activities"
+msgstr ""
+
+#: metrics/base.php:299
+msgid "Actions"
+msgstr ""
+
+#: metrics/base.php:301
+msgid "By Action Type"
+msgstr ""
+
+#: metrics/base.php:302
+msgid "Key"
+msgstr ""
+
+#: metrics/base.php:303
+msgid "Name"
+msgstr ""
+
+#: metrics/base.php:304
+msgid "Total Activities"
+msgstr ""
+
+#: metrics/base.php:305
+msgid "Feed"
+msgstr ""
+
+#: metrics/base.php:306
+msgid "Time"
+msgstr ""
+
+#: metrics/base.php:307
+msgid "Result Limit"
+msgstr ""
+
+#: metrics/base.php:308
+msgid "uncheck"
+msgstr ""
+
+#: metrics/base.php:310
+msgid "Active Totals for All Sites"
+msgstr ""
+
+#: metrics/base.php:311
+msgid "Countries"
+msgstr ""
+
+#: metrics/base.php:312
+msgid "Events (30 Days)"
+msgstr ""
+
+#: metrics/base.php:314
+msgid "All Active/Inactive"
+msgstr ""
+
+#: metrics/base.php:315 metrics/network-maps-hovermap.php:12
+#: metrics/network-maps-hovermap.php:13
+msgid "Hover Map"
 msgstr ""
 
 #: metrics/loader.php:15
@@ -199,10 +381,6 @@ msgstr ""
 
 #: metrics/network-activity-map.php:15 metrics/network-activity-map.php:16
 msgid "Map"
-msgstr ""
-
-#: metrics/network-activity-stats.php:12 metrics/network-activity-stats.php:13
-msgid "Stats"
 msgstr ""
 
 #: metrics/network-activity-stream.php:12
@@ -222,12 +400,8 @@ msgstr ""
 msgid "Area Maps"
 msgstr ""
 
-#: metrics/network-maps-area.php:62
+#: metrics/network-maps-area.php:68
 msgid "add"
-msgstr ""
-
-#: metrics/network-maps-hovermap.php:12 metrics/network-maps-hovermap.php:13
-msgid "Hover Map"
 msgstr ""
 
 #: metrics/network-maps-locationlist.php:12

@@ -8,7 +8,7 @@ jQuery(document).ready(function(){
 
     // write page layout with spinners
     chartDiv.empty().html(`
-        <span class="section-header">${_.escape( network_base_script.trans.home_1 ) /*Active Totals for All Sites*/}Home</span>
+        <span class="section-header">${_.escape( network_base_script.trans.home_1 ) /*Active Totals for All Sites*/}</span>
             <hr style="max-width:100%;">
             <div id="map_chart" style="width: 100%; max-width:1200px; margin:0 auto; max-height: 700px;height: 100vh;vertical-align: text-top;">${spinner}</div>
             
