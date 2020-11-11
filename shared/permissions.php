@@ -125,7 +125,7 @@ function dt_is_network_dashboard_plugin_active( $site_id = null ) :bool {
             return true;
         }
         $plugins = get_site_option( 'active_sitewide_plugins' );
-        if ( isset( $plugins[ 'disciple-tools-network-dashboard/disciple-tools-network-dashboard.php' ] ) ) {
+        if ( isset( $plugins['disciple-tools-network-dashboard/disciple-tools-network-dashboard.php'] ) ) {
             return true;
         }
     } else {
