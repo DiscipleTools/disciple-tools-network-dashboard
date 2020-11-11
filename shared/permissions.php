@@ -124,7 +124,8 @@ function dt_is_network_dashboard_plugin_active( $site_id = null ) :bool {
         if ( in_array( 'disciple-tools-network-dashboard/disciple-tools-network-dashboard.php', $active_plugins ) ){
             return true;
         }
-        if ( is_plugin_active_for_network( 'disciple-tools-network-dashboard/disciple-tools-network-dashboard.php' ) ) {
+        $plugins = get_site_option( 'active_sitewide_plugins' );
+        if ( isset( $plugins[ 'disciple-tools-network-dashboard/disciple-tools-network-dashboard.php' ] ) ) {
             return true;
         }
     } else {

@@ -148,7 +148,6 @@ class DT_Network_Dashboard {
         }
         require_once( 'cron/loader.php' );
 
-        require_once( 'admin/menu-and-tabs-endpoints.php' );
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );
         }

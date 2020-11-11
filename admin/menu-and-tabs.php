@@ -68,7 +68,6 @@ class DT_Network_Dashboard_Menu {
         array( $this, 'content' ) );
     }
 
-
     /**
      * Menu stub. Replaced when Disciple Tools Theme fully loads.
      */
@@ -210,7 +209,46 @@ class DT_Network_Dashboard_Tab_Profile
             </div><!--poststuff end -->
         </div><!-- wrap end -->
         <?php
+    }
 
+    public function box_network_tab(){
+        if ( isset( $_POST['show-tab'] )
+            && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['show-tab'] ) ), 'show-tab'.get_current_user_id() )
+            && isset( $_POST['tab'] ) ) {
+            $tab = sanitize_text_field( wp_unslash( $_POST['tab'] ) );
+            update_option( 'dt_network_dashboard_show_tab', $tab, true );
+        }
+        $tab = get_option( 'dt_network_dashboard_show_tab' );
+        ?>
+        <form method="POST">
+        <?php wp_nonce_field( 'show-tab'.get_current_user_id(), 'show-tab' ) ?>
+        <table class="widefat striped">
+            <thead>
+                <tr><td>Show Tab</td><td></td><td></td></tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td style="width:115px;"><img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) ) ?>images/tab-screen.png" height="40px" /></td>
+                <td>
+                    <select name="tab">
+                        <option value="hide" <?php echo ( 'hide' === $tab || empty( $tab ) ) ? 'selected' : ''; ?>>Hide</option>
+                        <option value="show" <?php echo ( 'show' === $tab ) ? 'selected' : ''; ?>>Show</option>
+                    </select>
+                </td>
+                <td>
+                    To show the network dashboard, you must enable this feature. The background tasks of the network dashboard will run and facilitate connection to other sites, even with the "Network" tab hidden.
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <button type="submit" class="button">Update</button>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        </form>
+        <br>
+        <?php
     }
 
     public function box_diagram(){
@@ -248,10 +286,8 @@ class DT_Network_Dashboard_Tab_Profile
             text-align: center;
         }
         </style>
+        <p><strong>Network Map (Incoming and Outgoing Reports)</strong></p>
         <table class="widefat striped" id="network-map">
-            <thead>
-            <tr><td>Network Map (Incoming and Outgoing Reports) <span style="float:right;"><a href="<?php echo esc_url( admin_url() ) ?>edit.php?post_type=site_link_system">Add Remote Dashboard</a></span></td></tr>
-            </thead>
             <tbody>
                 <tr>
                     <td>
@@ -314,46 +350,7 @@ class DT_Network_Dashboard_Tab_Profile
         <?php
     }
 
-    public function box_network_tab(){
-        if ( isset( $_POST['show-tab'] )
-            && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['show-tab'] ) ), 'show-tab'.get_current_user_id() )
-            && isset( $_POST['tab'] ) ) {
-            $tab = sanitize_text_field( wp_unslash( $_POST['tab'] ) );
-            update_option( 'dt_network_dashboard_show_tab', $tab, true );
-        }
-        $tab = get_option( 'dt_network_dashboard_show_tab' );
-        ?>
-        <form method="POST">
-        <?php wp_nonce_field( 'show-tab'.get_current_user_id(), 'show-tab' ) ?>
-        <table class="widefat striped">
-            <thead>
-                <tr><td>Show Tab</td><td></td><td></td></tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td style="width:115px;"><img src="<?php echo esc_url( plugin_dir_url( __FILE__ ) ) ?>images/tab-screen.png" height="40px" /></td>
-                <td>
-                    <select name="tab">
-                        <option value="hide" <?php echo ( 'hide' === $tab || empty( $tab ) ) ? 'selected' : ''; ?>>Hide</option>
-                        <option value="show" <?php echo ( 'show' === $tab ) ? 'selected' : ''; ?>>Show</option>
-                    </select>
-                </td>
-                <td>
 
-                    To show the network dashboard, you must enable this feature. The background tasks of the network dashboard will run and facilitate connection to other sites, even with the "Network" tab hidden.
-                </td>
-            </tr>
-            <tr>
-                <td colspan="3">
-                <button type="submit" class="button">Update</button>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        </form>
-        <br>
-        <?php
-    }
 
 }
 
@@ -370,20 +367,13 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                     <div id="post-body-content">
                         <!-- Main Column -->
                         <?php
-
                         if ( dt_is_current_multisite_dashboard_approved() ) {
 
-                            $this->process_full_list();
                             $this->main_column();
 
                             $obj = new DT_Network_Dashboard_Tab_Profile();
                             $obj->box_diagram();
-
-
-                        } else {
-                            $this->not_approved_content();
                         }
-
                         ?>
                         <style>#network-map .multisite { background-color: lightgray;}</style>
                         <!-- End Main Column -->
@@ -392,88 +382,6 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                 </div><!-- post-body meta box container -->
             </div><!--poststuff end -->
         </div><!-- wrap end -->
-        <?php
-    }
-
-    public function not_approved_content() {
-        ?>
-        <table class="widefat striped">
-            <thead>
-            <th>Not Yet Approved to Collect Reports from the Local Network</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <p>You are not yet approved to collect reports from the local network. Your network administrator must enable your dashboard to collect reports from this network.</p>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <table class="widefat striped">
-            <thead>
-            <th>How does this work?</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    <ol>
-                        <li>
-                            The network dashboard can collect reports from both "Remote Sites" which you setup through the Site Links system, or in a multisite installation, where many sites are hosted on one server
-                            you can enable the network dashboard to collect reports from the "local" or multisite server installations of Disciple Tools.
-                        </li>
-                        <li>
-                            Both remote and local sites can be collected from and are aggregated into dashboard totals.
-                        </li>
-                    </ol>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <?php
-    }
-
-    public function process_full_list() {
-        ?>
-        <table class="widefat striped">
-            <tbody>
-            <tr>
-                <td>
-                    <button class="button" id="rerun-collection" type="button">Refresh All Snapshots</button>
-                    &nbsp;<span id="rerun-collection-spinner" style="display: none;"><img src="<?php echo esc_url( plugin_dir_url( __DIR__ ) ) ?>spinner.svg" width="25px" /></span>
-                    &nbsp;<span id="result-message"></span>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <script>
-            jQuery(document).ready(function() {
-                jQuery('#rerun-collection').click( function() {
-                    let spinner = jQuery('#rerun-collection-spinner')
-                    spinner.show()
-                    jQuery.ajax({
-                        type: "POST",
-                        contentType: "application/json; charset=utf-8",
-                        dataType: "json",
-                        url: '<?php echo esc_url( rest_url() ) ?>dt/v1/network/admin/trigger_multisite_snapshot_collection',
-                        beforeSend: function (xhr) {
-                            xhr.setRequestHeader('X-WP-Nonce', '<?php echo esc_attr( wp_create_nonce( 'wp_rest' ) ); ?>');
-                        },
-                    })
-                        .done(function (data) {
-                            console.log(data)
-                            if ( data ) {
-                                spinner.hide()
-                                jQuery('#result-message').html('Snapshot refresh began successfully. Check logs below for updates.')
-                            }
-                        })
-                        .fail(function (err) {
-                            console.log(err)
-                            jQuery('#result-message').html('Snapshot refresh unsuccessful. View console for errors.')
-                        })
-                })
-            })
-        </script>
         <?php
     }
 
@@ -513,7 +421,7 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
         ?>
         <form method="post">
             <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
-            <p><strong>Network Dashboard Snapshots of Connected Sites</strong></p>
+            <p><strong>Manage Connected Sites</strong></p>
             <table class="widefat striped">
                 <thead>
                 <th>ID</th>
@@ -572,7 +480,6 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
                     <?php
                 }
                 ?>
-
                 </tbody>
             </table>
             <div style="display:none;padding:2em;" id="fail-error"></div>
@@ -580,11 +487,7 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
         <br>
         <!-- End Box -->
         <?php
-
     }
-
-
-
 }
 
 /**
@@ -600,7 +503,6 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                     <div id="post-body-content">
 
                         <!-- Main Column -->
-                        <?php $this->process_full_list() ?>
                         <?php $this->main_column() ?>
 
                         <?php
@@ -614,52 +516,6 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                 </div><!-- post-body meta box container -->
             </div><!--poststuff end -->
         </div><!-- wrap end -->
-        <?php
-    }
-
-    public function process_full_list() {
-        ?>
-        <table class="widefat striped">
-            <tbody>
-                <tr>
-                    <td>
-                        <button class="button" id="rerun-collection" type="button">Refresh All Snapshots</button>
-                        &nbsp;<span id="rerun-collection-spinner" style="display: none;"><img src="<?php echo esc_url( plugin_dir_url( __DIR__ ) ) ?>spinner.svg" width="25px" /></span>
-                        &nbsp;<span id="result-message"></span>
-
-                        <span style="float:right;"><a href="<?php echo esc_url( admin_url() ) ?>edit.php?post_type=site_link_system">Add Remote Dashboard</a></span>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
-        <script>
-        jQuery(document).ready(function() {
-            jQuery('#rerun-collection').click( function() {
-                let spinner = jQuery('#rerun-collection-spinner')
-                spinner.show()
-                jQuery.ajax({
-                    type: "POST",
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    url: '<?php echo esc_url( rest_url() ) ?>dt/v1/network/admin/trigger_snapshot_collection',
-                    beforeSend: function (xhr) {
-                        xhr.setRequestHeader('X-WP-Nonce', '<?php echo esc_attr( wp_create_nonce( 'wp_rest' ) ); ?>');
-                    },
-                })
-                    .done(function (data) {
-                        console.log(data)
-                        if ( data ) {
-                            spinner.hide()
-                            jQuery('#result-message').html('Snapshot refresh began successfully. Check logs below for updates.')
-                        }
-                    })
-                    .fail(function (err) {
-                        console.log(err)
-                        jQuery('#result-message').html('Snapshot refresh unsuccessful. View console for errors.')
-                    })
-            })
-        })
-        </script>
         <?php
     }
 
@@ -702,7 +558,7 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
         ?>
         <form method="post">
             <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
-            <p><strong>Network Dashboard Snapshots of Connected Sites</strong></p>
+            <p><strong>Manage Connected Sites</strong></p>
             <table class="widefat striped">
                 <thead>
                     <th>ID</th>
@@ -764,7 +620,6 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
                     <?php
                 }
                 ?>
-
                 </tbody>
             </table>
             <div style="display:none;padding:2em;" id="fail-error"></div>
@@ -773,10 +628,7 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
         <!-- End Box -->
         <?php
     }
-
 }
-
-
 
 
 
@@ -975,12 +827,15 @@ class DT_Network_Dashboard_Tab_System
 
                         <?php $this->box_local_site_data();?>
                         <?php $this->box_manage_sites_data() ?>
-                        <?php $this->box_site_project_details() ?>
                         <?php $this->box_registered_key_list() ?>
+                        <?php $this->box_site_project_details() ?>
                         <?php $this->box_utilities() ?>
                         <?php $this->box_cron_list() ?>
+                        <?php
+                        $obj = new DT_Network_Dashboard_Tab_Profile();
+                        $obj->box_diagram();
+                        ?>
                         <?php $this->box_txt_log_list() ?>
-                        <?php $this->box_cron_instructions() ?>
 
                         <!-- End Main Column -->
                     </div><!-- end post-body-content -->
@@ -997,8 +852,6 @@ class DT_Network_Dashboard_Tab_System
         $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report();
 
         if ( isset( $_POST['local_site_data'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['local_site_data'] ) ), 'local_site_data'.get_current_user_id() ) ) {
-            dt_write_log( $_POST );
-
             if ( isset( $_POST['new-local-snapshot'] ) ) {
                 $snapshot = DT_Network_Dashboard_Snapshot::snapshot_report( true );
             }
@@ -1009,7 +862,7 @@ class DT_Network_Dashboard_Tab_System
         }
 
         ?>
-        <p><strong>Manage Local Site</strong></p>
+        <p><strong>Manage Local Site Data</strong></p>
         <form method="POST">
             <?php wp_nonce_field( 'local_site_data'.esc_html( get_current_user_id() ), 'local_site_data' ) ?>
             <table class="widefat striped">
@@ -1027,7 +880,6 @@ class DT_Network_Dashboard_Tab_System
                 <tr>
                     <td>
                         <strong><?php echo esc_html( $profile['partner_name'] ) ?></strong><br>
-                        <?php echo esc_html( $profile['partner_id'] ) ?>
                     </td>
                     <td>
                         <a href="<?php echo esc_html( $profile['partner_url'] ) ?>"><?php echo esc_html( $profile['partner_url'] ) ?></a>
@@ -1144,7 +996,6 @@ class DT_Network_Dashboard_Tab_System
                         <?php
                     endif; // 3
 
-
                     /* New Groups 4 */
                 if ( isset( $_GET['rebuild_activity'] ) && '4' === $_GET['rebuild_activity'] ) :
                     $results = DT_Network_Activity_Log::query_new_coaching();
@@ -1175,7 +1026,6 @@ class DT_Network_Dashboard_Tab_System
                         </script>
                         <?php
                     endif; // 4
-
 
                     /* New Generations 5 */
                 if ( isset( $_GET['rebuild_activity'] ) && '5' === $_GET['rebuild_activity'] ) :
@@ -1210,7 +1060,6 @@ class DT_Network_Dashboard_Tab_System
                         </script>
                         <?php
                     endif; // 5
-
 
                     /* New Plugins 6 */
                 if ( isset( $_GET['rebuild_activity'] ) && '6' === $_GET['rebuild_activity'] ) :
@@ -1263,18 +1112,59 @@ class DT_Network_Dashboard_Tab_System
             && wp_verify_nonce( sanitize_key( wp_unslash( $_POST['network_dashboard_nonce'] ) ), 'network_dashboard_' . get_current_user_id() )
              ) {
 
-            /* SNAPSHOT */
-            if ( isset( $_POST['new-multisite-snapshot'] ) ){
-                dt_save_log( 'management', '', false );
-                dt_save_log( 'management', 'REFRESH MULTISITE SNAPSHOT', false );
+            if ( is_multisite() ) :
+                /* SNAPSHOT */
+                if ( isset( $_POST['new-multisite-snapshot'] ) ){
+                    dt_save_log( 'management', '', false );
+                    dt_save_log( 'management', 'REFRESH MULTISITE SNAPSHOT', false );
 
-                if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-multisite-snapshot'] ) ) ) ) ) {
-                    $message = array( 'notice-success','Successful collection of new snapshot' );
+                    if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-multisite-snapshot'] ) ) ) ) ) {
+                        $message = array( 'notice-success','Successful collection of new snapshot' );
+                    }
+                    else {
+                        $message = array( 'notice-error', 'Failed collection' );
+                    }
                 }
-                else {
-                    $message = array( 'notice-error', 'Failed collection' );
+
+                /* REBUILD ACTIVITY */
+                if ( isset( $_POST['new-multisite-activity'] ) ){
+                    dt_save_log( 'management', '', false );
+                    dt_save_log( 'management', 'REBUILD MULTISITE ACTIVITY', false );
+
+                    $id = sanitize_text_field( wp_unslash( $_POST['new-multisite-activity'] ) );
+
+                    dt_save_log( 'management', 'Start ID: ' . $id, false );
+
+                    $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+                    foreach ( $sites as $site ){
+                        if ( $id === $site['id'] ){
+                            dt_network_dashboard_collect_multisite_activity( $site );
+                            dt_save_log( 'management', 'End ID: ' . $id, false );
+                            break;
+                        }
+                    }
                 }
-            }
+                /* DELETE ACTIVITY */
+                if ( isset( $_POST['delete-multisite-activity'] ) ){
+                    dt_save_log( 'management', '', false );
+                    dt_save_log( 'management', 'DELETE MULTISITE ACTIVITY', false );
+
+                    $id = sanitize_text_field( wp_unslash( $_POST['delete-multisite-activity'] ) );
+
+                    dt_save_log( 'management', 'Start ID: ' . $id, false );
+
+                    $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
+                    foreach ( $sites as $site ){
+                        if ( $id === $site['id'] ){
+                            DT_Network_Activity_Log::delete_activity( $site['partner_id'] );
+                            dt_save_log( 'management', 'End ID: ' . $id, false );
+                            break;
+                        }
+                    }
+                }
+            endif; // is multisite
+
+            /* SNAPSHOT */
             if ( isset( $_POST['new-remote-snapshot'] ) ){
                 dt_save_log( 'management', '', false );
                 dt_save_log( 'management', 'REFRESH REMOTE SNAPSHOT', false );
@@ -1289,23 +1179,7 @@ class DT_Network_Dashboard_Tab_System
             }
 
             /* DELETE ACTIVITY */
-            if ( isset( $_POST['delete-multisite-activity'] ) ){
-                dt_save_log( 'management', '', false );
-                dt_save_log( 'management', 'DELETE MULTISITE ACTIVITY', false );
 
-                $id = sanitize_text_field( wp_unslash( $_POST['delete-multisite-activity'] ) );
-
-                dt_save_log( 'management', 'Start ID: ' . $id, false );
-
-                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-                foreach ( $sites as $site ){
-                    if ( $id === $site['id'] ){
-                        DT_Network_Activity_Log::delete_activity( $site['partner_id'] );
-                        dt_save_log( 'management', 'End ID: ' . $id, false );
-                        break;
-                    }
-                }
-            }
             if ( isset( $_POST['delete-remote-activity'] ) ){
                 dt_save_log( 'management', '', false );
                 dt_save_log( 'management', 'DELETE REMOTE SNAPSHOT', false );
@@ -1323,25 +1197,7 @@ class DT_Network_Dashboard_Tab_System
                     }
                 }
             }
-
             /* REBUILD ACTIVITY */
-            if ( isset( $_POST['new-multisite-activity'] ) ){
-                dt_save_log( 'management', '', false );
-                dt_save_log( 'management', 'REBUILD MULTISITE ACTIVITY', false );
-
-                $id = sanitize_text_field( wp_unslash( $_POST['new-multisite-activity'] ) );
-
-                dt_save_log( 'management', 'Start ID: ' . $id, false );
-
-                $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-                foreach ( $sites as $site ){
-                    if ( $id === $site['id'] ){
-                        dt_network_dashboard_collect_multisite_activity( $site );
-                        dt_save_log( 'management', 'End ID: ' . $id, false );
-                        break;
-                    }
-                }
-            }
             if ( isset( $_POST['new-remote-activity'] ) ){
                 dt_save_log( 'management', '', false );
                 dt_save_log( 'management', 'REBUILD REMOTE ACTIVITY', false );
@@ -1373,7 +1229,7 @@ class DT_Network_Dashboard_Tab_System
         ?>
         <form method="post">
             <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
-            <p><strong>Manage Site Snapshots and Activity Database</strong></p>
+            <p><strong>Manage Sites Data Syncing</strong></p>
             <table class="widefat striped">
                 <thead>
                     <tr>
@@ -1401,7 +1257,6 @@ class DT_Network_Dashboard_Tab_System
                         <tr>
                             <td>
                                 <strong><?php echo esc_html( $site['name'] ) ?></strong><br>
-                                <?php echo esc_html( $site['partner_id'] ) ?>
                             </td>
                             <td>
                                 <?php echo '<a href="'. esc_url( $profile['partner_url'] ) .'" target="_blank">' . esc_url( $profile['partner_url'] ) . '</a>' ?>
@@ -1608,6 +1463,7 @@ class DT_Network_Dashboard_Tab_System
 
     public function box_registered_key_list() {
         $actions = dt_network_dashboard_registered_actions();
+        $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
         $current_site_id = dt_network_site_id();
         ?>
         <!-- Box -->
@@ -1645,6 +1501,33 @@ class DT_Network_Dashboard_Tab_System
             ?>
             </tbody>
         </table>
+        <table class="widefat striped">
+            <thead>
+            <tr><th>Site Name</th><td>Site ID</td><td>ND Post ID</td><td>Type ID</td></tr>
+            </thead>
+            <tbody>
+            <?php
+            foreach ( $sites as $site ){
+                ?>
+                <tr>
+                    <td>
+                        <?php echo esc_attr( $site['name'] ) ?>
+                    </td>
+                    <td>
+                       <?php echo esc_attr( $site['partner_id'] ) ?>
+                    </td>
+                    <td>
+                        <?php echo esc_attr( $site['id'] ) ?>
+                    </td>
+                    <td>
+                        <?php echo esc_attr( $site['type_id'] ) ?>
+                    </td>
+                </tr>
+                <?php
+            }
+            ?>
+            </tbody>
+        </table>
         <br>
         <!-- End Box -->
         <?php
@@ -1672,12 +1555,6 @@ class DT_Network_Dashboard_Tab_System
         <form method="POST">
         <?php wp_nonce_field( 'utilities_' . get_current_user_id(), 'utilities_nonce' ) ?>
         <table class="widefat striped">
-            <thead>
-            <tr>
-                <th></th>
-                <th></th>
-            </tr>
-            </thead>
             <tbody>
                 <tr>
                     <td>
@@ -1787,19 +1664,9 @@ class DT_Network_Dashboard_Tab_System
         <form method="POST">
             <?php wp_nonce_field( 'reset-logs'.get_current_user_id(), 'reset-logs' ) ?>
             <table class="widefat striped">
-                <thead>
-                <tr>
-                    <th>
-                    <span style="float:right;">
-                        <button type="submit" name="refresh" value="true" class="button">Refresh</button>
-                    </span>
-                    </th>
-                </tr>
-                </thead>
                 <tbody>
                 <tr>
                     <td>
-
                         <?php if ( dt_network_dashboard_multisite_is_approved() ) : ?>
                         <a href="<?php echo esc_url( dt_get_log_location( 'multisite', 'url' ) ) ?>" target="_blank"><?php echo esc_url( dt_get_log_location( 'multisite', 'url' ) ) ?></a><br>
                         <a href="<?php echo esc_url( dt_get_log_location( 'activity-multisite', 'url' ) ) ?>" target="_blank"><?php echo esc_url( dt_get_log_location( 'activity-multisite', 'url' ) ) ?></a><br>
@@ -1809,67 +1676,19 @@ class DT_Network_Dashboard_Tab_System
                         <a href="<?php echo esc_url( dt_get_log_location( 'remote', 'url' ) ) ?>" target="_blank"><?php echo esc_url( dt_get_log_location( 'remote', 'url' ) ) ?></a><br>
                         <a href="<?php echo esc_url( dt_get_log_location( 'activity-remote', 'url' ) ) ?>" target="_blank"><?php echo esc_url( dt_get_log_location( 'activity-remote', 'url' ) ) ?></a><br>
                         <a href="<?php echo esc_url( dt_get_log_location( 'profile-collection', 'url' ) ) ?>" target="_blank"><?php echo esc_url( dt_get_log_location( 'profile-collection', 'url' ) ) ?></a><br>
-
                     </td>
                 </tr>
+                <tr>
+                    <td>
+                        <span style="float:right;">
+                            <button type="submit" name="refresh" value="true" class="button">Refresh</button>
+                        </span>
+                    </td>
+                    </tr>
                 </tbody>
             </table>
         </form>
         <br>
-        <?php
-    }
-
-    public function box_cron_instructions() {
-        ?>
-        <!-- Box -->
-        <table class="widefat striped">
-            <thead>
-            <th>What is CRON?</th>
-            </thead>
-            <tbody>
-            <tr>
-                <td>
-                    Cron is a time based task often scheduled to occur at regular times. You can have some tasks in a software run instantly, while others might build up and be run at a certain time.
-                    The Network Dashboard collects snapshots from remote sites in this time based way. Because these are processor intensive tasks/queries we do not run them instantly, so as to protect the performance of the
-                    Disciple.Tools system.
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    Although it is not required, if there are concerns about the timely distribution of posts/messages/emails or collection of snapshots, then it is very simple
-                    to add an external cron service.
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>EXPLANATION</strong><br></p>
-                    Wordpress/Disciple.Tools Cron System depends on visits to trigger background processes. If the site is not visited regularly
-                    like a normal website would be, it is possible to use an external cron service to call the site regularly and trigger these
-                    background tasks. If the Network Dashboard is configured for frequent collections in the section above and you notice
-                    these services not running when expected, you can schedule an external cron service to connect to the site on a regular basis.
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>SERVICES</strong></p>
-                    <ul>
-                        <li><a href="https://cron-job.org/en/">Cron-Job.org</a></li>
-                        <li><a href="https://www.easycron.com/">EasyCron</a></li>
-                        <li><a href="https://cronless.com/">Cronless</a></li>
-                        <li>Or Google "free cron services"</li>
-                    </ul>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <p><strong>CRON URL</strong><br></p>
-                    <code><?php echo esc_url( site_url() ) . '/wp-cron.php' ?></code>
-                </td>
-            </tr>
-            </tbody>
-        </table>
-        <br>
-        <!-- End Box -->
         <?php
     }
 
@@ -1888,7 +1707,6 @@ class DT_Network_Dashboard_Tab_Upgrades
                 <div id="post-body" class="metabox-holder columns-2">
                     <div id="post-body-content">
                         <!-- Main Column -->
-
 
                         <?php $this->box_mapbox_status() ?>
                         <?php $this->box_ipstack_api_key() ?>
@@ -1997,10 +1815,11 @@ class DT_Network_Dashboard_Tab_Tutorial
                 <td>
                     <dl>
                         <dt>Plugin Purpose</dt>
-                        <dd>Collecting reports across many systems is difficult and doing it automatically, even more so. Making sure
+                        <dd>
+                            Collecting reports across many systems is difficult and doing it automatically, even more so. Making sure
                             counts for certain location are counted only once you need a shared database of locations to post counts to.
-                            This network mapping plugin attempts to set up a globally consistent mapping schema.</dd>
-
+                            This network mapping plugin attempts to set up a globally consistent mapping schema.
+                        </dd>
                         <dt>Local vs Network Functions</dt>
                         <dd>This plugin has two functions.
                             <ol>
@@ -2013,9 +1832,46 @@ class DT_Network_Dashboard_Tab_Tutorial
                                 </li>
                             </ol>
                         </dd>
-
                     </dl>
-
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Cron is a time based task often scheduled to occur at regular times. You can have some tasks in a software run instantly, while others might build up and be run at a certain time.
+                    The Network Dashboard collects snapshots from remote sites in this time based way. Because these are processor intensive tasks/queries we do not run them instantly, so as to protect the performance of the
+                    Disciple.Tools system.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    Although it is not required, if there are concerns about the timely distribution of posts/messages/emails or collection of snapshots, then it is very simple
+                    to add an external cron service.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>EXPLANATION</strong><br></p>
+                    Wordpress/Disciple.Tools Cron System depends on visits to trigger background processes. If the site is not visited regularly
+                    like a normal website would be, it is possible to use an external cron service to call the site regularly and trigger these
+                    background tasks. If the Network Dashboard is configured for frequent collections in the section above and you notice
+                    these services not running when expected, you can schedule an external cron service to connect to the site on a regular basis.
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>SERVICES</strong></p>
+                    <ul>
+                        <li><a href="https://cron-job.org/en/">Cron-Job.org</a></li>
+                        <li><a href="https://www.easycron.com/">EasyCron</a></li>
+                        <li><a href="https://cronless.com/">Cronless</a></li>
+                        <li>Or Google "free cron services"</li>
+                    </ul>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <p><strong>CRON URL</strong><br></p>
+                    <code><?php echo esc_url( site_url() ) . '/wp-cron.php' ?></code>
                 </td>
             </tr>
             </tbody>
