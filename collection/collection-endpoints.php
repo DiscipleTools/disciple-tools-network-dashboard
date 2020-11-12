@@ -184,7 +184,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
 
         $last_site_record_id = sanitize_text_field( wp_unslash( $params['last_site_record_id'] ?? 0 ) );
         $raw_actions = recursive_sanitize_text_field( $params['actions'] );
-        $actions = dt_array_to_sql( $raw_actions );
+        $actions = dt_array_to_sql( $raw_actions ); // removed from query @todo replace
 
         // @phpcs:disable
         global $wpdb;
@@ -192,9 +192,8 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
                 SELECT *
                 FROM $wpdb->dt_movement_log
                 WHERE
-                      site_id = %s
+                    site_id = %s
                     AND id > %s
-                    AND action IN ($actions)
                 ORDER BY id
                 LIMIT 10000
                 ",
