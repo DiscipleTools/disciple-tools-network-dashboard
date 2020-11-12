@@ -21,7 +21,7 @@ function dt_network_dashboard_top_nav_desktop() {
  * @return bool
  */
 function dt_network_dashboard_has_metrics_permissions() : bool {
-    $permissions = array( 'view_any_contacts', 'view_project_metrics' );
+    $permissions = array( 'view_any_contacts', 'view_project_metrics', 'view_network_dashboard' );
     foreach ( $permissions as $permission ){
         if ( current_user_can( $permission ) ){
             return true;

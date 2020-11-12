@@ -81,14 +81,7 @@ class DT_Network_Mapping_Module_Config
      * @return bool
      */
     public function custom_permission_check(): bool {
-        /**
-         * Add logic to evaluate current user and return a bool decision on permission to the mapping module
-         * Example below gives permission to dispatchers and admins.
-         */
-        if ( current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' ) ) {
-            return true;
-        }
-        return false;
+        return dt_network_dashboard_has_permission();
     }
 
     public function custom_settings_filter( $data ) {

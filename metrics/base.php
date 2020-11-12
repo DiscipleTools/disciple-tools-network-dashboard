@@ -16,7 +16,7 @@ class DT_Network_Dashboard_Metrics_Base {
     public $menu_title = 'Example';
     public $js_object_name = ''; // This object will be loaded into the metrics.js file by the wp_localize_script.
     public $js_file_name = ''; // should be full file name plus extension
-    public $permissions = [ 'view_any_contacts', 'view_project_metrics' ];
+    public $permissions = [ 'view_any_contacts', 'view_project_metrics', 'view_network_dashboard' ];
 
     private static $_instance = null;
     public static function instance() {
@@ -662,8 +662,8 @@ class DT_Network_Dashboard_Metrics_Base {
               && isset( $filter['boundary']['e_lng'] )
               && isset( $filter['boundary']['w_lng'] )
             ) {
-                $additional_where .= " 
-                AND lng < ".$filter['boundary']['e_lng']." 
+                $additional_where .= "
+                AND lng < ".$filter['boundary']['e_lng']."
                 AND lng > ".$filter['boundary']['w_lng']."
                 AND lat > ".$filter['boundary']['s_lat']."
                 AND lat < ".$filter['boundary']['n_lat']."
@@ -675,8 +675,8 @@ class DT_Network_Dashboard_Metrics_Base {
         // @phpcs:disable
         $profile = dt_network_site_profile();
         $results = $wpdb->get_results( $wpdb->prepare( "
-                SELECT ml.*, 
-                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%%Y-%%c-%%e') AS day, 
+                SELECT ml.*,
+                       DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%%Y-%%c-%%e') AS day,
                        DATE_FORMAT(FROM_UNIXTIME(ml.timestamp), '%%H:%%i %%p') AS time,
                        CASE
                            WHEN pname.meta_value != '' THEN pname.meta_value
@@ -690,7 +690,7 @@ class DT_Network_Dashboard_Metrics_Base {
                 	AND	pname.meta_key = 'name'
                 LEFT JOIN $wpdb->postmeta as pvisibility ON pid.ID=pvisibility.post_id
                 	AND	pvisibility.meta_key = 'visibility'
-                WHERE ml.timestamp < %s 
+                WHERE ml.timestamp < %s
                   AND ml.timestamp > %s
                   AND ( pvisibility.meta_value != 'hide' || ml.site_id = %s )
                   $additional_where
@@ -1243,7 +1243,7 @@ class DT_Network_Dashboard_Metrics_Base {
                 	AND pid.post_type = 'dt_network_dashboard'
                 LEFT JOIN $wpdb->postmeta as pvisibility ON pid.ID=pvisibility.post_id
                 	AND	pvisibility.meta_key = 'visibility'
-                WHERE ml.timestamp > %s 
+                WHERE ml.timestamp > %s
                     AND pvisibility.meta_value != 'hide'
                 ",
         $time ) );

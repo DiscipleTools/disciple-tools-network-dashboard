@@ -189,11 +189,11 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
         // @phpcs:disable
         global $wpdb;
         $activity = $wpdb->get_results( $wpdb->prepare( "
-                SELECT * 
+                SELECT *
                 FROM $wpdb->dt_movement_log
-                WHERE 
+                WHERE
                       site_id = %s
-                    AND site_object_id > %s
+                    AND id > %s
                     AND action IN ($actions)
                 ORDER BY id
                 LIMIT 10000

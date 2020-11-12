@@ -1229,7 +1229,7 @@ class DT_Network_Dashboard_Tab_System
         ?>
         <form method="post">
             <?php wp_nonce_field( 'network_dashboard_' . get_current_user_id(), 'network_dashboard_nonce' ) ?>
-            <p><strong>Manage Sites Data Syncing</strong></p>
+            <p><strong>Manage Other Sites</strong></p>
             <table class="widefat striped">
                 <thead>
                     <tr>
