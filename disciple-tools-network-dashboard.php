@@ -45,7 +45,15 @@ function dt_network_dashboard() {
             new WP_Error( 'migration_error', 'Migration engine failed to migrate.' );
         }
 
-        return DT_Network_Dashboard::get_instance();
+        DT_Network_Dashboard::get_instance();
+
+        /**
+         * Use this action fires after the DT_Network_Dashboard plugin has loaded.
+         * Use this to hook expansions to the metrics or snapshot collection.
+         */
+        do_action( 'dt_network_dashboard_loaded' );
+
+        return true;
     }
     else {
         if ( ! is_multisite() ) {
