@@ -235,7 +235,7 @@ class DT_Network_Dashboard_Snapshot_Queries {
     public static function get_contacts_status(): array
     {
         $data = [];
-        $contact_fields = Disciple_Tools_Contact_Post_Type::instance()->get_custom_fields_settings();
+        $contact_fields = DT_Posts::get_post_field_settings( "contacts" );
         $status_defaults = $contact_fields['overall_status']['default'];
         $current_state = self::query_contacts_current_state();
         foreach ($status_defaults as $key => $status) {
@@ -258,7 +258,7 @@ class DT_Network_Dashboard_Snapshot_Queries {
         $labels = [];
         $keyed_result = [];
 
-        $contact_fields = Disciple_Tools_Contact_Post_Type::instance()->get_custom_fields_settings();
+        $contact_fields = DT_Posts::get_post_field_settings( "contacts" );
 
         foreach ($contact_fields['seeker_path']['default'] as $key => $value) {
             $labels[$key] = $value['label'];
@@ -430,7 +430,7 @@ class DT_Network_Dashboard_Snapshot_Queries {
         $keyed_practicing = [];
 
         // Make key list
-        $group_fields = Disciple_Tools_Groups_Post_Type::instance()->get_custom_fields_settings();
+        $group_fields = DT_Posts::get_post_field_settings( "groups" );
         foreach ($group_fields["health_metrics"]["default"] as $key => $option) {
             $labels[$key] = $option["label"];
         }
@@ -474,8 +474,8 @@ class DT_Network_Dashboard_Snapshot_Queries {
         global $wpdb;
 
         $results = $wpdb->get_results("
-            SELECT 
-              post_title as name, 
+            SELECT
+              post_title as name,
               ID as id
             FROM $wpdb->posts as p
             JOIN $wpdb->postmeta as pm
@@ -483,7 +483,7 @@ class DT_Network_Dashboard_Snapshot_Queries {
                 AND pm.meta_key = 'type'
             LEFT JOIN $wpdb->postmeta as pm2
               ON p.ID=pm2.post_id
-                AND pm2.meta_key = 'non_wp' 
+                AND pm2.meta_key = 'non_wp'
               WHERE p.post_type = 'site_link_system'
               AND p.post_status = 'publish'
               AND ( pm.meta_value = 'network_dashboard_both'
@@ -503,8 +503,8 @@ class DT_Network_Dashboard_Snapshot_Queries {
         global $wpdb;
 
         $results = $wpdb->get_results("
-            SELECT 
-              p.post_title as name, 
+            SELECT
+              p.post_title as name,
               p.ID as id,
               pm3.meta_value as last_activity_id
             FROM $wpdb->posts as p
@@ -516,7 +516,7 @@ class DT_Network_Dashboard_Snapshot_Queries {
                 AND pm2.meta_key = 'non_wp'
             LEFT JOIN $wpdb->postmeta as pm3
               ON p.ID=pm3.post_id
-                AND pm3.meta_key = 'last_activity_id' 
+                AND pm3.meta_key = 'last_activity_id'
               WHERE p.post_type = 'site_link_system'
               AND p.post_status = 'publish'
               AND ( pm.meta_value = 'network_dashboard_both'
@@ -766,7 +766,7 @@ class DT_Network_Dashboard_Snapshot_Queries {
                SELECT
                   count( DISTINCT object_id) as value
                 FROM $wpdb->dt_activity_log
-                WHERE 
+                WHERE
                     object_type = 'contacts'
                     AND object_subtype = 'baptism_date'
                     AND meta_value != ''
@@ -901,7 +901,7 @@ class DT_Network_Dashboard_Snapshot_Queries {
                     ON a.ID = c.post_id
                        AND c.meta_key = 'group_status'
                        AND c.meta_value = 'active'
-                JOIN $wpdb->postmeta as b 
+                JOIN $wpdb->postmeta as b
                   ON a.ID=b.post_id
                   AND b.meta_key = 'group_type'
                   AND ( b.meta_value = 'group' OR b.meta_value = 'church' )

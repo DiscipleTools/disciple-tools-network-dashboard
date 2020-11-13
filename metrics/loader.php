@@ -8,7 +8,8 @@ if ( 'show' !== get_option( 'dt_network_dashboard_show_tab' ) ){
 /**
  * Add Top Navigation
  */
-add_action( 'dt_top_nav_desktop', 'dt_network_dashboard_top_nav_desktop' );
+add_action( 'dt_top_nav_desktop', 'dt_network_dashboard_top_nav_desktop', 50 );
+add_action( 'dt_off_canvas_nav', 'dt_network_dashboard_top_nav_desktop', 50 );
 function dt_network_dashboard_top_nav_desktop() {
     if ( dt_network_dashboard_has_metrics_permissions() ) {
         ?>
