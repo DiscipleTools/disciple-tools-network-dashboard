@@ -3,7 +3,7 @@
 /**
 * REGISTER ACTIONS (AND CATEGORIES)
 */
-add_action( 'dt_network_dashboard_register_actions', 'dt_network_dashboard_register_action_generations', 10, 1 );
+add_filter( 'dt_network_dashboard_register_actions', 'dt_network_dashboard_register_action_generations', 10, 1 );
 function dt_network_dashboard_register_action_generations( $actions ){
 
     $actions['generation_pre-group'] = array(

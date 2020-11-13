@@ -32,7 +32,7 @@ window.load_activity_filter = () => {
             <p><strong>${_.escape( network_base_script.trans.types ) /*Types*/}</strong> <a style="float:right;" onclick="jQuery('.actions').addClass('hollow');">${_.escape( network_base_script.trans.activity_13 ) /*uncheck*/}</a></p>
             <div id="action-filter">${spinner}</div>
         </div>
-        
+
     </div>
     <div class="grid-x">
         <div class="cell">
@@ -71,11 +71,11 @@ window.load_activity_filter = () => {
         container.empty()
         jQuery.each( window.feed, function(i,v){
             container.append(`<h2>${v.label} (${v.list.length} events)</h2>`)
-            container.append(`<ul>`)
+            container.append(`<ul id="${i}"></ul>`)
+            let sublist = jQuery('#'+i)
             jQuery.each(v.list, function(ii,vv){
-                container.append(`<li><strong>(${vv.time})</strong> ${vv.message} </li>`)
+                sublist.append(`<li><strong>(${vv.time})</strong> ${vv.message} </li>`)
             })
-            container.append(`</ul>`)
         })
 
         jQuery('.loading-spinner').removeClass('active')

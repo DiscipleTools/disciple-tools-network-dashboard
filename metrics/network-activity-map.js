@@ -14,6 +14,7 @@ jQuery(document).ready(function(){
                 }
                 #activity-list-wrapper li {
                     font-size:.8em;
+                    list-style-type: none;
                 }
                 #activity-list-wrapper h2 {
                     font-size:1.2em;
@@ -49,7 +50,7 @@ jQuery(document).ready(function(){
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                
+
             `)
 
     new Foundation.Reveal(jQuery('#activity-filter-modal'))
