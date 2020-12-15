@@ -16,7 +16,7 @@ class DT_Network_Dashboard_Metrics_Base {
     public $menu_title = 'Example';
     public $js_object_name = ''; // This object will be loaded into the metrics.js file by the wp_localize_script.
     public $js_file_name = ''; // should be full file name plus extension
-    public $permissions = [ 'view_any_contacts', 'view_project_metrics', 'view_network_dashboard' ];
+    public $permissions = [ 'dt_all_access_contacts', 'view_project_metrics', 'view_network_dashboard' ];
 
     private static $_instance = null;
     public static function instance() {

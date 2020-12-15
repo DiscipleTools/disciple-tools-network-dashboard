@@ -15,7 +15,7 @@ function dt_network_dashboard_denied( $type = null ): bool {
     switch ( $type ) {
         // add other cases if necessary
         default:
-            if ( current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' ) || current_user_can( 'view_network_dashboard' ) ) {
+            if ( current_user_can( 'dt_all_access_contacts' ) || current_user_can( 'view_project_metrics' ) || current_user_can( 'view_network_dashboard' ) ) {
                 return false;
             }
             break;
@@ -25,7 +25,7 @@ function dt_network_dashboard_denied( $type = null ): bool {
 }
 
 function dt_network_dashboard_has_permission(){
-    if ( current_user_can( 'view_any_contacts' ) || current_user_can( 'view_project_metrics' ) || current_user_can( 'view_network_dashboard' ) ) {
+    if ( current_user_can( 'dt_all_access_contacts' ) || current_user_can( 'view_project_metrics' ) || current_user_can( 'view_network_dashboard' ) ) {
         return true;
     }
     return false;
