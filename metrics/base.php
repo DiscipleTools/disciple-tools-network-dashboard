@@ -105,7 +105,7 @@ class DT_Network_Dashboard_Metrics_Base {
                 break;
             case 'activity':
                 if ( isset( $params['filters'] ) && ! empty( $params['filters'] ) ){
-                    $filters = recursive_sanitize_text_field( $params['filters'] );
+                    $filters = dt_recursive_sanitize_array( $params['filters'] );
                     $data = self::build_log( $filters );
                 } else {
                     $data = self::build_log();
@@ -114,7 +114,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
             case 'activity_stats':
                 if ( isset( $params['filters'] ) && ! empty( $params['filters'] ) ){
-                    $filters = recursive_sanitize_text_field( $params['filters'] );
+                    $filters = dt_recursive_sanitize_array( $params['filters'] );
                     $data = self::get_activity_stats( $filters );
                 } else {
                     $data = self::get_activity_stats();

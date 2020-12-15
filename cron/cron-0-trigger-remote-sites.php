@@ -117,7 +117,7 @@ class DT_Network_Dashboard_Cron_Trigger_Remotes extends Disciple_Tools_Async_Tas
         if ( isset( $_POST[0]['list'] ) ) { // phpcs:ignore
 
             $file = 'trigger';
-            $list = recursive_sanitize_text_field( $_POST[0]['list'] ); // phpcs:ignore
+            $list = dt_recursive_sanitize_array( $_POST[0]['list'] ); // phpcs:ignore
 
             foreach ( $list as $item ) {
                 try {
@@ -188,7 +188,7 @@ class DT_Network_Dashboard_Cron_Trigger_Multisite extends Disciple_Tools_Async_T
         if ( isset( $_POST[0]['list'] ) ) { // @phpcs:ignore
 
             $file = 'trigger';
-            $list = recursive_sanitize_text_field( $_POST[0]['list'] ); // @phpcs:ignore
+            $list = dt_recursive_sanitize_array( $_POST[0]['list'] ); // @phpcs:ignore
 
             foreach ( $list as $item ) {
                 try {

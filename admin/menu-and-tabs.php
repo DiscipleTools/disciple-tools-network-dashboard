@@ -393,7 +393,7 @@ class DT_Network_Dashboard_Tab_Multisite_Incoming
              ) {
 
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
-                $partner = recursive_sanitize_text_field( $_POST['partner'] ); // @phpcs:ignore
+                $partner = dt_recursive_sanitize_array( $_POST['partner'] ); // @phpcs:ignore
 
                 foreach ( $partner as $key => $value ){
                     DT_Network_Dashboard_Site_Post_Type::update_multisite_profile( $key );
@@ -527,7 +527,7 @@ class DT_Network_Dashboard_Tab_Remote_Incoming
              ) {
 
             if ( isset( $_POST['update-profile'] ) && isset( $_POST['partner'] ) && is_array( $_POST['partner'] ) ) {
-                $partner = recursive_sanitize_text_field( $_POST['partner'] ); // @phpcs:ignore
+                $partner = dt_recursive_sanitize_array( $_POST['partner'] ); // @phpcs:ignore
 
                 foreach ( $partner as $key => $value ){
                     if ( isset( $value['nickname'] ) && ! empty( $value['nickname'] ) ) {
@@ -662,14 +662,14 @@ class DT_Network_Dashboard_Tab_Outgoing
         if ( isset( $_POST['activity-nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['activity-nonce'] ) ), 'activity'. get_current_user_id() ) ) {
 
             if ( isset( $_POST['send_activity'] ) && ! empty( $_POST['send_activity'] ) && is_array( $_POST['send_activity'] ) ) {
-                $send_activity = recursive_sanitize_text_field( $_POST['send_activity'] ); // @phpcs:ignore
+                $send_activity = dt_recursive_sanitize_array( $_POST['send_activity'] ); // @phpcs:ignore
                 foreach ($send_activity as $i => $v ) {
                     DT_Network_Dashboard_Site_Post_Type::update_send_activity( sanitize_text_field( wp_unslash( $i ) ), sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
 
             if ( isset( $_POST['location_precision'] ) && ! empty( $_POST['location_precision'] ) && is_array( $_POST['location_precision'] ) ) {
-                $location_precision = recursive_sanitize_text_field( $_POST['location_precision'] ); // @phpcs:ignore
+                $location_precision = dt_recursive_sanitize_array( $_POST['location_precision'] ); // @phpcs:ignore
                 foreach ( $location_precision as $i => $v ) {
                     DT_Network_Dashboard_Site_Post_Type::update_location_precision( sanitize_text_field( wp_unslash( $i ) ), sanitize_text_field( wp_unslash( $v ) ) );
                 }

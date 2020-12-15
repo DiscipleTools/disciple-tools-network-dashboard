@@ -189,7 +189,7 @@ class DT_Network_Activity_Log {
             if ( ! isset( $activity['payload'] ) || empty( $activity['payload'] ) ) {
                 $activity['payload'] = [];
             }
-            $data['payload'] = recursive_sanitize_text_field( $activity['payload'] );
+            $data['payload'] = dt_recursive_sanitize_array( $activity['payload'] );
 
             // PREPARE LOCATION DATA
             switch ( $location_type ) {
@@ -537,7 +537,7 @@ class DT_Network_Activity_Log {
                 continue;
             }
             $query = " INSERT INTO $wpdb->dt_movement_log
-                        ( 
+                        (
                             site_id,
                             site_record_id,
                             site_object_id,
@@ -550,7 +550,7 @@ class DT_Network_Activity_Log {
                             grid_id,
                             payload,
                             timestamp,
-                            hash 
+                            hash
                             )
                         VALUES ";
 
@@ -601,7 +601,7 @@ class DT_Network_Activity_Log {
                 continue;
             }
             $query = " INSERT INTO $wpdb->dt_movement_log
-                        ( 
+                        (
                             site_id,
                             site_record_id,
                             site_object_id,
@@ -614,7 +614,7 @@ class DT_Network_Activity_Log {
                             grid_id,
                             payload,
                             timestamp,
-                            hash 
+                            hash
                             )
                         VALUES ";
 
@@ -721,16 +721,16 @@ class DT_Network_Activity_Log {
         global $wpdb;
         $site_id = dt_network_site_id();
         return $wpdb->get_results( $wpdb->prepare( "
-                SELECT 
-                   a.object_id as site_object_id, 
-                   'new_contact' as action, 
+                SELECT
+                   a.object_id as site_object_id,
+                   'new_contact' as action,
                    a.hist_time as timestamp
                 FROM $wpdb->dt_activity_log as a
                 LEFT JOIN $wpdb->dt_movement_log as m
                     ON a.object_id=m.site_object_id
                     AND m.site_id = %s
                     AND m.action = 'new_contact'
-                WHERE a.object_type = 'contacts' 
+                WHERE a.object_type = 'contacts'
                     AND a.action = 'created'
                     AND m.id IS NULL
                 ORDER BY a.object_id;", $site_id ),
@@ -750,15 +750,15 @@ class DT_Network_Activity_Log {
         global $wpdb;
         $site_id = dt_network_site_id();
         return $results = $wpdb->get_results( $wpdb->prepare( "
-            SELECT a.object_id as site_object_id, 
-            CASE 
+            SELECT a.object_id as site_object_id,
+            CASE
                 WHEN pm.meta_value = 'pre-group'  THEN 'new_pre-group'
                 WHEN pm.meta_value = 'group'  THEN 'new_group'
                 WHEN pm.meta_value = 'church'  THEN 'new_church'
                 WHEN pm.meta_value = 'team'  THEN 'new_team'
                 ELSE 'new_group'
             END as action,
-            a.hist_time as timestamp 
+            a.hist_time as timestamp
             FROM $wpdb->dt_activity_log as a
             LEFT JOIN $wpdb->postmeta as pm ON a.object_id=pm.post_id
                 AND pm.meta_key = 'group_type'
@@ -766,7 +766,7 @@ class DT_Network_Activity_Log {
                 ON a.object_id=m.site_object_id
                 AND m.site_id = %s
                 AND ( m.action = 'new_pre-group' OR m.action = 'new_group' OR m.action = 'new_church' OR m.action = 'new_team' )
-            WHERE a.object_type = 'groups' 
+            WHERE a.object_type = 'groups'
             AND a.action = 'created'
             AND m.id IS NULL
             ORDER BY a.object_id;", $site_id ), ARRAY_A );
@@ -785,16 +785,16 @@ class DT_Network_Activity_Log {
         global $wpdb;
         $site_id = dt_network_site_id();
         return $results = $wpdb->get_results( $wpdb->prepare( "
-            SELECT 
-                DISTINCT( al.object_id ) as site_object_id, 
-                'new_baptism' as action, 
+            SELECT
+                DISTINCT( al.object_id ) as site_object_id,
+                'new_baptism' as action,
                 al.hist_time as timestamp
             FROM $wpdb->dt_activity_log as al
             LEFT JOIN $wpdb->dt_movement_log as m
                 ON al.object_id=m.site_object_id
                 AND m.site_id = %s
                 AND m.action = 'new_baptism'
-            WHERE al.object_type = 'contacts' 
+            WHERE al.object_type = 'contacts'
                 AND al.meta_value = 'milestone_baptized'
                 AND m.id IS NULL
             ORDER BY al.object_id;", $site_id), ARRAY_A );
@@ -813,16 +813,16 @@ class DT_Network_Activity_Log {
         global $wpdb;
         $site_id = dt_network_site_id();
         return $results = $wpdb->get_results( $wpdb->prepare( "
-           SELECT 
-                DISTINCT( al.object_id ) as site_object_id, 
-                'new_coaching' as action, 
+           SELECT
+                DISTINCT( al.object_id ) as site_object_id,
+                'new_coaching' as action,
                 al.hist_time as timestamp
             FROM $wpdb->dt_activity_log as al
             LEFT JOIN $wpdb->dt_movement_log as m
                 ON al.object_id=m.site_object_id
                 AND m.site_id = %s
                 AND m.action = 'new_coaching'
-            WHERE al.object_type = 'contacts' 
+            WHERE al.object_type = 'contacts'
                 AND al.meta_key = 'contacts_to_contacts'
                 AND al.field_type = 'connection from'
                 AND m.id IS NULL
@@ -842,9 +842,9 @@ class DT_Network_Activity_Log {
         global $wpdb;
         $site_id = dt_network_site_id();
         return $results = $wpdb->get_results( $wpdb->prepare( "
-            SELECT 
-                DISTINCT( al.object_id ) as site_object_id, 
-                CASE 
+            SELECT
+                DISTINCT( al.object_id ) as site_object_id,
+                CASE
                     WHEN pm.meta_value = 'pre-group'  THEN 'generation_pre-group'
                     WHEN pm.meta_value = 'group'  THEN 'generation_group'
                     WHEN pm.meta_value = 'church'  THEN 'generation_church'
@@ -860,7 +860,7 @@ class DT_Network_Activity_Log {
                 ON al.object_id=m.site_object_id
                 AND m.site_id = %s
                 AND ( m.action = 'generation_pre-group' OR m.action = 'generation_group' OR m.action = 'generation_church' OR m.action = 'generation_team' )
-            WHERE al.object_type = 'groups' 
+            WHERE al.object_type = 'groups'
                 AND al.meta_key = 'groups_to_groups'
                 AND al.field_type = 'connection from'
                 AND m.id IS NULL

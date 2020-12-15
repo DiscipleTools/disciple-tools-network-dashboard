@@ -183,7 +183,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
         // @todo check level of precision allowed to send activity
 
         $last_site_record_id = sanitize_text_field( wp_unslash( $params['last_site_record_id'] ?? 0 ) );
-        $raw_actions = recursive_sanitize_text_field( $params['actions'] );
+        $raw_actions = dt_recursive_sanitize_array( $params['actions'] );
         $actions = dt_array_to_sql( $raw_actions ); // removed from query @todo replace
 
         // @phpcs:disable

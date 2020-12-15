@@ -93,7 +93,7 @@ class DT_Network_Dashboard_Metrics_Activity_Map extends DT_Network_Dashboard_Met
 
         $params = $request->get_params();
         if ( isset( $params['filters'] ) && ! empty( $params['filters'] ) ){
-            $filters = recursive_sanitize_text_field( $params['filters'] );
+            $filters = dt_recursive_sanitize_array( $params['filters'] );
             $feed = $this->get_activity_log( $filters );
         } else {
             $feed = $this->get_activity_log();

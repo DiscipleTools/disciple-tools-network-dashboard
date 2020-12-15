@@ -69,7 +69,7 @@ class DT_Network_Dashboard_Site_Post_Type {
             return new WP_Error( __METHOD__, 'Remote API did not return a proper partner id.', array( 'data' => $site_profile ) );
         }
 
-        $site_profile = recursive_sanitize_text_field( $site_profile );
+        $site_profile = dt_recursive_sanitize_array( $site_profile );
 
         $dt_network_dashboard_id = get_post_meta( $id, 'dt_network_dashboard', true );
         if ( empty( $dt_network_dashboard_id ) || ! get_post_meta( $dt_network_dashboard_id, 'type_id', true ) ) {
@@ -98,9 +98,9 @@ class DT_Network_Dashboard_Site_Post_Type {
 
         // duplicate check
         $multisite_post_id = $wpdb->get_var( $wpdb->prepare(
-            "SELECT ID 
-                    FROM $wpdb->posts 
-                    WHERE post_type = %s 
+            "SELECT ID
+                    FROM $wpdb->posts
+                    WHERE post_type = %s
                       AND post_title = %s",
             self::get_token(),
         $partner_id ) );
@@ -149,9 +149,9 @@ class DT_Network_Dashboard_Site_Post_Type {
     public static function get_post_id( $partner_id ) {
         global $wpdb;
         $partner_post_id = $wpdb->get_var( $wpdb->prepare(
-            "SELECT ID 
-                    FROM $wpdb->posts 
-                    WHERE post_type = %s 
+            "SELECT ID
+                    FROM $wpdb->posts
+                    WHERE post_type = %s
                       AND post_title = %s",
             self::get_token(),
         $partner_id ) );
@@ -327,14 +327,14 @@ class DT_Network_Dashboard_Site_Post_Type {
         global $wpdb;
 
         $results = $wpdb->get_results("
-                 SELECT 
+                 SELECT
                   a.ID as id,
                  CASE
                     WHEN e.meta_value IS NOT NULL THEN e.meta_value
                     ELSE a.post_title
                  END as name,
                   b.meta_value as type,
-                  f.meta_value as type_id,    
+                  f.meta_value as type_id,
                   d.meta_value as partner_id,
                   d.meta_value as site_id,
                   c.meta_value as snapshot,
@@ -469,7 +469,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         global $wpdb;
 
         $results = $wpdb->get_col("
-                SELECT 
+                SELECT
                   g.meta_value as snapshot_timestamp
                 FROM $wpdb->posts as a
                 LEFT JOIN $wpdb->postmeta as g
@@ -494,10 +494,10 @@ class DT_Network_Dashboard_Site_Post_Type {
         global $wpdb;
 
         $results = $wpdb->get_results("
-                 SELECT 
+                 SELECT
                   a.ID as id,
                   b.meta_value as type,
-                  c.meta_value as type_id   
+                  c.meta_value as type_id
                 FROM $wpdb->posts as a
                 LEFT JOIN $wpdb->postmeta as b
                   ON a.ID=b.post_id
@@ -565,9 +565,9 @@ class DT_Network_Dashboard_Site_Post_Type {
         global $wpdb;
 
         $results = $wpdb->get_results("
-                SELECT 
+                SELECT
                   p.ID as id,
-                  p.post_title as name, 
+                  p.post_title as name,
                   pm.meta_value as type,
                   pm1.meta_value as dtnd_id
                 FROM $wpdb->posts as p
