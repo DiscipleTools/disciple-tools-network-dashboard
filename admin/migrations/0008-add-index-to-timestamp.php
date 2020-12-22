@@ -13,13 +13,14 @@ class DT_Network_Dashboard_Migration_0008 extends DT_Network_Dashboard_Migration
         global $wpdb;
         $table = $wpdb->prefix . 'dt_movement_log';
 
+        // @phpcs:disable
         $wpdb->query( "ALTER TABLE {$table} ADD INDEX `timestamp` (`timestamp`);" );
         $wpdb->query( "ALTER TABLE {$table} ADD INDEX `site_record_id` (`site_record_id`);" );
         $wpdb->query( "ALTER TABLE {$table} ADD INDEX `site_object_id` (`site_object_id`);" );
         $wpdb->query( "ALTER TABLE {$table} ADD INDEX `lng` (`lng`);" );
         $wpdb->query( "ALTER TABLE {$table} ADD INDEX `lat` (`lat`);" );
-
         // @phpcs:enable
+
     }
 
     /**

@@ -411,7 +411,7 @@ function dt_network_dashboard_ajax_notice_handler() {
     $type = 'dt-network-dashboard';
     update_option( 'dismissed-' . $type, true );
 }
-if ( ! function_exists( 'recursive_sanitize_text_field') ){
+if ( ! function_exists( 'recursive_sanitize_text_field' ) ){
     function recursive_sanitize_text_field( array $array ) {
         _deprecated_function( __FUNCTION__, '2.0', 'dt_recursive_sanitize_array()' );
         return dt_recursive_sanitize_array( $array );
