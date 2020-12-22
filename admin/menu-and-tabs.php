@@ -703,7 +703,7 @@ class DT_Network_Dashboard_Tab_Outgoing
                         <thead>
                         <tr>
                             <td style="width:30%;">Remote Sites</td>
-                            <td style="width:30%;text-align:center;">Location Precision Level</td>
+                            <td style="width:30%;text-align:center;"><!--Location Precision Level--></td>
                             <td style="width:30%;text-align:center;">Reports</td>
                         </tr>
                         </thead>
@@ -717,12 +717,14 @@ class DT_Network_Dashboard_Tab_Outgoing
                                 <tr>
                                     <td><?php echo esc_html( $site['name'] ) ?></td>
                                     <td style="text-align: center;">
+                                    <!--
                                         <select name="location_precision[<?php echo esc_attr( $site['id'] ) ?>]">
                                             <option value="none" <?php echo ( $site['location_precision'] === '' || $site['location_precision'] === 'none' ) ? 'selected' : ''; ?>>No Filter</option>
                                             <option value="admin2" <?php echo ( $site['location_precision'] === 'admin2' ) ? 'selected' : ''; ?>>Admin2 (County, District)</option>
                                             <option value="admin1" <?php echo ( $site['location_precision'] === 'admin1' ) ? 'selected' : ''; ?>>Admin1 (State)</option>
                                             <option value="admin0" <?php echo ( $site['location_precision'] === 'admin0' ) ? 'selected' : ''; ?>>Admin0 (Country)</option>
                                         </select>
+                                        -->
                                     </td>
                                     <td style="text-align: center;">
                                         <input type="radio" name="send_activity[<?php echo esc_attr( $site['id'] ) ?>]" value="none" <?php echo ( $site['send_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing |
@@ -750,7 +752,7 @@ class DT_Network_Dashboard_Tab_Outgoing
                         <thead>
                         <tr>
                             <td style="width:30%;">Multisite Sites</td>
-                            <td style="width:30%;text-align:center;">Location Precision Level</td>
+                            <td style="width:30%;text-align:center;"><!--Location Precision Level--></td>
                             <td style="width:30%;text-align:center;">Reports</td>
                         </tr>
                         </thead>
@@ -771,12 +773,14 @@ class DT_Network_Dashboard_Tab_Outgoing
                                 <tr>
                                     <td><?php echo esc_html( $site['name'] ) ?></td>
                                     <td style="text-align: center;">
+                                    <!--
                                         <select name="location_precision[<?php echo esc_attr( $site['id'] ) ?>]">
                                             <option value="none" <?php echo ( $site['location_precision'] === '' || $site['location_precision'] === 'none' ) ? 'selected' : ''; ?>>No Filter</option>
                                             <option value="admin2" <?php echo ( $site['location_precision'] === 'admin2' ) ? 'selected' : ''; ?>>Admin2 (County, District)</option>
                                             <option value="admin1" <?php echo ( $site['location_precision'] === 'admin1' ) ? 'selected' : ''; ?>>Admin1 (State)</option>
                                             <option value="admin0" <?php echo ( $site['location_precision'] === 'admin0' ) ? 'selected' : ''; ?>>Admin0 (Country)</option>
                                         </select>
+                                     -->
                                     </td>
                                     <td style="text-align: center;">
                                         <input type="radio" name="send_activity[<?php echo esc_attr( $site['id'] ) ?>]" value="none" <?php echo ( $site['send_activity'] === 'none' ) ? 'checked' : '' ?>/> Send Nothing |
