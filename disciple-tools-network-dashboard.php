@@ -18,6 +18,8 @@ if ( ! defined( 'ABSPATH' ) ) {
     return; // return if accessed directly
 }
 
+$dt_network_dashboard_required_dt_theme_version = '1.0';
+
 /**
  * Gets the instance of the `DT_Network_Dashboard` class.
  *
@@ -25,47 +27,57 @@ if ( ! defined( 'ABSPATH' ) ) {
  * @access public
  * @return object|bool
  */
-function dt_network_dashboard() {
+add_action( 'after_setup_theme', function () {
+    global $dt_network_dashboard_required_dt_theme_version;
+    $wp_theme = wp_get_theme();
+    $version = $wp_theme->version;
 
-    $current_theme = get_option( 'current_theme' );
-
-    if ( 'Disciple Tools' == $current_theme || dt_is_child_theme_of_disciple_tools() ) {
-
-        /**
-         * We want to make sure migrations are run on updates.
-         * @see https://www.sitepoint.com/wordpress-plugin-updates-right-way/
-         *
-         *      Note: this migration is for the Network Dashboard plugin. The migration for the mapping module
-         *      is handled inside the /mapping-module/mapping.php file and migrations engine.
-         */
-        try {
-            require_once( plugin_dir_path( __FILE__ ) . '/admin/class-migration-engine.php' );
-            DT_Network_Dashboard_Migration_Engine::migrate( DT_Network_Dashboard_Migration_Engine::$migration_number );
-        } catch ( Throwable $e ) {
-            new WP_Error( 'migration_error', 'Migration engine failed to migrate.' );
-        }
-
-        DT_Network_Dashboard::get_instance();
-
-        /**
-         * Use this action fires after the DT_Network_Dashboard plugin has loaded.
-         * Use this to hook expansions to the metrics or snapshot collection.
-         */
-        do_action( 'dt_network_dashboard_loaded' );
-
-        return true;
-    }
-    else {
+    /*
+     * Check if the Disciple.Tools theme is loaded and is the latest required version
+     */
+    $is_theme_dt = strpos( $wp_theme->get_template(), "disciple-tools-theme" ) !== false || $wp_theme->name === "Disciple Tools";
+    if ( $is_theme_dt && version_compare( $version, $dt_network_dashboard_required_dt_theme_version, "<" ) ) {
         if ( ! is_multisite() ) {
-            add_action( 'admin_notices', 'dt_network_dashboard_admin_notice' );
-            add_action( 'wp_ajax_dismissed_notice_handler', 'dt_network_dashboard_ajax_notice_handler' );
+            add_action( 'admin_notices', 'dt_training_hook_admin_notice' );
+            add_action( 'wp_ajax_dismissed_notice_handler', 'dt_hook_ajax_notice_handler' );
         }
-
+        return false;
+    }
+    if ( ! $is_theme_dt ){
         return false;
     }
 
-}
-add_action( 'after_setup_theme', 'dt_network_dashboard' );
+    /**
+     * Load useful function from the theme
+     */
+    if ( !defined( 'DT_FUNCTIONS_READY' ) ){
+        require_once get_template_directory() . '/dt-core/global-functions.php';
+    }
+
+    /**
+     * We want to make sure migrations are run on updates.
+     * @see https://www.sitepoint.com/wordpress-plugin-updates-right-way/
+     *
+     *      Note: this migration is for the Network Dashboard plugin. The migration for the mapping module
+     *      is handled inside the /mapping-module/mapping.php file and migrations engine.
+     */
+    try {
+        require_once( plugin_dir_path( __FILE__ ) . '/admin/class-migration-engine.php' );
+        DT_Network_Dashboard_Migration_Engine::migrate( DT_Network_Dashboard_Migration_Engine::$migration_number );
+    } catch ( Throwable $e ) {
+        new WP_Error( 'migration_error', 'Migration engine failed to migrate.' );
+    }
+
+    DT_Network_Dashboard::get_instance();
+
+    /**
+     * Use this action fires after the DT_Network_Dashboard plugin has loaded.
+     * Use this to hook expansions to the metrics or snapshot collection.
+     */
+    do_action( 'dt_network_dashboard_loaded' );
+
+    return true;
+}, 50 );
 
 
 
