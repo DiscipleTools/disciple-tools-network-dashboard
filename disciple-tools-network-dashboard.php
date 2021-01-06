@@ -3,12 +3,12 @@
  * Plugin Name: Disciple Tools - Network Dashboard
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
  * Description: Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging.
- * Version: 2.0
+ * Version: 2.1
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
  * Requires at least: 4.7.0
  * (Requires 4.7+ because of the integration of the REST API at 4.7 and the security requirements of this milestone version.)
- * Tested up to: 4.9
+ * Tested up to: 5.6
  * @package Disciple_Tools
  * @link    https://github.com/DiscipleTools
  * @license GPL-2.0 or later
@@ -187,7 +187,7 @@ class DT_Network_Dashboard {
 
         // Admin and settings variables
         $this->token          = 'dt_network_dashboard';
-        $this->version        = '2.0';
+        $this->version        = '2.1';
 
         global $wpdb;
         $wpdb->dt_movement_log = $wpdb->prefix . 'dt_movement_log';
