@@ -396,7 +396,7 @@ function dt_network_dashboard_admin_notice() {
         global $dt_network_dashboard_required_dt_theme_version;
         // multiple dismissible notice states ?>
         <div class="notice notice-error notice-dt-network-dashboard is-dismissible" data-notice="dt-demo">
-            <p><?php esc_html_e( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme version ".$dt_network_dashboard_required_dt_theme_version." to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard'." ); ?></p>
+            <p><?php echo esc_html( sprintf( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme version %s to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard'.", $dt_network_dashboard_required_dt_theme_version ) ); ?></p>
         </div>
         <script>
             jQuery(function($) {
@@ -413,7 +413,6 @@ function dt_network_dashboard_admin_notice() {
                 } );
             });
         </script>
-
     <?php }
 }
 
@@ -424,6 +423,7 @@ function dt_network_dashboard_ajax_notice_handler() {
     $type = 'dt-network-dashboard';
     update_option( 'dismissed-' . $type, true );
 }
+
 if ( ! function_exists( 'recursive_sanitize_text_field' ) ){
     function recursive_sanitize_text_field( array $array ) {
         _deprecated_function( __FUNCTION__, '2.0', 'dt_recursive_sanitize_array()' );
