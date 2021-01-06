@@ -393,9 +393,10 @@ if ( ! function_exists( 'dt_is_child_theme_of_disciple_tools' ) ) {
 function dt_network_dashboard_admin_notice() {
     // Check if it's been dismissed...
     if ( ! get_option( 'dismissed-dt-network-dashboard', false ) ) {
+        global $dt_network_dashboard_required_dt_theme_version;
         // multiple dismissible notice states ?>
         <div class="notice notice-error notice-dt-network-dashboard is-dismissible" data-notice="dt-demo">
-            <p><?php esc_html_e( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard'." ); ?></p>
+            <p><?php esc_html_e( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme version ".$dt_network_dashboard_required_dt_theme_version." to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard'." ); ?></p>
         </div>
         <script>
             jQuery(function($) {
