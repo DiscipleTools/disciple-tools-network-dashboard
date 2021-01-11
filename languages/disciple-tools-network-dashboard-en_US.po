@@ -55,11 +55,17 @@ msgstr "Administrator"
 msgid "Members"
 msgstr "Members"
 
-#: post-type/module-base.php:433
+#: metrics/base.php:222 metrics/base.php:249 metrics/network-maps-area.php:72
+#: metrics/network-maps-area.php:115 metrics/network-statistics-contacts.php:12
+#: metrics/network-statistics-contacts.php:13
+#: metrics/network-statistics-contacts.php:14
 msgid "Contacts"
 msgstr "Contacts"
 
-#: post-type/module-base.php:294 post-type/module-base.php:450
+#: metrics/base.php:223 metrics/base.php:252 metrics/network-maps-area.php:81
+#: metrics/network-maps-area.php:121 metrics/network-statistics-groups.php:12
+#: metrics/network-statistics-groups.php:13
+#: metrics/network-statistics-groups.php:14
 msgid "Groups"
 msgstr "Groups"
 
@@ -378,7 +384,7 @@ msgstr "Total Groups"
 msgid "Total Baptisms"
 msgstr "Total Baptisms"
 
-#: post-type/module-reports.php:123
+#: metrics/base.php:312
 msgid "Countries"
 msgstr "Countries"
 
@@ -472,16 +478,6 @@ msgstr "Clear"
 msgid "Disciple Tools - Training"
 msgstr "Disciple Tools - Training"
 
-#. Plugin URI of the plugin/theme
-#: 
-msgid "https://github.com/DiscipleTools/disciple-tools-training"
-msgstr "https://github.com/DiscipleTools/disciple-tools-training"
-
-#. Author URI of the plugin/theme
-#: 
-msgid "https://github.com/DiscipleTools"
-msgstr "https://github.com/DiscipleTools"
-
 #: admin/menu-and-tabs.php:56 admin/menu-and-tabs.php:57
 msgid "Extensions (DT)"
 msgstr "Extensions (DT)"
@@ -513,8 +509,9 @@ msgid "Site"
 msgstr "Site"
 
 #: metrics/base.php:224 metrics/base.php:254 metrics/network-maps-area.php:89
-#: metrics/network-statistics-users.php:12
+#: metrics/network-maps-area.php:133 metrics/network-statistics-users.php:12
 #: metrics/network-statistics-users.php:13
+#: metrics/network-statistics-users.php:14
 msgid "Users"
 msgstr "Users"
 
@@ -627,6 +624,7 @@ msgid "Baptisms"
 msgstr "Baptisms"
 
 #: metrics/base.php:259 metrics/network-maps-area.php:97
+#: metrics/network-maps-area.php:127
 msgid "Churches"
 msgstr "Churches"
 
@@ -750,8 +748,8 @@ msgstr "This Year"
 msgid "Activity Map"
 msgstr "Activity Map"
 
-#: metrics/base.php:298 metrics/network-activity-stats.php:12
-#: metrics/network-activity-stats.php:13
+#: metrics/base.php:298 metrics/network-activity-stats.php:11
+#: metrics/network-activity-stats.php:12 metrics/network-activity-stats.php:13
 msgid "Stats"
 msgstr "Stats"
 
@@ -796,6 +794,7 @@ msgid "uncheck"
 msgstr "uncheck"
 
 #: metrics/base.php:311 metrics/network-home.php:12 metrics/network-home.php:13
+#: metrics/network-home.php:14
 msgid "Home"
 msgstr "Home"
 
@@ -808,7 +807,7 @@ msgid "All Active/Inactive"
 msgstr "All Active/Inactive"
 
 #: metrics/base.php:316 metrics/network-maps-hovermap.php:12
-#: metrics/network-maps-hovermap.php:13
+#: metrics/network-maps-hovermap.php:13 metrics/network-maps-hovermap.php:14
 msgid "Hover Map"
 msgstr "Hover Map"
 
@@ -817,36 +816,44 @@ msgid "Network"
 msgstr "Network"
 
 #: metrics/network-activity-map.php:15 metrics/network-activity-map.php:16
+#: metrics/network-activity-map.php:17
 msgid "Map"
 msgstr "Map"
 
 #: metrics/network-activity-stream.php:12
 #: metrics/network-activity-stream.php:13
+#: metrics/network-activity-stream.php:14
 msgid "Log"
 msgstr "Log"
 
 #: metrics/network-activity.php:12 metrics/network-activity.php:13
+#: metrics/network-activity.php:14
 msgid "Activity"
 msgstr "Activity"
 
 #: metrics/network-maps-area.php:15 metrics/network-maps-area.php:16
+#: metrics/network-maps-area.php:17
 msgid "Area Maps"
 msgstr "Area Maps"
 
 #: metrics/network-maps-locationlist.php:12
 #: metrics/network-maps-locationlist.php:13
+#: metrics/network-maps-locationlist.php:14
 msgid "Location List"
 msgstr "Location List"
 
 #: metrics/network-maps.php:12 metrics/network-maps.php:13
+#: metrics/network-maps.php:14
 msgid "Maps"
 msgstr "Maps"
 
 #: metrics/network-sites.php:12 metrics/network-sites.php:13
+#: metrics/network-sites.php:14
 msgid "Site Reports"
 msgstr "Site Reports"
 
 #: metrics/network-statistics.php:12 metrics/network-statistics.php:13
+#: metrics/network-statistics.php:14
 msgid "Statistics"
 msgstr "Statistics"
 
@@ -870,11 +877,6 @@ msgstr "Network Dashboard Site Profile"
 #: 
 msgid "Disciple Tools - Network Dashboard"
 msgstr "Disciple Tools - Network Dashboard"
-
-#. Plugin URI of the plugin/theme
-#: 
-msgid "https://github.com/DiscipleTools/disciple-tools-network-dashboard"
-msgstr "https://github.com/DiscipleTools/disciple-tools-network-dashboard"
 
 #: admin/customize-site-linking.php:10 metrics/mapbox-maps.php:31
 #: metrics/mapbox-personal-maps.php:31 post-type/module-base.php:393
@@ -1038,8 +1040,124 @@ msgstr "Add Report"
 msgid "Disciple Tools - Streams"
 msgstr "Disciple Tools - Streams"
 
+#: logging/log-generations.php:11
+msgid "Pre-Group Generations"
+msgstr ""
+
+#: logging/log-generations.php:17
+msgid "Group Generations"
+msgstr ""
+
+#: logging/log-generations.php:23
+msgid "Church Generations"
+msgstr ""
+
+#: logging/log-generations.php:29
+msgid "Team Generations"
+msgstr ""
+
+#: logging/log-generations.php:76
+msgid "%s is reporting a new pre-group generation."
+msgstr ""
+
+#: logging/log-generations.php:81
+msgid "%s is reporting a new group generation."
+msgstr ""
+
+#: logging/log-generations.php:86
+msgid "%s is reporting a new church generation."
+msgstr ""
+
+#: logging/log-generations.php:91
+msgid "%s is reporting a new leadership team generation."
+msgstr ""
+
+#: logging/log-new-posts.php:11
+msgid "New Contact"
+msgstr ""
+
+#: logging/log-new-posts.php:16
+msgid "New Pre-Group"
+msgstr ""
+
+#: logging/log-new-posts.php:21
+msgid "New Group"
+msgstr ""
+
+#: logging/log-new-posts.php:26
+msgid "New Church"
+msgstr ""
+
+#: logging/log-new-posts.php:31
+msgid "New Team"
+msgstr ""
+
+#: logging/log-new-posts.php:36
+msgid "New Baptism"
+msgstr ""
+
+#: logging/log-new-posts.php:41
+msgid "New Coaching"
+msgstr ""
+
+#: logging/log-new-posts.php:164
+msgid "%s is reporting a new contact."
+msgstr ""
+
+#: logging/log-new-posts.php:169
+msgid "%s is reporting a new pre-group formed."
+msgstr ""
+
+#: logging/log-new-posts.php:174
+msgid "%s is reporting a new group formed."
+msgstr ""
+
+#: logging/log-new-posts.php:179
+msgid "%s is reporting a new church."
+msgstr ""
+
+#: logging/log-new-posts.php:184
+msgid "%s is reporting a new leadership team formed."
+msgstr ""
+
+#: logging/log-new-posts.php:189
+msgid "%s is reporting a new baptism."
+msgstr ""
+
+#: logging/log-new-posts.php:194
+msgid "%s is reporting an coaching relationship."
+msgstr ""
+
+#: metrics/network-maps-area.php:74 metrics/network-maps-area.php:83
+#: metrics/network-maps-area.php:91 metrics/network-maps-area.php:99
+msgid "Active"
+msgstr ""
+
+#: metrics/network-maps-area.php:75
+msgid "Paused"
+msgstr ""
+
+#: metrics/network-maps-area.php:76
+msgid "Closed"
+msgstr ""
+
+#: metrics/network-maps-area.php:84 metrics/network-maps-area.php:92
+#: metrics/network-maps-area.php:100
+msgid "Inactive"
+msgstr ""
+
 #. Plugin URI of the plugin/theme
 #: 
-msgid "https://github.com/DiscipleTools/disciple-tools-streams"
-msgstr "https://github.com/DiscipleTools/disciple-tools-streams"
+msgid "https://github.com/DiscipleTools/disciple-tools-network-dashboard"
+msgstr ""
+
+#. Description of the plugin/theme
+#: 
+msgid "Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging."
+msgstr ""
+
+#. Author URI of the plugin/theme
+#: 
+msgid "https://github.com/DiscipleTools"
+msgstr ""
 
