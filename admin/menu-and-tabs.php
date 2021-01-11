@@ -61,8 +61,8 @@ class DT_Network_Dashboard_Menu {
             'dashicons-admin-generic',
         59 );
         add_submenu_page( 'dt_extensions',
-            __( 'Network Dashboard', 'dt_network_dashboard' ),
-            __( 'Network Dashboard', 'dt_network_dashboard' ),
+            'Network Dashboard',
+            'Network Dashboard',
             'manage_dt',
             $this->token,
         array( $this, 'content' ) );
@@ -100,11 +100,11 @@ class DT_Network_Dashboard_Menu {
 
         ?>
         <div class="wrap">
-            <h2><?php esc_attr_e( 'Network Dashboard', 'dt_network_dashboard' ) ?></h2>
+            <h2><?php echo esc_attr( 'Network Dashboard' ) ?></h2>
             <h2 class="nav-tab-wrapper">
 
                  <a href="<?php echo esc_attr( $link ) . 'profile' ?>" class="nav-tab
-                    <?php ( $tab == 'profile' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                    <?php echo ( $tab == 'profile' ) ?  esc_attr( 'nav-tab-active') : ''; ?>">
                         Profile
                 </a>
 
@@ -127,12 +127,12 @@ class DT_Network_Dashboard_Menu {
                 <?php endif; ?>
 
                 <a href="<?php echo esc_attr( $link ) . 'outgoing' ?>" class="nav-tab
-                <?php ( $tab == 'outgoing' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                <?php echo ( $tab == 'outgoing' ) ? esc_attr( 'nav-tab-active' ) : ''; ?>">
                     Outgoing
                 </a>
 
                 <a href="<?php echo esc_attr( $link ) . 'system' ?>" class="nav-tab
-                <?php ( $tab == 'system' ) ? esc_attr_e( 'nav-tab-active', 'dt_network_dashboard' ) : print ''; ?>">
+                <?php echo ( $tab == 'system' ) ? esc_attr( 'nav-tab-active') : print ''; ?>">
                     System
                 </a>
 

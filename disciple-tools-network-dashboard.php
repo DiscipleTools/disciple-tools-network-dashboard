@@ -3,6 +3,8 @@
  * Plugin Name: Disciple Tools - Network Dashboard
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
  * Description: Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging.
+ * Text Domain: disciple-tools-network-dashboard
+ * Domain Path: /languages
  * Version: 2.1
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
@@ -78,7 +80,6 @@ add_action( 'after_setup_theme', function () {
 
     return true;
 }, 50 );
-
 
 
 /**
@@ -171,6 +172,7 @@ class DT_Network_Dashboard {
         if ( is_admin() ) {
             require_once( 'admin/menu-and-tabs.php' );
         }
+
     }
 
     /**
@@ -195,6 +197,7 @@ class DT_Network_Dashboard {
         if ( ! class_exists( 'Site_Link_System' ) ){
             require_once( get_theme_file_path() . '/dt-core/admin/site-link-post-type.php' );
         }
+
     }
 
     /**
@@ -223,9 +226,8 @@ class DT_Network_Dashboard {
             'disciple-tools-network-dashboard'
         );
 
-        // Internationalize the text strings used.
-        add_action( 'plugins_loaded', array( $this, 'i18n' ), 2 );
-
+        // load internationalization
+        add_action( 'after_setup_theme', array( $this, 'i18n' ), 51 );
     }
 
     /**
@@ -237,10 +239,6 @@ class DT_Network_Dashboard {
      */
     public static function deactivation() {
         delete_option( 'dismissed-dt-network-dashboard' );
-
-//        // delete cron jobs
-//        $timestamp = wp_next_scheduled( 'bl_cron_hook' );
-//        wp_unschedule_event( $timestamp, 'bl_cron_hook' );
     }
 
     /**
@@ -251,9 +249,19 @@ class DT_Network_Dashboard {
      * @return void
      */
     public function i18n() {
-        load_plugin_textdomain( 'dt_network_dashboard',
-            false,
-        trailingslashit( dirname( plugin_basename( __FILE__ ) ) ). 'languages' );
+        $domain = 'disciple-tools-network-dashboard';
+        $locale = apply_filters(
+            'plugin_locale',
+            ( is_admin() && function_exists( 'get_user_locale' ) ) ? get_user_locale() : get_locale(),
+            $domain
+        );
+
+        $mo_file = $domain . '-' . $locale . '.mo';
+        $path = realpath( dirname( __FILE__ ) . '/languages' );
+
+        if ($path && file_exists( $path )) {
+            load_textdomain( $domain, $path . '/' . $mo_file );
+        }
     }
 
     /**
@@ -264,7 +272,7 @@ class DT_Network_Dashboard {
      * @return string
      */
     public function __toString() {
-        return 'dt_network_dashboard';
+        return 'disciple-tools-network-dashboard';
     }
 
     /**
@@ -298,7 +306,7 @@ class DT_Network_Dashboard {
      */
     public function __call( $method = '', $args = array() ) {
         // @codingStandardsIgnoreLine
-        _doing_it_wrong( "dt_network_dashboard::{$method}", esc_html__( 'Method does not exist.', 'dt_network_dashboard' ), '0.1' );
+        _doing_it_wrong( "dt_network_dashboard::{$method}", esc_html( 'Method does not exist.' ), '0.1' );
         unset( $method, $args );
         return null;
     }
