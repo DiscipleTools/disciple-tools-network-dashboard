@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Disciple Tools - Network Dashboard\n"
-"POT-Creation-Date: 2021-01-11 10:41-0700\n"
+"POT-Creation-Date: 2021-01-11 14:00-0700\n"
 "PO-Revision-Date: 2021-01-11 10:41-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -26,33 +26,111 @@ msgstr ""
 msgid "Extensions (DT)"
 msgstr ""
 
-#: admin/menu-and-tabs.php:64 admin/menu-and-tabs.php:65
-#: admin/menu-and-tabs.php:103
-msgid "Network Dashboard"
-msgstr ""
-
 #: admin/menu-and-tabs.php:83
 msgid "You do not have sufficient permissions to access this page."
-msgstr ""
-
-#: admin/menu-and-tabs.php:107 admin/menu-and-tabs.php:130
-#: admin/menu-and-tabs.php:135
-msgid "nav-tab-active"
 msgstr ""
 
 #: admin/migrations/0000-initial.php:21
 msgid "Network Dashboard Viewer"
 msgstr ""
 
-#: disciple-tools-network-dashboard.php:301
-msgid "Method does not exist."
+#: logging/log-generations.php:11
+msgid "Pre-Group Generations"
 msgstr ""
 
-#: disciple-tools-network-dashboard.php:327
-msgid ""
-"'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme to "
-"work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - "
-"Network Dashboard'."
+#: logging/log-generations.php:17
+msgid "Group Generations"
+msgstr ""
+
+#: logging/log-generations.php:23
+msgid "Church Generations"
+msgstr ""
+
+#: logging/log-generations.php:29
+msgid "Team Generations"
+msgstr ""
+
+#: logging/log-generations.php:76
+#, php-format
+msgid "%s is reporting a new pre-group generation."
+msgstr ""
+
+#: logging/log-generations.php:81
+#, php-format
+msgid "%s is reporting a new group generation."
+msgstr ""
+
+#: logging/log-generations.php:86
+#, php-format
+msgid "%s is reporting a new church generation."
+msgstr ""
+
+#: logging/log-generations.php:91
+#, php-format
+msgid "%s is reporting a new leadership team generation."
+msgstr ""
+
+#: logging/log-new-posts.php:11
+msgid "New Contact"
+msgstr ""
+
+#: logging/log-new-posts.php:16
+msgid "New Pre-Group"
+msgstr ""
+
+#: logging/log-new-posts.php:21
+msgid "New Group"
+msgstr ""
+
+#: logging/log-new-posts.php:26
+msgid "New Church"
+msgstr ""
+
+#: logging/log-new-posts.php:31
+msgid "New Team"
+msgstr ""
+
+#: logging/log-new-posts.php:36
+msgid "New Baptism"
+msgstr ""
+
+#: logging/log-new-posts.php:41
+msgid "New Coaching"
+msgstr ""
+
+#: logging/log-new-posts.php:164
+#, php-format
+msgid "%s is reporting a new contact."
+msgstr ""
+
+#: logging/log-new-posts.php:169
+#, php-format
+msgid "%s is reporting a new pre-group formed."
+msgstr ""
+
+#: logging/log-new-posts.php:174
+#, php-format
+msgid "%s is reporting a new group formed."
+msgstr ""
+
+#: logging/log-new-posts.php:179
+#, php-format
+msgid "%s is reporting a new church."
+msgstr ""
+
+#: logging/log-new-posts.php:184
+#, php-format
+msgid "%s is reporting a new leadership team formed."
+msgstr ""
+
+#: logging/log-new-posts.php:189
+#, php-format
+msgid "%s is reporting a new baptism."
+msgstr ""
+
+#: logging/log-new-posts.php:194
+#, php-format
+msgid "%s is reporting an coaching relationship."
 msgstr ""
 
 #: metrics/base.php:220
@@ -64,20 +142,23 @@ msgid "Site"
 msgstr ""
 
 #: metrics/base.php:222 metrics/base.php:249 metrics/network-maps-area.php:72
-#: metrics/network-statistics-contacts.php:12
+#: metrics/network-maps-area.php:115 metrics/network-statistics-contacts.php:12
 #: metrics/network-statistics-contacts.php:13
+#: metrics/network-statistics-contacts.php:14
 msgid "Contacts"
 msgstr ""
 
 #: metrics/base.php:223 metrics/base.php:252 metrics/network-maps-area.php:81
-#: metrics/network-statistics-groups.php:12
+#: metrics/network-maps-area.php:121 metrics/network-statistics-groups.php:12
 #: metrics/network-statistics-groups.php:13
+#: metrics/network-statistics-groups.php:14
 msgid "Groups"
 msgstr ""
 
 #: metrics/base.php:224 metrics/base.php:254 metrics/network-maps-area.php:89
-#: metrics/network-statistics-users.php:12
+#: metrics/network-maps-area.php:133 metrics/network-statistics-users.php:12
 #: metrics/network-statistics-users.php:13
+#: metrics/network-statistics-users.php:14
 msgid "Users"
 msgstr ""
 
@@ -190,6 +271,7 @@ msgid "Baptisms"
 msgstr ""
 
 #: metrics/base.php:259 metrics/network-maps-area.php:97
+#: metrics/network-maps-area.php:127
 msgid "Churches"
 msgstr ""
 
@@ -313,8 +395,8 @@ msgstr ""
 msgid "Activity Map"
 msgstr ""
 
-#: metrics/base.php:298 metrics/network-activity-stats.php:12
-#: metrics/network-activity-stats.php:13
+#: metrics/base.php:298 metrics/network-activity-stats.php:11
+#: metrics/network-activity-stats.php:12 metrics/network-activity-stats.php:13
 msgid "Stats"
 msgstr ""
 
@@ -359,6 +441,7 @@ msgid "uncheck"
 msgstr ""
 
 #: metrics/base.php:311 metrics/network-home.php:12 metrics/network-home.php:13
+#: metrics/network-home.php:14
 msgid "Home"
 msgstr ""
 
@@ -375,7 +458,7 @@ msgid "All Active/Inactive"
 msgstr ""
 
 #: metrics/base.php:316 metrics/network-maps-hovermap.php:12
-#: metrics/network-maps-hovermap.php:13
+#: metrics/network-maps-hovermap.php:13 metrics/network-maps-hovermap.php:14
 msgid "Hover Map"
 msgstr ""
 
@@ -384,19 +467,23 @@ msgid "Network"
 msgstr ""
 
 #: metrics/network-activity-map.php:15 metrics/network-activity-map.php:16
+#: metrics/network-activity-map.php:17
 msgid "Map"
 msgstr ""
 
 #: metrics/network-activity-stream.php:12
 #: metrics/network-activity-stream.php:13
+#: metrics/network-activity-stream.php:14
 msgid "Log"
 msgstr ""
 
 #: metrics/network-activity.php:12 metrics/network-activity.php:13
+#: metrics/network-activity.php:14
 msgid "Activity"
 msgstr ""
 
 #: metrics/network-maps-area.php:15 metrics/network-maps-area.php:16
+#: metrics/network-maps-area.php:17
 msgid "Area Maps"
 msgstr ""
 
@@ -404,20 +491,42 @@ msgstr ""
 msgid "add"
 msgstr ""
 
+#: metrics/network-maps-area.php:74 metrics/network-maps-area.php:83
+#: metrics/network-maps-area.php:91 metrics/network-maps-area.php:99
+msgid "Active"
+msgstr ""
+
+#: metrics/network-maps-area.php:75
+msgid "Paused"
+msgstr ""
+
+#: metrics/network-maps-area.php:76
+msgid "Closed"
+msgstr ""
+
+#: metrics/network-maps-area.php:84 metrics/network-maps-area.php:92
+#: metrics/network-maps-area.php:100
+msgid "Inactive"
+msgstr ""
+
 #: metrics/network-maps-locationlist.php:12
 #: metrics/network-maps-locationlist.php:13
+#: metrics/network-maps-locationlist.php:14
 msgid "Location List"
 msgstr ""
 
 #: metrics/network-maps.php:12 metrics/network-maps.php:13
+#: metrics/network-maps.php:14
 msgid "Maps"
 msgstr ""
 
 #: metrics/network-sites.php:12 metrics/network-sites.php:13
+#: metrics/network-sites.php:14
 msgid "Site Reports"
 msgstr ""
 
 #: metrics/network-statistics.php:12 metrics/network-statistics.php:13
+#: metrics/network-statistics.php:14
 msgid "Statistics"
 msgstr ""
 
