@@ -9,9 +9,9 @@ class DT_Network_Dashboard_Metrics_Maps_Hovermap extends DT_Network_Dashboard_Me
 
         $this->base_slug = 'maps';
         $this->slug = 'hovermap';
-        $this->base_title = __( 'Hover Map', 'disciple_tools' );
-        $this->title = __( 'Hover Map', 'disciple_tools' );
-        $this->menu_title = 'Hover Map';
+        $this->base_title = __( 'Hover Map', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Hover Map', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Hover Map', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug . '/'  . $this->slug;
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';
@@ -25,7 +25,6 @@ class DT_Network_Dashboard_Metrics_Maps_Hovermap extends DT_Network_Dashboard_Me
         if ( $this->url === $this->url_path ) {
             add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ), 99 );
         }
-
     }
 
     public function add_scripts() {

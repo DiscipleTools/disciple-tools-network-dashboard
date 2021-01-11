@@ -8,7 +8,6 @@ function write_cluster( settings ) {
 
     jQuery('#network_maps_cluster').prop('style', 'font-weight:900;')
 
-
     let chart = jQuery('#chart')
     let spinner = ' <span class="loading-spinner users-spinner active"></span> '
 
@@ -16,16 +15,16 @@ function write_cluster( settings ) {
             <style>
                     #map-wrapper {
                         position: relative;
-                        height: ${window.innerHeight - 100}px; 
+                        height: ${window.innerHeight - 100}px;
                         width:100%;
                     }
-                    #map { 
+                    #map {
                         position: absolute;
                         top: 0;
                         left: 0;
                         z-index: 1;
                         width:100%;
-                        height: ${window.innerHeight - 100}px; 
+                        height: ${window.innerHeight - 100}px;
                      }
                      #legend {
                         position: absolute;
@@ -46,7 +45,7 @@ function write_cluster( settings ) {
                     }
                     .legend h4 {
                         margin: 0 0 10px;
-                    }    
+                    }
                     .legend div span {
                         border-radius: 50%;
                         display: inline-block;
@@ -105,7 +104,7 @@ function write_cluster( settings ) {
                 <div id='map'></div>
                 <div id='legend' class='legend'>
                     <div class="grid-x grid-margin-x grid-padding-x">
-                        
+
                     </div>
                 </div>
                 <div id="spinner">${spinner}</div>

@@ -9,9 +9,9 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
 
         $this->base_slug = 'maps';
         $this->slug = 'locationlist';
-        $this->base_title = __( 'Location List', 'disciple_tools' );
-        $this->title = __( 'Location List', 'disciple_tools' );
-        $this->menu_title = 'Location List';
+        $this->base_title = __( 'Location List', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Location List', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Location List', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug . '/'  . $this->slug;
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';

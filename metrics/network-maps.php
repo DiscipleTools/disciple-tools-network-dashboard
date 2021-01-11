@@ -9,9 +9,9 @@ class DT_Network_Dashboard_Metrics_Maps extends DT_Network_Dashboard_Metrics_Bas
 
         $this->base_slug = 'maps';
         $this->slug = '';
-        $this->base_title = __( 'Maps', 'disciple_tools' );
-        $this->title = __( 'Maps', 'disciple_tools' );
-        $this->menu_title = 'Maps';
+        $this->base_title = __( 'Maps', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Maps', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Maps', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug;
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
 

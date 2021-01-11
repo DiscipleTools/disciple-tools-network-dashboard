@@ -10,6 +10,7 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         }
         parent::__construct();
 
+        // @todo disabled.
 //        $this->base_slug = 'maps';
 //        $this->slug = 'cluster';
 //        $this->base_title = __( 'Cluster Map', 'disciple_tools' );
@@ -93,7 +94,7 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         $post_type = sanitize_text_field( wp_unslash( $params['post_type'] ) );
 
         return apply_filters( 'dashboard_cluster_layer_geojson', $this->_empty_geojson(), $post_type );
-        ;
+
     }
 
     public function cluster_geojson_contacts( $geojson, $post_type ) {
@@ -158,15 +159,6 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         if ( 'groups' !== $post_type ) {
             return $geojson;
         }
-
-        //        if ( $post_type === 'contacts' ) {
-//            $results = Disciple_Tools_Mapping_Queries::get_contacts_grid_totals( $status );
-//        } else if ( $post_type === 'groups' ) {
-//            $results = Disciple_Tools_Mapping_Queries::get_groups_grid_totals( $status );
-//        } else {
-//            return new WP_Error( __METHOD__, "Invalid post type", [ 'status' => 400 ] );
-//        }
-
 
         return $geojson;
     }

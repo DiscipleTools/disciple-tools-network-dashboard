@@ -104,7 +104,7 @@ class DT_Network_Dashboard_Menu {
             <h2 class="nav-tab-wrapper">
 
                  <a href="<?php echo esc_attr( $link ) . 'profile' ?>" class="nav-tab
-                    <?php echo ( $tab == 'profile' ) ?  esc_attr( 'nav-tab-active') : ''; ?>">
+                    <?php echo ( $tab == 'profile' ) ? esc_attr( 'nav-tab-active' ) : ''; ?>">
                         Profile
                 </a>
 
@@ -132,7 +132,7 @@ class DT_Network_Dashboard_Menu {
                 </a>
 
                 <a href="<?php echo esc_attr( $link ) . 'system' ?>" class="nav-tab
-                <?php echo ( $tab == 'system' ) ? esc_attr( 'nav-tab-active') : print ''; ?>">
+                <?php echo ( $tab == 'system' ) ? esc_attr( 'nav-tab-active' ) : ''; ?>">
                     System
                 </a>
 

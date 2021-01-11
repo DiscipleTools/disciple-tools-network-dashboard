@@ -8,37 +8,37 @@ function dt_network_dashboard_register_action_new_posts( $actions ){
 
     $actions['new_contact'] = array(
         'key' => 'new_contact',
-        'label' => 'New Contact',
+        'label' => __( 'New Contact', 'disciple-tools-network-dashboard' ),
         'message_pattern' => array()
     );
     $actions['new_pre-group'] = array(
         'key' => 'new_pre-group',
-        'label' => 'New Pre-Group',
+        'label' => __( 'New Pre-Group', 'disciple-tools-network-dashboard' ),
         'message_pattern' => array()
     );
     $actions['new_group'] = array(
         'key' => 'new_group',
-        'label' => 'New Group',
+        'label' => __( 'New Group', 'disciple-tools-network-dashboard' ),
         'message_pattern' => array()
     );
     $actions['new_church'] = array(
         'key' => 'new_church',
-        'label' => 'New Church',
+        'label' => __( 'New Church', 'disciple-tools-network-dashboard' ),
         'message_pattern' => array()
     );
     $actions['new_team'] = array(
         'key' => 'new_team',
-        'label' => 'New Team',
+        'label' => __( 'New Team', 'disciple-tools-network-dashboard' ),
         'message_pattern' => array()
     );
     $actions['new_baptism'] = array(
         'key' => 'new_baptism',
-        'label' => 'New Baptism',
+        'label' => __( 'New Baptism', 'disciple-tools-network-dashboard' ),
         'message_pattern' => array()
     );
     $actions['new_coaching'] = array(
         'key' => 'new_coaching',
-        'label' => 'New Coaching',
+        'label' => __( 'New Coaching', 'disciple-tools-network-dashboard' ),
         'message_pattern' => array()
     );
 
@@ -161,37 +161,37 @@ function dt_network_dashboard_translate_log_new_posts( $activity_log ){
 
         /* new_contact */
         if ( 'new_contact' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new contact.';
+            $activity_log[$index]['message'] = sprintf( __( '%s is reporting a new contact.', 'disciple-tools-network-dashboard' ), $log['site_name'] );
         }
 
         /* new_pre-group */
         if ( 'new_pre-group' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new pre-group formed';
+            $activity_log[$index]['message'] = sprintf( __( '%s is reporting a new pre-group formed.', 'disciple-tools-network-dashboard' ), $log['site_name'] );
         }
 
         /* new_group */
         if ( 'new_group' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new group formed';
+            $activity_log[$index]['message'] = sprintf( __( '%s is reporting a new group formed.', 'disciple-tools-network-dashboard' ), $log['site_name'] );
         }
 
         /* new_church */
         if ( 'new_church' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new church';
+            $activity_log[$index]['message'] = sprintf( __( '%s is reporting a new church.', 'disciple-tools-network-dashboard' ), $log['site_name'] );
         }
 
         /* new_team */
         if ( 'new_team' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new leadership team formed';
+            $activity_log[$index]['message'] = sprintf( __( '%s is reporting a new leadership team formed.', 'disciple-tools-network-dashboard' ), $log['site_name'] );
         }
 
         /* new_baptism */
         if ( 'new_baptism' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new baptism';
+            $activity_log[$index]['message'] = sprintf( __( '%s is reporting a new baptism.', 'disciple-tools-network-dashboard' ), $log['site_name'] );
         }
 
         /* new_coaching */
         if ( 'new_coaching' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting an coaching relationship';
+            $activity_log[$index]['message'] = sprintf( __( '%s is reporting an coaching relationship.', 'disciple-tools-network-dashboard' ), $log['site_name'] );
         }
     }
 

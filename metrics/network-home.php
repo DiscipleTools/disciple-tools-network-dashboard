@@ -9,9 +9,9 @@ class DT_Network_Dashboard_Metrics_Home extends DT_Network_Dashboard_Metrics_Bas
 
         $this->base_slug = 'home';
         $this->slug = '';
-        $this->base_title = __( 'Home', 'disciple_tools' );
-        $this->title = __( 'Home', 'disciple_tools' );
-        $this->menu_title = 'Home';
+        $this->base_title = __( 'Home', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Home', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Home', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug;
         $this->key = $this->root_slug . '_' . $this->base_slug;
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '.js';

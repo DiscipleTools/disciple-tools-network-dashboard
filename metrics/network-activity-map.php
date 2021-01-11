@@ -12,9 +12,9 @@ class DT_Network_Dashboard_Metrics_Activity_Map extends DT_Network_Dashboard_Met
 
         $this->base_slug = 'activity';
         $this->slug = 'map';
-        $this->base_title = __( 'Map', 'disciple_tools' );
-        $this->title = __( 'Map', 'disciple_tools' );
-        $this->menu_title = 'Map';
+        $this->base_title = __( 'Map', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Map', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Map', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug . '/'  . $this->slug;
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';
@@ -27,7 +27,6 @@ class DT_Network_Dashboard_Metrics_Activity_Map extends DT_Network_Dashboard_Met
         if ( $this->url === $this->url_path ) {
             add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ), 99 );
         }
-
     }
 
     public function add_scripts() {
@@ -139,6 +138,5 @@ class DT_Network_Dashboard_Metrics_Activity_Map extends DT_Network_Dashboard_Met
         return $geojson;
 
     }
-
 }
 new DT_Network_Dashboard_Metrics_Activity_Map();

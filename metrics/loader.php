@@ -65,17 +65,17 @@ function dt_network_dashboard_build_menu( $content ){
 
     // l1
     foreach ( $menu as $key => $value ){
-        $content .= '<li><a href="' . $value['url']  . '" id="'.$value['key'].'">' . $value['label']. '</a>';
+        $content .= '<li><a href="' . esc_url( $value['url'] )  . '" id="'.esc_attr( $value['key'] ).'">' . esc_html( $value['label'] ). '</a>';
         if ( isset( $value['children'] ) && ! empty( $value['children'] ) ){
-            $content .= '<ul class="menu vertical nested is-active" aria-expanded="true" id="'.$value['key'].'">';
+            $content .= '<ul class="menu vertical nested is-active" aria-expanded="true" id="'.esc_attr( $value['key'] ).'">';
             // l2
             foreach ( $value['children'] as $child ){
-                $content .= '<li><a href="' . $child['url']  . '" id="'.$child['key'].'">' . $child['label']. '</a>';
+                $content .= '<li><a href="' . esc_url( $child['url'] )  . '" id="'.esc_attr( $child['key'] ).'">' . esc_html( $child['label'] ). '</a>';
                 if ( isset( $child['children'] ) && ! empty( $child['children'] ) ){
-                    $content .= '<ul class="menu vertical nested is-active" aria-expanded="true" id="'.$child['key'].'">';
+                    $content .= '<ul class="menu vertical nested is-active" aria-expanded="true" id="'.esc_attr( $child['key'] ).'">';
                     // l3
                     foreach ( $child['children'] as $grandchild ){
-                        $content .= '<li><a href="' . $grandchild['url']  . '" id="'.$grandchild['key'].'">' . $grandchild['label']. '</a></li>';
+                        $content .= '<li><a href="' . esc_url( $grandchild['url'] )  . '" id="'.esc_attr( $grandchild['key'] ).'">' . esc_html( $grandchild['label'] ). '</a></li>';
                     }
                     $content .= '</ul>';
                 }

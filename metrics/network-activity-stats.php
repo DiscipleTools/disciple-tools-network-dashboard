@@ -1,7 +1,6 @@
 <?php
 if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
 
-
 class DT_Network_Dashboard_Metrics_Activity_Chart extends DT_Network_Dashboard_Metrics_Base
 {
     public function __construct() {
@@ -9,9 +8,9 @@ class DT_Network_Dashboard_Metrics_Activity_Chart extends DT_Network_Dashboard_M
 
         $this->base_slug = 'activity';
         $this->slug = 'stats';
-        $this->base_title = __( 'Stats', 'disciple_tools' );
-        $this->title = __( 'Stats', 'disciple_tools' );
-        $this->menu_title = 'Stats';
+        $this->base_title = __( 'Stats', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Stats', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Stats', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug . '/'  . $this->slug;
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';
@@ -23,7 +22,6 @@ class DT_Network_Dashboard_Metrics_Activity_Chart extends DT_Network_Dashboard_M
         if ( $this->url === $this->url_path ) {
             add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ), 99 );
         }
-
     }
 
     public function add_scripts() {
@@ -67,7 +65,5 @@ class DT_Network_Dashboard_Metrics_Activity_Chart extends DT_Network_Dashboard_M
         $template_for_url[$this->url] = 'template-metrics.php';
         return $template_for_url;
     }
-
-
 }
 new DT_Network_Dashboard_Metrics_Activity_Chart();

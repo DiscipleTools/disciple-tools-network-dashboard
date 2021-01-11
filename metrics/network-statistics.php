@@ -9,9 +9,9 @@ class DT_Network_Dashboard_Metrics_Statistics extends DT_Network_Dashboard_Metri
 
         $this->base_slug = 'statistics';
         $this->slug = '';
-        $this->base_title = __( 'Statistics', 'disciple_tools' );
-        $this->title = __( 'Statistics', 'disciple_tools' );
-        $this->menu_title = 'Statistics';
+        $this->base_title = __( 'Statistics', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Statistics', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Statistics', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug;
         $this->key = $this->root_slug . '_' . $this->base_slug;
 
@@ -28,6 +28,5 @@ class DT_Network_Dashboard_Metrics_Statistics extends DT_Network_Dashboard_Metri
         );
         return $tree;
     }
-
 }
 new DT_Network_Dashboard_Metrics_Statistics();

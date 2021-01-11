@@ -8,25 +8,25 @@ function dt_network_dashboard_register_action_generations( $actions ){
 
     $actions['generation_pre-group'] = array(
         'key' => 'generation_pre-group',
-        'label' => 'Pre-Group Generations',
+        'label' => __( 'Pre-Group Generations', 'disciple-tools-network-dashboard' ),
         'message_pattern' => array()
     );
 
     $actions['generation_group'] = array(
         'key' => 'generation_group',
-        'label' => 'Group Generations',
+        'label' => __( 'Group Generations', 'disciple-tools-network-dashboard' ),
         'message_pattern' => array()
     );
 
     $actions['generation_church'] = array(
         'key' => 'generation_church',
-        'label' => 'Church Generations',
+        'label' => __( 'Church Generations', 'disciple-tools-network-dashboard' ),
         'message_pattern' => array()
     );
 
     $actions['generation_team'] = array(
         'key' => 'generation_team',
-        'label' => 'Team Generations',
+        'label' => __( 'Team Generations', 'disciple-tools-network-dashboard' ),
         'message_pattern' => array()
     );
 
@@ -73,22 +73,22 @@ function dt_network_dashboard_translate_log_generations( $activity_log ){
 
         /* generation_pre-group */
         if ( 'generation_pre-group' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new pre-group generation';
+            $activity_log[$index]['message'] = sprintf( __( '%s is reporting a new pre-group generation.', 'disciple-tools-network-dashboard' ), $log['site_name'] );
         }
 
         /* generation_group */
         if ( 'generation_group' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new group generation';
+            $activity_log[$index]['message'] = sprintf( __( '%s is reporting a new group generation.', 'disciple-tools-network-dashboard' ), $log['site_name'] );
         }
 
         /* generation_church */
         if ( 'generation_church' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new church generation';
+            $activity_log[$index]['message'] = sprintf( __( '%s is reporting a new church generation.', 'disciple-tools-network-dashboard' ), $log['site_name'] );
         }
 
         /* generation_team */
         if ( 'generation_team' === $log['action'] ) {
-            $activity_log[$index]['message'] = $log['site_name'] . ' is reporting a new leadership team generation';
+            $activity_log[$index]['message'] = sprintf( __( '%s is reporting a new leadership team generation.', 'disciple-tools-network-dashboard' ), $log['site_name'] );
         }
     }
 

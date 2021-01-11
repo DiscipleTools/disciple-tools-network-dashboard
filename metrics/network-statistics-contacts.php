@@ -9,9 +9,9 @@ class DT_Network_Dashboard_Metrics_Overviews_Statistics extends DT_Network_Dashb
 
         $this->base_slug = 'statistics';
         $this->slug = 'contacts';
-        $this->base_title = __( 'Contacts', 'disciple_tools' );
-        $this->title = __( 'Contacts', 'disciple_tools' );
-        $this->menu_title = 'Contacts';
+        $this->base_title = __( 'Contacts', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Contacts', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Contacts', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug . '/'  . $this->slug;
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';

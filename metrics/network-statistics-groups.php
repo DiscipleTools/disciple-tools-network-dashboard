@@ -9,9 +9,9 @@ class DT_Network_Dashboard_Metrics_Statistics_Groups extends DT_Network_Dashboar
 
         $this->base_slug = 'statistics';
         $this->slug = 'groups';
-        $this->base_title = __( 'Groups', 'disciple_tools' );
-        $this->title = __( 'Groups', 'disciple_tools' );
-        $this->menu_title = 'Groups';
+        $this->base_title = __( 'Groups', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Groups', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Groups', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug . '/'  . $this->slug;
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
         $this->js_file_name = $this->root_slug . '-' . $this->base_slug . '-' . $this->slug . '.js';
@@ -24,7 +24,6 @@ class DT_Network_Dashboard_Metrics_Statistics_Groups extends DT_Network_Dashboar
         if ( $this->url === $this->url_path ) {
             add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ), 99 );
         }
-
     }
 
     public function add_scripts() {

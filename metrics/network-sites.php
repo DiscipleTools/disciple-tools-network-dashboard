@@ -9,9 +9,9 @@ class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics_Ba
 
         $this->base_slug = 'sites';
         $this->slug = '';
-        $this->base_title = __( 'Site Reports', 'disciple_tools' );
-        $this->title = __( 'Site Reports', 'disciple_tools' );
-        $this->menu_title = 'Site Reports';
+        $this->base_title = __( 'Site Reports', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Site Reports', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Site Reports', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug;
         $this->key = $this->root_slug . '_' . $this->base_slug;
 

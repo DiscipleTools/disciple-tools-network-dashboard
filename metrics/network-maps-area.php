@@ -12,9 +12,9 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
 
         $this->base_slug = 'maps';
         $this->slug = 'area';
-        $this->base_title = __( 'Area Maps', 'disciple_tools' );
-        $this->title = __( 'Area Maps', 'disciple_tools' );
-        $this->menu_title = 'Area Maps';
+        $this->base_title = __( 'Area Maps', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Area Maps', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Area Maps', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug . '/'  . $this->slug;
 
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
@@ -65,42 +65,42 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 'current_user_id' => get_current_user_id(),
                 "spinner_url" => get_stylesheet_directory_uri() . '/spinner.svg',
                 "translations" => array(
-                    'add' => __( 'add', 'disciple-tools' )
+                    'add' => __( 'add', 'disciple-tools-network-dashboard' )
                 ),
                 'contact_settings' => array(
                     'post_type' => 'contacts',
-                    'title' => __( 'Contacts', "disciple_tools" ),
+                    'title' => __( 'Contacts', 'disciple-tools-network-dashboard' ),
                     'status_list' => array(
-            'active' => array( "label" => 'Active' ),
-            'paused' => array( "label" => 'Paused' ),
-            'closed' => array( "label" => 'Closed' )
-                )
-                ),
-                'group_settings' => array(
-                    'post_type' => 'groups',
-                    'title' => __( 'Groups', "disciple_tools" ),
-                    'status_list' => array(
-            'active' => array( "label" => 'Active' ),
-            'inactive' => array( "label" => 'Inactive' )
-                )
-                ),
-                'user_settings' => array(
-                    'post_type' => 'users',
-                    'title' => __( 'Users', "disciple_tools" ),
-                    'status_list' => array(
-            'active' => array( "label" => 'Active' ),
-            'inactive' => array( "label" => 'Inactive' )
-                )
-                ),
-                'church_settings' => array(
-                    'post_type' => 'churches',
-                    'title' => __( 'Churches', "disciple_tools" ),
-                    'status_list' => array(
-            'active' => array( "label" => 'Active' ),
-            'inactive' => array( "label" => 'Inactive' )
-                )
-                )
-            )
+                    'active' => array( "label" => __( 'Active', 'disciple-tools-network-dashboard' ) ),
+                    'paused' => array( "label" => __( 'Paused', 'disciple-tools-network-dashboard' ) ),
+                    'closed' => array( "label" => __( 'Closed', 'disciple-tools-network-dashboard' ) )
+                        )
+                        ),
+                        'group_settings' => array(
+                            'post_type' => 'groups',
+                            'title' => __( 'Groups', 'disciple-tools-network-dashboard' ),
+                            'status_list' => array(
+                    'active' => array( "label" => __( 'Active', 'disciple-tools-network-dashboard' ) ),
+                    'inactive' => array( "label" => __( 'Inactive', 'disciple-tools-network-dashboard' ) )
+                        )
+                        ),
+                        'user_settings' => array(
+                            'post_type' => 'users',
+                            'title' => __( 'Users', 'disciple-tools-network-dashboard' ),
+                            'status_list' => array(
+                    'active' => array( "label" => __( 'Active', 'disciple-tools-network-dashboard' ) ),
+                    'inactive' => array( "label" => __( 'Inactive', 'disciple-tools-network-dashboard' ) )
+                        )
+                        ),
+                        'church_settings' => array(
+                            'post_type' => 'churches',
+                            'title' => __( 'Churches', 'disciple-tools-network-dashboard' ),
+                            'status_list' => array(
+                    'active' => array( "label" => __( 'Active', 'disciple-tools-network-dashboard' ) ),
+                    'inactive' => array( "label" => __( 'Inactive', 'disciple-tools-network-dashboard' ) )
+                        )
+                        )
+                    )
         );
     }
 
@@ -112,25 +112,25 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             'children' => array(
                 array(
                     'key' => $this->key . '_contacts',
-                    'label' => 'Contacts',
+                    'label' => __( 'Contacts', 'disciple-tools-network-dashboard' ),
                     'url' => '/'.$this->url . '/contacts',
                     'children' => array()
                 ),
                 array(
                     'key' => $this->key . '_groups',
-                    'label' => 'Groups',
+                    'label' => __( 'Groups', 'disciple-tools-network-dashboard' ),
                     'url' => '/'.$this->url. '/groups',
                     'children' => array()
                 ),
                 array(
                     'key' => $this->key . '_churches',
-                    'label' => 'Churches',
+                    'label' => __( 'Churches', 'disciple-tools-network-dashboard' ),
                     'url' => '/'.$this->url. '/churches',
                     'children' => array()
                 ),
                 array(
                     'key' => $this->key . '_users',
-                    'label' => 'Users',
+                    'label' => __( 'Users', 'disciple-tools-network-dashboard' ),
                     'url' => '/'.$this->url. '/users',
                     'children' => array()
                 ),
@@ -329,10 +329,6 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         return $grid_list;
     }
 
-
-
-
-
     public function points_geojson( WP_REST_Request $request ) {
         if ( ! $this->has_permission() ){
             return new WP_Error( __METHOD__, "Missing Permissions", array( 'status' => 400 ) );
@@ -362,9 +358,9 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         $results = $wpdb->get_results("
             SELECT lgm.label as l, p.post_title as n, lgm.post_id as pid, lgm.lng, lgm.lat, lg.admin0_grid_id as a0, lg.admin1_grid_id as a1
             FROM $wpdb->dt_location_grid_meta as lgm
-                 LEFT JOIN $wpdb->posts as p ON p.ID=lgm.post_id  
-                 LEFT JOIN $wpdb->dt_location_grid as lg ON lg.grid_id=lgm.grid_id   
-            WHERE lgm.post_type = 'trainings' 
+                 LEFT JOIN $wpdb->posts as p ON p.ID=lgm.post_id
+                 LEFT JOIN $wpdb->dt_location_grid as lg ON lg.grid_id=lgm.grid_id
+            WHERE lgm.post_type = 'trainings'
             LIMIT 40000;
             ",
         ARRAY_A );
@@ -433,17 +429,17 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
 
         if ( $status ) {
             $results = $wpdb->get_results( $wpdb->prepare( "
-            SELECT lg.label as address, p.post_title as name, lg.post_id, lg.lng, lg.lat 
-            FROM $wpdb->dt_location_grid_meta as lg 
-                JOIN $wpdb->posts as p ON p.ID=lg.post_id 
+            SELECT lg.label as address, p.post_title as name, lg.post_id, lg.lng, lg.lat
+            FROM $wpdb->dt_location_grid_meta as lg
+                JOIN $wpdb->posts as p ON p.ID=lg.post_id
                 LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=p.ID AND pm.meta_key = 'group_status'
             WHERE lg.post_type = 'groups' AND pm.meta_value = %s", $status),
             ARRAY_A );
         } else {
             $results = $wpdb->get_results("
-            SELECT lg.label as address, p.post_title as name, lg.post_id, lg.lng, lg.lat 
-            FROM $wpdb->dt_location_grid_meta as lg 
-                JOIN $wpdb->posts as p ON p.ID=lg.post_id 
+            SELECT lg.label as address, p.post_title as name, lg.post_id, lg.lng, lg.lat
+            FROM $wpdb->dt_location_grid_meta as lg
+                JOIN $wpdb->posts as p ON p.ID=lg.post_id
                 LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=p.ID AND pm.meta_key = 'group_status'
             WHERE lg.post_type = 'groups'",
             ARRAY_A);
@@ -485,9 +481,9 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
 
         if ( $status ) {
             $results = $wpdb->get_results( $wpdb->prepare( "
-            SELECT lg.label as address, p.post_title as name, lg.post_id, lg.lng, lg.lat 
-            FROM $wpdb->dt_location_grid_meta as lg 
-                JOIN $wpdb->posts as p ON p.ID=lg.post_id 
+            SELECT lg.label as address, p.post_title as name, lg.post_id, lg.lng, lg.lat
+            FROM $wpdb->dt_location_grid_meta as lg
+                JOIN $wpdb->posts as p ON p.ID=lg.post_id
                 LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=p.ID AND pm.meta_key = 'overall_status'
             WHERE lg.post_type = 'contacts'
             AND pm.post_id NOT IN (SELECT u.post_id FROM $wpdb->postmeta as u WHERE u.meta_key = 'corresponds_to_user' AND u.meta_value != '' )
@@ -495,9 +491,9 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             ARRAY_A );
         } else {
             $results = $wpdb->get_results("
-            SELECT lg.label as address, p.post_title as name, lg.post_id, lg.lng, lg.lat 
-            FROM $wpdb->dt_location_grid_meta as lg 
-                JOIN $wpdb->posts as p ON p.ID=lg.post_id 
+            SELECT lg.label as address, p.post_title as name, lg.post_id, lg.lng, lg.lat
+            FROM $wpdb->dt_location_grid_meta as lg
+                JOIN $wpdb->posts as p ON p.ID=lg.post_id
                 LEFT JOIN $wpdb->postmeta as pm ON pm.post_id=p.ID AND pm.meta_key = 'overall_status'
             WHERE lg.post_type = 'contacts'
             AND pm.post_id NOT IN (SELECT u.post_id FROM $wpdb->postmeta as u WHERE ( u.meta_key = 'corresponds_to_user' AND u.meta_value != '') OR ( u.meta_key = 'overall_status' AND u.meta_value = 'closed') )",
@@ -566,24 +562,24 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         global $wpdb;
         if ( $status ) {
             $results = $wpdb->get_results( $wpdb->prepare( "
-            SELECT DISTINCT lgm.grid_id as grid_id, lgm.grid_meta_id, lgm.post_id, po.post_title as name 
-            FROM $wpdb->dt_location_grid_meta as lgm 
-            LEFT JOIN $wpdb->posts as po ON po.ID=lgm.post_id  
+            SELECT DISTINCT lgm.grid_id as grid_id, lgm.grid_meta_id, lgm.post_id, po.post_title as name
+            FROM $wpdb->dt_location_grid_meta as lgm
+            LEFT JOIN $wpdb->posts as po ON po.ID=lgm.post_id
             JOIN $wpdb->postmeta as pm ON pm.post_id=lgm.post_id AND meta_key = 'overall_status' AND meta_value = 'active'
             WHERE lgm.post_type ='contacts'
             AND po.ID NOT IN (SELECT DISTINCT(u.post_id) FROM $wpdb->postmeta as u WHERE u.meta_key = 'corresponds_to_user' AND u.meta_value != '')
-                AND lgm.grid_id IS NOT NULL 
+                AND lgm.grid_id IS NOT NULL
                 ORDER BY po.post_title
             ;", $status ),
             ARRAY_A );
         } else {
             $results = $wpdb->get_results( "
-            SELECT DISTINCT lgm.grid_id as grid_id, lgm.grid_meta_id, lgm.post_id, po.post_title as name 
-            FROM $wpdb->dt_location_grid_meta as lgm 
-            LEFT JOIN $wpdb->posts as po ON po.ID=lgm.post_id          
-            WHERE lgm.post_type ='contacts' 
+            SELECT DISTINCT lgm.grid_id as grid_id, lgm.grid_meta_id, lgm.post_id, po.post_title as name
+            FROM $wpdb->dt_location_grid_meta as lgm
+            LEFT JOIN $wpdb->posts as po ON po.ID=lgm.post_id
+            WHERE lgm.post_type ='contacts'
                 AND po.ID NOT IN (SELECT DISTINCT(u.post_id) FROM $wpdb->postmeta as u WHERE ( u.meta_key = 'corresponds_to_user' AND u.meta_value != '') OR ( u.meta_key = 'overall_status' AND u.meta_value = 'closed'))
-                AND lgm.grid_id IS NOT NULL 
+                AND lgm.grid_id IS NOT NULL
                 ORDER BY po.post_title
             ;",
             ARRAY_A );
@@ -609,11 +605,11 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         global $wpdb;
 
         $results = $wpdb->get_results( "
-            SELECT DISTINCT lgm.grid_id as grid_id, lgm.grid_meta_id, lgm.post_id, po.post_title as name 
-            FROM $wpdb->dt_location_grid_meta as lgm 
-            LEFT JOIN $wpdb->posts as po ON po.ID=lgm.post_id          
-            WHERE lgm.post_type ='groups' 
-            	AND lgm.grid_id IS NOT NULL 
+            SELECT DISTINCT lgm.grid_id as grid_id, lgm.grid_meta_id, lgm.post_id, po.post_title as name
+            FROM $wpdb->dt_location_grid_meta as lgm
+            LEFT JOIN $wpdb->posts as po ON po.ID=lgm.post_id
+            WHERE lgm.post_type ='groups'
+            	AND lgm.grid_id IS NOT NULL
             	ORDER BY po.post_title
             ;",
         ARRAY_A );
@@ -635,7 +631,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         }
         global $wpdb;
         $results = $wpdb->get_results( "
-            SELECT t0.admin0_grid_id as grid_id, count(t0.admin0_grid_id) as count 
+            SELECT t0.admin0_grid_id as grid_id, count(t0.admin0_grid_id) as count
             FROM (
              SELECT lg.admin0_grid_id FROM $wpdb->dt_location_grid as lg LEFT JOIN $wpdb->dt_location_grid_meta as lgm ON lg.grid_id=lgm.grid_id WHERE lgm.post_type = 'trainings'
             ) as t0
@@ -648,11 +644,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             $list[$result['grid_id']] = $result;
         }
 
-
-
         return $list;
-
     }
-
 }
 new DT_Network_Dashboard_Metrics_Maps_Area();

@@ -9,9 +9,9 @@ class DT_Network_Dashboard_Metrics_Activity extends DT_Network_Dashboard_Metrics
 
         $this->base_slug = 'activity';
         $this->slug = '';
-        $this->base_title = __( 'Activity', 'disciple_tools' );
-        $this->title = __( 'Activity', 'disciple_tools' );
-        $this->menu_title = 'Activity';
+        $this->base_title = __( 'Activity', 'disciple-tools-network-dashboard' );
+        $this->title = __( 'Activity', 'disciple-tools-network-dashboard' );
+        $this->menu_title = __( 'Activity', 'disciple-tools-network-dashboard' );
         $this->url = $this->root_slug . '/' . $this->base_slug;
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
 
@@ -28,7 +28,5 @@ class DT_Network_Dashboard_Metrics_Activity extends DT_Network_Dashboard_Metrics
         );
         return $tree;
     }
-
-
 }
 new DT_Network_Dashboard_Metrics_Activity();
