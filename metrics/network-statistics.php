@@ -22,7 +22,7 @@ class DT_Network_Dashboard_Metrics_Statistics extends DT_Network_Dashboard_Metri
         // top levels load at 10, sub levels need to load at 50+
         $tree[$this->base_slug] = array(
             'key' => $this->key,
-            'label' => $this->menu_title,
+            'label' => __( 'Statistics', 'disciple-tools-network-dashboard' ),
             'url' => '/'.$this->url,
             'children' => array()
         );

@@ -107,7 +107,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
     public function menu( $tree ){
         $tree[$this->base_slug]['children'][$this->slug] = array(
             'key' => $this->key,
-            'label' => $this->menu_title,
+            'label' => __( 'Area Maps', 'disciple-tools-network-dashboard' ),
             'url' => '/'.$this->url,
             'children' => array(
                 array(
