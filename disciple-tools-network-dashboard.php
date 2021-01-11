@@ -324,7 +324,7 @@ register_deactivation_hook( __FILE__, array( 'DT_Network_Dashboard', 'deactivati
 function dt_network_dashboard_no_disciple_tools_theme_found() {
     ?>
     <div class="notice notice-error">
-        <p><?php esc_html_e( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard'.", "dt_network_dashboard" ); ?></p>
+        <p><?php echo esc_html( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard'." ); ?></p>
     </div>
     <?php
 }
