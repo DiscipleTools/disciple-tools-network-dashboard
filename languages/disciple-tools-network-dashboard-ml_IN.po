@@ -5,490 +5,490 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 "Project-Id-Version: Disciple Tools Plugins\n"
-"Language: bs\n"
+"Language: ml\n"
 
 #: disciple-tools-dashboard.php:253 disciple-tools-dashboard.php:264
 msgid "Whoah, partner!"
-msgstr "Whoah, partneru!"
+msgstr "ഓ, പങ്കാളി!"
 
 #: disciple-tools-dashboard.php:276
 msgid "Method does not exist."
-msgstr "Metoda ne postoji."
+msgstr "രീതി നിലവിലില്ല."
 
 #: metrics/mapbox-maps.php:30
 msgid "Training Maps"
-msgstr "Karte treninga"
+msgstr "പരിശീലന മാപ്പുകൾ"
 
 #: post-type/module-base.php:354
 msgid "Trainings"
-msgstr "Treninzi"
+msgstr "പരിശീലനങ്ങൾ"
 
 #: metrics/mapbox-personal-maps.php:30
 msgid "Trainings Maps"
-msgstr "Karte treninga"
+msgstr "പരിശീലന മാപ്പുകൾ"
 
 #: network/customize-site-linking.php:10 post-type/module-base.php:54
 msgid "Training"
-msgstr "Trening"
+msgstr "പരിശീലനം"
 
 #: post-type/module-base.php:59
 msgid "Multiplier"
-msgstr "Množitelj"
+msgstr "ഗുണിതം"
 
 #: post-type/module-base.php:65
 msgid "Dispatcher"
-msgstr "Dispečer"
+msgstr "ഡിസ്പാച്ചർ"
 
 #: post-type/module-base.php:72
 msgid "Disciple.Tools Admin"
-msgstr "Disciple.Tools Admin"
+msgstr "ശിഷ്യൻ.ടൂൾസ് അഡ്‌മിൻ"
 
 #: post-type/module-base.php:79
 msgid "Administrator"
-msgstr "Administrator"
+msgstr "അഡ്മിനിസ്ട്രേറ്റർ"
 
 #: post-type/module-base.php:432
 msgid "Members"
-msgstr "Članovi"
+msgstr "അംഗങ്ങൾ"
 
 #: post-type/module-base.php:433
 msgid "Contacts"
-msgstr "Kontakti"
+msgstr "കോൺ‌ടാക്റ്റുകൾ"
 
 #: post-type/module-base.php:294 post-type/module-base.php:450
 msgid "Groups"
-msgstr "Grupe"
+msgstr "ഗ്രൂപ്പുകൾ"
 
 #: post-type/module-base.php:259 post-type/module-base.php:467
 msgid "Leaders"
-msgstr "Vođe"
+msgstr "നേതാക്കൾ"
 
 #: post-type/module-base.php:484
 msgid "Coaches"
-msgstr "Treneri"
+msgstr "കോച്ചുകൾ"
 
 #: post-type/module-base.php:497
 msgid "Planted by"
-msgstr "Sadio"
+msgstr "നട്ടുപിടിപ്പിച്ചു"
 
 #: post-type/module-base.php:498
 msgid "Planting"
-msgstr "Sadnja"
+msgstr "നടീൽ"
 
 #: post-type/module-base.php:203 post-type/module-base.php:519
 msgid "People Groups"
-msgstr "Grupe ljudi"
+msgstr "പീപ്പിൾ ഗ്രൂപ്പുകൾ"
 
 #: post-type/module-base.php:102
 msgid "Tags"
-msgstr "Oznake"
+msgstr "ടാഗുകൾ"
 
 #: post-type/module-base.php:215
 msgctxt "Optional Documentation"
 msgid "A useful way to training related items and can help training contacts associated with noteworthy characteristics. e.g. business owner, sports lover. The contacts can also be filtered using these tags."
-msgstr "Koristan način za vježbanje predmeta koji mogu biti od koristi za osposobljavanje kontakata povezanih s vrijednim karakteristikama. npr. vlasnik preduzeća, zaljubljenik u sport. Kontakti se takođe mogu filtrirati pomoću ovih oznaka."
+msgstr "അനുബന്ധ ഇനങ്ങൾ‌ പരിശീലിപ്പിക്കുന്നതിനുള്ള ഒരു ഉപയോഗപ്രദമായ മാർ‌ഗ്ഗം കൂടാതെ ശ്രദ്ധേയമായ സവിശേഷതകളുമായി ബന്ധപ്പെട്ട കോൺ‌ടാക്റ്റുകളെ പരിശീലിപ്പിക്കാൻ സഹായിക്കുന്നു. ഉദാ. ബിസിനസ്സ് ഉടമ, കായിക പ്രേമികൾ. ഈ ടാഗുകൾ ഉപയോഗിച്ച് കോൺടാക്റ്റുകൾ ഫിൽട്ടർ ചെയ്യാനും കഴിയും."
 
 #: post-type/module-base.php:111
 msgid "Follow"
-msgstr "Pratiti"
+msgstr "പിന്തുടരുക"
 
 #: post-type/module-base.php:118
 msgid "Un-Follow"
-msgstr "Poništi praćenje"
+msgstr "പിന്തുടരരുത്"
 
 #: includes/template-dashboard.php:164
 msgid "Tasks"
-msgstr "Zadaci"
+msgstr "ചുമതലകൾ"
 
 #: post-type/module-base.php:249
 msgctxt "Training Status label"
 msgid "New"
-msgstr "Novo"
+msgstr "പുതിയത്"
 
 #: post-type/module-base.php:250
 msgctxt "Training Status field description"
 msgid "New training added to the system"
-msgstr "Nova obuka dodata u sistem"
+msgstr "സിസ്റ്റത്തിലേക്ക് പുതിയ പരിശീലനം ചേർത്തു"
 
 #: post-type/module-base.php:254
 msgctxt "Training Status label"
 msgid "Proposed"
-msgstr "Predloženo"
+msgstr "നിർദ്ദേശിച്ചു"
 
 #: post-type/module-base.php:255
 msgctxt "Training Status field description"
 msgid "This training has been proposed and is in initial conversations"
-msgstr "Ovaj trening je predložen i u početnim je razgovorima"
+msgstr "ഈ പരിശീലനം നിർദ്ദേശിക്കപ്പെട്ടു കൂടാതെ പ്രാരംഭ സംഭാഷണങ്ങളിലുമാണ്"
 
 #: post-type/module-base.php:259
 msgctxt "Training Status label"
 msgid "Scheduled"
-msgstr "Planirano"
+msgstr "ഷെഡ്യൂൾ ചെയ്തു"
 
 #: post-type/module-base.php:260
 msgctxt "Training Status field description"
 msgid "This training is confirmed, on the calendar."
-msgstr "Ovaj trening je potvrđen na kalendaru."
+msgstr "ഈ പരിശീലനം കലണ്ടറിൽ സ്ഥിരീകരിച്ചു."
 
 #: post-type/module-base.php:264
 msgctxt "Training Status label"
 msgid "In Progress"
-msgstr "U toku"
+msgstr "പുരോഗതിയിൽ"
 
 #: post-type/module-base.php:265
 msgctxt "Training Status field description"
 msgid "This training is confirmed, on the calendar, or currently active."
-msgstr "Ovaj trening je potvrđen, u kalendaru ili trenutno aktivan."
+msgstr "ഈ പരിശീലനം കലണ്ടറിൽ അല്ലെങ്കിൽ നിലവിൽ സജീവമാണെന്ന് സ്ഥിരീകരിച്ചു."
 
 #: post-type/module-base.php:269
 msgctxt "Training Status label"
 msgid "Complete"
-msgstr "Kompletna"
+msgstr "പൂർത്തിയായി"
 
 #: post-type/module-base.php:270
 msgctxt "Training Status field description"
 msgid "This training has successfully completed"
-msgstr "Ovaj trening je uspješno završen"
+msgstr "ഈ പരിശീലനം വിജയകരമായി പൂർത്തിയാക്കി"
 
 #: post-type/module-base.php:274
 msgctxt "Training Status label"
 msgid "Paused"
-msgstr "Pauza"
+msgstr "താൽക്കാലികമായി നിർത്തി"
 
 #: post-type/module-base.php:275
 msgctxt "Training Status field description"
 msgid "This contact is currently on hold. It has potential of getting scheduled in the future."
-msgstr "Ovaj kontakt je trenutno na čekanju. Ima potencijal da se zakaže u budućnosti."
+msgstr "ഈ കോൺ‌ടാക്റ്റ് നിലവിൽ തടഞ്ഞുവച്ചിരിക്കുന്നു. ഭാവിയിൽ ഷെഡ്യൂൾ ചെയ്യാനുള്ള സാധ്യതയുണ്ട്."
 
 #: post-type/module-base.php:279
 msgctxt "Training Status label"
 msgid "Closed"
-msgstr "Zatvoreno"
+msgstr "അടച്ചു"
 
 #: post-type/module-base.php:280
 msgctxt "Training Status field description"
 msgid "This training is no longer going to happen."
-msgstr "Ovaj trening se više neće dogoditi."
+msgstr "ഈ പരിശീലനം ഇനി നടക്കില്ല."
 
 #: post-type/module-base.php:176
 msgid "Assigned To"
-msgstr "Dodijeljen"
+msgstr "നിയോഗിച്ചിട്ടുള്ള"
 
 #: post-type/module-base.php:288
 msgid "Select the main person who is responsible for reporting on this training."
-msgstr "Odaberite glavnu osobu koja je odgovorna za izvještavanje o ovoj obuci."
+msgstr "ഈ പരിശീലനത്തെക്കുറിച്ച് റിപ്പോർട്ടുചെയ്യാൻ ഉത്തരവാദിത്തമുള്ള പ്രധാന വ്യക്തിയെ തിരഞ്ഞെടുക്കുക."
 
 #: post-type/module-base.php:185
 msgid "Training Coach / Church Planter"
-msgstr "Trener za obuku / planiranje crkava"
+msgstr "പരിശീലന കോച്ച് / ചർച്ച് പ്ലാന്റർ"
 
 #: post-type/module-base.php:297
 msgctxt "Optional Documentation"
 msgid "The person who planted and/or is coaching this training. Only one person can be assigned to a training while multiple people can be coaches / church planters of this training."
-msgstr "Osoba koja je postavila i / ili trenira ovaj trening. Samo jedna osoba može biti dodijeljena treningu, dok više ljudi može biti treneri / planeri crkve."
+msgstr "ഈ പരിശീലനം നട്ടുപിടിപ്പിച്ച / അല്ലെങ്കിൽ പരിശീലിപ്പിക്കുന്ന വ്യക്തി. ഒരു പരിശീലനത്തിന് ഒരാളെ മാത്രമേ നിയോഗിക്കാൻ കഴിയൂ, അതേസമയം ഒന്നിലധികം ആളുകൾക്ക് ഈ പരിശീലനത്തിന്റെ പരിശീലകർ / ചർച്ച് പ്ലാന്ററുകൾ ആകാം."
 
 #: post-type/module-base.php:196
 msgid "Requires Update"
-msgstr "Zahtijeva ažuriranje"
+msgstr "അപ്‌ഡേറ്റ് ആവശ്യമാണ്"
 
 #: post-type/module-base.php:313
 msgid "Video Link"
-msgstr "Video Link"
+msgstr "വീഡിയോ ലിങ്ക്"
 
 #: post-type/module-base.php:314
 msgctxt "Optional Documentation"
 msgid "Link to video chat service"
-msgstr "Link na uslugu video ćaskanja"
+msgstr "വീഡിയോ ചാറ്റ് സേവനത്തിലേക്ക് ലിങ്ക് ചെയ്യുക"
 
 #: post-type/module-base.php:321
 msgid "Notes"
-msgstr "Napomene"
+msgstr "കുറിപ്പുകൾ"
 
 #: post-type/module-base.php:322
 msgctxt "Optional Documentation"
 msgid "Notes on when the trainings will happen"
-msgstr "Napomene o tome kada će se održati treninzi"
+msgstr "പരിശീലനം എപ്പോൾ സംഭവിക്കുമെന്നതിനെക്കുറിച്ചുള്ള കുറിപ്പുകൾ"
 
 #: post-type/module-base.php:331 post-type/module-base.php:543
 msgid "Meeting Times"
-msgstr "Meeting Times"
+msgstr "മീറ്റിംഗ് ടൈംസ്"
 
 #: post-type/module-base.php:219 post-type/module-base.php:228
 msgid "Locations"
-msgstr "Lokacije"
+msgstr "ലൊക്കേഷനുകൾ"
 
 #: post-type/module-base.php:220 post-type/module-base.php:229
 msgctxt "Optional Documentation"
 msgid "The general location where this contact is located."
-msgstr "Općenito mjesto na kojem se nalazi ovaj kontakt."
+msgstr "ഈ കോൺ‌ടാക്റ്റ് സ്ഥിതിചെയ്യുന്ന പൊതു സ്ഥാനം."
 
 #: post-type/module-base.php:236
 msgid "Address"
-msgstr "Adresa"
+msgstr "വിലാസം"
 
 #: post-type/module-base.php:413
 msgid "Parent Training"
-msgstr "Obuka roditelja"
+msgstr "രക്ഷാകർതൃ പരിശീലനം"
 
 #: post-type/module-base.php:414
 msgctxt "Optional Documentation"
 msgid "A training that launched this training."
-msgstr "Trening koji je pokrenuo ovaj trening."
+msgstr "ഈ പരിശീലനം ആരംഭിച്ച ഒരു പരിശീലനം."
 
 #: post-type/module-base.php:424
 msgid "Peer Training"
-msgstr "Vršnjački trening"
+msgstr "പിയർ പരിശീലനം"
 
 #: post-type/module-base.php:425
 msgctxt "Optional Documentation"
 msgid "A related training that isn't a parent/child in relationship. It might indicate trainings that collaborate, are about to merge, recently split, etc."
-msgstr "Srodni trening koji nije roditelj / dijete u vezi. To može ukazivati na treninge koji sarađuju, koji se spremaju za spajanje, nedavno razdvajanje itd."
+msgstr "ബന്ധത്തിൽ ഒരു രക്ഷകർത്താവ് / കുട്ടി അല്ലാത്ത ഒരു അനുബന്ധ പരിശീലനം. ഇത് സഹകരിക്കുന്നതും ലയിപ്പിക്കാൻ പോകുന്നതും അടുത്തിടെ വിഭജിച്ചതുമായ പരിശീലനങ്ങളെ സൂചിപ്പിക്കാം."
 
 #: post-type/module-base.php:435
 msgid "Child Training"
-msgstr "Dječji trening"
+msgstr "ശിശു പരിശീലനം"
 
 #: post-type/module-base.php:436
 msgctxt "Optional Documentation"
 msgid "A training that has been birthed out of this training."
-msgstr "Trening koji je rođen sa ovog treninga."
+msgstr "ഈ പരിശീലനത്തിൽ നിന്ന് വേർതിരിച്ചെടുത്ത ഒരു പരിശീലനം."
 
 #: post-type/module-base.php:446 post-type/module-base.php:542
 #: post-type/module-base.php:653
 msgid "Member List"
-msgstr "Lista članova"
+msgstr "അംഗങ്ങളുടെ പട്ടിക"
 
 #: post-type/module-base.php:447
 msgctxt "Optional Documentation"
 msgid "The contacts who are members of this training."
-msgstr "Kontakti koji su članovi ovog treninga."
+msgstr "ഈ പരിശീലനത്തിലെ അംഗങ്ങളായ കോൺ‌ടാക്റ്റുകൾ."
 
 #: post-type/module-base.php:464
 msgctxt "Optional Documentation"
 msgid "The people trainings represented by this training."
-msgstr "Obuke za ljude koje predstavlja ovaj trening."
+msgstr "ഈ പരിശീലനം പ്രതിനിധീകരിക്കുന്ന ആളുകളുടെ പരിശീലനം."
 
 #: post-type/module-base.php:484
 msgid "Member Count"
-msgstr "Broj članova"
+msgstr "അംഗങ്ങളുടെ എണ്ണം"
 
 #: post-type/module-base.php:485 post-type/module-base.php:492
 msgctxt "Optional Documentation"
 msgid "The number of members in this training. It will automatically be updated when new members are added or removed in the member list. Change this number manually to included people who may not be in the system but are also members of the training."
-msgstr "Broj članova na ovom treningu. Automatski će se ažurirati kada se novi članovi dodaju ili uklone sa liste članova. Promijenite ovaj broj ručno na uključene ljude koji možda nisu u sistemu, ali su i članovi obuke."
+msgstr "ഈ പരിശീലനത്തിലെ അംഗങ്ങളുടെ എണ്ണം. അംഗങ്ങളുടെ പട്ടികയിൽ‌ പുതിയ അംഗങ്ങൾ‌ ചേർ‌ക്കുമ്പോഴോ നീക്കംചെയ്യുമ്പോഴോ ഇത് സ്വപ്രേരിതമായി അപ്‌ഡേറ്റ് ചെയ്യപ്പെടും. സിസ്റ്റത്തിൽ ഇല്ലാത്തവരും പരിശീലനത്തിലെ അംഗങ്ങളുമായ ആളുകളെ ഈ നമ്പർ സ്വമേധയാ മാറ്റുക."
 
 #: post-type/module-base.php:491
 msgid "Leader Count"
-msgstr "Broj vođa"
+msgstr "ലീഡർ എണ്ണം"
 
 #: post-type/module-base.php:503
 msgid "Training as Leader"
-msgstr "Obuka za vođu"
+msgstr "നേതാവായി പരിശീലനം"
 
 #: post-type/module-base.php:504
 msgctxt "Optional Documentation"
 msgid "Leader of a training"
-msgstr "Voditelj treninga"
+msgstr "ഒരു പരിശീലനത്തിന്റെ നേതാവ്"
 
 #: post-type/module-base.php:514
 msgid "Training as Participant"
-msgstr "Obuka za polaznika"
+msgstr "പങ്കാളിയായി പരിശീലനം"
 
 #: post-type/module-base.php:515
 msgctxt "Optional Documentation"
 msgid "Participant in a training."
-msgstr "Polaznik treninga."
+msgstr "ഒരു പരിശീലനത്തിൽ പങ്കെടുക്കുന്നയാൾ."
 
 #: post-type/module-base.php:537
 msgid "Other"
-msgstr "Ostalo"
+msgstr "മറ്റുള്ളവ"
 
 #: post-type/module-base.php:568
 msgctxt "input field placeholder"
 msgid "Search Users"
-msgstr "Pretražite korisnike"
+msgstr "ഉപയോക്താക്കളെ തിരയുക"
 
 #: post-type/module-base.php:601
 msgctxt "Search 'something'"
 msgid "Search %s"
-msgstr "Pretražite% s"
+msgstr "% S തിരയുക"
 
 #: post-type/module-base.php:656
 msgid "Create"
-msgstr "Stvoriti"
+msgstr "സൃഷ്ടിക്കാൻ"
 
 #: post-type/module-base.php:661
 msgid "Select"
-msgstr "Odaberite"
+msgstr "തിരഞ്ഞെടുക്കുക"
 
 #: post-type/module-base.php:666
 msgid "To add new members, click on 'Create' or 'Select'."
-msgstr "Da biste dodali nove članove, kliknite na 'Stvori' ili 'Odaberi'."
+msgstr "പുതിയ അംഗങ്ങളെ ചേർക്കുന്നതിന്, 'സൃഷ്ടിക്കുക' അല്ലെങ്കിൽ 'തിരഞ്ഞെടുക്കുക' ക്ലിക്കുചെയ്യുക."
 
 #: post-type/module-base.php:671
 msgctxt "Add members modal"
 msgid "Add members from existing contacts"
-msgstr "Dodajte članove iz postojećih kontakata"
+msgstr "നിലവിലുള്ള കോൺ‌ടാക്റ്റുകളിൽ നിന്ന് അംഗങ്ങളെ ചേർക്കുക"
 
 #: post-type/module-base.php:672
 msgctxt "Add members modal"
 msgid "In the 'Member List' field, type the name of an existing contact to add them to this training."
-msgstr "U polje 'Lista članova' unesite ime postojećeg kontakta da biste ih dodali u ovu obuku."
+msgstr "'അംഗ പട്ടിക' ഫീൽഡിൽ, ഈ പരിശീലനത്തിലേക്ക് അവരെ ചേർക്കുന്നതിന് നിലവിലുള്ള ഒരു കോൺടാക്റ്റിന്റെ പേര് ടൈപ്പുചെയ്യുക."
 
 #: post-type/module-base.php:681
 msgid "Close"
-msgstr "Zatvori"
+msgstr "അടയ്‌ക്കുക"
 
 #: post-type/module-base.php:879
 msgid "Removed %1$s: %2$s"
-msgstr "Uklonjeno% 1 $ s:% 2 $ s"
+msgstr "% 1 $ s നീക്കംചെയ്തു:% 2 $ s"
 
 #: post-type/module-base.php:882
 msgid "Added %1$s: %2$s"
-msgstr "Dodano% 1 $ s:% 2 $ s"
+msgstr "% 1 $ s ചേർത്തു:% 2 $ s"
 
 #: post-type/module-base.php:885
 msgid "Updated %1$s: %2$s to %3$s"
-msgstr "Ažurirano% 1 $ s:% 2 $ s na% 3 $ s"
+msgstr "% 1 $ s:% 2 $ s മുതൽ% 3 $ s വരെ അപ്‌ഡേറ്റുചെയ്‌തു"
 
 #: post-type/module-base.php:942
 msgctxt "List Filters"
 msgid "Assigned to me"
-msgstr "Dodijeljeno meni"
+msgstr "എനിക്ക് നിയോഗിച്ചു"
 
 #: post-type/module-base.php:950 post-type/module-base.php:1007
 #: post-type/module-base.php:1015
 msgctxt "List Filters"
 msgid "All"
-msgstr "Sve"
+msgstr "എല്ലാം"
 
 #: post-type/module-reports.php:85
 msgid "Reports"
-msgstr "Izvještaji"
+msgstr "റിപ്പോർട്ടുകൾ"
 
 #: post-type/module-reports.php:121
 msgid "Total Groups"
-msgstr "Ukupno grupa"
+msgstr "ആകെ ഗ്രൂപ്പുകൾ"
 
 #: post-type/module-reports.php:122
 msgid "Total Baptisms"
-msgstr "Ukupna krštenja"
+msgstr "ആകെ സ്നാനം"
 
 #: post-type/module-reports.php:123
 msgid "Countries"
-msgstr "Zemlje"
+msgstr "രാജ്യങ്ങൾ"
 
 #: post-type/module-reports.php:124
 msgid "States"
-msgstr "Države"
+msgstr "സംസ്ഥാനങ്ങൾ"
 
 #: post-type/module-reports.php:125
 msgid "Counties"
-msgstr "Županije"
+msgstr "കൗണ്ടികൾ"
 
 #: post-type/module-public-calendar.php:432
 #: post-type/module-registration.php:385
 msgid "Add"
-msgstr "Dodati"
+msgstr "ചേർക്കുക"
 
 #: post-type/module-registration.php:31
 msgid "Apps"
-msgstr "Aplikacije"
+msgstr "അപ്ലിക്കേഷനുകൾ"
 
 #: post-type/module-registration.php:59
 msgid "copy link"
-msgstr "kopiraj vezu"
+msgstr "ലിങ്ക് പകർത്തുക"
 
 #: post-type/module-registration.php:61
 msgid "edit form"
-msgstr "uredi obrazac"
+msgstr "ഫോം എഡിറ്റുചെയ്യുക"
 
 #: post-type/module-registration.php:63
 msgid "report"
-msgstr "izvještaj"
+msgstr "റിപ്പോർട്ട്"
 
 #: post-type/module-registration.php:67
 msgid "create link"
-msgstr "kreiraj vezu"
+msgstr "ലിങ്ക് സൃഷ്ടിക്കുക"
 
 #: post-type/module-registration.php:114
 msgid "link"
-msgstr "veza"
+msgstr "ലിങ്ക്"
 
 #: post-type/module-registration.php:116
 msgid "show on calendar"
-msgstr "prikaži na kalendaru"
+msgstr "കലണ്ടറിൽ കാണിക്കുക"
 
 #: post-type/module-registration.php:118
 msgid "open registration"
-msgstr "otvorena registracija "
+msgstr "ഓപ്പൺ രജിസ്ട്രേഷൻ "
 
 #: post-type/module-registration.php:265
 msgid "add"
-msgstr "dodati"
+msgstr "ചേർക്കുക"
 
 #: post-type/module-registration.php:266
 msgid "Use"
-msgstr "Koristite"
+msgstr "ഉപയോഗിക്കുക"
 
 #: post-type/module-registration.php:267 post-type/module-registration.php:695
 msgid "Search Location"
-msgstr "Pretraži lokaciju"
+msgstr "ലൊക്കേഷൻ തിരയുക"
 
 #: post-type/module-registration.php:268
 msgid "Delete Location"
-msgstr "Izbriši lokaciju"
+msgstr "സ്ഥാനം ഇല്ലാതാക്കുക"
 
 #: post-type/module-registration.php:269
 msgid "Open Mapping"
-msgstr "Otvori mapiranje"
+msgstr "ഓപ്പൺ മാപ്പിംഗ്"
 
 #: post-type/module-registration.php:270
 msgid "clear"
-msgstr "jasno"
+msgstr "വ്യക്തമാണ്"
 
 #: post-type/module-registration.php:384
 msgid "Register for Training"
-msgstr "Prijavite se za trening"
+msgstr "പരിശീലനത്തിനായി രജിസ്റ്റർ ചെയ്യുക"
 
 #: post-type/module-registration.php:386
 msgid "Join Training"
-msgstr "Pridružite se treningu"
+msgstr "പരിശീലനത്തിൽ ചേരുക"
 
 #: post-type/module-registration.php:387
 msgid "Join in"
-msgstr "Pridruži se"
+msgstr "പങ്കുചേരുക"
 
 #: post-type/module-registration.php:700
 msgid "Clear"
-msgstr "Jasno"
+msgstr "മായ്‌ക്കുക"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Training"
-msgstr "Alati za učenike - trening"
+msgstr "ശിഷ്യ ഉപകരണങ്ങൾ - പരിശീലനം"
 
 #: includes/admin/admin-menu-and-tabs.php:62
 msgid "Extensions (DT)"
-msgstr "Proširenja (DT)"
+msgstr "വിപുലീകരണങ്ങൾ (DT)"
 
 #: admin/menu-and-tabs.php:64 admin/menu-and-tabs.php:65
 #: admin/menu-and-tabs.php:103
 msgid "Network Dashboard"
-msgstr "Mrežna nadzorna ploča"
+msgstr "നെറ്റ്‌വർക്ക് ഡാഷ്‌ബോർഡ്"
 
 #: includes/admin/admin-menu-and-tabs.php:79
 msgid "You do not have sufficient permissions to access this page."
-msgstr "Nemate dovoljno dozvola za pristup ovoj stranici."
+msgstr "ഈ പേജ് ആക്സസ് ചെയ്യുന്നതിന് നിങ്ങൾക്ക് മതിയായ അനുമതികളില്ല."
 
 #: admin/menu-and-tabs.php:107 admin/menu-and-tabs.php:130
 #: admin/menu-and-tabs.php:135
 msgid "nav-tab-active"
-msgstr "nav-tab-aktivan"
+msgstr "nav-tab-active"
 
 #: admin/migrations/0000-initial.php:21
 msgid "Network Dashboard Viewer"
-msgstr "Mrežni preglednik nadzorne ploče"
+msgstr "നെറ്റ്‌വർക്ക് ഡാഷ്‌ബോർഡ് വ്യൂവർ"
 
 #: metrics/base.php:220
 msgid "ID"
@@ -496,7 +496,7 @@ msgstr "ID"
 
 #: metrics/base.php:221 metrics/base.php:255
 msgid "Site"
-msgstr "Site"
+msgstr "സൈറ്റ്"
 
 #: metrics/base.php:224 metrics/base.php:254 metrics/network-maps-area.php:89
 #: metrics/network-maps-area.php:133 metrics/network-statistics-users.php:12
@@ -504,374 +504,374 @@ msgstr "Site"
 #: metrics/network-statistics-users.php:14
 #: metrics/network-statistics-users.php:50
 msgid "Users"
-msgstr "Korisnici"
+msgstr "ഉപയോക്താക്കൾ"
 
 #: metrics/base.php:225
 msgid "Timestamp"
-msgstr "Vremenska oznaka"
+msgstr "ടൈംസ്റ്റാമ്പ്"
 
 #: metrics/base.php:226
 msgid "Visit"
-msgstr "Posjetite"
+msgstr "സന്ദർശിക്കുക"
 
 #: metrics/base.php:227
 msgid "View"
-msgstr "Pogled"
+msgstr "കാണുക"
 
 #: metrics/base.php:229
 msgid "Active Snapshot"
-msgstr "Aktivni snimak"
+msgstr "സജീവ സ്നാപ്പ്ഷോട്ട്"
 
 #: metrics/base.php:230
 msgid "Generations"
-msgstr "Generacije"
+msgstr "തലമുറകൾ"
 
 #: metrics/base.php:231
 msgid "Follow-up Funnel"
-msgstr "Lijevak za praćenje"
+msgstr "ഫോളോ-അപ്പ് ഫണൽ"
 
 #: metrics/base.php:232
 msgid "On-Going Meetings"
-msgstr "Sastanci u toku"
+msgstr "നടക്കുന്ന മീറ്റിംഗുകൾ"
 
 #: metrics/base.php:233
 msgid "Coaching"
-msgstr "Coaching"
+msgstr "പരിശീലനം"
 
 #: metrics/base.php:234
 msgid "Baptized"
-msgstr "Kršten"
+msgstr "സ്‌നാനമേറ്റു"
 
 #: metrics/base.php:235
 msgid "Active Groups"
-msgstr "Aktivne grupe"
+msgstr "സജീവ ഗ്രൂപ്പുകൾ"
 
 #: metrics/base.php:236 metrics/base.php:258
 msgid "Church"
-msgstr "Crkva"
+msgstr "ക്രിസ്ത്യൻ പള്ളി"
 
 #: metrics/base.php:237
 msgid "Health Metrics"
-msgstr "Zdravstvene metrike"
+msgstr "ആരോഗ്യ അളവുകൾ"
 
 #: metrics/base.php:238
 msgid "Total Users"
-msgstr "Ukupno korisnika"
+msgstr "മൊത്തം ഉപയോക്താക്കൾ"
 
 #: metrics/base.php:239
 msgid "Responders"
-msgstr "Responders"
+msgstr "പ്രതികരിക്കുന്നവർ"
 
 #: metrics/base.php:240
 msgid "Dispatchers"
-msgstr "Dispečeri"
+msgstr "ഡിസ്പാച്ചേഴ്സ്"
 
 #: metrics/base.php:241
 msgid "Multipliers"
-msgstr "Multiplikatori"
+msgstr "മൾട്ടിപ്ലയറുകൾ"
 
 #: metrics/base.php:242
 msgid "Admins"
-msgstr "Administratori"
+msgstr "അഡ്‌മിനുകൾ"
 
 #: metrics/base.php:243
 msgid "User Login Activity"
-msgstr "Aktivnost prijave korisnika"
+msgstr "ഉപയോക്തൃ ലോഗിൻ പ്രവർത്തനം"
 
 #: metrics/base.php:244
 msgid "Users Active in the Last 30 Days"
-msgstr "Korisnici aktivni u zadnjih 30 dana"
+msgstr "കഴിഞ്ഞ 30 ദിവസങ്ങളിൽ സജീവമായ ഉപയോക്താക്കൾ"
 
 #: metrics/base.php:245
 msgid "Practicing"
-msgstr "Vežbanje"
+msgstr "പരിശീലിക്കുന്നു"
 
 #: metrics/base.php:246
 msgid "Not Practicing"
-msgstr "Ne vežbam"
+msgstr "പരിശീലിക്കുന്നില്ല"
 
 #: metrics/base.php:247
 msgid "Chart Funnel"
-msgstr "Lijevak grafikona"
+msgstr "ചാർട്ട് ഫണൽ"
 
 #: metrics/base.php:250
 msgid "Contact"
-msgstr "Kontakt"
+msgstr "ബന്ധപ്പെടുക"
 
 #: metrics/base.php:251
 msgid "Group"
-msgstr "Grupa"
+msgstr "ഗ്രൂപ്പ്"
 
 #: metrics/base.php:253
 msgid "User"
-msgstr "Korisnik"
+msgstr "ഉപയോക്താവ്"
 
 #: metrics/base.php:256 metrics/base.php:301
 msgid "Sites"
-msgstr "Sajtovi"
+msgstr "സൈറ്റുകൾ"
 
 #: metrics/base.php:257
 msgid "Baptisms"
-msgstr "Krštenja"
+msgstr "സ്നാനം"
 
 #: metrics/base.php:259 metrics/network-maps-area.php:97
 #: metrics/network-maps-area.php:127
 msgid "Churches"
-msgstr "Crkve"
+msgstr "പള്ളികൾ"
 
 #: metrics/base.php:260
 msgid "Location"
-msgstr "Lokacija"
+msgstr "സ്ഥാനം"
 
 #: metrics/base.php:261
 msgid "Types"
-msgstr "Vrste"
+msgstr "തരങ്ങൾ"
 
 #: metrics/base.php:263
 msgid "modify filter"
-msgstr "izmijeni filter"
+msgstr "ഫിൽട്ടർ പരിഷ്‌ക്കരിക്കുക"
 
 #: metrics/base.php:264
 msgid "Filter List"
-msgstr "Lista filtera"
+msgstr "ലിസ്റ്റ് ഫിൽട്ടർ ചെയ്യുക"
 
 #: metrics/base.php:265
 msgid "reset data"
-msgstr "resetiranje podataka"
+msgstr "ഡാറ്റ പുന reset സജ്ജമാക്കുക"
 
 #: post-type/module-base.php:133
 msgid "Status"
-msgstr "Status"
+msgstr "പദവി"
 
 #: metrics/base.php:268
 msgid "Status - All"
-msgstr "Status - Sve"
+msgstr "നില - എല്ലാം"
 
 #: metrics/base.php:270
 msgid "Zoom Level"
-msgstr "Razina zumiranja"
+msgstr "സൂം ലെവൽ"
 
 #: metrics/base.php:271
 msgid "Auto Zoom"
-msgstr "Automatsko zumiranje"
+msgstr "യാന്ത്രിക സൂം"
 
 #: metrics/base.php:272
 msgid "World"
-msgstr "Svijet"
+msgstr "ലോകം"
 
 #: metrics/base.php:273
 msgid "Country"
-msgstr "Country"
+msgstr "രാജ്യം"
 
 #: metrics/base.php:274
 msgid "State"
-msgstr "Država"
+msgstr "സംസ്ഥാനം"
 
 #: includes/template-dashboard.php:23
 msgid "Active Contacts"
-msgstr "Aktivni kontakti"
+msgstr "സജീവ കോൺടാക്റ്റുകൾ"
 
 #: metrics/base.php:277
 msgid "Paused Contacts"
-msgstr "Pauzirani kontakti"
+msgstr "താൽക്കാലികമായി നിർത്തിയ കോൺടാക്റ്റുകൾ"
 
 #: metrics/base.php:278
 msgid "Closed Contacts"
-msgstr "Zatvoreni kontakti"
+msgstr "അടച്ച കോൺ‌ടാക്റ്റുകൾ"
 
 #: metrics/base.php:279
 msgid "Total Contacts"
-msgstr "Ukupno kontakata"
+msgstr "മൊത്തം കോൺ‌ടാക്റ്റുകൾ"
 
 #: metrics/base.php:280
 msgid "New Contacts"
-msgstr "Novi kontakti"
+msgstr "പുതിയ കോൺ‌ടാക്റ്റുകൾ"
 
 #: metrics/base.php:282
 msgid "New Baptisms"
-msgstr "Nova krštenja"
+msgstr "പുതിയ സ്നാനം"
 
 #: metrics/base.php:283
 msgid "Baptism Generations"
-msgstr "Generacije krštenja"
+msgstr "സ്നാപന തലമുറകൾ"
 
 #: metrics/base.php:284
 msgid "Select Location"
-msgstr "Odaberite Lokacija"
+msgstr "ലൊക്കേഷൻ തിരഞ്ഞെടുക്കുക"
 
 #: metrics/base.php:286
 msgid "New Groups"
-msgstr "Nove grupe"
+msgstr "പുതിയ ഗ്രൂപ്പുകൾ"
 
 #: metrics/base.php:287
 msgid "Pre-Group"
-msgstr "Predgrupa"
+msgstr "പ്രീ-ഗ്രൂപ്പ്"
 
 #: metrics/base.php:288
 msgid "Pre-Groups"
-msgstr "Predgrupe"
+msgstr "പ്രീ-ഗ്രൂപ്പുകൾ"
 
 #: metrics/base.php:290
 msgid "Last 7 Days"
-msgstr "Zadnjih 7 dana"
+msgstr "അവസാന 7 ദിവസം"
 
 #: metrics/base.php:291
 msgid "Last 30 Days"
-msgstr "Zadnjih 30 dana"
+msgstr "അവസാന 30 ദിവസം"
 
 #: metrics/base.php:292
 msgid "Last 60 Days"
-msgstr "Zadnjih 60 dana"
+msgstr "അവസാന 60 ദിവസം"
 
 #: metrics/base.php:293
 msgid "Last 12 Months"
-msgstr "Posljednjih 12 mjeseci"
+msgstr "കഴിഞ്ഞ 12 മാസം"
 
 #: metrics/base.php:294
 msgid "Last 24 Months"
-msgstr "Posljednja 24 mjeseca"
+msgstr "കഴിഞ്ഞ 24 മാസം"
 
 #: metrics/base.php:295
 msgid "This Year"
-msgstr "Ove godine"
+msgstr "ഈവർഷം"
 
 #: metrics/base.php:297
 msgid "Activity Map"
-msgstr "Mapa aktivnosti"
+msgstr "പ്രവർത്തന മാപ്പ്"
 
 #: metrics/base.php:298 metrics/network-activity-stats.php:11
 #: metrics/network-activity-stats.php:12 metrics/network-activity-stats.php:13
 #: metrics/network-activity-stats.php:57
 msgid "Stats"
-msgstr "Statistika"
+msgstr "സ്ഥിതിവിവരക്കണക്കുകൾ"
 
 #: metrics/base.php:299
 msgid "Activities"
-msgstr "Aktivnosti"
+msgstr "പ്രവർത്തനങ്ങൾ"
 
 #: metrics/base.php:300
 msgid "Actions"
-msgstr "Akcije"
+msgstr "പ്രവർത്തനങ്ങൾ"
 
 #: metrics/base.php:302
 msgid "By Action Type"
-msgstr "Po tipu radnje"
+msgstr "പ്രവർത്തന തരം പ്രകാരം"
 
 #: metrics/base.php:303
 msgid "Key"
-msgstr "Ključ"
+msgstr "കീ"
 
 #: metrics/base.php:304
 msgid "Name"
-msgstr "Ime"
+msgstr "പേര്"
 
 #: metrics/base.php:305
 msgid "Total Activities"
-msgstr "Ukupne aktivnosti"
+msgstr "മൊത്തം പ്രവർത്തനങ്ങൾ"
 
 #: metrics/base.php:306
 msgid "Feed"
-msgstr "Feed"
+msgstr "ഫീഡ്"
 
 #: metrics/base.php:307
 msgid "Time"
-msgstr "Vrijeme"
+msgstr "സമയം"
 
 #: metrics/base.php:308
 msgid "Result Limit"
-msgstr "Ograničenje rezultata"
+msgstr "ഫല പരിധി"
 
 #: metrics/base.php:309
 msgid "uncheck"
-msgstr "poništite"
+msgstr "അൺചെക്ക് ചെയ്യുക"
 
 #: metrics/base.php:311 metrics/network-home.php:12 metrics/network-home.php:13
 #: metrics/network-home.php:14 metrics/network-home.php:48
 msgid "Home"
-msgstr "Dom"
+msgstr "വീട്"
 
 #: metrics/base.php:313
 msgid "Events (30 Days)"
-msgstr "Događaji (30 dana)"
+msgstr "ഇവന്റുകൾ (30 ദിവസം)"
 
 #: metrics/base.php:315
 msgid "All Active/Inactive"
-msgstr "Svi aktivni / neaktivni"
+msgstr "എല്ലാം സജീവ / നിഷ്‌ക്രിയം"
 
 #: metrics/base.php:316 metrics/network-maps-hovermap.php:12
 #: metrics/network-maps-hovermap.php:13 metrics/network-maps-hovermap.php:14
 #: metrics/network-maps-hovermap.php:51
 msgid "Hover Map"
-msgstr "Hover Map"
+msgstr "മാപ്പ് ഹോവർ ചെയ്യുക"
 
 #: metrics/loader.php:16
 msgid "Network"
-msgstr "Mreža"
+msgstr "നെറ്റ്‌വർക്ക്"
 
 #: metrics/network-activity-map.php:15 metrics/network-activity-map.php:16
 #: metrics/network-activity-map.php:17 metrics/network-activity-map.php:63
 msgid "Map"
-msgstr "Map"
+msgstr "മാപ്പ്"
 
 #: metrics/network-activity-stream.php:12
 #: metrics/network-activity-stream.php:13
 #: metrics/network-activity-stream.php:14
 #: metrics/network-activity-stream.php:51
 msgid "Log"
-msgstr "Dnevnik"
+msgstr "ലോഗ്"
 
 #: metrics/network-activity.php:12 metrics/network-activity.php:13
 #: metrics/network-activity.php:14 metrics/network-activity.php:25
 msgid "Activity"
-msgstr "Aktivnost"
+msgstr "പ്രവർത്തനം"
 
 #: metrics/network-maps-area.php:15 metrics/network-maps-area.php:16
 #: metrics/network-maps-area.php:17 metrics/network-maps-area.php:110
 msgid "Area Maps"
-msgstr "Karte područja"
+msgstr "ഏരിയ മാപ്പുകൾ"
 
 #: metrics/network-maps-locationlist.php:12
 #: metrics/network-maps-locationlist.php:13
 #: metrics/network-maps-locationlist.php:14
 #: metrics/network-maps-locationlist.php:46
 msgid "Location List"
-msgstr "Lista lokacija"
+msgstr "ലൊക്കേഷൻ ലിസ്റ്റ്"
 
 #: metrics/network-maps.php:12 metrics/network-maps.php:13
 #: metrics/network-maps.php:14 metrics/network-maps.php:25
 msgid "Maps"
-msgstr "Maps"
+msgstr "മാപ്‌സ്"
 
 #: metrics/network-sites.php:12 metrics/network-sites.php:13
 #: metrics/network-sites.php:14 metrics/network-sites.php:45
 msgid "Site Reports"
-msgstr "Izvještaji sa web lokacija"
+msgstr "സൈറ്റ് റിപ്പോർട്ടുകൾ"
 
 #: metrics/network-statistics.php:12 metrics/network-statistics.php:13
 #: metrics/network-statistics.php:14 metrics/network-statistics.php:25
 msgid "Statistics"
-msgstr "Statistika"
+msgstr "സ്ഥിതിവിവരക്കണക്കുകൾ"
 
 #: shared/permissions.php:41
 msgid "Network Dashboard Transfer Both Ways"
-msgstr "Mrežna nadzorna ploča prenosi se u oba smjera"
+msgstr "നെറ്റ്‌വർക്ക് ഡാഷ്‌ബോർഡ് കൈമാറ്റം രണ്ട് വഴികളും"
 
 #: shared/permissions.php:42
 msgid "Network Dashboard Receiving Only"
-msgstr "Mrežna nadzorna ploča samo prima"
+msgstr "നെറ്റ്‌വർക്ക് ഡാഷ്‌ബോർഡ് സ്വീകരിക്കുന്നു"
 
 #: shared/permissions.php:43
 msgid "Network Dashboard Sending Only"
-msgstr "Mrežna nadzorna ploča samo slanje"
+msgstr "നെറ്റ്‌വർക്ക് ഡാഷ്‌ബോർഡ് അയയ്‌ക്കുന്നത് മാത്രം"
 
 #: shared/site-profile.php:99
 msgid "Network Dashboard Site Profile"
-msgstr "Profil web stranice nadzorne ploče mreže"
+msgstr "നെറ്റ്‌വർക്ക് ഡാഷ്‌ബോർഡ് സൈറ്റ് പ്രൊഫൈൽ"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Network Dashboard"
-msgstr "Alati za učenike - Mrežna nadzorna ploča"
+msgstr "ശിഷ്യ ഉപകരണങ്ങൾ - നെറ്റ്‌വർക്ക് ഡാഷ്‌ബോർഡ്"
 
 #: admin/customize-site-linking.php:10 metrics/mapbox-maps.php:31
 #: metrics/mapbox-personal-maps.php:31 post-type/module-base.php:393
@@ -879,268 +879,268 @@ msgstr "Alati za učenike - Mrežna nadzorna ploča"
 #: post-type/module-base.php:466 post-type/module-base.php:483
 #: post-type/module-base.php:520
 msgid "Streams"
-msgstr "Potoci"
+msgstr "സ്ട്രീമുകൾ"
 
 #: metrics/mapbox-maps.php:30
 msgid "Stream Maps"
-msgstr "Stream Maps"
+msgstr "സ്ട്രീം മാപ്പുകൾ"
 
 #: metrics/mapbox-personal-maps.php:30
 msgid "Streams Maps"
-msgstr "Karte prijenosa"
+msgstr "സ്ട്രീമുകൾ മാപ്പുകൾ"
 
 #: post-type/module-base.php:103
 msgctxt "Optional Documentation"
 msgid "A useful way to stream related items and can help stream contacts associated with noteworthy characteristics. e.g. business owner, sports lover. The contacts can also be filtered using these tags."
-msgstr "Koristan način strujanja povezanih predmeta i može pomoći u strujanju kontakata povezanih s vrijednim karakteristikama. npr. vlasnik preduzeća, zaljubljenik u sport. Kontakti se takođe mogu filtrirati pomoću ovih oznaka."
+msgstr "അനുബന്ധ ഇനങ്ങൾ‌ സ്ട്രീം ചെയ്യുന്നതിനുള്ള ഒരു ഉപയോഗപ്രദമായ മാർ‌ഗ്ഗം കൂടാതെ ശ്രദ്ധേയമായ സവിശേഷതകളുമായി ബന്ധപ്പെട്ട കോൺ‌ടാക്റ്റുകളെ സ്ട്രീം ചെയ്യാൻ സഹായിക്കുന്നു. ഉദാ. ബിസിനസ്സ് ഉടമ, കായിക പ്രേമികൾ. ഈ ടാഗുകൾ ഉപയോഗിച്ച് കോൺടാക്റ്റുകൾ ഫിൽട്ടർ ചെയ്യാനും കഴിയും."
 
 #: post-type/module-base.php:138
 msgctxt "Stream Status label"
 msgid "New"
-msgstr "Novo"
+msgstr "പുതിയത്"
 
 #: post-type/module-base.php:139
 msgctxt "Stream Status field description"
 msgid "New stream added to the system"
-msgstr "Novi tok dodan u sistem"
+msgstr "സിസ്റ്റത്തിലേക്ക് പുതിയ സ്ട്രീം ചേർത്തു"
 
 #: post-type/module-base.php:143
 msgctxt "Stream Status label"
 msgid "Model"
-msgstr "Model"
+msgstr "മോഡൽ"
 
 #: post-type/module-base.php:144
 msgctxt "Stream Status field description"
 msgid "This stream has been proposed and is in initial conversations"
-msgstr "Ovaj je tok predložen i u početnim je razgovorima"
+msgstr "ഈ സ്ട്രീം നിർദ്ദേശിക്കപ്പെട്ടു കൂടാതെ പ്രാരംഭ സംഭാഷണങ്ങളിലുമാണ്"
 
 #: post-type/module-base.php:148
 msgctxt "Stream Status label"
 msgid "Assist"
-msgstr "Assist"
+msgstr "അസിസ്റ്റ്"
 
 #: post-type/module-base.php:149
 msgctxt "Stream Status field description"
 msgid "This stream is confirmed, on the calendar."
-msgstr "Ovaj tok je potvrđen u kalendaru."
+msgstr "കലണ്ടറിൽ ഈ സ്ട്രീം സ്ഥിരീകരിച്ചു."
 
 #: post-type/module-base.php:153
 msgctxt "Stream Status label"
 msgid "Watch"
-msgstr "Gledaj"
+msgstr "കാവൽ"
 
 #: post-type/module-base.php:154
 msgctxt "Stream Status field description"
 msgid "This stream is confirmed, on the calendar, or currently active."
-msgstr "Ovaj tok je potvrđen, u kalendaru ili trenutno aktivan."
+msgstr "ഈ സ്ട്രീം സ്ഥിരീകരിച്ചു, കലണ്ടറിൽ അല്ലെങ്കിൽ നിലവിൽ സജീവമാണ്."
 
 #: post-type/module-base.php:158
 msgctxt "Stream Status label"
 msgid "Leave"
-msgstr "Odlazi"
+msgstr "വിട്ടേക്കുക"
 
 #: post-type/module-base.php:159
 msgctxt "Stream Status field description"
 msgid "This stream has successfully completed"
-msgstr "Ovaj tok je uspješno završen"
+msgstr "ഈ സ്ട്രീം വിജയകരമായി പൂർത്തിയാക്കി"
 
 #: post-type/module-base.php:163
 msgctxt "Stream Status label"
 msgid "Paused"
-msgstr "Pauza"
+msgstr "താൽക്കാലികമായി നിർത്തി"
 
 #: post-type/module-base.php:164
 msgctxt "Stream Status field description"
 msgid "This contact is currently on hold. It has potential of getting scheduled in the future."
-msgstr "Ovaj kontakt je trenutno na čekanju. Ima potencijal da se zakaže u budućnosti."
+msgstr "ഈ കോൺ‌ടാക്റ്റ് നിലവിൽ തടഞ്ഞുവച്ചിരിക്കുന്നു. ഭാവിയിൽ ഷെഡ്യൂൾ ചെയ്യാനുള്ള സാധ്യതയുണ്ട്."
 
 #: post-type/module-base.php:168
 msgctxt "Stream Status label"
 msgid "Closed"
-msgstr "Zatvoreno"
+msgstr "അടച്ചു"
 
 #: post-type/module-base.php:169
 msgctxt "Stream Status field description"
 msgid "This stream is no longer going to happen."
-msgstr "Ovaj tok se više neće dogoditi."
+msgstr "ഈ സ്ട്രീം മേലിൽ സംഭവിക്കാൻ പോകുന്നില്ല."
 
 #: post-type/module-base.php:177
 msgid "Select the main person who is responsible for reporting on this stream."
-msgstr "Odaberite glavnu osobu koja je odgovorna za izvještavanje o ovom toku."
+msgstr "ഈ സ്ട്രീമിൽ റിപ്പോർട്ടുചെയ്യാൻ ഉത്തരവാദിയായ പ്രധാന വ്യക്തിയെ തിരഞ്ഞെടുക്കുക."
 
 #: post-type/module-base.php:186
 msgctxt "Optional Documentation"
 msgid "The person who planted and/or is coaching this stream. Only one person can be assigned to a stream while multiple people can be coaches / church planters of this stream."
-msgstr "Osoba koja je zasadila i / ili trenira ovaj tok. Samo jedna osoba može biti dodijeljena potoku, dok više ljudi može biti treneri / saditelji crkava ovog potoka."
+msgstr "ഈ സ്ട്രീം നട്ടുപിടിപ്പിച്ച / അല്ലെങ്കിൽ പരിശീലിപ്പിക്കുന്ന വ്യക്തി. ഒരു സ്ട്രീമിലേക്ക് ഒരാളെ മാത്രമേ നിയോഗിക്കാൻ കഴിയൂ, അതേസമയം ഒന്നിലധികം ആളുകൾക്ക് ഈ സ്ട്രീമിലെ കോച്ചുകൾ / ചർച്ച് പ്ലാന്ററുകൾ ആകാം."
 
 #: post-type/module-base.php:204
 msgctxt "Optional Documentation"
 msgid "The people streams represented by this stream."
-msgstr "Potoci ljudi koje predstavlja ovaj tok."
+msgstr "ഈ സ്ട്രീം പ്രതിനിധീകരിക്കുന്ന ആളുകളുടെ സ്ട്രീമുകൾ."
 
 #: post-type/module-base.php:309
 msgid "Parent Stream"
-msgstr "Roditeljski tok"
+msgstr "രക്ഷാകർതൃ സ്ട്രീം"
 
 #: post-type/module-base.php:310
 msgctxt "Optional Documentation"
 msgid "A stream that launched this stream."
-msgstr "Potok koji je pokrenuo ovaj tok."
+msgstr "ഈ സ്ട്രീം സമാരംഭിച്ച ഒരു സ്ട്രീം."
 
 #: post-type/module-base.php:321
 msgid "Peer Streams"
-msgstr "Vršnjački tokovi"
+msgstr "പിയർ സ്ട്രീമുകൾ"
 
 #: post-type/module-base.php:322
 msgctxt "Optional Documentation"
 msgid "A related stream that isn't a parent/child in relationship. It might indicate streams that collaborate, are about to merge, recently split, etc."
-msgstr "Povezani tok koji nije roditelj / dijete u vezi. To može ukazivati na tokove koji surađuju, koji se spremaju spojiti, nedavno se podijeliti itd."
+msgstr "ബന്ധത്തിൽ ഒരു രക്ഷകർത്താവ് / കുട്ടി അല്ലാത്ത ഒരു അനുബന്ധ സ്ട്രീം. ഇത് സഹകരിക്കുന്ന, ലയിപ്പിക്കാൻ പോകുന്ന, അടുത്തിടെ വിഭജിച്ച മുതലായ സ്ട്രീമുകളെ സൂചിപ്പിക്കാം."
 
 #: post-type/module-base.php:333
 msgid "Child Streams"
-msgstr "Dječji potoci"
+msgstr "കുട്ടികളുടെ അരുവികൾ"
 
 #: post-type/module-base.php:334
 msgctxt "Optional Documentation"
 msgid "A stream that has been birthed out of this stream."
-msgstr "Potok koji je izvučen iz ovog potoka."
+msgstr "ഈ സ്ട്രീമിൽ നിന്ന് പുറന്തള്ളപ്പെട്ട ഒരു സ്ട്രീം."
 
 #: post-type/module-base.php:369
 msgid "Leader in Stream"
-msgstr "Vođa u streamu"
+msgstr "സ്ട്രീമിലെ നേതാവ്"
 
 #: post-type/module-base.php:370
 msgctxt "Optional Documentation"
 msgid "Leader of a stream"
-msgstr "Vođa potoka"
+msgstr "ഒരു സ്ട്രീമിന്റെ നേതാവ്"
 
 #: post-type/module-base.php:380
 msgid "Key Disciple in Stream"
-msgstr "Ključni učenik u toku"
+msgstr "സ്ട്രീമിലെ പ്രധാന ശിഷ്യൻ"
 
 #: post-type/module-base.php:381
 msgctxt "Optional Documentation"
 msgid "Disciple in a stream."
-msgstr "Učenik u toku."
+msgstr "ഒരു അരുവിയിൽ ശിഷ്യൻ."
 
 #: post-type/module-base.php:536
 msgid "Connections"
-msgstr "Veze"
+msgstr "കണക്ഷനുകൾ"
 
 #: post-type/module-reports.php:432
 msgid "Add Report"
-msgstr "Dodaj izvještaj"
+msgstr "റിപ്പോർട്ട് ചേർക്കുക"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Streams"
-msgstr "Alati za učenike - tokovi"
+msgstr "ശിഷ്യ ഉപകരണങ്ങൾ - സ്ട്രീമുകൾ"
 
 #: logging/log-generations.php:11
 msgid "Pre-Group Generations"
-msgstr "Generacije predgrupa"
+msgstr "പ്രീ-ഗ്രൂപ്പ് തലമുറകൾ"
 
 #: logging/log-generations.php:17
 msgid "Group Generations"
-msgstr "Grupne generacije"
+msgstr "ഗ്രൂപ്പ് തലമുറകൾ"
 
 #: logging/log-generations.php:23
 msgid "Church Generations"
-msgstr "Crkvene generacije"
+msgstr "ചർച്ച് തലമുറകൾ"
 
 #: logging/log-generations.php:29
 msgid "Team Generations"
-msgstr "Timske generacije"
+msgstr "ടീം തലമുറകൾ"
 
 #: logging/log-generations.php:76
 msgid "%s is reporting a new pre-group generation."
-msgstr "% s prijavljuje novu generaciju predgrupe."
+msgstr "% s ഒരു പുതിയ പ്രീ-ഗ്രൂപ്പ് ജനറേഷൻ റിപ്പോർട്ടുചെയ്യുന്നു."
 
 #: logging/log-generations.php:81
 msgid "%s is reporting a new group generation."
-msgstr "% s prijavljuje novu generaciju grupe."
+msgstr "% s ഒരു പുതിയ ഗ്രൂപ്പ് തലമുറ റിപ്പോർട്ടുചെയ്യുന്നു."
 
 #: logging/log-generations.php:86
 msgid "%s is reporting a new church generation."
-msgstr "% s prijavljuje novu crkvenu generaciju."
+msgstr "% s ഒരു പുതിയ സഭാ തലമുറയെ റിപ്പോർട്ട് ചെയ്യുന്നു."
 
 #: logging/log-generations.php:91
 msgid "%s is reporting a new leadership team generation."
-msgstr "% s izvještava o novoj generaciji voditeljskog tima."
+msgstr "% s ഒരു പുതിയ നേതൃത്വ ടീം ജനറേഷൻ റിപ്പോർട്ടുചെയ്യുന്നു."
 
 #: logging/log-new-posts.php:11
 msgid "New Contact"
-msgstr "Novi kontakt"
+msgstr "പുതിയ കോൺ‌ടാക്റ്റ്"
 
 #: logging/log-new-posts.php:16
 msgid "New Pre-Group"
-msgstr "Nova predgrupa"
+msgstr "പുതിയ പ്രീ-ഗ്രൂപ്പ്"
 
 #: logging/log-new-posts.php:21
 msgid "New Group"
-msgstr "Nova grupa"
+msgstr "പുതിയ ഗ്രൂപ്പ്"
 
 #: logging/log-new-posts.php:26
 msgid "New Church"
-msgstr "Nova crkva"
+msgstr "പുതിയ പള്ളി"
 
 #: logging/log-new-posts.php:31
 msgid "New Team"
-msgstr "Novi tim"
+msgstr "പുതിയ ടീം"
 
 #: logging/log-new-posts.php:36
 msgid "New Baptism"
-msgstr "Novo krštenje"
+msgstr "പുതിയ സ്നാനം"
 
 #: logging/log-new-posts.php:41
 msgid "New Coaching"
-msgstr "New Coaching"
+msgstr "പുതിയ കോച്ചിംഗ്"
 
 #: logging/log-new-posts.php:164
 msgid "%s is reporting a new contact."
-msgstr "% s prijavljuje novi kontakt."
+msgstr "% s ഒരു പുതിയ കോൺ‌ടാക്റ്റ് റിപ്പോർ‌ട്ട് ചെയ്യുന്നു."
 
 #: logging/log-new-posts.php:169
 msgid "%s is reporting a new pre-group formed."
-msgstr "% s izvještava o formiranju nove predgrupe."
+msgstr "% s ഒരു പുതിയ പ്രീ-ഗ്രൂപ്പ് രൂപീകരിച്ചതായി റിപ്പോർട്ടുചെയ്യുന്നു."
 
 #: logging/log-new-posts.php:174
 msgid "%s is reporting a new group formed."
-msgstr "% s prijavljuje formiranu novu grupu."
+msgstr "% s ഒരു പുതിയ ഗ്രൂപ്പ് രൂപീകരിച്ചതായി റിപ്പോർട്ടുചെയ്യുന്നു."
 
 #: logging/log-new-posts.php:179
 msgid "%s is reporting a new church."
-msgstr "% s prijavljuje novu crkvu."
+msgstr "% s ഒരു പുതിയ സഭ റിപ്പോർട്ട് ചെയ്യുന്നു."
 
 #: logging/log-new-posts.php:184
 msgid "%s is reporting a new leadership team formed."
-msgstr "% s izvještava o formiranju novog vodstvenog tima."
+msgstr "% s ഒരു പുതിയ നേതൃത്വ ടീം രൂപീകരിച്ചതായി റിപ്പോർട്ടുചെയ്യുന്നു."
 
 #: logging/log-new-posts.php:189
 msgid "%s is reporting a new baptism."
-msgstr "% s prijavljuje novo krštenje."
+msgstr "% s ഒരു പുതിയ സ്നാനം റിപ്പോർട്ട് ചെയ്യുന്നു."
 
 #: logging/log-new-posts.php:194
 msgid "%s is reporting an coaching relationship."
-msgstr "% s izvještava o trenerskoj vezi."
+msgstr "% s ഒരു കോച്ചിംഗ് ബന്ധം റിപ്പോർട്ടുചെയ്യുന്നു."
 
 #: metrics/network-maps-area.php:74 metrics/network-maps-area.php:83
 #: metrics/network-maps-area.php:91 metrics/network-maps-area.php:99
 msgid "Active"
-msgstr "Aktivno"
+msgstr "സജീവമാണ്"
 
 #: metrics/network-maps-area.php:75
 msgid "Paused"
-msgstr "Pauza"
+msgstr "താൽക്കാലികമായി നിർത്തി"
 
 #: metrics/network-maps-area.php:76
 msgid "Closed"
-msgstr "Zatvoreno"
+msgstr "അടച്ചു"
 
 #: metrics/network-maps-area.php:84 metrics/network-maps-area.php:92
 #: metrics/network-maps-area.php:100
 msgid "Inactive"
-msgstr "Neaktivan"
+msgstr "നിഷ്‌ക്രിയം"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1150,7 +1150,7 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-network-dashboard"
 #. Description of the plugin/theme
 #: 
 msgid "Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging."
-msgstr "Povežite ovu web lokaciju Disciple Tools sa većom mrežom web lokacija. Dodaje sigurnosno osjetljive ukupne vrijednosti, mapiranje, evidentiranje aktivnosti."
+msgstr "സൈറ്റുകളുടെ ഒരു വലിയ നെറ്റ്‌വർക്കിലേക്ക് ഈ ശിഷ്യ ഉപകരണ സൈറ്റിനെ ബന്ധിപ്പിക്കുക. സുരക്ഷാ സെൻ‌സിറ്റീവ് ടോട്ടലുകൾ‌, മാപ്പിംഗ്, ആക്റ്റിവിറ്റി ലോഗിംഗ് എന്നിവ ചേർക്കുന്നു."
 
 #. Author URI of the plugin/theme
 #: 
@@ -1165,15 +1165,15 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-streams"
 #. Description of the plugin/theme
 #: 
 msgid "Disciple Tools Streams Extension adds recording of streams and cross reference them with contacts, groups, and locations."
-msgstr "Proširenje streamova Disciple Tools dodaje snimanje tokova i ukrštanje s kontaktima, grupama i lokacijama."
+msgstr "ശിഷ്യ ഉപകരണ സ്ട്രീമുകൾ വിപുലീകരണം സ്ട്രീമുകളുടെ റെക്കോർഡിംഗും കോൺടാക്റ്റുകൾ, ഗ്രൂപ്പുകൾ, ലൊക്കേഷനുകൾ എന്നിവ ഉപയോഗിച്ച് ക്രോസ് റഫറൻസും ചേർക്കുന്നു."
 
 #: disciple-tools-training.php:297
 msgid "'Disciple Tools - Training' plugin requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or make sure it is latest version."
-msgstr "Dodatak 'Disciple Tools - Training' zahtijeva rad teme 'Disciple Tools'. Molimo aktivirajte temu 'Disciple Tools' ili se pobrinite da je najnovija verzija."
+msgstr "'ശിഷ്യ ഉപകരണങ്ങൾ - പരിശീലനം' പ്ലഗിൻ പ്രവർത്തിക്കാൻ 'ശിഷ്യ ഉപകരണങ്ങൾ' തീം ആവശ്യമാണ്. 'ശിഷ്യ ഉപകരണങ്ങൾ' തീം സജീവമാക്കുക അല്ലെങ്കിൽ അത് ഏറ്റവും പുതിയ പതിപ്പാണെന്ന് ഉറപ്പാക്കുക."
 
 #: disciple-tools-training.php:299
 msgid "Current Disciple Tools version: %1$s, required version: %2$s"
-msgstr "Trenutna verzija alata za učenike:% 1 $ s, obavezna verzija:% 2 $ s"
+msgstr "നിലവിലെ ശിഷ്യ ഉപകരണ പതിപ്പ്:% 1 $ s, ആവശ്യമായ പതിപ്പ്:% 2 $ s"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1183,148 +1183,148 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-training"
 #. Description of the plugin/theme
 #: 
 msgid "Disciple Tools Training Extension adds recording of trainings and cross reference them with contacts, groups, and locations."
-msgstr "Produženje obuke za učeničke alate dodaje snimanje treninga i njihovo upoređivanje sa kontaktima, grupama i lokacijama."
+msgstr "ശിഷ്യ ഉപകരണ പരിശീലന വിപുലീകരണം പരിശീലനത്തിന്റെ റെക്കോർഡിംഗും കോൺടാക്റ്റുകൾ, ഗ്രൂപ്പുകൾ, ലൊക്കേഷനുകൾ എന്നിവ ഉപയോഗിച്ച് ക്രോസ് റഫറൻസും ചേർക്കുന്നു."
 
 #: post-type/module-base.php:128
 msgid "Duplicates"
-msgstr "Duplikati"
+msgstr "തനിപ്പകർപ്പുകൾ"
 
 #: post-type/module-base.php:185
 msgid "Coach"
-msgstr "Treneru"
+msgstr "കോച്ച്"
 
 #: post-type/module-base.php:253
 msgid "Leaders Total"
-msgstr "Total Leaders"
+msgstr "നേതാക്കൾ ആകെ"
 
 #: post-type/module-base.php:271
 msgid "Disciples Total"
-msgstr "Ukupno učenika"
+msgstr "ശിഷ്യന്മാർ ആകെ"
 
 #: post-type/module-base.php:277
 msgid "Key Disciples"
-msgstr "Ključni učenici"
+msgstr "പ്രധാന ശിഷ്യന്മാർ"
 
 #: post-type/module-base.php:288
 msgid "Groups Total"
-msgstr "Grupe ukupno"
+msgstr "ഗ്രൂപ്പുകൾ ആകെ"
 
 #: post-type/module-base.php:348
 msgid "Trainings Total"
-msgstr "Ukupno treninzi"
+msgstr "പരിശീലനം ആകെ"
 
 #: includes/admin/admin-menu-and-tabs.php:63
 msgid "Dashboard Plugin"
-msgstr "Dodatak za nadzornu ploču"
+msgstr "ഡാഷ്‌ബോർഡ് പ്ലഗിൻ"
 
 #: includes/admin/admin-menu-and-tabs.php:84 includes/functions.php:84
 msgid "Dashboard"
-msgstr "Kontrolna ploča"
+msgstr "ഡാഷ്ബോർഡ്"
 
 #: includes/rest-api.php:80
 msgid "%s days since last update"
-msgstr "% s dana od zadnjeg ažuriranja"
+msgstr "അവസാന അപ്‌ഡേറ്റ് മുതൽ% s ദിവസങ്ങൾ"
 
 #: includes/rest-api.php:416
 msgid "Accept"
-msgstr "Prihvati"
+msgstr "അംഗീകരിക്കുക"
 
 #: includes/rest-api.php:417
 msgid "Decline"
-msgstr "Odbij"
+msgstr "നിരസിക്കുക"
 
 #: includes/rest-api.php:418
 msgid "# Contacts Assigned"
-msgstr "# Dodijeljeni kontakti"
+msgstr "# കോൺ‌ടാക്റ്റുകൾ നിയുക്തമാക്കി"
 
 #: includes/rest-api.php:419
 msgid "# First Meetings"
-msgstr "# Prvi sastanci"
+msgstr "# ആദ്യ മീറ്റിംഗുകൾ"
 
 #: includes/rest-api.php:420
 msgid "# Faith milestones"
-msgstr "# Vjera prekretnice"
+msgstr "# വിശ്വാസ നാഴികക്കല്ലുകൾ"
 
 #: includes/rest-api.php:421
 msgid "Hurray! You are caught up."
-msgstr "Ura! Uhvaćeni ste."
+msgstr "ഹുറേ! നിങ്ങൾ പിടിക്കപ്പെട്ടു."
 
 #: includes/rest-api.php:422
 msgid "remove"
-msgstr "ukloniti"
+msgstr "നീക്കംചെയ്യുക"
 
 #: includes/rest-api.php:423
 msgid "mark as complete"
-msgstr "označiti kao potpunu"
+msgstr "പൂർത്തിയായതായി അടയാളപ്പെടുത്തുക"
 
 #: includes/rest-api.php:424
 msgid "No task created"
-msgstr "Nije kreiran nijedan zadatak"
+msgstr "ഒരു ജോലിയും സൃഷ്ടിച്ചിട്ടില്ല"
 
 #: includes/rest-api.php:425
 msgid "Reminder"
-msgstr "Podsjetnik"
+msgstr "ഓർമ്മപ്പെടുത്തൽ"
 
 #: includes/rest-api.php:426
 msgid "No note set"
-msgstr "Nije postavljena nota"
+msgstr "കുറിപ്പ് സജ്ജമാക്കിയിട്ടില്ല"
 
 #: includes/template-dashboard.php:30
 msgid "Add a contact"
-msgstr "Dodajte kontakt"
+msgstr "ഒരു കോൺടാക്റ്റ് ചേർക്കുക"
 
 #: includes/template-dashboard.php:33
 msgid "View Contacts List"
-msgstr "Pogledajte listu kontakata"
+msgstr "കോൺ‌ടാക്റ്റ് പട്ടിക കാണുക"
 
 #: includes/template-dashboard.php:47
 msgid "Pending Contacts"
-msgstr "Kontakti na čekanju"
+msgstr "കോൺ‌ടാക്റ്റുകൾ തീർപ്പുകൽപ്പിച്ചിട്ടില്ല"
 
 #: includes/template-dashboard.php:52 includes/template-dashboard.php:70
 msgid "View All"
-msgstr "Vidi sve"
+msgstr "എല്ലാം കാണുക"
 
 #: includes/template-dashboard.php:65
 msgid "Update Needed"
-msgstr "Potrebno ažuriranje"
+msgstr "അപ്‌ഡേറ്റ് ആവശ്യമാണ്"
 
 #: includes/template-dashboard.php:79
 msgid "Contact Workload"
-msgstr "Kontaktirajte opterećenje"
+msgstr "ജോലിഭാരവുമായി ബന്ധപ്പെടുക"
 
 #: includes/template-dashboard.php:83
 msgid "Choose an option to let the dispatcher(s) know if you are ready for new contacts"
-msgstr "Odaberite opciju da obavijestite dispečera da li ste spremni za nove kontakte"
+msgstr "നിങ്ങൾ പുതിയ കോൺടാക്റ്റുകൾക്ക് തയ്യാറാണോയെന്ന് ഡിസ്പാച്ചറെ (ങ്ങളെ) അറിയിക്കാൻ ഒരു ഓപ്ഷൻ തിരഞ്ഞെടുക്കുക"
 
 #: includes/template-dashboard.php:93
 msgid "Set travel or dates unavailable"
-msgstr "Postavljanje putovanja ili datuma nije dostupno"
+msgstr "യാത്രയോ തീയതിയോ ലഭ്യമല്ല"
 
 #: includes/template-dashboard.php:106
 msgid "Personal Benchmarks"
-msgstr "Osobna mjerila"
+msgstr "വ്യക്തിഗത ബെഞ്ച്മാർക്കുകൾ"
 
 #: includes/template-dashboard.php:135
 msgid "Faith Milestone Totals"
-msgstr "Faith Milestone Totals"
+msgstr "വിശ്വാസം നാഴികക്കല്ലുകൾ ആകെ"
 
 #: includes/template-dashboard.php:138
 msgid "Milestones on your active contacts"
-msgstr "Prekretnice u vašim aktivnim kontaktima"
+msgstr "നിങ്ങളുടെ സജീവ കോൺ‌ടാക്റ്റുകളിലെ നാഴികക്കല്ലുകൾ"
 
 #: includes/template-dashboard.php:149
 msgid "Seeker Path Progress"
-msgstr "Napredak puta tragača"
+msgstr "അന്വേഷകന്റെ പാത പുരോഗതി"
 
 #: includes/template-dashboard.php:152
 msgid "No data to show yet. You have no active contacts"
-msgstr "Još nema podataka za prikaz. Nemate aktivnih kontakata"
+msgstr "ഇതുവരെ കാണിക്കാൻ ഡാറ്റയൊന്നുമില്ല. നിങ്ങൾക്ക് സജീവ കോൺടാക്റ്റുകളൊന്നുമില്ല"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Dashboard"
-msgstr "Alati za učenike - Nadzorna ploča"
+msgstr "ശിഷ്യ ഉപകരണങ്ങൾ - ഡാഷ്‌ബോർഡ്"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1334,5 +1334,5 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-dashboard"
 #. Description of the plugin/theme
 #: 
 msgid "The multiplier dashboard upgrades the multipliers experience as soon as they log into the system giving them a landing page with stats."
-msgstr "Nadzorna ploča množitelja nadograđuje iskustvo množitelja čim se prijave u sistem dajući im odredišnu stranicu sa statistikom"
+msgstr "മൾട്ടിപ്ലയർ ഡാഷ്‌ബോർഡ് സിസ്റ്റത്തിലേക്ക് ലോഗിൻ ചെയ്‌തയുടനെ സ്ഥിതിവിവരക്കണക്കുകളുള്ള ഒരു ലാൻഡിംഗ് പേജ് നൽകിക്കൊണ്ട് അനുഭവം അപ്‌ഗ്രേഡുചെയ്യുന്നു"
 
