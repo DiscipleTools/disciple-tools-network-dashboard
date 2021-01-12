@@ -37,11 +37,11 @@ msgstr "Multiplicador"
 
 #: post-type/module-base.php:65
 msgid "Dispatcher"
-msgstr "Despachador"
+msgstr "Enviador"
 
 #: post-type/module-base.php:72
 msgid "Disciple.Tools Admin"
-msgstr "Disciple.Tools Admin"
+msgstr "Administrador de Disciple.Tools"
 
 #: post-type/module-base.php:79
 msgid "Administrator"
@@ -77,7 +77,7 @@ msgstr "Plantando"
 
 #: post-type/module-base.php:203 post-type/module-base.php:519
 msgid "People Groups"
-msgstr "Grupos de personas"
+msgstr "Étnias"
 
 #: post-type/module-base.php:102
 msgid "Tags"
@@ -220,11 +220,11 @@ msgstr "Ubicaciones"
 #: post-type/module-base.php:220 post-type/module-base.php:229
 msgctxt "Optional Documentation"
 msgid "The general location where this contact is located."
-msgstr "La ubicación general donde se encuentra este contacto."
+msgstr "La ubicación general en la cual se encuentra este contacto."
 
 #: post-type/module-base.php:236
 msgid "Address"
-msgstr "Habla a"
+msgstr "Dirección"
 
 #: post-type/module-base.php:413
 msgid "Parent Training"
@@ -256,7 +256,7 @@ msgstr "Un entrenamiento que ha nacido de este entrenamiento."
 #: post-type/module-base.php:446 post-type/module-base.php:542
 #: post-type/module-base.php:653
 msgid "Member List"
-msgstr "Lista de miembros"
+msgstr "Listado de miembros"
 
 #: post-type/module-base.php:447
 msgctxt "Optional Documentation"
@@ -270,7 +270,7 @@ msgstr "Las formaciones de personas representadas por esta formación."
 
 #: post-type/module-base.php:484
 msgid "Member Count"
-msgstr "cuenta de miembro"
+msgstr "Cant. de miembros"
 
 #: post-type/module-base.php:485 post-type/module-base.php:492
 msgctxt "Optional Documentation"
@@ -306,12 +306,12 @@ msgstr "Otro"
 #: post-type/module-base.php:568
 msgctxt "input field placeholder"
 msgid "Search Users"
-msgstr "Usuarios de búsqueda"
+msgstr "Buscar usuarios"
 
 #: post-type/module-base.php:601
 msgctxt "Search 'something'"
 msgid "Search %s"
-msgstr "Buscar% s"
+msgstr "Buscar %s"
 
 #: post-type/module-base.php:656
 msgid "Create"
@@ -319,16 +319,16 @@ msgstr "Crear"
 
 #: post-type/module-base.php:661
 msgid "Select"
-msgstr "Seleccione"
+msgstr "Seleccionar"
 
 #: post-type/module-base.php:666
 msgid "To add new members, click on 'Create' or 'Select'."
-msgstr "Para agregar nuevos miembros, haga clic en 'Crear' o 'Seleccionar'."
+msgstr "Para agregar nuevos miembros, haga click en 'Crear' or 'Seleccionar'."
 
 #: post-type/module-base.php:671
 msgctxt "Add members modal"
 msgid "Add members from existing contacts"
-msgstr "Agregar miembros de contactos existentes"
+msgstr "Agregar miembros desde contactos existentes"
 
 #: post-type/module-base.php:672
 msgctxt "Add members modal"
@@ -337,7 +337,7 @@ msgstr "En el campo 'Lista de miembros', escriba el nombre de un contacto existe
 
 #: post-type/module-base.php:681
 msgid "Close"
-msgstr "Cerca"
+msgstr "Cerrar"
 
 #: post-type/module-base.php:879
 msgid "Removed %1$s: %2$s"
@@ -354,13 +354,13 @@ msgstr "% 1 $ s actualizado:% 2 $ s a% 3 $ s"
 #: post-type/module-base.php:942
 msgctxt "List Filters"
 msgid "Assigned to me"
-msgstr "Asignado a mí"
+msgstr "Asignados a mí"
 
 #: post-type/module-base.php:950 post-type/module-base.php:1007
 #: post-type/module-base.php:1015
 msgctxt "List Filters"
 msgid "All"
-msgstr "Todas"
+msgstr "Todos"
 
 #: post-type/module-reports.php:85
 msgid "Reports"
@@ -389,7 +389,7 @@ msgstr "Condados"
 #: post-type/module-public-calendar.php:432
 #: post-type/module-registration.php:385
 msgid "Add"
-msgstr "Añadir"
+msgstr "Agregar"
 
 #: post-type/module-registration.php:31
 msgid "Apps"
@@ -425,7 +425,7 @@ msgstr "registro abierto "
 
 #: post-type/module-registration.php:265
 msgid "add"
-msgstr "añadir"
+msgstr "agregar"
 
 #: post-type/module-registration.php:266
 msgid "Use"
@@ -548,7 +548,7 @@ msgstr "Grupos activos"
 
 #: metrics/base.php:236 metrics/base.php:258
 msgid "Church"
-msgstr "Iglesia"
+msgstr "Congregación"
 
 #: metrics/base.php:237
 msgid "Health Metrics"
@@ -564,11 +564,11 @@ msgstr "Respondedores"
 
 #: metrics/base.php:240
 msgid "Dispatchers"
-msgstr "Despachadores"
+msgstr "Enviadores"
 
 #: metrics/base.php:241
 msgid "Multipliers"
-msgstr "Multiplicadores"
+msgstr "Obreros"
 
 #: metrics/base.php:242
 msgid "Admins"
@@ -617,7 +617,7 @@ msgstr "Bautismos"
 #: metrics/base.php:259 metrics/network-maps-area.php:97
 #: metrics/network-maps-area.php:127
 msgid "Churches"
-msgstr "Iglesias"
+msgstr "Congregaciones"
 
 #: metrics/base.php:260
 msgid "Location"
@@ -685,7 +685,7 @@ msgstr "Contactos totales"
 
 #: metrics/base.php:280
 msgid "New Contacts"
-msgstr "Nuevos contactos"
+msgstr "Contactos nuevos"
 
 #: metrics/base.php:282
 msgid "New Baptisms"
@@ -802,7 +802,7 @@ msgstr "Todo activo / inactivo"
 #: metrics/network-maps-hovermap.php:13 metrics/network-maps-hovermap.php:14
 #: metrics/network-maps-hovermap.php:51
 msgid "Hover Map"
-msgstr "Mapa de desplazamiento"
+msgstr "Mapa hover"
 
 #: metrics/loader.php:16
 msgid "Network"
@@ -1070,7 +1070,7 @@ msgstr "% s informa sobre una nueva generación de equipos de liderazgo."
 
 #: logging/log-new-posts.php:11
 msgid "New Contact"
-msgstr "Nuevo contacto"
+msgstr "Contacto nuevo"
 
 #: logging/log-new-posts.php:16
 msgid "New Pre-Group"
@@ -1223,7 +1223,7 @@ msgstr "Tablero"
 
 #: includes/rest-api.php:80
 msgid "%s days since last update"
-msgstr "% s días desde la última actualización"
+msgstr "%s días desde la última actualización"
 
 #: includes/rest-api.php:416
 msgid "Accept"
@@ -1231,7 +1231,7 @@ msgstr "Aceptar"
 
 #: includes/rest-api.php:417
 msgid "Decline"
-msgstr "Disminución"
+msgstr "Rechazar"
 
 #: includes/rest-api.php:418
 msgid "# Contacts Assigned"
@@ -1259,7 +1259,7 @@ msgstr "marcar como completo"
 
 #: includes/rest-api.php:424
 msgid "No task created"
-msgstr "No se creó ninguna tarea"
+msgstr "No se creó una tarea"
 
 #: includes/rest-api.php:425
 msgid "Reminder"
@@ -1267,7 +1267,7 @@ msgstr "Recordatorio"
 
 #: includes/rest-api.php:426
 msgid "No note set"
-msgstr "Sin conjunto de notas"
+msgstr "No se asignó una nota"
 
 #: includes/template-dashboard.php:30
 msgid "Add a contact"
@@ -1287,7 +1287,7 @@ msgstr "Ver todo"
 
 #: includes/template-dashboard.php:65
 msgid "Update Needed"
-msgstr "Actualización necesaria"
+msgstr "Actualización requerida"
 
 #: includes/template-dashboard.php:79
 msgid "Contact Workload"
