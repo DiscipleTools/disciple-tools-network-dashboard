@@ -5,498 +5,498 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 "Project-Id-Version: Disciple Tools Plugins\n"
-"Language: ko\n"
+"Language: lo\n"
 
 #: disciple-tools-dashboard.php:253 disciple-tools-dashboard.php:264
 msgid "Whoah, partner!"
-msgstr "우와, 파트너!"
+msgstr "Whoah, ຄູ່ຮ່ວມງານ!"
 
 #: disciple-tools-dashboard.php:276
 msgid "Method does not exist."
-msgstr "방법이 없습니다."
+msgstr "ບໍ່ມີວິທີການ."
 
 #: metrics/mapbox-maps.php:30
 msgid "Training Maps"
-msgstr "교육지도"
+msgstr "ແຜນທີ່ການຝຶກອົບຮົມ"
 
 #: post-type/module-base.php:354
 msgid "Trainings"
-msgstr "훈련"
+msgstr "ການຝຶກອົບຮົມ"
 
 #: metrics/mapbox-personal-maps.php:30
 msgid "Trainings Maps"
-msgstr "교육지도"
+msgstr "ແຜນທີ່ຝຶກອົບຮົມ"
 
 #: network/customize-site-linking.php:10 post-type/module-base.php:54
 msgid "Training"
-msgstr "훈련"
+msgstr "ການຝຶກອົບຮົມ"
 
 #: post-type/module-base.php:59
 msgid "Multiplier"
-msgstr "승수"
+msgstr "ຄູນ"
 
 #: post-type/module-base.php:65
 msgid "Dispatcher"
-msgstr "디스패처"
+msgstr "ຊາກລົດ"
 
 #: post-type/module-base.php:72
 msgid "Disciple.Tools Admin"
-msgstr "Disciple.Tools 관리자"
+msgstr "ບໍລິຫານ Disciple.Tools"
 
 #: post-type/module-base.php:79
 msgid "Administrator"
-msgstr "관리자"
+msgstr "ຜູ້​ບໍ​ລິ​ຫານ"
 
 #: post-type/module-base.php:432
 msgid "Members"
-msgstr "회원"
+msgstr "ສະມາຊິກ"
 
 #: post-type/module-base.php:433
 msgid "Contacts"
-msgstr "콘택트 렌즈"
+msgstr "ລາຍຊື່ຜູ້ຕິດຕໍ່"
 
 #: post-type/module-base.php:294 post-type/module-base.php:450
 msgid "Groups"
-msgstr "여러 떼"
+msgstr "ກຸ່ມ"
 
 #: post-type/module-base.php:259 post-type/module-base.php:467
 msgid "Leaders"
-msgstr "리더"
+msgstr "ຜູ້ ນຳ"
 
 #: post-type/module-base.php:484
 msgid "Coaches"
-msgstr "코치"
+msgstr "ຄູຝຶກສອນ"
 
 #: post-type/module-base.php:497
 msgid "Planted by"
-msgstr "심은 사람"
+msgstr "ປູກໂດຍ"
 
 #: post-type/module-base.php:498
 msgid "Planting"
-msgstr "심기"
+msgstr "ການປູກ"
 
 #: post-type/module-base.php:203 post-type/module-base.php:519
 msgid "People Groups"
-msgstr "사람들 그룹"
+msgstr "ກຸ່ມຄົນ"
 
 #: post-type/module-base.php:102
 msgid "Tags"
-msgstr "태그"
+msgstr "ປ້າຍ"
 
 #: post-type/module-base.php:215
 msgctxt "Optional Documentation"
 msgid "A useful way to training related items and can help training contacts associated with noteworthy characteristics. e.g. business owner, sports lover. The contacts can also be filtered using these tags."
-msgstr "관련 항목을 교육하는 유용한 방법이며 주목할만한 특성과 관련된 연락처를 교육하는 데 도움이 될 수 있습니다. 예 : 비즈니스 소유자, 스포츠 애호가. 이러한 태그를 사용하여 연락처를 필터링 할 수도 있습니다."
+msgstr "ວິທີການທີ່ມີປະໂຫຍດໃນການຝຶກອົບຮົມລາຍການທີ່ກ່ຽວຂ້ອງແລະສາມາດຊ່ວຍການຕິດຕໍ່ພົວພັນທີ່ຕິດພັນກັບຄຸນລັກສະນະທີ່ ໜ້າ ສັງເກດ. ເຊັ່ນ: ເຈົ້າຂອງທຸລະກິດ, ຮັກກິລາ. ລາຍຊື່ຜູ້ຕິດຕໍ່ຍັງສາມາດຖືກກັ່ນຕອງໂດຍໃຊ້ແທັກເຫຼົ່ານີ້."
 
 #: post-type/module-base.php:111
 msgid "Follow"
-msgstr "따르다"
+msgstr "ປະຕິບັດຕາມ"
 
 #: post-type/module-base.php:118
 msgid "Un-Follow"
-msgstr "팔로우 취소"
+msgstr "ປະຕິບັດຕາມ"
 
 #: includes/template-dashboard.php:164
 msgid "Tasks"
-msgstr "과제"
+msgstr "ໜ້າ ວຽກ"
 
 #: post-type/module-base.php:249
 msgctxt "Training Status label"
 msgid "New"
-msgstr "새로운"
+msgstr "ໃຫມ່"
 
 #: post-type/module-base.php:250
 msgctxt "Training Status field description"
 msgid "New training added to the system"
-msgstr "시스템에 추가 된 새로운 교육"
+msgstr "ການຝຶກອົບຮົມ ໃໝ່ ໄດ້ເພີ່ມເຂົ້າໃນລະບົບ"
 
 #: post-type/module-base.php:254
 msgctxt "Training Status label"
 msgid "Proposed"
-msgstr "제안"
+msgstr "ສະ ເໜີ"
 
 #: post-type/module-base.php:255
 msgctxt "Training Status field description"
 msgid "This training has been proposed and is in initial conversations"
-msgstr "이 교육은 제안되었으며 초기 대화 중입니다."
+msgstr "ການຝຶກອົບຮົມນີ້ໄດ້ຖືກສະ ເໜີ ຂື້ນມາແລະຢູ່ໃນການສົນທະນາໃນເບື້ອງຕົ້ນ"
 
 #: post-type/module-base.php:259
 msgctxt "Training Status label"
 msgid "Scheduled"
-msgstr "예정"
+msgstr "ກຳ ນົດ"
 
 #: post-type/module-base.php:260
 msgctxt "Training Status field description"
 msgid "This training is confirmed, on the calendar."
-msgstr "이 교육은 달력에서 확인됩니다."
+msgstr "ການຝຶກອົບຮົມນີ້ແມ່ນໄດ້ຖືກຢືນຢັນ, ຕາມປະຕິທິນ."
 
 #: post-type/module-base.php:264
 msgctxt "Training Status label"
 msgid "In Progress"
-msgstr "진행 중"
+msgstr "ໃນຄວາມຄືບ ໜ້າ"
 
 #: post-type/module-base.php:265
 msgctxt "Training Status field description"
 msgid "This training is confirmed, on the calendar, or currently active."
-msgstr "이 교육은 달력에 확인되었거나 현재 활성화되어 있습니다."
+msgstr "ການຝຶກອົບຮົມນີ້ແມ່ນໄດ້ຖືກຢືນຢັນ, ຕາມປະຕິທິນ, ຫລືວ່າໃນປະຈຸບັນ."
 
 #: post-type/module-base.php:269
 msgctxt "Training Status label"
 msgid "Complete"
-msgstr "완전한"
+msgstr "ສຳ ເລັດ"
 
 #: post-type/module-base.php:270
 msgctxt "Training Status field description"
 msgid "This training has successfully completed"
-msgstr "이 교육은 성공적으로 완료되었습니다."
+msgstr "ການຝຶກອົບຮົມຄັ້ງນີ້ໄດ້ ສຳ ເລັດລົງ"
 
 #: post-type/module-base.php:274
 msgctxt "Training Status label"
 msgid "Paused"
-msgstr "일시 중지됨"
+msgstr "ຢຸດຊົ່ວຄາວ"
 
 #: post-type/module-base.php:275
 msgctxt "Training Status field description"
 msgid "This contact is currently on hold. It has potential of getting scheduled in the future."
-msgstr "이 연락처는 현재 보류 중입니다. 미래에 계획 될 가능성이 있습니다."
+msgstr "ປະຈຸບັນການຕິດຕໍ່ນີ້ໄດ້ຖືກຄວບຄຸມໄວ້ແລ້ວ. ມັນມີທ່າແຮງໃນການ ກຳ ນົດເວລາໃນອະນາຄົດ."
 
 #: post-type/module-base.php:279
 msgctxt "Training Status label"
 msgid "Closed"
-msgstr "닫은"
+msgstr "ປິດແລ້ວ"
 
 #: post-type/module-base.php:280
 msgctxt "Training Status field description"
 msgid "This training is no longer going to happen."
-msgstr "이 훈련은 더 이상 일어나지 않을 것입니다."
+msgstr "ການຝຶກອົບຮົມນີ້ແມ່ນຈະບໍ່ເກີດຂື້ນອີກຕໍ່ໄປ."
 
 #: post-type/module-base.php:176
 msgid "Assigned To"
-msgstr "할당"
+msgstr "ການ​ມອບ​ຫມາຍ​ໃຫ້"
 
 #: post-type/module-base.php:288
 msgid "Select the main person who is responsible for reporting on this training."
-msgstr "이 교육에 대한보고를 담당하는 주 담당자를 선택하십시오."
+msgstr "ເລືອກເອົາບຸກຄົນຕົ້ນຕໍທີ່ຮັບຜິດຊອບໃນການລາຍງານກ່ຽວກັບການຝຶກອົບຮົມນີ້."
 
 #: post-type/module-base.php:185
 msgid "Training Coach / Church Planter"
-msgstr "훈련 코치 / 교회 개척자"
+msgstr "ຄູຝຶກສອນ / ຜູ້ປູກໂບດ"
 
 #: post-type/module-base.php:297
 msgctxt "Optional Documentation"
 msgid "The person who planted and/or is coaching this training. Only one person can be assigned to a training while multiple people can be coaches / church planters of this training."
-msgstr "이 교육을 심거나지도하는 사람입니다. 한 사람 만 훈련에 배정 될 수 있으며 여러 사람이이 훈련의 코치 / 교회 개척자가 될 수 있습니다."
+msgstr "ບຸກຄົນຜູ້ທີ່ປູກແລະ / ຫຼືເປັນຜູ້ຝຶກສອນການຝຶກອົບຮົມນີ້. ມີພຽງແຕ່ຄົນດຽວເທົ່ານັ້ນທີ່ສາມາດໄດ້ຮັບການມອບ ໝາຍ ໃຫ້ເຂົ້າຝຶກອົບຮົມໃນຂະນະທີ່ຫຼາຍຄົນສາມາດເປັນຄູຝຶກ / ຜູ້ປູກໂບດຂອງການຝຶກອົບຮົມນີ້."
 
 #: post-type/module-base.php:196
 msgid "Requires Update"
-msgstr "업데이트 필요"
+msgstr "ຮຽກຮ້ອງໃຫ້ມີການປັບປຸງ"
 
 #: post-type/module-base.php:313
 msgid "Video Link"
-msgstr "비디오 링크"
+msgstr "ການເຊື່ອມຕໍ່ວິດີໂອ"
 
 #: post-type/module-base.php:314
 msgctxt "Optional Documentation"
 msgid "Link to video chat service"
-msgstr "영상 채팅 서비스에 연결"
+msgstr "ເຊື່ອມຕໍ່ກັບການບໍລິການສົນທະນາທາງວິດີໂອ"
 
 #: post-type/module-base.php:321
 msgid "Notes"
-msgstr "메모"
+msgstr "ບັນທຶກ"
 
 #: post-type/module-base.php:322
 msgctxt "Optional Documentation"
 msgid "Notes on when the trainings will happen"
-msgstr "교육 실시시기에 대한 참고 사항"
+msgstr "ບັນທຶກກ່ຽວກັບເວລາການຝຶກອົບຮົມຈະເກີດຂື້ນ"
 
 #: post-type/module-base.php:331 post-type/module-base.php:543
 msgid "Meeting Times"
-msgstr "회의 시간"
+msgstr "ເວລາປະຊຸມ"
 
 #: post-type/module-base.php:219 post-type/module-base.php:228
 msgid "Locations"
-msgstr "위치"
+msgstr "ສະຖານທີ່ຕ່າງໆ"
 
 #: post-type/module-base.php:220 post-type/module-base.php:229
 msgctxt "Optional Documentation"
 msgid "The general location where this contact is located."
-msgstr "이 연락처가있는 일반적인 위치입니다."
+msgstr "ສະຖານທີ່ທົ່ວໄປທີ່ຕິດຕໍ່ພົວພັນນີ້."
 
 #: post-type/module-base.php:236
 msgid "Address"
-msgstr "주소"
+msgstr "ທີ່ຢູ່"
 
 #: post-type/module-base.php:413
 msgid "Parent Training"
-msgstr "학부모 교육"
+msgstr "ການຝຶກອົບຮົມພໍ່ແມ່"
 
 #: post-type/module-base.php:414
 msgctxt "Optional Documentation"
 msgid "A training that launched this training."
-msgstr "이 교육을 시작한 교육입니다."
+msgstr "ການຝຶກອົບຮົມທີ່ເປີດການຝຶກອົບຮົມຄັ້ງນີ້."
 
 #: post-type/module-base.php:424
 msgid "Peer Training"
-msgstr "동료 교육"
+msgstr "ການຝຶກອົບຮົມມິດສະຫາຍ"
 
 #: post-type/module-base.php:425
 msgctxt "Optional Documentation"
 msgid "A related training that isn't a parent/child in relationship. It might indicate trainings that collaborate, are about to merge, recently split, etc."
-msgstr "관계에서 부모 / 자녀가 아닌 관련 교육. 공동 작업, 병합 예정, 최근 분할 등의 교육을 나타낼 수 있습니다."
+msgstr "ການຝຶກອົບຮົມທີ່ກ່ຽວຂ້ອງທີ່ບໍ່ແມ່ນພໍ່ແມ່ / ເດັກໃນຄວາມ ສຳ ພັນ. ມັນອາດຈະຊີ້ບອກເຖິງການຝຶກອົບຮົມທີ່ຮ່ວມມືກັນ, ກຳ ລັງຈະລວມເຂົ້າກັນ, ແບ່ງປັນໃນບໍ່ດົນມານີ້, ແລະອື່ນໆ."
 
 #: post-type/module-base.php:435
 msgid "Child Training"
-msgstr "아동 훈련"
+msgstr "ການອົບຮົມເດັກ"
 
 #: post-type/module-base.php:436
 msgctxt "Optional Documentation"
 msgid "A training that has been birthed out of this training."
-msgstr "이 훈련에서 탄생 한 훈련."
+msgstr "ການຝຶກອົບຮົມທີ່ໄດ້ຮັບການຊ່ວຍເຫຼືອຈາກການຝຶກອົບຮົມນີ້."
 
 #: post-type/module-base.php:446 post-type/module-base.php:542
 #: post-type/module-base.php:653
 msgid "Member List"
-msgstr "회원 목록"
+msgstr "ລາຍຊື່ສະມາຊິກ"
 
 #: post-type/module-base.php:447
 msgctxt "Optional Documentation"
 msgid "The contacts who are members of this training."
-msgstr "이 교육의 구성원 인 연락처입니다."
+msgstr "ຜູ້ຕິດຕໍ່ທີ່ເປັນສະມາຊິກຂອງການຝຶກອົບຮົມນີ້."
 
 #: post-type/module-base.php:464
 msgctxt "Optional Documentation"
 msgid "The people trainings represented by this training."
-msgstr "이 훈련으로 대표되는 사람들 훈련."
+msgstr "ການຝຶກອົບຮົມປະຊາຊົນເປັນຕົວແທນໂດຍການຝຶກອົບຮົມນີ້."
 
 #: post-type/module-base.php:484
 msgid "Member Count"
-msgstr "회원 수"
+msgstr "ຈຳ ນວນສະມາຊິກ"
 
 #: post-type/module-base.php:485 post-type/module-base.php:492
 msgctxt "Optional Documentation"
 msgid "The number of members in this training. It will automatically be updated when new members are added or removed in the member list. Change this number manually to included people who may not be in the system but are also members of the training."
-msgstr "이 교육의 회원 수입니다. 회원 목록에서 새 회원이 추가되거나 삭제되면 자동으로 업데이트됩니다. 시스템에 없지만 교육의 구성원이기도 한 포함 된 사람으로이 번호를 수동으로 변경합니다."
+msgstr "ຈຳ ນວນສະມາຊິກໃນການຝຶກອົບຮົມຄັ້ງນີ້. ມັນຈະຖືກປັບປຸງໂດຍອັດຕະໂນມັດເມື່ອສະມາຊິກ ໃໝ່ ຖືກເພີ່ມຫລືລຶບອອກໃນບັນຊີສະມາຊິກ. ປ່ຽນເລກ ໝາຍ ນີ້ດ້ວຍຕົນເອງໃຫ້ເຂົ້າຮ່ວມກັບຄົນທີ່ບໍ່ຢູ່ໃນລະບົບແຕ່ຍັງເປັນສະມາຊິກຂອງການຝຶກອົບຮົມ."
 
 #: post-type/module-base.php:491
 msgid "Leader Count"
-msgstr "리더 수"
+msgstr "ຈຳ ນວນຜູ້ ນຳ"
 
 #: post-type/module-base.php:503
 msgid "Training as Leader"
-msgstr "리더로서의 훈련"
+msgstr "ການຝຶກອົບຮົມໃນຖານະເປັນຜູ້ ນຳ"
 
 #: post-type/module-base.php:504
 msgctxt "Optional Documentation"
 msgid "Leader of a training"
-msgstr "훈련의 리더"
+msgstr "ຜູ້ ນຳ ຂອງການຝຶກອົບຮົມ"
 
 #: post-type/module-base.php:514
 msgid "Training as Participant"
-msgstr "참가자 교육"
+msgstr "ການຝຶກອົບຮົມເປັນຜູ້ເຂົ້າຮ່ວມ"
 
 #: post-type/module-base.php:515
 msgctxt "Optional Documentation"
 msgid "Participant in a training."
-msgstr "교육 참가자."
+msgstr "ເຂົ້າຮ່ວມໃນການຝຶກອົບຮົມ."
 
 #: post-type/module-base.php:537
 msgid "Other"
-msgstr "다른"
+msgstr "ອື່ນໆ"
 
 #: post-type/module-base.php:568
 msgctxt "input field placeholder"
 msgid "Search Users"
-msgstr "사용자 검색"
+msgstr "ຜູ້ໃຊ້ຄົ້ນຫາ"
 
 #: post-type/module-base.php:601
 msgctxt "Search 'something'"
 msgid "Search %s"
-msgstr "% s 검색"
+msgstr "ຄົ້ນຫາ% s"
 
 #: post-type/module-base.php:656
 msgid "Create"
-msgstr "창조하다"
+msgstr "ສ້າງ"
 
 #: post-type/module-base.php:661
 msgid "Select"
-msgstr "고르다"
+msgstr "ເລືອກ"
 
 #: post-type/module-base.php:666
 msgid "To add new members, click on 'Create' or 'Select'."
-msgstr "새 회원을 추가하려면 '만들기'또는 '선택'을 클릭하십시오."
+msgstr "ເພື່ອເພີ່ມສະມາຊິກ ໃໝ່, ໃຫ້ຄລິກໃສ່ 'ສ້າງ' ຫລື 'ເລືອກ'."
 
 #: post-type/module-base.php:671
 msgctxt "Add members modal"
 msgid "Add members from existing contacts"
-msgstr "기존 연락처에서 구성원 추가"
+msgstr "ເພີ່ມສະມາຊິກຈາກຜູ້ຕິດຕໍ່ທີ່ມີຢູ່"
 
 #: post-type/module-base.php:672
 msgctxt "Add members modal"
 msgid "In the 'Member List' field, type the name of an existing contact to add them to this training."
-msgstr "'멤버 목록'필드에 기존 연락처의 이름을 입력하여이 교육에 추가합니다."
+msgstr "ໃນພາກສ່ວນ 'ລາຍຊື່ສະມາຊິກ', ພິມຊື່ຂອງຜູ້ຕິດຕໍ່ທີ່ມີຢູ່ເພື່ອເພີ່ມພວກເຂົາເຂົ້າໃນການຝຶກອົບຮົມນີ້."
 
 #: post-type/module-base.php:681
 msgid "Close"
-msgstr "닫기"
+msgstr "ປິດ"
 
 #: post-type/module-base.php:879
 msgid "Removed %1$s: %2$s"
-msgstr "% 1 $ s 삭제 : % 2 $ s"
+msgstr "ລຶບ% 1 $ s:% 2 $ s"
 
 #: post-type/module-base.php:882
 msgid "Added %1$s: %2$s"
-msgstr "% 1 $ s 추가 : % 2 $ s"
+msgstr "ເພີ່ມ% 1 $ s:% 2 $ s"
 
 #: post-type/module-base.php:885
 msgid "Updated %1$s: %2$s to %3$s"
-msgstr "% 1 $ s 업데이트 : % 2 $ s에서 % 3 $ s로"
+msgstr "ອັບເດດ% 1 $ s:% 2 $ s ກັບ% 3 $ s"
 
 #: post-type/module-base.php:942
 msgctxt "List Filters"
 msgid "Assigned to me"
-msgstr "나에게 할당 됨"
+msgstr "ມອບ ໝາຍ ໃຫ້ຂ້ອຍ"
 
 #: post-type/module-base.php:950 post-type/module-base.php:1007
 #: post-type/module-base.php:1015
 msgctxt "List Filters"
 msgid "All"
-msgstr "모두"
+msgstr "ທັງ ໝົດ"
 
 #: post-type/module-reports.php:85
 msgid "Reports"
-msgstr "보고서"
+msgstr "ບົດລາຍງານ"
 
 #: post-type/module-reports.php:121
 msgid "Total Groups"
-msgstr "총 그룹"
+msgstr "ລວມກຸ່ມ"
 
 #: post-type/module-reports.php:122
 msgid "Total Baptisms"
-msgstr "총 세례"
+msgstr "ການຮັບບັບເຕມາທັງ ໝົດ"
 
 #: post-type/module-reports.php:123
 msgid "Countries"
-msgstr "국가"
+msgstr "ປະເທດຕ່າງໆ"
 
 #: post-type/module-reports.php:124
 msgid "States"
-msgstr "상태"
+msgstr "ລັດ"
 
 #: post-type/module-reports.php:125
 msgid "Counties"
-msgstr "카운티"
+msgstr "ເຂດປົກຄອງ"
 
 #: post-type/module-public-calendar.php:432
 #: post-type/module-registration.php:385
 msgid "Add"
-msgstr "더하다"
+msgstr "ຕື່ມ"
 
 #: post-type/module-registration.php:31
 msgid "Apps"
-msgstr "앱"
+msgstr "ແອັບ."
 
 #: post-type/module-registration.php:59
 msgid "copy link"
-msgstr "링크 복사"
+msgstr "ສຳ ເນົາລິ້ງ"
 
 #: post-type/module-registration.php:61
 msgid "edit form"
-msgstr "양식 수정"
+msgstr "ດັດແກ້ແບບຟອມ"
 
 #: post-type/module-registration.php:63
 msgid "report"
-msgstr "보고서"
+msgstr "ລາຍງານ"
 
 #: post-type/module-registration.php:67
 msgid "create link"
-msgstr "링크 생성"
+msgstr "ສ້າງລິ້ງ"
 
 #: post-type/module-registration.php:114
 msgid "link"
-msgstr "링크"
+msgstr "link"
 
 #: post-type/module-registration.php:116
 msgid "show on calendar"
-msgstr "달력에 표시"
+msgstr "ສະແດງຕາມປະຕິທິນ"
 
 #: post-type/module-registration.php:118
 msgid "open registration"
-msgstr "공개 등록 "
+msgstr "ເປີດລົງທະບຽນ "
 
 #: post-type/module-registration.php:265
 msgid "add"
-msgstr "더하다"
+msgstr "ເພີ່ມ"
 
 #: post-type/module-registration.php:266
 msgid "Use"
-msgstr "사용하다"
+msgstr "ໃຊ້"
 
 #: post-type/module-registration.php:267 post-type/module-registration.php:695
 msgid "Search Location"
-msgstr "위치 검색"
+msgstr "ສະຖານທີ່ຄົ້ນຫາ"
 
 #: post-type/module-registration.php:268
 msgid "Delete Location"
-msgstr "위치 삭제"
+msgstr "ລຶບສະຖານທີ່"
 
 #: post-type/module-registration.php:269
 msgid "Open Mapping"
-msgstr "오픈 매핑"
+msgstr "ເປີດແຜນທີ່"
 
 #: post-type/module-registration.php:270
 msgid "clear"
-msgstr "맑은"
+msgstr "ຈະແຈ້ງ"
 
 #: post-type/module-registration.php:384
 msgid "Register for Training"
-msgstr "교육 등록"
+msgstr "ລົງທະບຽນເຂົ້າຝຶກອົບຮົມ"
 
 #: post-type/module-registration.php:386
 msgid "Join Training"
-msgstr "교육 참여"
+msgstr "ເຂົ້າຮ່ວມການຝຶກອົບຮົມ"
 
 #: post-type/module-registration.php:387
 msgid "Join in"
-msgstr "가입"
+msgstr "ເຂົ້າຮ່ວມໃນ"
 
 #: post-type/module-registration.php:700
 msgid "Clear"
-msgstr "맑은"
+msgstr "ແຈ້ງ"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Training"
-msgstr "제자 도구-훈련"
+msgstr "ເຄື່ອງມືຮຽນ - ການຝຶກອົບຮົມ"
 
 #: includes/admin/admin-menu-and-tabs.php:62
 msgid "Extensions (DT)"
-msgstr "확장 (DT)"
+msgstr "ສ່ວນຂະຫຍາຍ (DT)"
 
 #: admin/menu-and-tabs.php:64 admin/menu-and-tabs.php:65
 #: admin/menu-and-tabs.php:103
 msgid "Network Dashboard"
-msgstr "네트워크 대시 보드"
+msgstr "ແຜງຄວບຄຸມເຄືອຂ່າຍ"
 
 #: includes/admin/admin-menu-and-tabs.php:79
 msgid "You do not have sufficient permissions to access this page."
-msgstr "이 페이지에 액세스 할 수있는 권한이 없습니다."
+msgstr "ທ່ານບໍ່ມີສິດພຽງພໍໃນການເຂົ້າເຖິງ ໜ້າ ນີ້."
 
 #: admin/menu-and-tabs.php:107 admin/menu-and-tabs.php:130
 #: admin/menu-and-tabs.php:135
 msgid "nav-tab-active"
-msgstr "탐색 탭 활성"
+msgstr "nav-tab-active"
 
 #: admin/migrations/0000-initial.php:21
 msgid "Network Dashboard Viewer"
-msgstr "네트워크 대시 보드 뷰어"
+msgstr "ເບິ່ງເຄືອຂ່າຍ Dashboard"
 
 #: metrics/base.php:220
 msgid "ID"
-msgstr "신분증"
+msgstr "ບັດປະ ຈຳ ຕົວ"
 
 #: metrics/base.php:221 metrics/base.php:255
 msgid "Site"
-msgstr "대지"
+msgstr "ເວັບໄຊ"
 
 #: metrics/base.php:224 metrics/base.php:254 metrics/network-maps-area.php:89
 #: metrics/network-maps-area.php:133 metrics/network-statistics-users.php:12
@@ -504,374 +504,374 @@ msgstr "대지"
 #: metrics/network-statistics-users.php:14
 #: metrics/network-statistics-users.php:50
 msgid "Users"
-msgstr "사용자"
+msgstr "ຜູ້ໃຊ້"
 
 #: metrics/base.php:225
 msgid "Timestamp"
-msgstr "타임 스탬프"
+msgstr "ຕາຕະລາງເວລາ"
 
 #: metrics/base.php:226
 msgid "Visit"
-msgstr "방문"
+msgstr "ຢ້ຽມຢາມ"
 
 #: metrics/base.php:227
 msgid "View"
-msgstr "전망"
+msgstr "ເບິ່ງ"
 
 #: metrics/base.php:229
 msgid "Active Snapshot"
-msgstr "활성 스냅 샷"
+msgstr "ພາບຖ່າຍທີ່ໃຊ້ງານ"
 
 #: metrics/base.php:230
 msgid "Generations"
-msgstr "세대"
+msgstr "ຫລາຍລຸ້ນຄົນ"
 
 #: metrics/base.php:231
 msgid "Follow-up Funnel"
-msgstr "후속 유입 경로"
+msgstr "ຕິດຕາມ Funnel"
 
 #: metrics/base.php:232
 msgid "On-Going Meetings"
-msgstr "진행중인 회의"
+msgstr "ກອງປະຊຸມສຸດ ກຳ ລັງ"
 
 #: metrics/base.php:233
 msgid "Coaching"
-msgstr "코칭"
+msgstr "ການຝຶກສອນ"
 
 #: metrics/base.php:234
 msgid "Baptized"
-msgstr "침례"
+msgstr "ຮັບບັບເຕມາ"
 
 #: metrics/base.php:235
 msgid "Active Groups"
-msgstr "활성 그룹"
+msgstr "ກຸ່ມທີ່ມີການເຄື່ອນໄຫວ"
 
 #: metrics/base.php:236 metrics/base.php:258
 msgid "Church"
-msgstr "교회에"
+msgstr "ໂບດ"
 
 #: metrics/base.php:237
 msgid "Health Metrics"
-msgstr "건강 지표"
+msgstr "ມາດຕະການສຸຂະພາບ"
 
 #: metrics/base.php:238
 msgid "Total Users"
-msgstr "총 사용자"
+msgstr "ຜູ້ໃຊ້ທັງ ໝົດ"
 
 #: metrics/base.php:239
 msgid "Responders"
-msgstr "응답자"
+msgstr "ຜູ້ຕອບ"
 
 #: metrics/base.php:240
 msgid "Dispatchers"
-msgstr "디스패처"
+msgstr "ຜູ້ຂັບໄລ່"
 
 #: metrics/base.php:241
 msgid "Multipliers"
-msgstr "승수"
+msgstr "ຕົວຄູນ"
 
 #: metrics/base.php:242
 msgid "Admins"
-msgstr "관리자"
+msgstr "ແອັດມິນ"
 
 #: metrics/base.php:243
 msgid "User Login Activity"
-msgstr "사용자 로그인 활동"
+msgstr "ກິດຈະກໍາເຂົ້າສູ່ລະບົບຜູ້ໃຊ້"
 
 #: metrics/base.php:244
 msgid "Users Active in the Last 30 Days"
-msgstr "지난 30 일 동안 활동 한 사용자"
+msgstr "ຜູ້ໃຊ້ມີການເຄື່ອນໄຫວໃນ 30 ວັນທີ່ຜ່ານມາ"
 
 #: metrics/base.php:245
 msgid "Practicing"
-msgstr "연습"
+msgstr "ຝຶກຊ້ອມ"
 
 #: metrics/base.php:246
 msgid "Not Practicing"
-msgstr "연습하지 않음"
+msgstr "ບໍ່ປະຕິບັດ"
 
 #: metrics/base.php:247
 msgid "Chart Funnel"
-msgstr "차트 퍼널"
+msgstr "Funnel ຕາຕະລາງ"
 
 #: metrics/base.php:250
 msgid "Contact"
-msgstr "접촉"
+msgstr "ຕິດຕໍ່"
 
 #: metrics/base.php:251
 msgid "Group"
-msgstr "그룹"
+msgstr "ກຸ່ມ"
 
 #: metrics/base.php:253
 msgid "User"
-msgstr "사용자"
+msgstr "ຜູ້ໃຊ້"
 
 #: metrics/base.php:256 metrics/base.php:301
 msgid "Sites"
-msgstr "사이트"
+msgstr "ພື້ນ​ທີ່"
 
 #: metrics/base.php:257
 msgid "Baptisms"
-msgstr "침례"
+msgstr "ການຮັບບັບເຕມາ"
 
 #: metrics/base.php:259 metrics/network-maps-area.php:97
 #: metrics/network-maps-area.php:127
 msgid "Churches"
-msgstr "교회"
+msgstr "ໂບດ"
 
 #: metrics/base.php:260
 msgid "Location"
-msgstr "위치"
+msgstr "ສະຖານທີ່"
 
 #: metrics/base.php:261
 msgid "Types"
-msgstr "종류"
+msgstr "ປະເພດ"
 
 #: metrics/base.php:263
 msgid "modify filter"
-msgstr "필터 수정"
+msgstr "ປັບປຸງແກ້ໄຂຕົວກອງ"
 
 #: metrics/base.php:264
 msgid "Filter List"
-msgstr "필터 목록"
+msgstr "ລາຍຊື່ຕົວກອງ"
 
 #: metrics/base.php:265
 msgid "reset data"
-msgstr "데이터 재설정"
+msgstr "ຕັ້ງຄ່າຂໍ້ມູນ"
 
 #: post-type/module-base.php:133
 msgid "Status"
-msgstr "상태"
+msgstr "ສະຖານະພາບ"
 
 #: metrics/base.php:268
 msgid "Status - All"
-msgstr "상태-모두"
+msgstr "ສະຖານະພາບ - ທັງ ໝົດ"
 
 #: metrics/base.php:270
 msgid "Zoom Level"
-msgstr "줌 레벨"
+msgstr "ລະດັບການຊູມ"
 
 #: metrics/base.php:271
 msgid "Auto Zoom"
-msgstr "자동 줌"
+msgstr "ຊູມອັດຕະໂນມັດ"
 
 #: metrics/base.php:272
 msgid "World"
-msgstr "세계"
+msgstr "ໂລກ"
 
 #: metrics/base.php:273
 msgid "Country"
-msgstr "국가"
+msgstr "ປະເທດ"
 
 #: metrics/base.php:274
 msgid "State"
-msgstr "상태"
+msgstr "ລັດ"
 
 #: includes/template-dashboard.php:23
 msgid "Active Contacts"
-msgstr "활성 연락처"
+msgstr "ລາຍຊື່ຜູ້ຕິດຕໍ່ທີ່ໃຊ້ວຽກ"
 
 #: metrics/base.php:277
 msgid "Paused Contacts"
-msgstr "일시 중지 된 연락처"
+msgstr "ລາຍຊື່ຕິດຕໍ່ທີ່ຖືກຢຸດໄວ້"
 
 #: metrics/base.php:278
 msgid "Closed Contacts"
-msgstr "닫힌 연락처"
+msgstr "ລາຍຊື່ຜູ້ຕິດຕໍ່ທີ່ປິດ"
 
 #: metrics/base.php:279
 msgid "Total Contacts"
-msgstr "총 연락처"
+msgstr "ລາຍຊື່ຜູ້ຕິດຕໍ່ທັງ ໝົດ"
 
 #: metrics/base.php:280
 msgid "New Contacts"
-msgstr "새 연락처"
+msgstr "ລາຍຊື່ຜູ້ຕິດຕໍ່ ໃໝ່"
 
 #: metrics/base.php:282
 msgid "New Baptisms"
-msgstr "새로운 세례"
+msgstr "ການຮັບບັບເຕມາ ໃໝ່"
 
 #: metrics/base.php:283
 msgid "Baptism Generations"
-msgstr "세례 세대"
+msgstr "ລຸ້ນຮັບບັບເຕມາ"
 
 #: metrics/base.php:284
 msgid "Select Location"
-msgstr "위치 선택"
+msgstr "ເລືອກສະຖານທີ່"
 
 #: metrics/base.php:286
 msgid "New Groups"
-msgstr "새 그룹"
+msgstr "ກຸ່ມ ໃໝ່"
 
 #: metrics/base.php:287
 msgid "Pre-Group"
-msgstr "사전 그룹"
+msgstr "ທາງສ່ວນຫນ້າຂອງກຸ່ມ"
 
 #: metrics/base.php:288
 msgid "Pre-Groups"
-msgstr "사전 그룹"
+msgstr "ທາງສ່ວນຫນ້າຂອງກຸ່ມ"
 
 #: metrics/base.php:290
 msgid "Last 7 Days"
-msgstr "지난 7 일"
+msgstr "7 ວັນສຸດທ້າຍ"
 
 #: metrics/base.php:291
 msgid "Last 30 Days"
-msgstr "지난 30 일"
+msgstr "30 ວັນທີ່ຜ່ານມາ"
 
 #: metrics/base.php:292
 msgid "Last 60 Days"
-msgstr "지난 60 일"
+msgstr "60 ວັນສຸດທ້າຍ"
 
 #: metrics/base.php:293
 msgid "Last 12 Months"
-msgstr "지난 12 개월"
+msgstr "12 ເດືອນຜ່ານມາ"
 
 #: metrics/base.php:294
 msgid "Last 24 Months"
-msgstr "지난 24 개월"
+msgstr "24 ເດືອນຜ່ານມາ"
 
 #: metrics/base.php:295
 msgid "This Year"
-msgstr "올해"
+msgstr "ປີ​ນີ້"
 
 #: metrics/base.php:297
 msgid "Activity Map"
-msgstr "활동지도"
+msgstr "ແຜນທີ່ກິດຈະ ກຳ"
 
 #: metrics/base.php:298 metrics/network-activity-stats.php:11
 #: metrics/network-activity-stats.php:12 metrics/network-activity-stats.php:13
 #: metrics/network-activity-stats.php:57
 msgid "Stats"
-msgstr "통계"
+msgstr "ສະຖິຕິ"
 
 #: metrics/base.php:299
 msgid "Activities"
-msgstr "활동"
+msgstr "ກິດຈະ ກຳ"
 
 #: metrics/base.php:300
 msgid "Actions"
-msgstr "행위"
+msgstr "ການກະ ທຳ"
 
 #: metrics/base.php:302
 msgid "By Action Type"
-msgstr "액션 유형별"
+msgstr "ໂດຍປະເພດການປະຕິບັດງານ"
 
 #: metrics/base.php:303
 msgid "Key"
-msgstr "키"
+msgstr "ກຸນແຈ"
 
 #: metrics/base.php:304
 msgid "Name"
-msgstr "이름"
+msgstr "ຊື່"
 
 #: metrics/base.php:305
 msgid "Total Activities"
-msgstr "총 활동"
+msgstr "ກິດຈະ ກຳ ທັງ ໝົດ"
 
 #: metrics/base.php:306
 msgid "Feed"
-msgstr "먹이다"
+msgstr "ອາຫານ"
 
 #: metrics/base.php:307
 msgid "Time"
-msgstr "시각"
+msgstr "ເວລາ"
 
 #: metrics/base.php:308
 msgid "Result Limit"
-msgstr "결과 제한"
+msgstr "ຂໍ້ ຈຳ ກັດຜົນໄດ້ຮັບ"
 
 #: metrics/base.php:309
 msgid "uncheck"
-msgstr "선택 취소"
+msgstr "ຍົກເລີກ"
 
 #: metrics/base.php:311 metrics/network-home.php:12 metrics/network-home.php:13
 #: metrics/network-home.php:14 metrics/network-home.php:48
 msgid "Home"
-msgstr "집"
+msgstr "ເຮືອນ"
 
 #: metrics/base.php:313
 msgid "Events (30 Days)"
-msgstr "이벤트 (30 일)"
+msgstr "ເຫດການຕ່າງໆ (30 ວັນ)"
 
 #: metrics/base.php:315
 msgid "All Active/Inactive"
-msgstr "모두 활성 / 비활성"
+msgstr "ທັງ ໝົດ ທີ່ໃຊ້ວຽກ / ບໍ່ເຄື່ອນໄຫວ"
 
 #: metrics/base.php:316 metrics/network-maps-hovermap.php:12
 #: metrics/network-maps-hovermap.php:13 metrics/network-maps-hovermap.php:14
 #: metrics/network-maps-hovermap.php:51
 msgid "Hover Map"
-msgstr "호버 맵"
+msgstr "ແຜນທີ່ Hover"
 
 #: metrics/loader.php:16
 msgid "Network"
-msgstr "회로망"
+msgstr "ເຄືອຂ່າຍ"
 
 #: metrics/network-activity-map.php:15 metrics/network-activity-map.php:16
 #: metrics/network-activity-map.php:17 metrics/network-activity-map.php:63
 msgid "Map"
-msgstr "지도"
+msgstr "ແຜນທີ່"
 
 #: metrics/network-activity-stream.php:12
 #: metrics/network-activity-stream.php:13
 #: metrics/network-activity-stream.php:14
 #: metrics/network-activity-stream.php:51
 msgid "Log"
-msgstr "로그"
+msgstr "ເຊັນເຂົ້າ"
 
 #: metrics/network-activity.php:12 metrics/network-activity.php:13
 #: metrics/network-activity.php:14 metrics/network-activity.php:25
 msgid "Activity"
-msgstr "활동"
+msgstr "ກິດຈະ ກຳ"
 
 #: metrics/network-maps-area.php:15 metrics/network-maps-area.php:16
 #: metrics/network-maps-area.php:17 metrics/network-maps-area.php:110
 msgid "Area Maps"
-msgstr "지역지도"
+msgstr "ແຜນທີ່ພື້ນທີ່"
 
 #: metrics/network-maps-locationlist.php:12
 #: metrics/network-maps-locationlist.php:13
 #: metrics/network-maps-locationlist.php:14
 #: metrics/network-maps-locationlist.php:46
 msgid "Location List"
-msgstr "위치 목록"
+msgstr "ລາຍຊື່ສະຖານທີ່ຕັ້ງ"
 
 #: metrics/network-maps.php:12 metrics/network-maps.php:13
 #: metrics/network-maps.php:14 metrics/network-maps.php:25
 msgid "Maps"
-msgstr "지도"
+msgstr "ແຜນທີ່"
 
 #: metrics/network-sites.php:12 metrics/network-sites.php:13
 #: metrics/network-sites.php:14 metrics/network-sites.php:45
 msgid "Site Reports"
-msgstr "사이트 보고서"
+msgstr "ບົດລາຍງານຂອງສະຖານທີ່"
 
 #: metrics/network-statistics.php:12 metrics/network-statistics.php:13
 #: metrics/network-statistics.php:14 metrics/network-statistics.php:25
 msgid "Statistics"
-msgstr "통계"
+msgstr "ສະຖິຕິ"
 
 #: shared/permissions.php:41
 msgid "Network Dashboard Transfer Both Ways"
-msgstr "네트워크 대시 보드 양방향 전송"
+msgstr "ເຄືອຂ່າຍ Dashboard ໂອນທັງສອງວິທີ"
 
 #: shared/permissions.php:42
 msgid "Network Dashboard Receiving Only"
-msgstr "네트워크 대시 보드 수신 만"
+msgstr "ແຜງຄວບຄຸມເຄືອຂ່າຍທີ່ໄດ້ຮັບເທົ່ານັ້ນ"
 
 #: shared/permissions.php:43
 msgid "Network Dashboard Sending Only"
-msgstr "네트워크 대시 보드 전송 만"
+msgstr "ແຜງຄວບຄຸມເຄືອຂ່າຍສົ່ງເທົ່ານັ້ນ"
 
 #: shared/site-profile.php:99
 msgid "Network Dashboard Site Profile"
-msgstr "네트워크 대시 보드 사이트 프로필"
+msgstr "ປະຫວັດຄວາມເປັນມາຂອງ Network Dashboard"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Network Dashboard"
-msgstr "제자 도구-네트워크 대시 보드"
+msgstr "ເຄື່ອງມືສາວົກ - ກະດານຄວບຄຸມເຄືອຂ່າຍ"
 
 #: admin/customize-site-linking.php:10 metrics/mapbox-maps.php:31
 #: metrics/mapbox-personal-maps.php:31 post-type/module-base.php:393
@@ -879,268 +879,268 @@ msgstr "제자 도구-네트워크 대시 보드"
 #: post-type/module-base.php:466 post-type/module-base.php:483
 #: post-type/module-base.php:520
 msgid "Streams"
-msgstr "스트림"
+msgstr "ສາຍນ້ ຳ"
 
 #: metrics/mapbox-maps.php:30
 msgid "Stream Maps"
-msgstr "스트림 맵"
+msgstr "ແຜນທີ່ສະຕີມ"
 
 #: metrics/mapbox-personal-maps.php:30
 msgid "Streams Maps"
-msgstr "스트림지도"
+msgstr "ແຜນທີ່ກະແສ"
 
 #: post-type/module-base.php:103
 msgctxt "Optional Documentation"
 msgid "A useful way to stream related items and can help stream contacts associated with noteworthy characteristics. e.g. business owner, sports lover. The contacts can also be filtered using these tags."
-msgstr "관련 항목을 스트리밍하고 주목할만한 특징과 관련된 연락처를 스트리밍하는 데 유용한 방법입니다. 예 : 비즈니스 소유자, 스포츠 애호가. 이러한 태그를 사용하여 연락처를 필터링 할 수도 있습니다."
+msgstr "ວິທີການທີ່ມີປະໂຫຍດໃນການກະຈາຍລາຍການທີ່ກ່ຽວຂ້ອງແລະສາມາດຊ່ວຍກະແສລາຍຊື່ຜູ້ຕິດຕໍ່ທີ່ກ່ຽວຂ້ອງກັບຄຸນລັກສະນະທີ່ ໜ້າ ສັງເກດ. ເຊັ່ນ: ເຈົ້າຂອງທຸລະກິດ, ຮັກກິລາ. ລາຍຊື່ຜູ້ຕິດຕໍ່ຍັງສາມາດຖືກກັ່ນຕອງໂດຍໃຊ້ແທັກເຫຼົ່ານີ້."
 
 #: post-type/module-base.php:138
 msgctxt "Stream Status label"
 msgid "New"
-msgstr "새로운"
+msgstr "ໃຫມ່"
 
 #: post-type/module-base.php:139
 msgctxt "Stream Status field description"
 msgid "New stream added to the system"
-msgstr "시스템에 새 스트림 추가"
+msgstr "ກະແສ ໃໝ່ ເພີ່ມເຂົ້າໃນລະບົບ"
 
 #: post-type/module-base.php:143
 msgctxt "Stream Status label"
 msgid "Model"
-msgstr "모델"
+msgstr "ຕົວແບບ"
 
 #: post-type/module-base.php:144
 msgctxt "Stream Status field description"
 msgid "This stream has been proposed and is in initial conversations"
-msgstr "이 스트림은 제안되었으며 초기 대화 중입니다."
+msgstr "ກະແສນີ້ໄດ້ສະ ເໜີ ອອກມາແລະຢູ່ໃນການສົນທະນາໃນເບື້ອງຕົ້ນ"
 
 #: post-type/module-base.php:148
 msgctxt "Stream Status label"
 msgid "Assist"
-msgstr "돕다"
+msgstr "ຊ່ວຍ"
 
 #: post-type/module-base.php:149
 msgctxt "Stream Status field description"
 msgid "This stream is confirmed, on the calendar."
-msgstr "이 스트림은 달력에서 확인됩니다."
+msgstr "ກະແສນີ້ຖືກຢືນຢັນ, ໃນປະຕິທິນ."
 
 #: post-type/module-base.php:153
 msgctxt "Stream Status label"
 msgid "Watch"
-msgstr "손목 시계"
+msgstr "ເບິ່ງ"
 
 #: post-type/module-base.php:154
 msgctxt "Stream Status field description"
 msgid "This stream is confirmed, on the calendar, or currently active."
-msgstr "이 스트림은 달력에서 확인되었거나 현재 활성화되어 있습니다."
+msgstr "ກະແສນີ້ຖືກຢືນຢັນ, ໃນປະຕິທິນ, ຫຼືປະຈຸບັນມີການເຄື່ອນໄຫວຢູ່."
 
 #: post-type/module-base.php:158
 msgctxt "Stream Status label"
 msgid "Leave"
-msgstr "떠나다"
+msgstr "ອອກຈາກ"
 
 #: post-type/module-base.php:159
 msgctxt "Stream Status field description"
 msgid "This stream has successfully completed"
-msgstr "이 스트림이 성공적으로 완료되었습니다."
+msgstr "ກະແສນີ້ ສຳ ເລັດແລ້ວ"
 
 #: post-type/module-base.php:163
 msgctxt "Stream Status label"
 msgid "Paused"
-msgstr "일시 중지됨"
+msgstr "ຢຸດຊົ່ວຄາວ"
 
 #: post-type/module-base.php:164
 msgctxt "Stream Status field description"
 msgid "This contact is currently on hold. It has potential of getting scheduled in the future."
-msgstr "이 연락처는 현재 보류 중입니다. 미래에 계획 될 가능성이 있습니다."
+msgstr "ປະຈຸບັນການຕິດຕໍ່ນີ້ໄດ້ຖືກຄວບຄຸມໄວ້ແລ້ວ. ມັນມີທ່າແຮງໃນການ ກຳ ນົດເວລາໃນອະນາຄົດ."
 
 #: post-type/module-base.php:168
 msgctxt "Stream Status label"
 msgid "Closed"
-msgstr "닫은"
+msgstr "ປິດແລ້ວ"
 
 #: post-type/module-base.php:169
 msgctxt "Stream Status field description"
 msgid "This stream is no longer going to happen."
-msgstr "이 스트림은 더 이상 발생하지 않습니다."
+msgstr "ກະແສນີ້ຈະບໍ່ເກີດຂື້ນອີກຕໍ່ໄປ."
 
 #: post-type/module-base.php:177
 msgid "Select the main person who is responsible for reporting on this stream."
-msgstr "이 스트림에 대한보고를 담당하는 주 담당자를 선택하십시오."
+msgstr "ເລືອກບຸກຄົນຫຼັກທີ່ຮັບຜິດຊອບລາຍງານກ່ຽວກັບກະແສນີ້."
 
 #: post-type/module-base.php:186
 msgctxt "Optional Documentation"
 msgid "The person who planted and/or is coaching this stream. Only one person can be assigned to a stream while multiple people can be coaches / church planters of this stream."
-msgstr "이 스트림을 심거나지도하는 사람입니다. 한 스트림에 한 사람 만 할당 할 수 있지만 여러 사람이이 스트림의 코치 / 교회 개척자가 될 수 있습니다."
+msgstr "ບຸກຄົນຜູ້ທີ່ປູກແລະ / ຫຼື ກຳ ລັງສອນສາຍນ້ ຳ ນີ້. ມີພຽງຄົນດຽວເທົ່ານັ້ນທີ່ສາມາດຖືກມອບ ໝາຍ ໃຫ້ກະແສໃນຂະນະທີ່ຫລາຍໆຄົນສາມາດເປັນຄູຝຶກ / ຜູ້ປູກໂບດຂອງກະແສນີ້."
 
 #: post-type/module-base.php:204
 msgctxt "Optional Documentation"
 msgid "The people streams represented by this stream."
-msgstr "이 스트림이 나타내는 사람들 스트림."
+msgstr "ສາຍນ້ ຳ ຂອງປະຊາຊົນເປັນຕົວແທນຂອງກະແສນີ້."
 
 #: post-type/module-base.php:309
 msgid "Parent Stream"
-msgstr "부모 스트림"
+msgstr "ສາຍກະແສຂອງພໍ່ແມ່"
 
 #: post-type/module-base.php:310
 msgctxt "Optional Documentation"
 msgid "A stream that launched this stream."
-msgstr "이 스트림을 시작한 스트림입니다."
+msgstr "ສາຍນ້ ຳ ທີ່ເປີດກະແສນີ້."
 
 #: post-type/module-base.php:321
 msgid "Peer Streams"
-msgstr "피어 스트림"
+msgstr "Peer Streams"
 
 #: post-type/module-base.php:322
 msgctxt "Optional Documentation"
 msgid "A related stream that isn't a parent/child in relationship. It might indicate streams that collaborate, are about to merge, recently split, etc."
-msgstr "관계에서 부모 / 자식이 아닌 관련 스트림. 공동 작업, 병합 예정, 최근 분할 등의 스트림을 나타낼 수 있습니다."
+msgstr "ກະແສທີ່ກ່ຽວຂ້ອງທີ່ບໍ່ແມ່ນພໍ່ແມ່ / ເດັກໃນຄວາມ ສຳ ພັນ. ມັນອາດຈະຊີ້ບອກສາຍນ້ ຳ ທີ່ຮ່ວມມືກັນ, ກຳ ລັງຈະລວມເຂົ້າກັນ, ແບ່ງປັນໃນບໍ່ດົນມານີ້, ແລະອື່ນໆ."
 
 #: post-type/module-base.php:333
 msgid "Child Streams"
-msgstr "자식 스트림"
+msgstr "ກະແສເດັກ"
 
 #: post-type/module-base.php:334
 msgctxt "Optional Documentation"
 msgid "A stream that has been birthed out of this stream."
-msgstr "이 스트림에서 생성 된 스트림입니다."
+msgstr "ກະແສນ້ ຳ ທີ່ໄຫຼອອກຈາກກະແສນີ້."
 
 #: post-type/module-base.php:369
 msgid "Leader in Stream"
-msgstr "스트림의 리더"
+msgstr "ຜູ້ ນຳ ໃນ Stream"
 
 #: post-type/module-base.php:370
 msgctxt "Optional Documentation"
 msgid "Leader of a stream"
-msgstr "스트림의 리더"
+msgstr "ຜູ້ ນຳ ກະແສ"
 
 #: post-type/module-base.php:380
 msgid "Key Disciple in Stream"
-msgstr "스트림의 주요 제자"
+msgstr "ສາວົກຫຼັກໃນກະແສ"
 
 #: post-type/module-base.php:381
 msgctxt "Optional Documentation"
 msgid "Disciple in a stream."
-msgstr "스트림의 제자."
+msgstr "ສານຸສິດໃນກະແສ."
 
 #: post-type/module-base.php:536
 msgid "Connections"
-msgstr "사이"
+msgstr "ການເຊື່ອມຕໍ່"
 
 #: post-type/module-reports.php:432
 msgid "Add Report"
-msgstr "보고서 추가"
+msgstr "ເພີ່ມລາຍງານ"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Streams"
-msgstr "제자 도구-스트림"
+msgstr "ເຄື່ອງມືສາວົກ - ກະແສ"
 
 #: logging/log-generations.php:11
 msgid "Pre-Group Generations"
-msgstr "그룹 전 세대"
+msgstr "ກຸ່ມລຸ້ນກ່ອນ"
 
 #: logging/log-generations.php:17
 msgid "Group Generations"
-msgstr "그룹 세대"
+msgstr "ການຜະລິດກຸ່ມ"
 
 #: logging/log-generations.php:23
 msgid "Church Generations"
-msgstr "교회 세대"
+msgstr "ການຜະລິດໂບດ"
 
 #: logging/log-generations.php:29
 msgid "Team Generations"
-msgstr "팀 세대"
+msgstr "ລຸ້ນທີມ"
 
 #: logging/log-generations.php:76
 msgid "%s is reporting a new pre-group generation."
-msgstr "% s이 (가) 새로운 사전 그룹 생성을보고합니다."
+msgstr "% s ກຳ ລັງລາຍງານລຸ້ນລຸ້ນ ໃໝ່."
 
 #: logging/log-generations.php:81
 msgid "%s is reporting a new group generation."
-msgstr "% s이 (가) 새 그룹 생성을보고합니다."
+msgstr "% s ກຳ ລັງລາຍງານການສ້າງກຸ່ມ ໃໝ່."
 
 #: logging/log-generations.php:86
 msgid "%s is reporting a new church generation."
-msgstr "% s 님이 새로운 교회 세대를보고하고 있습니다."
+msgstr "% s ກຳ ລັງລາຍງານການຜະລິດໂບດ ໃໝ່."
 
 #: logging/log-generations.php:91
 msgid "%s is reporting a new leadership team generation."
-msgstr "% s 님이 새로운 리더십 팀 세대를보고하고 있습니다."
+msgstr "% s ກຳ ລັງລາຍງານການສ້າງກຸ່ມຜູ້ ນຳ ໃໝ່."
 
 #: logging/log-new-posts.php:11
 msgid "New Contact"
-msgstr "새로운 연락처"
+msgstr "ຕິດຕໍ່ ໃໝ່"
 
 #: logging/log-new-posts.php:16
 msgid "New Pre-Group"
-msgstr "새로운 사전 그룹"
+msgstr "New Pre-Group"
 
 #: logging/log-new-posts.php:21
 msgid "New Group"
-msgstr "새 그룹"
+msgstr "ກຸ່ມ ໃໝ່"
 
 #: logging/log-new-posts.php:26
 msgid "New Church"
-msgstr "새 교회"
+msgstr "ໂບດ ໃໝ່"
 
 #: logging/log-new-posts.php:31
 msgid "New Team"
-msgstr "새로운 팀"
+msgstr "ທີມງານໃຫມ່"
 
 #: logging/log-new-posts.php:36
 msgid "New Baptism"
-msgstr "새 세례"
+msgstr "ການບັບຕິສະມາ ໃໝ່"
 
 #: logging/log-new-posts.php:41
 msgid "New Coaching"
-msgstr "새로운 코칭"
+msgstr "ການຝຶກສອນ ໃໝ່"
 
 #: logging/log-new-posts.php:164
 msgid "%s is reporting a new contact."
-msgstr "% s이 (가) 새 연락처를보고합니다."
+msgstr "% s ກຳ ລັງລາຍງານລາຍຊື່ຜູ້ຕິດຕໍ່ ໃໝ່."
 
 #: logging/log-new-posts.php:169
 msgid "%s is reporting a new pre-group formed."
-msgstr "% s이 (가) 새로운 사전 그룹 형성을보고합니다."
+msgstr "% s ກຳ ລັງລາຍງານກຸ່ມທີ່ສ້າງຕັ້ງຂຶ້ນກ່ອນ."
 
 #: logging/log-new-posts.php:174
 msgid "%s is reporting a new group formed."
-msgstr "% s이 (가) 구성된 새 그룹을보고합니다."
+msgstr "% s ກຳ ລັງລາຍງານກຸ່ມ ໃໝ່ ທີ່ສ້າງຂຶ້ນ."
 
 #: logging/log-new-posts.php:179
 msgid "%s is reporting a new church."
-msgstr "% s 님이 새 교회를보고하고 있습니다."
+msgstr "% s ກຳ ລັງລາຍງານສາດສະ ໜາ ຈັກ ໃໝ່."
 
 #: logging/log-new-posts.php:184
 msgid "%s is reporting a new leadership team formed."
-msgstr "% s이 (가) 새로운 리더십 팀이 구성되었다고보고합니다."
+msgstr "% s ກຳ ລັງລາຍງານທີມງານຜູ້ ນຳ ໃໝ່ ທີ່ສ້າງຕັ້ງຂຶ້ນ."
 
 #: logging/log-new-posts.php:189
 msgid "%s is reporting a new baptism."
-msgstr "% s 님이 새로운 세례를보고하고 있습니다."
+msgstr "% s ກຳ ລັງລາຍງານການບັບຕິສະມາ ໃໝ່."
 
 #: logging/log-new-posts.php:194
 msgid "%s is reporting an coaching relationship."
-msgstr "% s 님이 코칭 관계를보고하고 있습니다."
+msgstr "% s ກຳ ລັງລາຍງານຄວາມ ສຳ ພັນຂອງການເປັນຄູຝຶກ."
 
 #: metrics/network-maps-area.php:74 metrics/network-maps-area.php:83
 #: metrics/network-maps-area.php:91 metrics/network-maps-area.php:99
 msgid "Active"
-msgstr "유효한"
+msgstr "ຫ້າວຫັນ"
 
 #: metrics/network-maps-area.php:75
 msgid "Paused"
-msgstr "일시 중지됨"
+msgstr "ຢຸດຊົ່ວຄາວ"
 
 #: metrics/network-maps-area.php:76
 msgid "Closed"
-msgstr "닫은"
+msgstr "ປິດແລ້ວ"
 
 #: metrics/network-maps-area.php:84 metrics/network-maps-area.php:92
 #: metrics/network-maps-area.php:100
 msgid "Inactive"
-msgstr "비활성"
+msgstr "ບໍ່ເຮັດວຽກ"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1150,7 +1150,7 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-network-dashboard"
 #. Description of the plugin/theme
 #: 
 msgid "Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging."
-msgstr "이 제자 도구 사이트를 더 큰 사이트 네트워크에 연결하십시오. 보안에 민감한 총계, 매핑, 활동 로깅을 추가합니다."
+msgstr "ເຊື່ອມຕໍ່ເວັບໄຊທ໌ Disciple Tools ນີ້ກັບເຄືອຂ່າຍທີ່ໃຫຍ່ກວ່າ. ເພີ່ມ ຈຳ ນວນທີ່ລະອຽດອ່ອນດ້ານຄວາມປອດໄພ, ການສ້າງແຜນທີ່, ການຕັດໄມ້ກິດຈະ ກຳ."
 
 #. Author URI of the plugin/theme
 #: 
@@ -1165,15 +1165,15 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-streams"
 #. Description of the plugin/theme
 #: 
 msgid "Disciple Tools Streams Extension adds recording of streams and cross reference them with contacts, groups, and locations."
-msgstr "Disciple Tools Streams Extension은 스트림 기록을 추가하고 연락처, 그룹 및 위치와 상호 참조합니다."
+msgstr "ເຄື່ອງມື Disciple Streams Extension ເພີ່ມການບັນທຶກສາຍນ້ ຳ ແລະການອ້າງອິງຂ້າມກັບພວກເຂົາຕິດຕໍ່, ກຸ່ມ, ແລະສະຖານທີ່ຕ່າງໆ."
 
 #: disciple-tools-training.php:297
 msgid "'Disciple Tools - Training' plugin requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or make sure it is latest version."
-msgstr "'Disciple Tools-Training'플러그인이 작동하려면 'Disciple Tools'테마가 필요합니다. '제자 도구'테마를 활성화하거나 최신 버전인지 확인하세요."
+msgstr "ເຄື່ອງມື 'Disciple - ການຝຶກອົບຮົມ' ຕ້ອງໃຊ້ຫົວຂໍ້ 'Disciple Tools' ເພື່ອເຮັດວຽກ. ກະລຸນາກະຕຸ້ນຫົວຂໍ້ 'Disciple Tools' ຫຼືຮັບປະກັນວ່າມັນແມ່ນເວີຊັນລ້າສຸດ."
 
 #: disciple-tools-training.php:299
 msgid "Current Disciple Tools version: %1$s, required version: %2$s"
-msgstr "현재 Disciple Tools 버전 : % 1 $ s, 필수 버전 : % 2 $ s"
+msgstr "ຮຸ່ນເຄື່ອງມືສາວົກປັດຈຸບັນ:% 1 $ s, ລຸ້ນທີ່ຕ້ອງການ:% 2 $ s"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1183,148 +1183,148 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-training"
 #. Description of the plugin/theme
 #: 
 msgid "Disciple Tools Training Extension adds recording of trainings and cross reference them with contacts, groups, and locations."
-msgstr "Disciple Tools Training Extension은 훈련 기록을 추가하고 연락처, 그룹 및 위치와 상호 참조합니다."
+msgstr "ການຂະຫຍາຍການຝຶກອົບຮົມເຄື່ອງມືຂອງ Disciple ເພີ່ມການບັນທຶກການຝຶກອົບຮົມແລະການອ້າງອິງຂ້າມກັບພວກເຂົາຕິດຕໍ່, ກຸ່ມ, ແລະສະຖານທີ່."
 
 #: post-type/module-base.php:128
 msgid "Duplicates"
-msgstr "중복"
+msgstr "ຊໍ້າກັນ"
 
 #: post-type/module-base.php:185
 msgid "Coach"
-msgstr "코치"
+msgstr "ຄູຝຶກສອນ"
 
 #: post-type/module-base.php:253
 msgid "Leaders Total"
-msgstr "총 리더"
+msgstr "ຜູ້ ນຳ ທັງ ໝົດ"
 
 #: post-type/module-base.php:271
 msgid "Disciples Total"
-msgstr "제자 합계"
+msgstr "ສາວົກທັງ ໝົດ"
 
 #: post-type/module-base.php:277
 msgid "Key Disciples"
-msgstr "주요 제자"
+msgstr "ສານຸສິດທີ່ ສຳ ຄັນ"
 
 #: post-type/module-base.php:288
 msgid "Groups Total"
-msgstr "그룹 합계"
+msgstr "ກຸ່ມທັງ ໝົດ"
 
 #: post-type/module-base.php:348
 msgid "Trainings Total"
-msgstr "교육 합계"
+msgstr "ການຝຶກອົບຮົມທັງ ໝົດ"
 
 #: includes/admin/admin-menu-and-tabs.php:63
 msgid "Dashboard Plugin"
-msgstr "대시 보드 플러그인"
+msgstr "Plugin Dashboard"
 
 #: includes/admin/admin-menu-and-tabs.php:84 includes/functions.php:84
 msgid "Dashboard"
-msgstr "계기반"
+msgstr "ແຜງຄວບຄຸມ"
 
 #: includes/rest-api.php:80
 msgid "%s days since last update"
-msgstr "마지막 업데이트 이후 % s 일"
+msgstr "% s ມື້ນັບຕັ້ງແຕ່ການປັບປຸງຄັ້ງສຸດທ້າຍ"
 
 #: includes/rest-api.php:416
 msgid "Accept"
-msgstr "동의하기"
+msgstr "ຍອມ​ຮັບ"
 
 #: includes/rest-api.php:417
 msgid "Decline"
-msgstr "쇠퇴"
+msgstr "ຫຼຸດລົງ"
 
 #: includes/rest-api.php:418
 msgid "# Contacts Assigned"
-msgstr "할당 된 연락처 수"
+msgstr "# ຕິດຕໍ່ໄດ້ຮັບມອບ ໝາຍ"
 
 #: includes/rest-api.php:419
 msgid "# First Meetings"
-msgstr "# 첫 만남"
+msgstr "# ການພົບປະຄັ້ງ ທຳ ອິດ"
 
 #: includes/rest-api.php:420
 msgid "# Faith milestones"
-msgstr "# 신앙 이정표"
+msgstr "# ຄວາມເຊື່ອທີ່ ສຳ ຄັນ"
 
 #: includes/rest-api.php:421
 msgid "Hurray! You are caught up."
-msgstr "만세! 당신은 잡혔습니다."
+msgstr "ຮືຮືຮື! ເຈົ້າຖືກຈັບ."
 
 #: includes/rest-api.php:422
 msgid "remove"
-msgstr "없애다"
+msgstr "ເອົາອອກ"
 
 #: includes/rest-api.php:423
 msgid "mark as complete"
-msgstr "완료로 표시"
+msgstr "ໝາຍ ສຳ ເລັດ"
 
 #: includes/rest-api.php:424
 msgid "No task created"
-msgstr "생성 된 작업 없음"
+msgstr "ບໍ່ມີ ໜ້າ ວຽກໃດໆທີ່ຖືກສ້າງຂື້ນ"
 
 #: includes/rest-api.php:425
 msgid "Reminder"
-msgstr "조언"
+msgstr "ເຕືອນ"
 
 #: includes/rest-api.php:426
 msgid "No note set"
-msgstr "설정된 메모 없음"
+msgstr "ບໍ່ມີການຕັ້ງຄ່າບັນທຶກ"
 
 #: includes/template-dashboard.php:30
 msgid "Add a contact"
-msgstr "연락처 추가"
+msgstr "ເພີ່ມລາຍຊື່ຜູ້ຕິດຕໍ່"
 
 #: includes/template-dashboard.php:33
 msgid "View Contacts List"
-msgstr "연락처 목록보기"
+msgstr "ເບິ່ງລາຍຊື່ຜູ້ຕິດຕໍ່"
 
 #: includes/template-dashboard.php:47
 msgid "Pending Contacts"
-msgstr "보류중인 연락처"
+msgstr "ຕິດຕໍ່ພົວພັນທີ່ຍັງຄ້າງ"
 
 #: includes/template-dashboard.php:52 includes/template-dashboard.php:70
 msgid "View All"
-msgstr "모두보기"
+msgstr "ເບິ່ງ​ທັງ​ຫມົດ"
 
 #: includes/template-dashboard.php:65
 msgid "Update Needed"
-msgstr "업데이트 필요"
+msgstr "ຕ້ອງການການປັບປຸງ"
 
 #: includes/template-dashboard.php:79
 msgid "Contact Workload"
-msgstr "워크로드에 문의"
+msgstr "ຕິດຕໍ່ Workload"
 
 #: includes/template-dashboard.php:83
 msgid "Choose an option to let the dispatcher(s) know if you are ready for new contacts"
-msgstr "새 연락처를받을 준비가되었는지 운영자에게 알리는 옵션을 선택하세요."
+msgstr "ເລືອກຕົວເລືອກທີ່ຈະແຈ້ງໃຫ້ຜູ້ສົ່ງເອກະສານຮູ້ວ່າທ່ານກຽມພ້ອມ ສຳ ລັບຜູ້ຕິດຕໍ່ ໃໝ່"
 
 #: includes/template-dashboard.php:93
 msgid "Set travel or dates unavailable"
-msgstr "여행 또는 날짜 설정 불가"
+msgstr "ກຳ ນົດການເດີນທາງຫລືວັນເວລາທີ່ບໍ່ມີ"
 
 #: includes/template-dashboard.php:106
 msgid "Personal Benchmarks"
-msgstr "개인 벤치 마크"
+msgstr "ມາດຕະຖານສ່ວນຕົວ"
 
 #: includes/template-dashboard.php:135
 msgid "Faith Milestone Totals"
-msgstr "믿음 이정표 합계"
+msgstr "ສັດທາ Milestone Totals"
 
 #: includes/template-dashboard.php:138
 msgid "Milestones on your active contacts"
-msgstr "활성 연락처에 대한 마일스톤"
+msgstr "Milestones ກ່ຽວກັບລາຍຊື່ຜູ້ຕິດຕໍ່ທີ່ມີການເຄື່ອນໄຫວຂອງທ່ານ"
 
 #: includes/template-dashboard.php:149
 msgid "Seeker Path Progress"
-msgstr "시커 경로 진행"
+msgstr "ຄວາມຄືບ ໜ້າ ຂອງຜູ້ຊອກຫາ"
 
 #: includes/template-dashboard.php:152
 msgid "No data to show yet. You have no active contacts"
-msgstr "아직 표시 할 데이터가 없습니다. 활성 연락처가 없습니다."
+msgstr "ບໍ່ມີຂໍ້ມູນທີ່ຈະສະແດງເທື່ອ. ທ່ານບໍ່ມີລາຍຊື່ຜູ້ຕິດຕໍ່ທີ່ໃຊ້ງານຢູ່"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Dashboard"
-msgstr "제자 도구-대시 보드"
+msgstr "ເຄື່ອງມືສາວົກ - ແຜງຄວບຄຸມ"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1334,5 +1334,5 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-dashboard"
 #. Description of the plugin/theme
 #: 
 msgid "The multiplier dashboard upgrades the multipliers experience as soon as they log into the system giving them a landing page with stats."
-msgstr "승수 대시 보드는 시스템에 로그인하자마자 승수 경험을 업그레이드하여 통계가있는 랜딩 페이지를 제공합니다."
+msgstr "dashboard ຕົວຄູນຍົກລະດັບປະສົບການຕົວທະວີຄູນທັນທີທີ່ພວກເຂົາເຂົ້າສູ່ລະບົບໃຫ້ພວກເຂົາມີ ໜ້າ ດິນທີ່ມີສະຖິຕິ"
 
