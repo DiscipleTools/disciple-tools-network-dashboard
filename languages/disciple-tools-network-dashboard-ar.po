@@ -33,15 +33,15 @@ msgstr "تدريب"
 
 #: post-type/module-base.php:59
 msgid "Multiplier"
-msgstr "المضاعف"
+msgstr "مضاعف"
 
 #: post-type/module-base.php:65
 msgid "Dispatcher"
-msgstr "المرسل"
+msgstr "موزع المهام"
 
 #: post-type/module-base.php:72
 msgid "Disciple.Tools Admin"
-msgstr "Disciple.Tools Admin"
+msgstr "مشرف Disciple.Tools"
 
 #: post-type/module-base.php:79
 msgid "Administrator"
@@ -49,15 +49,15 @@ msgstr "مدير"
 
 #: post-type/module-base.php:432
 msgid "Members"
-msgstr "أفراد"
+msgstr "الأعضاء"
 
 #: post-type/module-base.php:433
 msgid "Contacts"
-msgstr "جهات الاتصال"
+msgstr "جهات الاتصالل"
 
 #: post-type/module-base.php:294 post-type/module-base.php:450
 msgid "Groups"
-msgstr "مجموعات"
+msgstr "المجموعات"
 
 #: post-type/module-base.php:259 post-type/module-base.php:467
 msgid "Leaders"
@@ -77,7 +77,7 @@ msgstr "يزرع"
 
 #: post-type/module-base.php:203 post-type/module-base.php:519
 msgid "People Groups"
-msgstr "مجموعات الناس"
+msgstr "مجموعات بشرية"
 
 #: post-type/module-base.php:102
 msgid "Tags"
@@ -90,11 +90,11 @@ msgstr "طريقة مفيدة لتدريب العناصر ذات الصلة وي
 
 #: post-type/module-base.php:111
 msgid "Follow"
-msgstr "إتبع"
+msgstr "تابع"
 
 #: post-type/module-base.php:118
 msgid "Un-Follow"
-msgstr "الغاء المتابعة"
+msgstr "عدم المتابعة"
 
 #: includes/template-dashboard.php:164
 msgid "Tasks"
@@ -172,7 +172,7 @@ msgstr "لن يحدث هذا التدريب بعد الآن."
 
 #: post-type/module-base.php:176
 msgid "Assigned To"
-msgstr "مخصص ل"
+msgstr "المعينة لي"
 
 #: post-type/module-base.php:288
 msgid "Select the main person who is responsible for reporting on this training."
@@ -189,7 +189,7 @@ msgstr "الشخص الذي زرع و / أو يوجه هذا التدريب. ي�
 
 #: post-type/module-base.php:196
 msgid "Requires Update"
-msgstr "يتطلب التحديث"
+msgstr "يحتاج إلى تحديث"
 
 #: post-type/module-base.php:313
 msgid "Video Link"
@@ -220,11 +220,11 @@ msgstr "المواقع"
 #: post-type/module-base.php:220 post-type/module-base.php:229
 msgctxt "Optional Documentation"
 msgid "The general location where this contact is located."
-msgstr "الموقع العام حيث توجد جهة الاتصال هذه."
+msgstr "من فضلك محاولة الاتصال مرة اخرى"
 
 #: post-type/module-base.php:236
 msgid "Address"
-msgstr "عنوان"
+msgstr "العنوان"
 
 #: post-type/module-base.php:413
 msgid "Parent Training"
@@ -301,25 +301,25 @@ msgstr "مشارك في تدريب."
 
 #: post-type/module-base.php:537
 msgid "Other"
-msgstr "آخر"
+msgstr "أخرى"
 
 #: post-type/module-base.php:568
 msgctxt "input field placeholder"
 msgid "Search Users"
-msgstr "بحث في المستخدمين"
+msgstr "البحث عن مستخدمين"
 
 #: post-type/module-base.php:601
 msgctxt "Search 'something'"
 msgid "Search %s"
-msgstr "بحث في٪ s"
+msgstr "البحث  %s"
 
 #: post-type/module-base.php:656
 msgid "Create"
-msgstr "خلق"
+msgstr "إنشاء"
 
 #: post-type/module-base.php:661
 msgid "Select"
-msgstr "تحديد"
+msgstr "اختيار"
 
 #: post-type/module-base.php:666
 msgid "To add new members, click on 'Create' or 'Select'."
@@ -328,7 +328,7 @@ msgstr "لإضافة أعضاء جدد ، انقر فوق \"إنشاء\" أو \"
 #: post-type/module-base.php:671
 msgctxt "Add members modal"
 msgid "Add members from existing contacts"
-msgstr "إضافة أعضاء من جهات الاتصال الموجودة"
+msgstr "إنشاء مستخدم من خلال هذا المتصل"
 
 #: post-type/module-base.php:672
 msgctxt "Add members modal"
@@ -337,7 +337,7 @@ msgstr "في الحقل \"قائمة الأعضاء\" ، اكتب اسم جهة 
 
 #: post-type/module-base.php:681
 msgid "Close"
-msgstr "قريب"
+msgstr "غلق"
 
 #: post-type/module-base.php:879
 msgid "Removed %1$s: %2$s"
@@ -368,11 +368,11 @@ msgstr "التقارير"
 
 #: post-type/module-reports.php:121
 msgid "Total Groups"
-msgstr "إجمالي المجموعات"
+msgstr "مجموع المجموعات"
 
 #: post-type/module-reports.php:122
 msgid "Total Baptisms"
-msgstr "مجموع المعمودية"
+msgstr "مجموع المعموديات"
 
 #: post-type/module-reports.php:123
 msgid "Countries"
@@ -504,7 +504,7 @@ msgstr "موقع"
 #: metrics/network-statistics-users.php:14
 #: metrics/network-statistics-users.php:50
 msgid "Users"
-msgstr "المستخدمون"
+msgstr "المستخدم"
 
 #: metrics/base.php:225
 msgid "Timestamp"
@@ -540,11 +540,11 @@ msgstr "التدريب"
 
 #: metrics/base.php:234
 msgid "Baptized"
-msgstr "عمد"
+msgstr "تم تعميده"
 
 #: metrics/base.php:235
 msgid "Active Groups"
-msgstr "المجموعات النشطة"
+msgstr "المجموعات الناشطة"
 
 #: metrics/base.php:236 metrics/base.php:258
 msgid "Church"
@@ -564,11 +564,11 @@ msgstr "المستجيبون"
 
 #: metrics/base.php:240
 msgid "Dispatchers"
-msgstr "المرسلون"
+msgstr "منظمي الحركة"
 
 #: metrics/base.php:241
 msgid "Multipliers"
-msgstr "المضاعفات"
+msgstr "المضاعفون"
 
 #: metrics/base.php:242
 msgid "Admins"
@@ -596,15 +596,15 @@ msgstr "قمع الرسم البياني"
 
 #: metrics/base.php:250
 msgid "Contact"
-msgstr "اتصل"
+msgstr "جهة اتصال"
 
 #: metrics/base.php:251
 msgid "Group"
-msgstr "مجموعة"
+msgstr "المجموعة"
 
 #: metrics/base.php:253
 msgid "User"
-msgstr "المستعمل"
+msgstr "المستخدم"
 
 #: metrics/base.php:256 metrics/base.php:301
 msgid "Sites"
@@ -612,7 +612,7 @@ msgstr "المواقع"
 
 #: metrics/base.php:257
 msgid "Baptisms"
-msgstr "المعمودية"
+msgstr "المعموديات"
 
 #: metrics/base.php:259 metrics/network-maps-area.php:97
 #: metrics/network-maps-area.php:127
@@ -657,7 +657,7 @@ msgstr "تكبير تلقائي"
 
 #: metrics/base.php:272
 msgid "World"
-msgstr "العالمية"
+msgstr "العالم"
 
 #: metrics/base.php:273
 msgid "Country"
@@ -669,7 +669,7 @@ msgstr "حالة"
 
 #: includes/template-dashboard.php:23
 msgid "Active Contacts"
-msgstr "جهات الاتصال النشطة"
+msgstr "جهات الاتصال الناشطة"
 
 #: metrics/base.php:277
 msgid "Paused Contacts"
@@ -685,7 +685,7 @@ msgstr "مجموع جهات الاتصال"
 
 #: metrics/base.php:280
 msgid "New Contacts"
-msgstr "اتصالات جديدة"
+msgstr "جهات اتصال جديدة"
 
 #: metrics/base.php:282
 msgid "New Baptisms"
@@ -733,7 +733,7 @@ msgstr "آخر 24 شهرًا"
 
 #: metrics/base.php:295
 msgid "This Year"
-msgstr "هذه السنة"
+msgstr "هذا العام"
 
 #: metrics/base.php:297
 msgid "Activity Map"
@@ -763,7 +763,7 @@ msgstr "مفتاح"
 
 #: metrics/base.php:304
 msgid "Name"
-msgstr "اسم"
+msgstr "الاسم"
 
 #: metrics/base.php:305
 msgid "Total Activities"
@@ -788,7 +788,7 @@ msgstr "ازل"
 #: metrics/base.php:311 metrics/network-home.php:12 metrics/network-home.php:13
 #: metrics/network-home.php:14 metrics/network-home.php:48
 msgid "Home"
-msgstr "الصفحة الرئيسية"
+msgstr "البيت"
 
 #: metrics/base.php:313
 msgid "Events (30 Days)"
@@ -823,7 +823,7 @@ msgstr "سجل"
 #: metrics/network-activity.php:12 metrics/network-activity.php:13
 #: metrics/network-activity.php:14 metrics/network-activity.php:25
 msgid "Activity"
-msgstr "نشاط"
+msgstr "النشاط"
 
 #: metrics/network-maps-area.php:15 metrics/network-maps-area.php:16
 #: metrics/network-maps-area.php:17 metrics/network-maps-area.php:110
@@ -1127,11 +1127,11 @@ msgstr "يقوم٪ s بالإبلاغ عن علاقة تدريب."
 #: metrics/network-maps-area.php:74 metrics/network-maps-area.php:83
 #: metrics/network-maps-area.php:91 metrics/network-maps-area.php:99
 msgid "Active"
-msgstr "نشيط"
+msgstr "ناشط"
 
 #: metrics/network-maps-area.php:75
 msgid "Paused"
-msgstr "متوقف مؤقتًا"
+msgstr "توقف"
 
 #: metrics/network-maps-area.php:76
 msgid "Closed"
@@ -1140,7 +1140,7 @@ msgstr "مغلق"
 #: metrics/network-maps-area.php:84 metrics/network-maps-area.php:92
 #: metrics/network-maps-area.php:100
 msgid "Inactive"
-msgstr "غير نشط"
+msgstr "غير ناشط"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1223,7 +1223,7 @@ msgstr "لوحة القيادة"
 
 #: includes/rest-api.php:80
 msgid "%s days since last update"
-msgstr "٪ s أيام منذ آخر تحديث"
+msgstr "%s يوم منذ آخر تحديث"
 
 #: includes/rest-api.php:416
 msgid "Accept"
@@ -1231,7 +1231,7 @@ msgstr "قبول"
 
 #: includes/rest-api.php:417
 msgid "Decline"
-msgstr "انخفاض"
+msgstr "رفض"
 
 #: includes/rest-api.php:418
 msgid "# Contacts Assigned"
@@ -1259,15 +1259,15 @@ msgstr "وضع علامة مكتمل"
 
 #: includes/rest-api.php:424
 msgid "No task created"
-msgstr "لم يتم إنشاء مهمة"
+msgstr "تم إنشاء جهة اتصال جديدة"
 
 #: includes/rest-api.php:425
 msgid "Reminder"
-msgstr "تذكير"
+msgstr "الجنس"
 
 #: includes/rest-api.php:426
 msgid "No note set"
-msgstr "لم يتم تعيين الملاحظات"
+msgstr "لا شيء محدّد"
 
 #: includes/template-dashboard.php:30
 msgid "Add a contact"
@@ -1287,7 +1287,7 @@ msgstr "مشاهدة الكل"
 
 #: includes/template-dashboard.php:65
 msgid "Update Needed"
-msgstr "تحديث اللازمة"
+msgstr "يحتاج إلى تحديث"
 
 #: includes/template-dashboard.php:79
 msgid "Contact Workload"
