@@ -5,481 +5,481 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 "Project-Id-Version: Disciple Tools Plugins\n"
-"Language: sl\n"
+"Language: ur\n"
 
 #: disciple-tools-dashboard.php:253 disciple-tools-dashboard.php:264
 msgid "Whoah, partner!"
-msgstr "Joj, partner!"
+msgstr "واہ ، ساتھی!"
 
 #: disciple-tools-dashboard.php:276
 msgid "Method does not exist."
-msgstr "Metoda ne obstaja."
+msgstr "طریقہ موجود نہیں ہے۔"
 
 #: metrics/mapbox-maps.php:30
 msgid "Training Maps"
-msgstr "Zemljevidi za trening"
+msgstr "تربیت کے نقشے"
 
 #: post-type/module-base.php:354
 msgid "Trainings"
-msgstr "Treningi"
+msgstr "تربیت"
 
 #: metrics/mapbox-personal-maps.php:30
 msgid "Trainings Maps"
-msgstr "Zemljevidi za treninge"
+msgstr "تربیت کے نقشے"
 
 #: network/customize-site-linking.php:10 post-type/module-base.php:54
 msgid "Training"
-msgstr "Usposabljanje"
+msgstr "تربیت"
 
 #: post-type/module-base.php:59
 msgid "Multiplier"
-msgstr "Množitelj"
+msgstr "ضرب"
 
 #: post-type/module-base.php:65
 msgid "Dispatcher"
-msgstr "Dispečer"
+msgstr "بھیجنے والا"
 
 #: post-type/module-base.php:72
 msgid "Disciple.Tools Admin"
-msgstr "Učenec"
+msgstr "شاگرد۔ ٹولز ایڈمن"
 
 #: post-type/module-base.php:79
 msgid "Administrator"
-msgstr "Skrbnik"
+msgstr "ایڈمنسٹریٹر"
 
 #: post-type/module-base.php:432
 msgid "Members"
-msgstr "Člani"
+msgstr "ممبران"
 
 #: post-type/module-base.php:433
 msgid "Contacts"
-msgstr "Stiki"
+msgstr "رابطے"
 
 #: post-type/module-base.php:294 post-type/module-base.php:450
 msgid "Groups"
-msgstr "Skupine"
+msgstr "گروہ"
 
 #: post-type/module-base.php:259 post-type/module-base.php:467
 msgid "Leaders"
-msgstr "Voditelji"
+msgstr "قائدین"
 
 #: post-type/module-base.php:484
 msgid "Coaches"
-msgstr "Trenerji"
+msgstr "کوچز"
 
 #: post-type/module-base.php:497
 msgid "Planted by"
-msgstr "Posadil"
+msgstr "کے ذریعہ لگائے گئے"
 
 #: post-type/module-base.php:498
 msgid "Planting"
-msgstr "Sajenje"
+msgstr "پودے لگانا"
 
 #: post-type/module-base.php:203 post-type/module-base.php:519
 msgid "People Groups"
-msgstr "Skupine ljudi"
+msgstr "لوگوں کے گروپ"
 
 #: post-type/module-base.php:102
 msgid "Tags"
-msgstr "Oznake"
+msgstr "ٹیگز"
 
 #: post-type/module-base.php:215
 msgctxt "Optional Documentation"
 msgid "A useful way to training related items and can help training contacts associated with noteworthy characteristics. e.g. business owner, sports lover. The contacts can also be filtered using these tags."
-msgstr "Koristni način za predmete, povezane z usposabljanjem, in lahko pomaga pri vzpostavljanju stikov, povezanih z omembe vrednimi lastnostmi. npr. lastnik podjetja, ljubitelj športa. Stike je mogoče filtrirati tudi s pomočjo teh oznak."
+msgstr "متعلقہ اشیاء کی تربیت کا ایک مفید طریقہ اور قابل ذکر خصوصیات سے وابستہ رابطوں کی تربیت میں مدد مل سکتی ہے۔ جیسے کاروباری مالک ، کھیل سے محبت کرنے والا۔ ان ٹیگوں کا استعمال کرکے رابطوں کو بھی فلٹر کیا جاسکتا ہے۔"
 
 #: post-type/module-base.php:111
 msgid "Follow"
-msgstr "Sledite"
+msgstr "پیروی"
 
 #: post-type/module-base.php:118
 msgid "Un-Follow"
-msgstr "Ne sledi"
+msgstr "فالو کریں"
 
 #: includes/template-dashboard.php:164
 msgid "Tasks"
-msgstr "Naloge"
+msgstr "ٹاسک"
 
 #: post-type/module-base.php:249
 msgctxt "Training Status label"
 msgid "New"
-msgstr "Novo"
+msgstr "نئی"
 
 #: post-type/module-base.php:250
 msgctxt "Training Status field description"
 msgid "New training added to the system"
-msgstr "Sistem je dodan nov trening"
+msgstr "اس نظام میں نئی تربیت شامل ہوگئی"
 
 #: post-type/module-base.php:254
 msgctxt "Training Status label"
 msgid "Proposed"
-msgstr "Predlagano"
+msgstr "مجوزہ"
 
 #: post-type/module-base.php:255
 msgctxt "Training Status field description"
 msgid "This training has been proposed and is in initial conversations"
-msgstr "Ta trening je predlagan in je v začetnih pogovorih"
+msgstr "یہ تربیت تجویز کی گئی ہے اور ابتدائی گفتگو میں ہے"
 
 #: post-type/module-base.php:259
 msgctxt "Training Status label"
 msgid "Scheduled"
-msgstr "Načrtovano"
+msgstr "طے شدہ"
 
 #: post-type/module-base.php:260
 msgctxt "Training Status field description"
 msgid "This training is confirmed, on the calendar."
-msgstr "Ta trening je potrjen na koledarju."
+msgstr "اس تربیت کی تصدیق کیلنڈر پر کی جاتی ہے۔"
 
 #: post-type/module-base.php:264
 msgctxt "Training Status label"
 msgid "In Progress"
-msgstr "V teku"
+msgstr "کام جاری ہے"
 
 #: post-type/module-base.php:265
 msgctxt "Training Status field description"
 msgid "This training is confirmed, on the calendar, or currently active."
-msgstr "To usposabljanje je potrjeno, v koledarju ali trenutno aktivno."
+msgstr "اس تربیت کی تصدیق ، کیلنڈر پر ، یا فی الحال فعال ہے۔"
 
 #: post-type/module-base.php:269
 msgctxt "Training Status label"
 msgid "Complete"
-msgstr "Dokončano"
+msgstr "مکمل"
 
 #: post-type/module-base.php:270
 msgctxt "Training Status field description"
 msgid "This training has successfully completed"
-msgstr "To usposabljanje je bilo uspešno zaključeno"
+msgstr "یہ تربیت کامیابی کے ساتھ مکمل ہوئی ہے"
 
 #: post-type/module-base.php:274
 msgctxt "Training Status label"
 msgid "Paused"
-msgstr "Začasno ustavljeno"
+msgstr "رک گیا"
 
 #: post-type/module-base.php:275
 msgctxt "Training Status field description"
 msgid "This contact is currently on hold. It has potential of getting scheduled in the future."
-msgstr "Ta stik je trenutno na čakanju. V prihodnosti lahko načrtuje načrtovanje."
+msgstr "فی الحال یہ رابطہ برقرار ہے۔ مستقبل میں اس کے شیڈول کا امکان ہے۔"
 
 #: post-type/module-base.php:279
 msgctxt "Training Status label"
 msgid "Closed"
-msgstr "Zaprto"
+msgstr "بند"
 
 #: post-type/module-base.php:280
 msgctxt "Training Status field description"
 msgid "This training is no longer going to happen."
-msgstr "Ta trening se ne bo več zgodil."
+msgstr "یہ تربیت اب ہونے والی نہیں ہے۔"
 
 #: post-type/module-base.php:176
 msgid "Assigned To"
-msgstr "Dodeljena"
+msgstr "مقرر کیا، مقرر کرنا"
 
 #: post-type/module-base.php:288
 msgid "Select the main person who is responsible for reporting on this training."
-msgstr "Izberite glavno osebo, ki je odgovorna za poročanje o tem usposabljanju."
+msgstr "اس اہم شخص کو منتخب کریں جو اس تربیت کے بارے میں رپورٹنگ کا ذمہ دار ہے۔"
 
 #: post-type/module-base.php:185
 msgid "Training Coach / Church Planter"
-msgstr "Izobraževalni trener / cerkovnik"
+msgstr "ٹریننگ کوچ / چرچ پلانٹر"
 
 #: post-type/module-base.php:297
 msgctxt "Optional Documentation"
 msgid "The person who planted and/or is coaching this training. Only one person can be assigned to a training while multiple people can be coaches / church planters of this training."
-msgstr "Oseba, ki je posadila in / ali vodi ta trening. Na trening se lahko dodeli samo ena oseba, medtem ko je lahko več ljudi trenerjev / načrtovalcev cerkve tega treninga."
+msgstr "وہ شخص جس نے لگائی اور / یا اس تربیت کی تربیت دے رہی ہے۔ صرف ایک فرد کو تربیت سونپی جاسکتی ہے جبکہ متعدد افراد اس تربیت کے کوچ / گرجا گھر کے آلہ کار ہوسکتے ہیں۔"
 
 #: post-type/module-base.php:196
 msgid "Requires Update"
-msgstr "Zahteva posodobitev"
+msgstr "اپ ڈیٹ کی ضرورت ہے"
 
 #: post-type/module-base.php:313
 msgid "Video Link"
-msgstr "Video povezava"
+msgstr "ویڈیو لنک"
 
 #: post-type/module-base.php:314
 msgctxt "Optional Documentation"
 msgid "Link to video chat service"
-msgstr "Povezava do storitve video klepeta"
+msgstr "ویڈیو چیٹ سروس سے لنک کریں"
 
 #: post-type/module-base.php:321
 msgid "Notes"
-msgstr "Opombe"
+msgstr "نوٹ"
 
 #: post-type/module-base.php:322
 msgctxt "Optional Documentation"
 msgid "Notes on when the trainings will happen"
-msgstr "Opombe o tem, kdaj bodo treningi"
+msgstr "تربیت کب ہوگی اس پر نوٹس"
 
 #: post-type/module-base.php:331 post-type/module-base.php:543
 msgid "Meeting Times"
-msgstr "Časi sestankov"
+msgstr "میٹنگ ٹائمز"
 
 #: post-type/module-base.php:219 post-type/module-base.php:228
 msgid "Locations"
-msgstr "Lokacije"
+msgstr "مقامات"
 
 #: post-type/module-base.php:220 post-type/module-base.php:229
 msgctxt "Optional Documentation"
 msgid "The general location where this contact is located."
-msgstr "Splošno mesto, kjer je ta stik."
+msgstr "عام مقام جہاں یہ رابطہ واقع ہے۔"
 
 #: post-type/module-base.php:236
 msgid "Address"
-msgstr "Naslov"
+msgstr "پتہ"
 
 #: post-type/module-base.php:413
 msgid "Parent Training"
-msgstr "Izobraževanje staršev"
+msgstr "والدین کی تربیت"
 
 #: post-type/module-base.php:414
 msgctxt "Optional Documentation"
 msgid "A training that launched this training."
-msgstr "Usposabljanje, ki je začelo to usposabljanje."
+msgstr "ایک ایسی تربیت جس نے اس تربیت کا آغاز کیا۔"
 
 #: post-type/module-base.php:424
 msgid "Peer Training"
-msgstr "Vzajemno usposabljanje"
+msgstr "ہم مرتبہ کی تربیت"
 
 #: post-type/module-base.php:425
 msgctxt "Optional Documentation"
 msgid "A related training that isn't a parent/child in relationship. It might indicate trainings that collaborate, are about to merge, recently split, etc."
-msgstr "Sorodno usposabljanje, ki ni v razmerju starš / otrok. Lahko kaže na treninge, ki sodelujejo, se bodo kmalu združili, nedavno razdelili itd."
+msgstr "متعلقہ تربیت جو رشتے میں والدین / بچ isn'tہ نہیں ہے۔ یہ ایسی تربیت کی نشاندہی کرسکتی ہے جو باہم تعاون کریں ، انضمام ہونے والی ہیں ، حال ہی میں تقسیم ہونا وغیرہ"
 
 #: post-type/module-base.php:435
 msgid "Child Training"
-msgstr "Izobraževanje otrok"
+msgstr "بچوں کی تربیت"
 
 #: post-type/module-base.php:436
 msgctxt "Optional Documentation"
 msgid "A training that has been birthed out of this training."
-msgstr "Trening, ki je bil rojen s tega treninga."
+msgstr "ایک تربیت جو اس تربیت سے پیدا ہوئی ہے۔"
 
 #: post-type/module-base.php:446 post-type/module-base.php:542
 #: post-type/module-base.php:653
 msgid "Member List"
-msgstr "Seznam članov"
+msgstr "ممبر کی فہرست"
 
 #: post-type/module-base.php:447
 msgctxt "Optional Documentation"
 msgid "The contacts who are members of this training."
-msgstr "Stiki, ki so člani tega usposabljanja."
+msgstr "رابطے جو اس تربیت کے ممبر ہیں۔"
 
 #: post-type/module-base.php:464
 msgctxt "Optional Documentation"
 msgid "The people trainings represented by this training."
-msgstr "Izobraževanje ljudi, ki ga predstavlja to izobraževanje."
+msgstr "لوگوں کی تربیت جس کی نمائندگی اس تربیت سے کی جاتی ہے۔"
 
 #: post-type/module-base.php:484
 msgid "Member Count"
-msgstr "Število članov"
+msgstr "ممبر گنتی"
 
 #: post-type/module-base.php:485 post-type/module-base.php:492
 msgctxt "Optional Documentation"
 msgid "The number of members in this training. It will automatically be updated when new members are added or removed in the member list. Change this number manually to included people who may not be in the system but are also members of the training."
-msgstr "Število članov na tem usposabljanju. Samodejno se bo posodobil, ko bodo na seznamu članov dodani ali odstranjeni novi člani. Ročno spremenite to številko na vključene osebe, ki morda niso v sistemu, vendar so tudi člani usposabljanja."
+msgstr "اس تربیت میں ممبروں کی تعداد۔ جب ممبر لسٹ میں نئے ممبران شامل یا ہٹائے جائیں گے تو یہ خود بخود اپ ڈیٹ ہوجائے گی۔ اس نمبر کو دستی طور پر ان لوگوں میں شامل کریں جو شاید سسٹم میں نہ ہوں بلکہ وہ تربیت کے ممبر بھی ہوں۔"
 
 #: post-type/module-base.php:491
 msgid "Leader Count"
-msgstr "Števec voditeljev"
+msgstr "قائد شمار"
 
 #: post-type/module-base.php:503
 msgid "Training as Leader"
-msgstr "Usposabljanje za vodjo"
+msgstr "قائد کی حیثیت سے تربیت"
 
 #: post-type/module-base.php:504
 msgctxt "Optional Documentation"
 msgid "Leader of a training"
-msgstr "Vodja treninga"
+msgstr "ایک تربیت کا قائد"
 
 #: post-type/module-base.php:514
 msgid "Training as Participant"
-msgstr "Izobraževanje kot udeleženec"
+msgstr "بطور شریک تربیت"
 
 #: post-type/module-base.php:515
 msgctxt "Optional Documentation"
 msgid "Participant in a training."
-msgstr "Udeleženec usposabljanja."
+msgstr "ایک تربیت میں شریک۔"
 
 #: post-type/module-base.php:537
 msgid "Other"
-msgstr "Drugo"
+msgstr "دیگر"
 
 #: post-type/module-base.php:568
 msgctxt "input field placeholder"
 msgid "Search Users"
-msgstr "Iskanje uporabnikov"
+msgstr "صارفین تلاش کریں"
 
 #: post-type/module-base.php:601
 msgctxt "Search 'something'"
 msgid "Search %s"
-msgstr "Išči% s"
+msgstr "٪ s تلاش کریں"
 
 #: post-type/module-base.php:656
 msgid "Create"
-msgstr "Ustvari"
+msgstr "بنانا"
 
 #: post-type/module-base.php:661
 msgid "Select"
-msgstr "Izberite"
+msgstr "منتخب کریں"
 
 #: post-type/module-base.php:666
 msgid "To add new members, click on 'Create' or 'Select'."
-msgstr "Če želite dodati nove člane, kliknite »Ustvari« ali »Izberi«."
+msgstr "نئے ممبروں کو شامل کرنے کے لئے ، 'تخلیق' یا 'منتخب کریں' پر کلک کریں۔"
 
 #: post-type/module-base.php:671
 msgctxt "Add members modal"
 msgid "Add members from existing contacts"
-msgstr "Dodajte člane iz obstoječih stikov"
+msgstr "موجودہ رابطوں سے ممبران کو شامل کریں"
 
 #: post-type/module-base.php:672
 msgctxt "Add members modal"
 msgid "In the 'Member List' field, type the name of an existing contact to add them to this training."
-msgstr "V polje »Seznam članov« vnesite ime obstoječega stika, da ga dodate na to usposabljanje."
+msgstr "'ممبر لسٹ' فیلڈ میں ، کسی موجودہ رابطے کا نام ان کی تربیت میں شامل کرنے کے ل type ٹائپ کریں۔"
 
 #: post-type/module-base.php:681
 msgid "Close"
-msgstr "Zapri"
+msgstr "بند کریں"
 
 #: post-type/module-base.php:879
 msgid "Removed %1$s: %2$s"
-msgstr "Odstranjeno% 1 $ s:% 2 $ s"
+msgstr "ہٹا دیا گیا٪ 1 $ s:٪ 2 $ s"
 
 #: post-type/module-base.php:882
 msgid "Added %1$s: %2$s"
-msgstr "Dodano% 1 $ s:% 2 $ s"
+msgstr "٪ 1 $ s:٪ 2 $ s شامل کیا گیا"
 
 #: post-type/module-base.php:885
 msgid "Updated %1$s: %2$s to %3$s"
-msgstr "Posodobljeno% 1 $ s:% 2 $ s na% 3 $ s"
+msgstr "٪ 1 $ s:٪ 2 $ s کو٪ 3 $ s میں اپ ڈیٹ کیا گیا"
 
 #: post-type/module-base.php:942
 msgctxt "List Filters"
 msgid "Assigned to me"
-msgstr "Dodeljeno meni"
+msgstr "مجھے تفویض کیا"
 
 #: post-type/module-base.php:950 post-type/module-base.php:1007
 #: post-type/module-base.php:1015
 msgctxt "List Filters"
 msgid "All"
-msgstr "Vse"
+msgstr "سب"
 
 #: post-type/module-reports.php:85
 msgid "Reports"
-msgstr "Poročila"
+msgstr "رپورٹیں"
 
 #: post-type/module-reports.php:121
 msgid "Total Groups"
-msgstr "Skupno skupin"
+msgstr "کل گروپس"
 
 #: post-type/module-reports.php:122
 msgid "Total Baptisms"
-msgstr "Skupni krsti"
+msgstr "کل بپتسمہ"
 
 #: post-type/module-reports.php:123
 msgid "Countries"
-msgstr "Države"
+msgstr "ممالک"
 
 #: post-type/module-reports.php:124
 msgid "States"
-msgstr "Državah"
+msgstr "ریاستیں"
 
 #: post-type/module-reports.php:125
 msgid "Counties"
-msgstr "Okrožja"
+msgstr "کاؤنٹیوں"
 
 #: post-type/module-public-calendar.php:432
 #: post-type/module-registration.php:385
 msgid "Add"
-msgstr "Dodaj"
+msgstr "شامل کریں"
 
 #: post-type/module-registration.php:31
 msgid "Apps"
-msgstr "Aplikacije"
+msgstr "اطلاقات"
 
 #: post-type/module-registration.php:59
 msgid "copy link"
-msgstr "kopiraj povezavo"
+msgstr "کاپی لنک"
 
 #: post-type/module-registration.php:61
 msgid "edit form"
-msgstr "uredite obrazec"
+msgstr "فارم میں ترمیم کریں"
 
 #: post-type/module-registration.php:63
 msgid "report"
-msgstr "poročilo"
+msgstr "رپورٹ"
 
 #: post-type/module-registration.php:67
 msgid "create link"
-msgstr "ustvari povezavo"
+msgstr "لنک بنائیں"
 
 #: post-type/module-registration.php:114
 msgid "link"
-msgstr "povezava"
+msgstr "لنک"
 
 #: post-type/module-registration.php:116
 msgid "show on calendar"
-msgstr "oddaja na koledarju"
+msgstr "کیلنڈر پر دکھائیں"
 
 #: post-type/module-registration.php:118
 msgid "open registration"
-msgstr "odprta registracija"
+msgstr "کھلی رجسٹریشن "
 
 #: post-type/module-registration.php:265
 msgid "add"
-msgstr "dodajte"
+msgstr "شامل کریں"
 
 #: post-type/module-registration.php:266
 msgid "Use"
-msgstr "Uporaba"
+msgstr "استعمال کریں"
 
 #: post-type/module-registration.php:267 post-type/module-registration.php:695
 msgid "Search Location"
-msgstr "Iskanje lokacije"
+msgstr "تلاش مقام"
 
 #: post-type/module-registration.php:268
 msgid "Delete Location"
-msgstr "Izbriši lokacijo"
+msgstr "مقام کو حذف کریں"
 
 #: post-type/module-registration.php:269
 msgid "Open Mapping"
-msgstr "Odprite preslikavo"
+msgstr "اوپن میپنگ"
 
 #: post-type/module-registration.php:270
 msgid "clear"
-msgstr "jasno"
+msgstr "صاف"
 
 #: post-type/module-registration.php:384
 msgid "Register for Training"
-msgstr "Prijavite se na usposabljanje"
+msgstr "تربیت کے لئے رجسٹر ہوں"
 
 #: post-type/module-registration.php:386
 msgid "Join Training"
-msgstr "Pridružite se treningu"
+msgstr "ٹریننگ میں شامل ہوں"
 
 #: post-type/module-registration.php:387
 msgid "Join in"
-msgstr "Pridruži se"
+msgstr "میں شامل ہوں"
 
 #: post-type/module-registration.php:700
 msgid "Clear"
-msgstr "Jasno"
+msgstr "صاف"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Training"
-msgstr "Orodja za učence - Usposabljanje"
+msgstr "شاگرد کے اوزار - تربیت"
 
 #: includes/admin/admin-menu-and-tabs.php:62
 msgid "Extensions (DT)"
-msgstr "Razširitve (DT)"
+msgstr "ایکسٹینشن (ڈی ٹی)"
 
 #: admin/menu-and-tabs.php:64 admin/menu-and-tabs.php:65
 #: admin/menu-and-tabs.php:103
 msgid "Network Dashboard"
-msgstr "Nadzorna plošča omrežja"
+msgstr "نیٹ ورک ڈیش بورڈ"
 
 #: includes/admin/admin-menu-and-tabs.php:79
 msgid "You do not have sufficient permissions to access this page."
-msgstr "Nimate dovolj dovoljenj za dostop do te strani."
+msgstr "آپ کو اس صفحے تک رسائی کے ل sufficient کافی اجازت نہیں ہے۔"
 
 #: admin/menu-and-tabs.php:107 admin/menu-and-tabs.php:130
 #: admin/menu-and-tabs.php:135
@@ -488,7 +488,7 @@ msgstr "nav-tab-active"
 
 #: admin/migrations/0000-initial.php:21
 msgid "Network Dashboard Viewer"
-msgstr "Pregledovalnik omrežne nadzorne plošče"
+msgstr "نیٹ ورک ڈیش بورڈ دیکھنے والا"
 
 #: metrics/base.php:220
 msgid "ID"
@@ -496,7 +496,7 @@ msgstr "ID"
 
 #: metrics/base.php:221 metrics/base.php:255
 msgid "Site"
-msgstr "Spletna stran"
+msgstr "سائٹ"
 
 #: metrics/base.php:224 metrics/base.php:254 metrics/network-maps-area.php:89
 #: metrics/network-maps-area.php:133 metrics/network-statistics-users.php:12
@@ -504,374 +504,374 @@ msgstr "Spletna stran"
 #: metrics/network-statistics-users.php:14
 #: metrics/network-statistics-users.php:50
 msgid "Users"
-msgstr "Uporabniki"
+msgstr "صارفین"
 
 #: metrics/base.php:225
 msgid "Timestamp"
-msgstr "Časovni žig"
+msgstr "ٹائم اسٹیمپ"
 
 #: metrics/base.php:226
 msgid "Visit"
-msgstr "Obiščite"
+msgstr "ملاحظہ کریں"
 
 #: metrics/base.php:227
 msgid "View"
-msgstr "Pogled"
+msgstr "دیکھیں"
 
 #: metrics/base.php:229
 msgid "Active Snapshot"
-msgstr "Aktivni posnetek"
+msgstr "متحرک سنیپ شاٹ"
 
 #: metrics/base.php:230
 msgid "Generations"
-msgstr "Generacije"
+msgstr "نسلیں"
 
 #: metrics/base.php:231
 msgid "Follow-up Funnel"
-msgstr "Nadaljni tok"
+msgstr "فالو اپ چمنی"
 
 #: metrics/base.php:232
 msgid "On-Going Meetings"
-msgstr "Srečanja v teku"
+msgstr "جانے والی ملاقاتیں"
 
 #: metrics/base.php:233
 msgid "Coaching"
-msgstr "Treniranje"
+msgstr "کوچنگ"
 
 #: metrics/base.php:234
 msgid "Baptized"
-msgstr "Krščen"
+msgstr "بپتسمہ لیا"
 
 #: metrics/base.php:235
 msgid "Active Groups"
-msgstr "Aktivne skupine"
+msgstr "متحرک گروپس"
 
 #: metrics/base.php:236 metrics/base.php:258
 msgid "Church"
-msgstr "Cerkev"
+msgstr "چرچ"
 
 #: metrics/base.php:237
 msgid "Health Metrics"
-msgstr "Meritve zdravja"
+msgstr "ہیلتھ میٹرکس"
 
 #: metrics/base.php:238
 msgid "Total Users"
-msgstr "Skupno število uporabnikov"
+msgstr "کل صارف"
 
 #: metrics/base.php:239
 msgid "Responders"
-msgstr "Odzivniki"
+msgstr "جواب دہندگان"
 
 #: metrics/base.php:240
 msgid "Dispatchers"
-msgstr "Dispečerji"
+msgstr "بھیجنے والے"
 
 #: metrics/base.php:241
 msgid "Multipliers"
-msgstr "Množitelji"
+msgstr "ضرب"
 
 #: metrics/base.php:242
 msgid "Admins"
-msgstr "Skrbniki"
+msgstr "ایڈمنز"
 
 #: metrics/base.php:243
 msgid "User Login Activity"
-msgstr "Aktivnost prijave uporabnika"
+msgstr "صارف لاگ ان کی سرگرمی"
 
 #: metrics/base.php:244
 msgid "Users Active in the Last 30 Days"
-msgstr "Uporabniki, aktivni v zadnjih 30 dneh"
+msgstr "آخری 30 دنوں میں استعمال کنندہ"
 
 #: metrics/base.php:245
 msgid "Practicing"
-msgstr "Vadba"
+msgstr "مشق کرنا"
 
 #: metrics/base.php:246
 msgid "Not Practicing"
-msgstr "Ne vadim"
+msgstr "مشق نہیں"
 
 #: metrics/base.php:247
 msgid "Chart Funnel"
-msgstr "Diagram toka"
+msgstr "چارٹ چمنی"
 
 #: metrics/base.php:250
 msgid "Contact"
-msgstr "Kontakt"
+msgstr "رابطہ کریں"
 
 #: metrics/base.php:251
 msgid "Group"
-msgstr "Skupina"
+msgstr "گروپ"
 
 #: metrics/base.php:253
 msgid "User"
-msgstr "Uporabnik"
+msgstr "صارف"
 
 #: metrics/base.php:256 metrics/base.php:301
 msgid "Sites"
-msgstr "Spletna mesta"
+msgstr "سائٹیں"
 
 #: metrics/base.php:257
 msgid "Baptisms"
-msgstr "Krsti"
+msgstr "بپتسمہ"
 
 #: metrics/base.php:259 metrics/network-maps-area.php:97
 #: metrics/network-maps-area.php:127
 msgid "Churches"
-msgstr "Cerkve"
+msgstr "گرجا گھر"
 
 #: metrics/base.php:260
 msgid "Location"
-msgstr "Lokacija"
+msgstr "مقام"
 
 #: metrics/base.php:261
 msgid "Types"
-msgstr "Vrste"
+msgstr "اقسام"
 
 #: metrics/base.php:263
 msgid "modify filter"
-msgstr "spremeni filter"
+msgstr "فلٹر میں ترمیم کریں"
 
 #: metrics/base.php:264
 msgid "Filter List"
-msgstr "Seznam filtrov"
+msgstr "فلٹر کی فہرست"
 
 #: metrics/base.php:265
 msgid "reset data"
-msgstr "ponastavi podatke"
+msgstr "ڈیٹا کو دوبارہ ترتیب دیں"
 
 #: post-type/module-base.php:133
 msgid "Status"
-msgstr "Stanje"
+msgstr "حالت"
 
 #: metrics/base.php:268
 msgid "Status - All"
-msgstr "Stanje - Vse"
+msgstr "حیثیت - سب"
 
 #: metrics/base.php:270
 msgid "Zoom Level"
-msgstr "Povečava"
+msgstr "زوم لیول"
 
 #: metrics/base.php:271
 msgid "Auto Zoom"
-msgstr "Samodejni zoom"
+msgstr "آٹو زوم"
 
 #: metrics/base.php:272
 msgid "World"
-msgstr "Svet"
+msgstr "دنیا"
 
 #: metrics/base.php:273
 msgid "Country"
-msgstr "Država"
+msgstr "ملک"
 
 #: metrics/base.php:274
 msgid "State"
-msgstr "Država"
+msgstr "حالت"
 
 #: includes/template-dashboard.php:23
 msgid "Active Contacts"
-msgstr "Aktivni stiki"
+msgstr "فعال رابطے"
 
 #: metrics/base.php:277
 msgid "Paused Contacts"
-msgstr "Začasno ustavljeni stiki"
+msgstr "روکے ہوئے رابطے"
 
 #: metrics/base.php:278
 msgid "Closed Contacts"
-msgstr "Zaprti stiki"
+msgstr "رابطے بند"
 
 #: metrics/base.php:279
 msgid "Total Contacts"
-msgstr "Skupaj stikov"
+msgstr "کل رابطے"
 
 #: metrics/base.php:280
 msgid "New Contacts"
-msgstr "Novi stiki"
+msgstr "نئے رابطے"
 
 #: metrics/base.php:282
 msgid "New Baptisms"
-msgstr "Novi krsti"
+msgstr "نیا بپتسمہ"
 
 #: metrics/base.php:283
 msgid "Baptism Generations"
-msgstr "Krstne generacije"
+msgstr "بپتسمہ نسلیں"
 
 #: metrics/base.php:284
 msgid "Select Location"
-msgstr "Izberite Lokacija"
+msgstr "مقام منتخب کریں"
 
 #: metrics/base.php:286
 msgid "New Groups"
-msgstr "Nove skupine"
+msgstr "نئے گروپس"
 
 #: metrics/base.php:287
 msgid "Pre-Group"
-msgstr "Predskupina"
+msgstr "پری گروپ"
 
 #: metrics/base.php:288
 msgid "Pre-Groups"
-msgstr "Predskupine"
+msgstr "پری گروپس"
 
 #: metrics/base.php:290
 msgid "Last 7 Days"
-msgstr "Zadnjih 7 dni"
+msgstr "آخری 7 دن"
 
 #: metrics/base.php:291
 msgid "Last 30 Days"
-msgstr "Zadnjih 30 dni"
+msgstr "آخری 30 دن"
 
 #: metrics/base.php:292
 msgid "Last 60 Days"
-msgstr "Zadnjih 60 dni"
+msgstr "آخری 60 دن"
 
 #: metrics/base.php:293
 msgid "Last 12 Months"
-msgstr "Zadnjih 12 mesecev"
+msgstr "پچھلے 12 مہینے"
 
 #: metrics/base.php:294
 msgid "Last 24 Months"
-msgstr "Zadnjih 24 mesecev"
+msgstr "آخری 24 ماہ"
 
 #: metrics/base.php:295
 msgid "This Year"
-msgstr "To leto"
+msgstr "اس سال"
 
 #: metrics/base.php:297
 msgid "Activity Map"
-msgstr "Zemljevid dejavnosti"
+msgstr "سرگرمی کا نقشہ"
 
 #: metrics/base.php:298 metrics/network-activity-stats.php:11
 #: metrics/network-activity-stats.php:12 metrics/network-activity-stats.php:13
 #: metrics/network-activity-stats.php:57
 msgid "Stats"
-msgstr "Statistika"
+msgstr "اعدادوشمار"
 
 #: metrics/base.php:299
 msgid "Activities"
-msgstr "Dejavnosti"
+msgstr "سرگرمیاں"
 
 #: metrics/base.php:300
 msgid "Actions"
-msgstr "Dejanja"
+msgstr "عمل"
 
 #: metrics/base.php:302
 msgid "By Action Type"
-msgstr "Po vrsti dejanja"
+msgstr "بذریعہ ایکشن ٹائپ"
 
 #: metrics/base.php:303
 msgid "Key"
-msgstr "Ključ"
+msgstr "چابی"
 
 #: metrics/base.php:304
 msgid "Name"
-msgstr "Ime"
+msgstr "نام"
 
 #: metrics/base.php:305
 msgid "Total Activities"
-msgstr "Skupne dejavnosti"
+msgstr "کل سرگرمیاں"
 
 #: metrics/base.php:306
 msgid "Feed"
-msgstr "Krma"
+msgstr "کھانا کھلانا"
 
 #: metrics/base.php:307
 msgid "Time"
-msgstr "Čas"
+msgstr "وقت"
 
 #: metrics/base.php:308
 msgid "Result Limit"
-msgstr "Omejitev rezultata"
+msgstr "نتائج کی حد"
 
 #: metrics/base.php:309
 msgid "uncheck"
-msgstr "počistite"
+msgstr "چیک نہ کریں"
 
 #: metrics/base.php:311 metrics/network-home.php:12 metrics/network-home.php:13
 #: metrics/network-home.php:14 metrics/network-home.php:48
 msgid "Home"
-msgstr "Domov"
+msgstr "گھر"
 
 #: metrics/base.php:313
 msgid "Events (30 Days)"
-msgstr "Dogodki (30 dni)"
+msgstr "واقعات (30 دن)"
 
 #: metrics/base.php:315
 msgid "All Active/Inactive"
-msgstr "Vse aktivno / neaktivno"
+msgstr "تمام متحرک / غیر فعال"
 
 #: metrics/base.php:316 metrics/network-maps-hovermap.php:12
 #: metrics/network-maps-hovermap.php:13 metrics/network-maps-hovermap.php:14
 #: metrics/network-maps-hovermap.php:51
 msgid "Hover Map"
-msgstr "Zemljevid miške"
+msgstr "ہوور نقشہ"
 
 #: metrics/loader.php:16
 msgid "Network"
-msgstr "Omrežje"
+msgstr "نیٹ ورک"
 
 #: metrics/network-activity-map.php:15 metrics/network-activity-map.php:16
 #: metrics/network-activity-map.php:17 metrics/network-activity-map.php:63
 msgid "Map"
-msgstr "Zemljevid"
+msgstr "نقشہ"
 
 #: metrics/network-activity-stream.php:12
 #: metrics/network-activity-stream.php:13
 #: metrics/network-activity-stream.php:14
 #: metrics/network-activity-stream.php:51
 msgid "Log"
-msgstr "Dnevnik"
+msgstr "لاگ"
 
 #: metrics/network-activity.php:12 metrics/network-activity.php:13
 #: metrics/network-activity.php:14 metrics/network-activity.php:25
 msgid "Activity"
-msgstr "Dejavnost"
+msgstr "سرگرمی"
 
 #: metrics/network-maps-area.php:15 metrics/network-maps-area.php:16
 #: metrics/network-maps-area.php:17 metrics/network-maps-area.php:110
 msgid "Area Maps"
-msgstr "Zemljevidi območja"
+msgstr "رقبہ کے نقشے"
 
 #: metrics/network-maps-locationlist.php:12
 #: metrics/network-maps-locationlist.php:13
 #: metrics/network-maps-locationlist.php:14
 #: metrics/network-maps-locationlist.php:46
 msgid "Location List"
-msgstr "Seznam lokacij"
+msgstr "مقام کی فہرست"
 
 #: metrics/network-maps.php:12 metrics/network-maps.php:13
 #: metrics/network-maps.php:14 metrics/network-maps.php:25
 msgid "Maps"
-msgstr "Zemljevidi"
+msgstr "نقشہ جات"
 
 #: metrics/network-sites.php:12 metrics/network-sites.php:13
 #: metrics/network-sites.php:14 metrics/network-sites.php:45
 msgid "Site Reports"
-msgstr "Poročila o spletnih mestih"
+msgstr "سائٹ کی رپورٹیں"
 
 #: metrics/network-statistics.php:12 metrics/network-statistics.php:13
 #: metrics/network-statistics.php:14 metrics/network-statistics.php:25
 msgid "Statistics"
-msgstr "Statistika"
+msgstr "اعدادوشمار"
 
 #: shared/permissions.php:41
 msgid "Network Dashboard Transfer Both Ways"
-msgstr "Omrežna nadzorna plošča prenaša v obe smeri"
+msgstr "نیٹ ورک ڈیش بورڈ دونوں طریقوں سے منتقلی کرتا ہے"
 
 #: shared/permissions.php:42
 msgid "Network Dashboard Receiving Only"
-msgstr "Omrežna nadzorna plošča samo prejema"
+msgstr "صرف نیٹ ورک ڈیش بورڈ وصول کرنا"
 
 #: shared/permissions.php:43
 msgid "Network Dashboard Sending Only"
-msgstr "Samo pošiljanje nadzorne plošče omrežja"
+msgstr "نیٹ ورک ڈیش بورڈ صرف بھیج رہا ہے"
 
 #: shared/site-profile.php:99
 msgid "Network Dashboard Site Profile"
-msgstr "Profil spletnega mesta nadzorne plošče"
+msgstr "نیٹ ورک ڈیش بورڈ سائٹ پروفائل"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Network Dashboard"
-msgstr "Orodja za učence - omrežna nadzorna plošča"
+msgstr "شاگرد کے اوزار - نیٹ ورک ڈیش بورڈ"
 
 #: admin/customize-site-linking.php:10 metrics/mapbox-maps.php:31
 #: metrics/mapbox-personal-maps.php:31 post-type/module-base.php:393
@@ -879,268 +879,268 @@ msgstr "Orodja za učence - omrežna nadzorna plošča"
 #: post-type/module-base.php:466 post-type/module-base.php:483
 #: post-type/module-base.php:520
 msgid "Streams"
-msgstr "Potoki"
+msgstr "سلسلہ"
 
 #: metrics/mapbox-maps.php:30
 msgid "Stream Maps"
-msgstr "Pretočni zemljevidi"
+msgstr "سلسلہ کے نقشے"
 
 #: metrics/mapbox-personal-maps.php:30
 msgid "Streams Maps"
-msgstr "Zemljevidi tokov"
+msgstr "سلسلہ کے نقشے"
 
 #: post-type/module-base.php:103
 msgctxt "Optional Documentation"
 msgid "A useful way to stream related items and can help stream contacts associated with noteworthy characteristics. e.g. business owner, sports lover. The contacts can also be filtered using these tags."
-msgstr "Koristni način pretakanja povezanih elementov in lahko pomaga pri pretakanju stikov, povezanih z omembe vrednimi lastnostmi. npr. lastnik podjetja, ljubitelj športa. Stike je mogoče filtrirati tudi s pomočjo teh oznak."
+msgstr "متعلقہ آئٹموں کو اسٹریم کرنے کا ایک مفید طریقہ اور قابل ذکر خصوصیات سے وابستہ رابطوں کو اسٹریم کرنے میں مدد مل سکتی ہے۔ جیسے کاروباری مالک ، کھیل سے محبت کرنے والا۔ ان ٹیگوں کا استعمال کرکے رابطوں کو بھی فلٹر کیا جاسکتا ہے۔"
 
 #: post-type/module-base.php:138
 msgctxt "Stream Status label"
 msgid "New"
-msgstr "Novo"
+msgstr "نئی"
 
 #: post-type/module-base.php:139
 msgctxt "Stream Status field description"
 msgid "New stream added to the system"
-msgstr "V sistem je dodan nov tok"
+msgstr "سسٹم میں نیا سلسلہ شامل ہوا"
 
 #: post-type/module-base.php:143
 msgctxt "Stream Status label"
 msgid "Model"
-msgstr "Model"
+msgstr "ماڈل"
 
 #: post-type/module-base.php:144
 msgctxt "Stream Status field description"
 msgid "This stream has been proposed and is in initial conversations"
-msgstr "Ta tok je predlagan in je v začetnih pogovorih"
+msgstr "یہ ندی تجویز کی گئی ہے اور ابتدائی گفتگو میں ہے"
 
 #: post-type/module-base.php:148
 msgctxt "Stream Status label"
 msgid "Assist"
-msgstr "Asist"
+msgstr "مدد کریں"
 
 #: post-type/module-base.php:149
 msgctxt "Stream Status field description"
 msgid "This stream is confirmed, on the calendar."
-msgstr "Ta tok je potrjen v koledarju."
+msgstr "اس سلسلہ کی تصدیق کیلنڈر پر کی گئی ہے۔"
 
 #: post-type/module-base.php:153
 msgctxt "Stream Status label"
 msgid "Watch"
-msgstr "Pazi"
+msgstr "دیکھو"
 
 #: post-type/module-base.php:154
 msgctxt "Stream Status field description"
 msgid "This stream is confirmed, on the calendar, or currently active."
-msgstr "Ta tok je potrjen, v koledarju ali trenutno aktiven."
+msgstr "اس سلسلہ کی تصدیق ، کیلنڈر پر ، یا فی الحال فعال ہے۔"
 
 #: post-type/module-base.php:158
 msgctxt "Stream Status label"
 msgid "Leave"
-msgstr "Pustite"
+msgstr "چھوڑ دو"
 
 #: post-type/module-base.php:159
 msgctxt "Stream Status field description"
 msgid "This stream has successfully completed"
-msgstr "Ta tok je bil uspešno zaključen"
+msgstr "یہ سلسلہ کامیابی کے ساتھ مکمل ہوا ہے"
 
 #: post-type/module-base.php:163
 msgctxt "Stream Status label"
 msgid "Paused"
-msgstr "Začasno ustavljeno"
+msgstr "رک گیا"
 
 #: post-type/module-base.php:164
 msgctxt "Stream Status field description"
 msgid "This contact is currently on hold. It has potential of getting scheduled in the future."
-msgstr "Ta stik je trenutno na čakanju. V prihodnosti lahko načrtuje načrtovanje."
+msgstr "فی الحال یہ رابطہ برقرار ہے۔ مستقبل میں اس کے شیڈول کا امکان ہے۔"
 
 #: post-type/module-base.php:168
 msgctxt "Stream Status label"
 msgid "Closed"
-msgstr "Zaprto"
+msgstr "بند"
 
 #: post-type/module-base.php:169
 msgctxt "Stream Status field description"
 msgid "This stream is no longer going to happen."
-msgstr "Ta tok se ne bo več zgodil."
+msgstr "اب یہ سلسلہ جاری ہونے والا نہیں ہے۔"
 
 #: post-type/module-base.php:177
 msgid "Select the main person who is responsible for reporting on this stream."
-msgstr "Izberite glavno osebo, ki je odgovorna za poročanje o tem toku."
+msgstr "اس اہم شخص کو منتخب کریں جو اس سلسلہ کی اطلاع دہندگی کا ذمہ دار ہے۔"
 
 #: post-type/module-base.php:186
 msgctxt "Optional Documentation"
 msgid "The person who planted and/or is coaching this stream. Only one person can be assigned to a stream while multiple people can be coaches / church planters of this stream."
-msgstr "Oseba, ki je zasadila in / ali trenira ta tok. V potok je mogoče dodeliti samo eno osebo, medtem ko je lahko več ljudi trenerjev / posaditeljev cerkve tega potoka."
+msgstr "وہ شخص جس نے اس ندی کو لگایا اور / یا اس کی کوچنگ کررہا ہے۔ صرف ایک شخص کو ایک ندی میں تفویض کیا جاسکتا ہے جبکہ متعدد افراد اس دھارے کے کوچ / چرچ کے شجر کاری کرنے والے ہوسکتے ہیں۔"
 
 #: post-type/module-base.php:204
 msgctxt "Optional Documentation"
 msgid "The people streams represented by this stream."
-msgstr "Ljudski tokovi, ki jih predstavlja ta tok."
+msgstr "لوگ اس سلسلے کی نمائندگی کرتے ہیں۔"
 
 #: post-type/module-base.php:309
 msgid "Parent Stream"
-msgstr "Starševski tok"
+msgstr "والدین کا سلسلہ"
 
 #: post-type/module-base.php:310
 msgctxt "Optional Documentation"
 msgid "A stream that launched this stream."
-msgstr "Tok, ki je zagnal ta tok."
+msgstr "ایک ندی جس نے اس سلسلہ کو شروع کیا۔"
 
 #: post-type/module-base.php:321
 msgid "Peer Streams"
-msgstr "Vrstniški tokovi"
+msgstr "ہم مرتبہ سلسلہ"
 
 #: post-type/module-base.php:322
 msgctxt "Optional Documentation"
 msgid "A related stream that isn't a parent/child in relationship. It might indicate streams that collaborate, are about to merge, recently split, etc."
-msgstr "Sorodni tok, ki ni starš / otrok v zvezi. Lahko kaže na tokove, ki sodelujejo, se bodo združili, pred kratkim razdelili itd."
+msgstr "متعلقہ ندی جو رشتے میں والدین / بچ isn'tہ نہیں ہے۔ یہ ان ندیوں کی نشاندہی کرسکتا ہے جو تعاون کرتے ہیں ، ملنے والے ہیں ، حال ہی میں تقسیم ہونے والے ہیں ، وغیرہ۔"
 
 #: post-type/module-base.php:333
 msgid "Child Streams"
-msgstr "Otroški tokovi"
+msgstr "چائلڈ اسٹریمز"
 
 #: post-type/module-base.php:334
 msgctxt "Optional Documentation"
 msgid "A stream that has been birthed out of this stream."
-msgstr "Potok, ki je bil rojen iz tega potoka."
+msgstr "ایک ندی جو اس ندی سے نکل چکی ہے۔"
 
 #: post-type/module-base.php:369
 msgid "Leader in Stream"
-msgstr "Vodja v toku"
+msgstr "سلسلہ میں رہبر"
 
 #: post-type/module-base.php:370
 msgctxt "Optional Documentation"
 msgid "Leader of a stream"
-msgstr "Vodja toka"
+msgstr "ایک ندی کا قائد"
 
 #: post-type/module-base.php:380
 msgid "Key Disciple in Stream"
-msgstr "Ključni učenec v toku"
+msgstr "سلسلہ میں کلیدی شاگرد"
 
 #: post-type/module-base.php:381
 msgctxt "Optional Documentation"
 msgid "Disciple in a stream."
-msgstr "Učenec v toku."
+msgstr "ایک ندی میں شاگرد"
 
 #: post-type/module-base.php:536
 msgid "Connections"
-msgstr "Povezave"
+msgstr "رابطے"
 
 #: post-type/module-reports.php:432
 msgid "Add Report"
-msgstr "Dodaj poročilo"
+msgstr "رپورٹ شامل کریں"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Streams"
-msgstr "Orodja za učence - tokovi"
+msgstr "شاگرد کے اوزار - سلسلہ"
 
 #: logging/log-generations.php:11
 msgid "Pre-Group Generations"
-msgstr "Generacije pred skupinami"
+msgstr "گروپ سے پہلے کی نسلیں"
 
 #: logging/log-generations.php:17
 msgid "Group Generations"
-msgstr "Skupinske generacije"
+msgstr "گروپ نسلیں"
 
 #: logging/log-generations.php:23
 msgid "Church Generations"
-msgstr "Cerkvene generacije"
+msgstr "چرچ کی نسلیں"
 
 #: logging/log-generations.php:29
 msgid "Team Generations"
-msgstr "Skupinske generacije"
+msgstr "ٹیم نسلیں"
 
 #: logging/log-generations.php:76
 msgid "%s is reporting a new pre-group generation."
-msgstr "% s poroča o novi generaciji predskupin."
+msgstr "٪ s نئی گروپ سے پہلے کی نسل کی اطلاع دے رہا ہے۔"
 
 #: logging/log-generations.php:81
 msgid "%s is reporting a new group generation."
-msgstr "% s poroča o novi generaciji skupine."
+msgstr "٪ s ایک نئی گروپ نسل کی اطلاع دے رہا ہے۔"
 
 #: logging/log-generations.php:86
 msgid "%s is reporting a new church generation."
-msgstr "% s poroča o novi cerkveni generaciji."
+msgstr "٪ s چرچ کی نئی نسل کی اطلاع دے رہا ہے۔"
 
 #: logging/log-generations.php:91
 msgid "%s is reporting a new leadership team generation."
-msgstr "% s poroča o novi generaciji vodstvene ekipe."
+msgstr "٪ s ایک نئی قیادت ٹیم کی نسل کی اطلاع دے رہا ہے۔"
 
 #: logging/log-new-posts.php:11
 msgid "New Contact"
-msgstr "Nov stik"
+msgstr "نیا رابطہ"
 
 #: logging/log-new-posts.php:16
 msgid "New Pre-Group"
-msgstr "Nova predskupina"
+msgstr "نیا پری گروپ"
 
 #: logging/log-new-posts.php:21
 msgid "New Group"
-msgstr "Nova skupina"
+msgstr "نیا گروپ"
 
 #: logging/log-new-posts.php:26
 msgid "New Church"
-msgstr "Nova cerkev"
+msgstr "نیا چرچ"
 
 #: logging/log-new-posts.php:31
 msgid "New Team"
-msgstr "Nova ekipa"
+msgstr "نئی ٹیم"
 
 #: logging/log-new-posts.php:36
 msgid "New Baptism"
-msgstr "Nov krst"
+msgstr "نیا بپتسمہ"
 
 #: logging/log-new-posts.php:41
 msgid "New Coaching"
-msgstr "Novo treniranje"
+msgstr "نئی کوچنگ"
 
 #: logging/log-new-posts.php:164
 msgid "%s is reporting a new contact."
-msgstr "% s poroča o novem stiku."
+msgstr "٪ s ایک نئے رابطے کی اطلاع دے رہا ہے۔"
 
 #: logging/log-new-posts.php:169
 msgid "%s is reporting a new pre-group formed."
-msgstr "% s poroča o ustanovljeni novi predskupini."
+msgstr "٪ s تشکیل شدہ ایک نئے پری گروپ کی اطلاع دے رہا ہے۔"
 
 #: logging/log-new-posts.php:174
 msgid "%s is reporting a new group formed."
-msgstr "% s poroča o ustanovljeni novi skupini."
+msgstr "٪ s بنائے ہوئے ایک نئے گروپ کی اطلاع دے رہا ہے۔"
 
 #: logging/log-new-posts.php:179
 msgid "%s is reporting a new church."
-msgstr "% s poroča o novi cerkvi."
+msgstr "٪ s ایک نئے چرچ کی اطلاع دے رہا ہے۔"
 
 #: logging/log-new-posts.php:184
 msgid "%s is reporting a new leadership team formed."
-msgstr "% s poroča o ustanovljeni novi vodstveni skupini."
+msgstr "٪ s تشکیل دی گئی ایک نئی قیادت کی ٹیم کی اطلاع دے رہا ہے۔"
 
 #: logging/log-new-posts.php:189
 msgid "%s is reporting a new baptism."
-msgstr "% s poroča o novem krstu."
+msgstr "٪ s ایک نیا بپتسمہ دے رہا ہے۔"
 
 #: logging/log-new-posts.php:194
 msgid "%s is reporting an coaching relationship."
-msgstr "% s poroča o trenerskem odnosu."
+msgstr "٪ s کوچنگ تعلقات کی اطلاع دے رہا ہے۔"
 
 #: metrics/network-maps-area.php:74 metrics/network-maps-area.php:83
 #: metrics/network-maps-area.php:91 metrics/network-maps-area.php:99
 msgid "Active"
-msgstr "Aktivno"
+msgstr "فعال"
 
 #: metrics/network-maps-area.php:75
 msgid "Paused"
-msgstr "Začasno ustavljeno"
+msgstr "رک گیا"
 
 #: metrics/network-maps-area.php:76
 msgid "Closed"
-msgstr "Zaprto"
+msgstr "بند"
 
 #: metrics/network-maps-area.php:84 metrics/network-maps-area.php:92
 #: metrics/network-maps-area.php:100
 msgid "Inactive"
-msgstr "Neaktivno"
+msgstr "غیر فعال"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1150,7 +1150,7 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-network-dashboard"
 #. Description of the plugin/theme
 #: 
 msgid "Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging."
-msgstr "Povežite to spletno mesto Disciple Tools z večjo mrežo spletnih mest. Dodaja varnostno občutljive vsote, preslikavo, beleženje dejavnosti."
+msgstr "اس انضباطی ٹولس سائٹ کو سائٹوں کے بڑے نیٹ ورک سے مربوط کریں۔ حفاظتی حساس کل ، نقشہ سازی ، سرگرمی لاگنگ شامل کرتا ہے۔"
 
 #. Author URI of the plugin/theme
 #: 
@@ -1165,15 +1165,15 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-streams"
 #. Description of the plugin/theme
 #: 
 msgid "Disciple Tools Streams Extension adds recording of streams and cross reference them with contacts, groups, and locations."
-msgstr "Razširitev tokov Disciple Tools doda snemanje tokov in jih navzkrižno sklicuje s stiki, skupinami in lokacijami."
+msgstr "شاگرد کے ٹولز اسٹریمز ایکسٹینشن میں دھاروں کی ریکارڈنگ شامل ہوتی ہے اور رابطوں ، گروپوں اور مقامات کے ساتھ ان کا حوالہ دیتے ہیں۔"
 
 #: disciple-tools-training.php:297
 msgid "'Disciple Tools - Training' plugin requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or make sure it is latest version."
-msgstr "Vtičnik »Orodja za učence - Vadba« zahteva delovanje teme »Orodja za učence«. Aktivirajte temo »Orodja za učence« ali se prepričajte, da je najnovejša različica."
+msgstr "'شاگرد ٹولز - ٹریننگ' پلگ ان میں کام کرنے کے لئے 'شاگرد ٹولز' تھیم کی ضرورت ہوتی ہے۔ براہ کرم 'شاگردی والے اوزار' تھیم کو چالو کریں یا یہ یقینی بنائیں کہ یہ تازہ ترین ورژن ہے۔"
 
 #: disciple-tools-training.php:299
 msgid "Current Disciple Tools version: %1$s, required version: %2$s"
-msgstr "Trenutna različica orodij za učence:% 1 $ s, obvezna različica:% 2 $ s"
+msgstr "موجودہ شاگردی والے ٹولز کا ورژن:٪ 1 $ s ، مطلوبہ ورژن:٪ 2 $ s"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1183,148 +1183,148 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-training"
 #. Description of the plugin/theme
 #: 
 msgid "Disciple Tools Training Extension adds recording of trainings and cross reference them with contacts, groups, and locations."
-msgstr "Disciple Tools Training Extension doda snemanje vadb in njihovo sklicevanje s stiki, skupinami in lokacijami."
+msgstr "شاگرد ٹولز ٹریننگ ایکسٹینشن میں تربیت کی ریکارڈنگ شامل ہوتی ہے اور رابطوں ، گروپوں اور مقامات کے ساتھ ان کا حوالہ دیا جاتا ہے۔"
 
 #: post-type/module-base.php:128
 msgid "Duplicates"
-msgstr "Dvojniki"
+msgstr "نقول"
 
 #: post-type/module-base.php:185
 msgid "Coach"
-msgstr "Trener"
+msgstr "کوچ"
 
 #: post-type/module-base.php:253
 msgid "Leaders Total"
-msgstr "Voditelji skupaj"
+msgstr "قائدین کل"
 
 #: post-type/module-base.php:271
 msgid "Disciples Total"
-msgstr "Učenci skupaj"
+msgstr "کل شاگرد"
 
 #: post-type/module-base.php:277
 msgid "Key Disciples"
-msgstr "Ključni učenci"
+msgstr "کلیدی شاگرد"
 
 #: post-type/module-base.php:288
 msgid "Groups Total"
-msgstr "Skupine skupaj"
+msgstr "گروپس کل"
 
 #: post-type/module-base.php:348
 msgid "Trainings Total"
-msgstr "Treningi skupaj"
+msgstr "ٹریننگ کل"
 
 #: includes/admin/admin-menu-and-tabs.php:63
 msgid "Dashboard Plugin"
-msgstr "Vtičnik za nadzorno ploščo"
+msgstr "ڈیش بورڈ پلگ ان"
 
 #: includes/admin/admin-menu-and-tabs.php:84 includes/functions.php:84
 msgid "Dashboard"
-msgstr "Armaturna plošča"
+msgstr "ڈیش بورڈ"
 
 #: includes/rest-api.php:80
 msgid "%s days since last update"
-msgstr "% s dni od zadnje posodobitve"
+msgstr "آخری تازہ کاری کے بعد٪ s دن"
 
 #: includes/rest-api.php:416
 msgid "Accept"
-msgstr "Sprejmi"
+msgstr "قبول کریں"
 
 #: includes/rest-api.php:417
 msgid "Decline"
-msgstr "Zavrni"
+msgstr "رد"
 
 #: includes/rest-api.php:418
 msgid "# Contacts Assigned"
-msgstr "# Stiki dodeljeni"
+msgstr "# رابطے تفویض"
 
 #: includes/rest-api.php:419
 msgid "# First Meetings"
-msgstr "# Prva srečanja"
+msgstr "# پہلی ملاقاتیں"
 
 #: includes/rest-api.php:420
 msgid "# Faith milestones"
-msgstr "# Mejniki vere"
+msgstr "# عقیدہ سنگ میل"
 
 #: includes/rest-api.php:421
 msgid "Hurray! You are caught up."
-msgstr "Hura! Ujeti ste."
+msgstr "ہورے! تم پکڑے گئے ہو"
 
 #: includes/rest-api.php:422
 msgid "remove"
-msgstr "Odstrani"
+msgstr "دور"
 
 #: includes/rest-api.php:423
 msgid "mark as complete"
-msgstr "označi kot popolno"
+msgstr "مکمل طور پر نشان زد کریں"
 
 #: includes/rest-api.php:424
 msgid "No task created"
-msgstr "Nobena naloga ni ustvarjena"
+msgstr "کوئی کام نہیں بنایا گیا"
 
 #: includes/rest-api.php:425
 msgid "Reminder"
-msgstr "Opomnik"
+msgstr "یاد دہانی"
 
 #: includes/rest-api.php:426
 msgid "No note set"
-msgstr "Opomba ni nastavljena"
+msgstr "کوئی نوٹ سیٹ نہیں ہے"
 
 #: includes/template-dashboard.php:30
 msgid "Add a contact"
-msgstr "Dodajte stik"
+msgstr "ایک رابطہ شامل کریں"
 
 #: includes/template-dashboard.php:33
 msgid "View Contacts List"
-msgstr "Ogled seznama stikov"
+msgstr "روابط کی فہرست دیکھیں"
 
 #: includes/template-dashboard.php:47
 msgid "Pending Contacts"
-msgstr "Čakajoči stiki"
+msgstr "زیر التواء رابطے"
 
 #: includes/template-dashboard.php:52 includes/template-dashboard.php:70
 msgid "View All"
-msgstr "Poglej vse"
+msgstr "سب دیکھیں"
 
 #: includes/template-dashboard.php:65
 msgid "Update Needed"
-msgstr "Potrebna posodobitev"
+msgstr "اپ ڈیٹ کی ضرورت ہے"
 
 #: includes/template-dashboard.php:79
 msgid "Contact Workload"
-msgstr "Obrnite se na obremenitev"
+msgstr "ورک بوجھ سے رابطہ کریں"
 
 #: includes/template-dashboard.php:83
 msgid "Choose an option to let the dispatcher(s) know if you are ready for new contacts"
-msgstr "Izberite možnost, da dispečerja obvestite, ali ste pripravljeni na nove stike"
+msgstr "اگر آپ نئے رابطوں کے ل ready تیار ہیں تو بھیجنے والوں کو بتانے کے لئے ایک آپشن منتخب کریں"
 
 #: includes/template-dashboard.php:93
 msgid "Set travel or dates unavailable"
-msgstr "Nastavite potovanje ali datume ni na voljo"
+msgstr "سفر یا تاریخیں دستیاب نہیں"
 
 #: includes/template-dashboard.php:106
 msgid "Personal Benchmarks"
-msgstr "Osebna merila uspešnosti"
+msgstr "ذاتی معیارات"
 
 #: includes/template-dashboard.php:135
 msgid "Faith Milestone Totals"
-msgstr "Faith Milestone Vsote"
+msgstr "عقیدے کا سنگ میل"
 
 #: includes/template-dashboard.php:138
 msgid "Milestones on your active contacts"
-msgstr "Mejniki vaših aktivnih stikov"
+msgstr "آپ کے فعال رابطوں پر سنگ میل"
 
 #: includes/template-dashboard.php:149
 msgid "Seeker Path Progress"
-msgstr "Napredek poti iskalca"
+msgstr "سالک کی راہ میں ترقی"
 
 #: includes/template-dashboard.php:152
 msgid "No data to show yet. You have no active contacts"
-msgstr "Ni podatkov za prikaz. Nimate aktivnih stikov"
+msgstr "ابھی ظاہر کرنے کے لئے کوئی ڈیٹا نہیں ہے۔ آپ کے کوئی فعال رابطے نہیں ہیں"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Dashboard"
-msgstr "Orodja za učence - Nadzorna plošča"
+msgstr "شاگرد کے اوزار - ڈیش بورڈ"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1334,5 +1334,5 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-dashboard"
 #. Description of the plugin/theme
 #: 
 msgid "The multiplier dashboard upgrades the multipliers experience as soon as they log into the system giving them a landing page with stats."
-msgstr "Nadzorna plošča množitelja nadgradi izkušnjo množitelja takoj, ko se prijavijo v sistem in jim dajo ciljno stran s statistiko"
+msgstr "ضوابط کا ڈیش بورڈ جیسے ہی سسٹم میں لاگ ان ہوتا ہے تو اعدادوشمار کے ساتھ لینڈنگ پیج دیتے ہوئے ضرب عضب کے تجربے کو اپ گریڈ کرتا ہے"
 
