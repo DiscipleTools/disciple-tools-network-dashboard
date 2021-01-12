@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: Disciple Tools - Network Dashboard\n"
-"POT-Creation-Date: 2021-01-11 14:02-0700\n"
+"POT-Creation-Date: 2021-01-11 15:06-0700\n"
 "PO-Revision-Date: 2021-01-11 10:41-0700\n"
 "Last-Translator: \n"
 "Language-Team: \n"
@@ -145,6 +145,7 @@ msgstr ""
 #: metrics/network-maps-area.php:115 metrics/network-statistics-contacts.php:12
 #: metrics/network-statistics-contacts.php:13
 #: metrics/network-statistics-contacts.php:14
+#: metrics/network-statistics-contacts.php:51
 msgid "Contacts"
 msgstr ""
 
@@ -152,6 +153,7 @@ msgstr ""
 #: metrics/network-maps-area.php:121 metrics/network-statistics-groups.php:12
 #: metrics/network-statistics-groups.php:13
 #: metrics/network-statistics-groups.php:14
+#: metrics/network-statistics-groups.php:50
 msgid "Groups"
 msgstr ""
 
@@ -159,6 +161,7 @@ msgstr ""
 #: metrics/network-maps-area.php:133 metrics/network-statistics-users.php:12
 #: metrics/network-statistics-users.php:13
 #: metrics/network-statistics-users.php:14
+#: metrics/network-statistics-users.php:50
 msgid "Users"
 msgstr ""
 
@@ -397,6 +400,7 @@ msgstr ""
 
 #: metrics/base.php:298 metrics/network-activity-stats.php:11
 #: metrics/network-activity-stats.php:12 metrics/network-activity-stats.php:13
+#: metrics/network-activity-stats.php:57
 msgid "Stats"
 msgstr ""
 
@@ -441,7 +445,7 @@ msgid "uncheck"
 msgstr ""
 
 #: metrics/base.php:311 metrics/network-home.php:12 metrics/network-home.php:13
-#: metrics/network-home.php:14
+#: metrics/network-home.php:14 metrics/network-home.php:48
 msgid "Home"
 msgstr ""
 
@@ -459,6 +463,7 @@ msgstr ""
 
 #: metrics/base.php:316 metrics/network-maps-hovermap.php:12
 #: metrics/network-maps-hovermap.php:13 metrics/network-maps-hovermap.php:14
+#: metrics/network-maps-hovermap.php:51
 msgid "Hover Map"
 msgstr ""
 
@@ -467,23 +472,24 @@ msgid "Network"
 msgstr ""
 
 #: metrics/network-activity-map.php:15 metrics/network-activity-map.php:16
-#: metrics/network-activity-map.php:17
+#: metrics/network-activity-map.php:17 metrics/network-activity-map.php:63
 msgid "Map"
 msgstr ""
 
 #: metrics/network-activity-stream.php:12
 #: metrics/network-activity-stream.php:13
 #: metrics/network-activity-stream.php:14
+#: metrics/network-activity-stream.php:51
 msgid "Log"
 msgstr ""
 
 #: metrics/network-activity.php:12 metrics/network-activity.php:13
-#: metrics/network-activity.php:14
+#: metrics/network-activity.php:14 metrics/network-activity.php:25
 msgid "Activity"
 msgstr ""
 
 #: metrics/network-maps-area.php:15 metrics/network-maps-area.php:16
-#: metrics/network-maps-area.php:17
+#: metrics/network-maps-area.php:17 metrics/network-maps-area.php:110
 msgid "Area Maps"
 msgstr ""
 
@@ -512,21 +518,22 @@ msgstr ""
 #: metrics/network-maps-locationlist.php:12
 #: metrics/network-maps-locationlist.php:13
 #: metrics/network-maps-locationlist.php:14
+#: metrics/network-maps-locationlist.php:46
 msgid "Location List"
 msgstr ""
 
 #: metrics/network-maps.php:12 metrics/network-maps.php:13
-#: metrics/network-maps.php:14
+#: metrics/network-maps.php:14 metrics/network-maps.php:25
 msgid "Maps"
 msgstr ""
 
 #: metrics/network-sites.php:12 metrics/network-sites.php:13
-#: metrics/network-sites.php:14
+#: metrics/network-sites.php:14 metrics/network-sites.php:45
 msgid "Site Reports"
 msgstr ""
 
 #: metrics/network-statistics.php:12 metrics/network-statistics.php:13
-#: metrics/network-statistics.php:14
+#: metrics/network-statistics.php:14 metrics/network-statistics.php:25
 msgid "Statistics"
 msgstr ""
 
