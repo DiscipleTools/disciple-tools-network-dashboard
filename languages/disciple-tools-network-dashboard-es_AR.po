@@ -9,494 +9,494 @@ msgstr ""
 
 #: disciple-tools-dashboard.php:253 disciple-tools-dashboard.php:264
 msgid "Whoah, partner!"
-msgstr ""
+msgstr "¡Vaya, socio!"
 
 #: disciple-tools-dashboard.php:276
 msgid "Method does not exist."
-msgstr ""
+msgstr "El método no existe."
 
 #: metrics/mapbox-maps.php:30
 msgid "Training Maps"
-msgstr ""
+msgstr "Mapas de entrenamiento"
 
 #: post-type/module-base.php:354
 msgid "Trainings"
-msgstr ""
+msgstr "Entrenamientos"
 
 #: metrics/mapbox-personal-maps.php:30
 msgid "Trainings Maps"
-msgstr ""
+msgstr "Mapas de formación"
 
 #: network/customize-site-linking.php:10 post-type/module-base.php:54
 msgid "Training"
-msgstr ""
+msgstr "Formación"
 
 #: post-type/module-base.php:59
 msgid "Multiplier"
-msgstr ""
+msgstr "Multiplicador"
 
 #: post-type/module-base.php:65
 msgid "Dispatcher"
-msgstr ""
+msgstr "Enviador"
 
 #: post-type/module-base.php:72
 msgid "Disciple.Tools Admin"
-msgstr ""
+msgstr "Administrador de Disciple.Tools"
 
 #: post-type/module-base.php:79
 msgid "Administrator"
-msgstr ""
+msgstr "Administrador"
 
 #: post-type/module-base.php:432
 msgid "Members"
-msgstr ""
+msgstr "Miembros"
 
 #: post-type/module-base.php:433
 msgid "Contacts"
-msgstr ""
+msgstr "Contactos"
 
 #: post-type/module-base.php:294 post-type/module-base.php:450
 msgid "Groups"
-msgstr ""
+msgstr "Grupos"
 
 #: post-type/module-base.php:259 post-type/module-base.php:467
 msgid "Leaders"
-msgstr ""
+msgstr "Líderes"
 
 #: post-type/module-base.php:484
 msgid "Coaches"
-msgstr ""
+msgstr "Entrenadores"
 
 #: post-type/module-base.php:497
 msgid "Planted by"
-msgstr ""
+msgstr "Plantado por"
 
 #: post-type/module-base.php:498
 msgid "Planting"
-msgstr ""
+msgstr "Plantando"
 
 #: post-type/module-base.php:203 post-type/module-base.php:519
 msgid "People Groups"
-msgstr ""
+msgstr "Étnias"
 
 #: post-type/module-base.php:102
 msgid "Tags"
-msgstr ""
+msgstr "Etiquetas"
 
 #: post-type/module-base.php:215
 msgctxt "Optional Documentation"
 msgid "A useful way to training related items and can help training contacts associated with noteworthy characteristics. e.g. business owner, sports lover. The contacts can also be filtered using these tags."
-msgstr ""
+msgstr "Una forma útil de capacitar elementos relacionados y puede ayudar a capacitar contactos asociados con características notables. p.ej. dueño de negocio, amante de los deportes. Los contactos también se pueden filtrar utilizando estas etiquetas."
 
 #: post-type/module-base.php:111
 msgid "Follow"
-msgstr ""
+msgstr "Seguir"
 
 #: post-type/module-base.php:118
 msgid "Un-Follow"
-msgstr ""
+msgstr "Dejar de seguir"
 
 #: includes/template-dashboard.php:164
 msgid "Tasks"
-msgstr ""
+msgstr "Tareas"
 
 #: post-type/module-base.php:249
 msgctxt "Training Status label"
 msgid "New"
-msgstr ""
+msgstr "Nuevo"
 
 #: post-type/module-base.php:250
 msgctxt "Training Status field description"
 msgid "New training added to the system"
-msgstr ""
+msgstr "Nuevo entrenamiento agregado al sistema"
 
 #: post-type/module-base.php:254
 msgctxt "Training Status label"
 msgid "Proposed"
-msgstr ""
+msgstr "Propuesto"
 
 #: post-type/module-base.php:255
 msgctxt "Training Status field description"
 msgid "This training has been proposed and is in initial conversations"
-msgstr ""
+msgstr "Esta formación ha sido propuesta y está en conversaciones iniciales."
 
 #: post-type/module-base.php:259
 msgctxt "Training Status label"
 msgid "Scheduled"
-msgstr ""
+msgstr "Programado"
 
 #: post-type/module-base.php:260
 msgctxt "Training Status field description"
 msgid "This training is confirmed, on the calendar."
-msgstr ""
+msgstr "Esta formación está confirmada, en el calendario."
 
 #: post-type/module-base.php:264
 msgctxt "Training Status label"
 msgid "In Progress"
-msgstr ""
+msgstr "En progreso"
 
 #: post-type/module-base.php:265
 msgctxt "Training Status field description"
 msgid "This training is confirmed, on the calendar, or currently active."
-msgstr ""
+msgstr "Esta formación está confirmada, en el calendario o actualmente activa."
 
 #: post-type/module-base.php:269
 msgctxt "Training Status label"
 msgid "Complete"
-msgstr ""
+msgstr "Completar"
 
 #: post-type/module-base.php:270
 msgctxt "Training Status field description"
 msgid "This training has successfully completed"
-msgstr ""
+msgstr "Esta formación se ha completado con éxito"
 
 #: post-type/module-base.php:274
 msgctxt "Training Status label"
 msgid "Paused"
-msgstr ""
+msgstr "Pausado"
 
 #: post-type/module-base.php:275
 msgctxt "Training Status field description"
 msgid "This contact is currently on hold. It has potential of getting scheduled in the future."
-msgstr ""
+msgstr "Este contacto está actualmente en espera. Tiene potencial de programarse en el futuro."
 
 #: post-type/module-base.php:279
 msgctxt "Training Status label"
 msgid "Closed"
-msgstr ""
+msgstr "Cerrado"
 
 #: post-type/module-base.php:280
 msgctxt "Training Status field description"
 msgid "This training is no longer going to happen."
-msgstr ""
+msgstr "Este entrenamiento ya no se realizará."
 
 #: post-type/module-base.php:176
 msgid "Assigned To"
-msgstr ""
+msgstr "Asignado a"
 
 #: post-type/module-base.php:288
 msgid "Select the main person who is responsible for reporting on this training."
-msgstr ""
+msgstr "Seleccione la persona principal responsable de informar sobre esta capacitación."
 
 #: post-type/module-base.php:185
 msgid "Training Coach / Church Planter"
-msgstr ""
+msgstr "Entrenador de entrenamiento / plantador de iglesias"
 
 #: post-type/module-base.php:297
 msgctxt "Optional Documentation"
 msgid "The person who planted and/or is coaching this training. Only one person can be assigned to a training while multiple people can be coaches / church planters of this training."
-msgstr ""
+msgstr "La persona que plantó y / o está entrenando este entrenamiento. Solo se puede asignar una persona a una capacitación, mientras que varias personas pueden ser entrenadores / plantadores de iglesias de esta capacitación."
 
 #: post-type/module-base.php:196
 msgid "Requires Update"
-msgstr ""
+msgstr "Requiere actualización"
 
 #: post-type/module-base.php:313
 msgid "Video Link"
-msgstr ""
+msgstr "Enlace de video"
 
 #: post-type/module-base.php:314
 msgctxt "Optional Documentation"
 msgid "Link to video chat service"
-msgstr ""
+msgstr "Enlace al servicio de video chat"
 
 #: post-type/module-base.php:321
 msgid "Notes"
-msgstr ""
+msgstr "Notas"
 
 #: post-type/module-base.php:322
 msgctxt "Optional Documentation"
 msgid "Notes on when the trainings will happen"
-msgstr ""
+msgstr "Notas sobre cuándo se realizarán los entrenamientos"
 
 #: post-type/module-base.php:331 post-type/module-base.php:543
 msgid "Meeting Times"
-msgstr ""
+msgstr "Horarios de encuentro"
 
 #: post-type/module-base.php:219 post-type/module-base.php:228
 msgid "Locations"
-msgstr ""
+msgstr "Ubicaciones"
 
 #: post-type/module-base.php:220 post-type/module-base.php:229
 msgctxt "Optional Documentation"
 msgid "The general location where this contact is located."
-msgstr ""
+msgstr "La ubicación general en la cual se encuentra este contacto."
 
 #: post-type/module-base.php:236
 msgid "Address"
-msgstr ""
+msgstr "Dirección"
 
 #: post-type/module-base.php:413
 msgid "Parent Training"
-msgstr ""
+msgstr "Entrenamiento para padres"
 
 #: post-type/module-base.php:414
 msgctxt "Optional Documentation"
 msgid "A training that launched this training."
-msgstr ""
+msgstr "Una formación que puso en marcha esta formación."
 
 #: post-type/module-base.php:424
 msgid "Peer Training"
-msgstr ""
+msgstr "Entrenamiento entre pares"
 
 #: post-type/module-base.php:425
 msgctxt "Optional Documentation"
 msgid "A related training that isn't a parent/child in relationship. It might indicate trainings that collaborate, are about to merge, recently split, etc."
-msgstr ""
+msgstr "Un entrenamiento relacionado que no es una relación padre / hijo. Podría indicar capacitaciones que colaboran, están a punto de fusionarse, se han dividido recientemente, etc."
 
 #: post-type/module-base.php:435
 msgid "Child Training"
-msgstr ""
+msgstr "Entrenamiento infantil"
 
 #: post-type/module-base.php:436
 msgctxt "Optional Documentation"
 msgid "A training that has been birthed out of this training."
-msgstr ""
+msgstr "Un entrenamiento que ha nacido de este entrenamiento."
 
 #: post-type/module-base.php:446 post-type/module-base.php:542
 #: post-type/module-base.php:653
 msgid "Member List"
-msgstr ""
+msgstr "Listado de miembros"
 
 #: post-type/module-base.php:447
 msgctxt "Optional Documentation"
 msgid "The contacts who are members of this training."
-msgstr ""
+msgstr "Los contactos que son miembros de esta formación."
 
 #: post-type/module-base.php:464
 msgctxt "Optional Documentation"
 msgid "The people trainings represented by this training."
-msgstr ""
+msgstr "Las formaciones de personas representadas por esta formación."
 
 #: post-type/module-base.php:484
 msgid "Member Count"
-msgstr ""
+msgstr "Cant. de miembros"
 
 #: post-type/module-base.php:485 post-type/module-base.php:492
 msgctxt "Optional Documentation"
 msgid "The number of members in this training. It will automatically be updated when new members are added or removed in the member list. Change this number manually to included people who may not be in the system but are also members of the training."
-msgstr ""
+msgstr "El número de miembros en esta capacitación. Se actualizará automáticamente cuando se agreguen o eliminen nuevos miembros en la lista de miembros. Cambie este número manualmente para incluir personas que pueden no estar en el sistema pero que también son miembros de la capacitación."
 
 #: post-type/module-base.php:491
 msgid "Leader Count"
-msgstr ""
+msgstr "Recuento de líderes"
 
 #: post-type/module-base.php:503
 msgid "Training as Leader"
-msgstr ""
+msgstr "Entrenando como líder"
 
 #: post-type/module-base.php:504
 msgctxt "Optional Documentation"
 msgid "Leader of a training"
-msgstr ""
+msgstr "Líder de una formación"
 
 #: post-type/module-base.php:514
 msgid "Training as Participant"
-msgstr ""
+msgstr "Formación como participante"
 
 #: post-type/module-base.php:515
 msgctxt "Optional Documentation"
 msgid "Participant in a training."
-msgstr ""
+msgstr "Participante en una formación."
 
 #: post-type/module-base.php:537
 msgid "Other"
-msgstr ""
+msgstr "Otro"
 
 #: post-type/module-base.php:568
 msgctxt "input field placeholder"
 msgid "Search Users"
-msgstr ""
+msgstr "Buscar usuarios"
 
 #: post-type/module-base.php:601
 msgctxt "Search 'something'"
 msgid "Search %s"
-msgstr ""
+msgstr "Buscar %s"
 
 #: post-type/module-base.php:656
 msgid "Create"
-msgstr ""
+msgstr "Crear"
 
 #: post-type/module-base.php:661
 msgid "Select"
-msgstr ""
+msgstr "Seleccionar"
 
 #: post-type/module-base.php:666
 msgid "To add new members, click on 'Create' or 'Select'."
-msgstr ""
+msgstr "Para agregar nuevos miembros, hacé click en 'Crear' or 'Seleccionar'."
 
 #: post-type/module-base.php:671
 msgctxt "Add members modal"
 msgid "Add members from existing contacts"
-msgstr ""
+msgstr "Agregar miembros desde contactos existentes"
 
 #: post-type/module-base.php:672
 msgctxt "Add members modal"
 msgid "In the 'Member List' field, type the name of an existing contact to add them to this training."
-msgstr ""
+msgstr "En el campo 'Lista de miembros', escriba el nombre de un contacto existente para agregarlo a esta capacitación."
 
 #: post-type/module-base.php:681
 msgid "Close"
-msgstr ""
+msgstr "Cerrar"
 
 #: post-type/module-base.php:879
 msgid "Removed %1$s: %2$s"
-msgstr ""
+msgstr "% 1 $ s eliminado:% 2 $ s"
 
 #: post-type/module-base.php:882
 msgid "Added %1$s: %2$s"
-msgstr ""
+msgstr "% 1 $ s añadido:% 2 $ s"
 
 #: post-type/module-base.php:885
 msgid "Updated %1$s: %2$s to %3$s"
-msgstr ""
+msgstr "% 1 $ s actualizado:% 2 $ s a% 3 $ s"
 
 #: post-type/module-base.php:942
 msgctxt "List Filters"
 msgid "Assigned to me"
-msgstr ""
+msgstr "Asignados a mí"
 
 #: post-type/module-base.php:950 post-type/module-base.php:1007
 #: post-type/module-base.php:1015
 msgctxt "List Filters"
 msgid "All"
-msgstr ""
+msgstr "Todos"
 
 #: post-type/module-reports.php:85
 msgid "Reports"
-msgstr ""
+msgstr "Informes"
 
 #: post-type/module-reports.php:121
 msgid "Total Groups"
-msgstr ""
+msgstr "Grupos totales"
 
 #: post-type/module-reports.php:122
 msgid "Total Baptisms"
-msgstr ""
+msgstr "Bautismos totales"
 
 #: post-type/module-reports.php:123
 msgid "Countries"
-msgstr ""
+msgstr "Países"
 
 #: post-type/module-reports.php:124
 msgid "States"
-msgstr ""
+msgstr "Estados"
 
 #: post-type/module-reports.php:125
 msgid "Counties"
-msgstr ""
+msgstr "Condados"
 
 #: post-type/module-public-calendar.php:432
 #: post-type/module-registration.php:385
 msgid "Add"
-msgstr ""
+msgstr "Agregar"
 
 #: post-type/module-registration.php:31
 msgid "Apps"
-msgstr ""
+msgstr "Aplicaciones"
 
 #: post-type/module-registration.php:59
 msgid "copy link"
-msgstr ""
+msgstr "copiar link"
 
 #: post-type/module-registration.php:61
 msgid "edit form"
-msgstr ""
+msgstr "editar formulario"
 
 #: post-type/module-registration.php:63
 msgid "report"
-msgstr ""
+msgstr "reporte"
 
 #: post-type/module-registration.php:67
 msgid "create link"
-msgstr ""
+msgstr "crear vínculo"
 
 #: post-type/module-registration.php:114
 msgid "link"
-msgstr ""
+msgstr "enlace"
 
 #: post-type/module-registration.php:116
 msgid "show on calendar"
-msgstr ""
+msgstr "mostrar en el calendario"
 
 #: post-type/module-registration.php:118
 msgid "open registration"
-msgstr ""
+msgstr "registro abierto "
 
 #: post-type/module-registration.php:265
 msgid "add"
-msgstr ""
+msgstr "agregar"
 
 #: post-type/module-registration.php:266
 msgid "Use"
-msgstr ""
+msgstr "Utilizar"
 
 #: post-type/module-registration.php:267 post-type/module-registration.php:695
 msgid "Search Location"
-msgstr ""
+msgstr "Buscar ubicación"
 
 #: post-type/module-registration.php:268
 msgid "Delete Location"
-msgstr ""
+msgstr "Eliminar ubicación"
 
 #: post-type/module-registration.php:269
 msgid "Open Mapping"
-msgstr ""
+msgstr "Mapeo abierto"
 
 #: post-type/module-registration.php:270
 msgid "clear"
-msgstr ""
+msgstr "claro"
 
 #: post-type/module-registration.php:384
 msgid "Register for Training"
-msgstr ""
+msgstr "Registrarse para la formación"
 
 #: post-type/module-registration.php:386
 msgid "Join Training"
-msgstr ""
+msgstr "Unirse a la formación"
 
 #: post-type/module-registration.php:387
 msgid "Join in"
-msgstr ""
+msgstr "Participar"
 
 #: post-type/module-registration.php:700
 msgid "Clear"
-msgstr ""
+msgstr "Claro"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Training"
-msgstr ""
+msgstr "Herramientas para discípulos: entrenamiento"
 
 #: includes/admin/admin-menu-and-tabs.php:62
 msgid "Extensions (DT)"
-msgstr ""
+msgstr "Extensiones (DT)"
 
 #: admin/menu-and-tabs.php:64 admin/menu-and-tabs.php:65
 #: admin/menu-and-tabs.php:103
 msgid "Network Dashboard"
-msgstr ""
+msgstr "Panel de red"
 
 #: includes/admin/admin-menu-and-tabs.php:79
 msgid "You do not have sufficient permissions to access this page."
-msgstr ""
+msgstr "No tiene permisos suficientes para acceder a esta página."
 
 #: admin/menu-and-tabs.php:107 admin/menu-and-tabs.php:130
 #: admin/menu-and-tabs.php:135
 msgid "nav-tab-active"
-msgstr ""
+msgstr "nav-tab-active"
 
 #: admin/migrations/0000-initial.php:21
 msgid "Network Dashboard Viewer"
-msgstr ""
+msgstr "Visor de panel de red"
 
 #: metrics/base.php:220
 msgid "ID"
-msgstr ""
+msgstr "CARNÉ DE IDENTIDAD"
 
 #: metrics/base.php:221 metrics/base.php:255
 msgid "Site"
-msgstr ""
+msgstr "Sitio"
 
 #: metrics/base.php:224 metrics/base.php:254 metrics/network-maps-area.php:89
 #: metrics/network-maps-area.php:133 metrics/network-statistics-users.php:12
@@ -504,374 +504,374 @@ msgstr ""
 #: metrics/network-statistics-users.php:14
 #: metrics/network-statistics-users.php:50
 msgid "Users"
-msgstr ""
+msgstr "Usuarios"
 
 #: metrics/base.php:225
 msgid "Timestamp"
-msgstr ""
+msgstr "Marca de tiempo"
 
 #: metrics/base.php:226
 msgid "Visit"
-msgstr ""
+msgstr "Visitar"
 
 #: metrics/base.php:227
 msgid "View"
-msgstr ""
+msgstr "Ver"
 
 #: metrics/base.php:229
 msgid "Active Snapshot"
-msgstr ""
+msgstr "Instantánea activa"
 
 #: metrics/base.php:230
 msgid "Generations"
-msgstr ""
+msgstr "Generaciones"
 
 #: metrics/base.php:231
 msgid "Follow-up Funnel"
-msgstr ""
+msgstr "Embudo de seguimiento"
 
 #: metrics/base.php:232
 msgid "On-Going Meetings"
-msgstr ""
+msgstr "Reuniones en curso"
 
 #: metrics/base.php:233
 msgid "Coaching"
-msgstr ""
+msgstr "Entrenamiento"
 
 #: metrics/base.php:234
 msgid "Baptized"
-msgstr ""
+msgstr "Bautizado"
 
 #: metrics/base.php:235
 msgid "Active Groups"
-msgstr ""
+msgstr "Grupos activos"
 
 #: metrics/base.php:236 metrics/base.php:258
 msgid "Church"
-msgstr ""
+msgstr "Congregación"
 
 #: metrics/base.php:237
 msgid "Health Metrics"
-msgstr ""
+msgstr "Métricas de salud"
 
 #: metrics/base.php:238
 msgid "Total Users"
-msgstr ""
+msgstr "Usuarios totales"
 
 #: metrics/base.php:239
 msgid "Responders"
-msgstr ""
+msgstr "Respondedores"
 
 #: metrics/base.php:240
 msgid "Dispatchers"
-msgstr ""
+msgstr "Enviadores"
 
 #: metrics/base.php:241
 msgid "Multipliers"
-msgstr ""
+msgstr "Obreros"
 
 #: metrics/base.php:242
 msgid "Admins"
-msgstr ""
+msgstr "Administradores"
 
 #: metrics/base.php:243
 msgid "User Login Activity"
-msgstr ""
+msgstr "Actividad de inicio de sesión de usuario"
 
 #: metrics/base.php:244
 msgid "Users Active in the Last 30 Days"
-msgstr ""
+msgstr "Usuarios activos en los últimos 30 días"
 
 #: metrics/base.php:245
 msgid "Practicing"
-msgstr ""
+msgstr "Practicando"
 
 #: metrics/base.php:246
 msgid "Not Practicing"
-msgstr ""
+msgstr "No practicar"
 
 #: metrics/base.php:247
 msgid "Chart Funnel"
-msgstr ""
+msgstr "Embudo de gráfico"
 
 #: metrics/base.php:250
 msgid "Contact"
-msgstr ""
+msgstr "Contacto"
 
 #: metrics/base.php:251
 msgid "Group"
-msgstr ""
+msgstr "Grupo"
 
 #: metrics/base.php:253
 msgid "User"
-msgstr ""
+msgstr "Usuario"
 
 #: metrics/base.php:256 metrics/base.php:301
 msgid "Sites"
-msgstr ""
+msgstr "Sitios"
 
 #: metrics/base.php:257
 msgid "Baptisms"
-msgstr ""
+msgstr "Bautismos"
 
 #: metrics/base.php:259 metrics/network-maps-area.php:97
 #: metrics/network-maps-area.php:127
 msgid "Churches"
-msgstr ""
+msgstr "Congregaciones"
 
 #: metrics/base.php:260
 msgid "Location"
-msgstr ""
+msgstr "Ubicación"
 
 #: metrics/base.php:261
 msgid "Types"
-msgstr ""
+msgstr "Tipos"
 
 #: metrics/base.php:263
 msgid "modify filter"
-msgstr ""
+msgstr "modificar filtro"
 
 #: metrics/base.php:264
 msgid "Filter List"
-msgstr ""
+msgstr "Lista de filtros"
 
 #: metrics/base.php:265
 msgid "reset data"
-msgstr ""
+msgstr "reiniciar datos"
 
 #: post-type/module-base.php:133
 msgid "Status"
-msgstr ""
+msgstr "Estado"
 
 #: metrics/base.php:268
 msgid "Status - All"
-msgstr ""
+msgstr "Estado: todos"
 
 #: metrics/base.php:270
 msgid "Zoom Level"
-msgstr ""
+msgstr "Nivel de zoom"
 
 #: metrics/base.php:271
 msgid "Auto Zoom"
-msgstr ""
+msgstr "Zoom automático"
 
 #: metrics/base.php:272
 msgid "World"
-msgstr ""
+msgstr "Mundo"
 
 #: metrics/base.php:273
 msgid "Country"
-msgstr ""
+msgstr "País"
 
 #: metrics/base.php:274
 msgid "State"
-msgstr ""
+msgstr "Estado"
 
 #: includes/template-dashboard.php:23
 msgid "Active Contacts"
-msgstr ""
+msgstr "Contactos activos"
 
 #: metrics/base.php:277
 msgid "Paused Contacts"
-msgstr ""
+msgstr "Contactos en pausa"
 
 #: metrics/base.php:278
 msgid "Closed Contacts"
-msgstr ""
+msgstr "Contactos cerrados"
 
 #: metrics/base.php:279
 msgid "Total Contacts"
-msgstr ""
+msgstr "Contactos totales"
 
 #: metrics/base.php:280
 msgid "New Contacts"
-msgstr ""
+msgstr "Contactos nuevos"
 
 #: metrics/base.php:282
 msgid "New Baptisms"
-msgstr ""
+msgstr "Nuevos bautismos"
 
 #: metrics/base.php:283
 msgid "Baptism Generations"
-msgstr ""
+msgstr "Generaciones del bautismo"
 
 #: metrics/base.php:284
 msgid "Select Location"
-msgstr ""
+msgstr "Seleccionar ubicación"
 
 #: metrics/base.php:286
 msgid "New Groups"
-msgstr ""
+msgstr "Grupos nuevos"
 
 #: metrics/base.php:287
 msgid "Pre-Group"
-msgstr ""
+msgstr "Pre-grupo"
 
 #: metrics/base.php:288
 msgid "Pre-Groups"
-msgstr ""
+msgstr "Pre-grupos"
 
 #: metrics/base.php:290
 msgid "Last 7 Days"
-msgstr ""
+msgstr "Los últimos 7 días"
 
 #: metrics/base.php:291
 msgid "Last 30 Days"
-msgstr ""
+msgstr "Últimos 30 días"
 
 #: metrics/base.php:292
 msgid "Last 60 Days"
-msgstr ""
+msgstr "Últimos 60 días"
 
 #: metrics/base.php:293
 msgid "Last 12 Months"
-msgstr ""
+msgstr "Últimos 12 meses"
 
 #: metrics/base.php:294
 msgid "Last 24 Months"
-msgstr ""
+msgstr "Últimos 24 meses"
 
 #: metrics/base.php:295
 msgid "This Year"
-msgstr ""
+msgstr "Este año"
 
 #: metrics/base.php:297
 msgid "Activity Map"
-msgstr ""
+msgstr "Mapa de actividades"
 
 #: metrics/base.php:298 metrics/network-activity-stats.php:11
 #: metrics/network-activity-stats.php:12 metrics/network-activity-stats.php:13
 #: metrics/network-activity-stats.php:57
 msgid "Stats"
-msgstr ""
+msgstr "Estadísticas"
 
 #: metrics/base.php:299
 msgid "Activities"
-msgstr ""
+msgstr "Ocupaciones"
 
 #: metrics/base.php:300
 msgid "Actions"
-msgstr ""
+msgstr "Comportamiento"
 
 #: metrics/base.php:302
 msgid "By Action Type"
-msgstr ""
+msgstr "Por tipo de acción"
 
 #: metrics/base.php:303
 msgid "Key"
-msgstr ""
+msgstr "Llave"
 
 #: metrics/base.php:304
 msgid "Name"
-msgstr ""
+msgstr "Nombre"
 
 #: metrics/base.php:305
 msgid "Total Activities"
-msgstr ""
+msgstr "Actividades totales"
 
 #: metrics/base.php:306
 msgid "Feed"
-msgstr ""
+msgstr "Alimentar"
 
 #: metrics/base.php:307
 msgid "Time"
-msgstr ""
+msgstr "Hora"
 
 #: metrics/base.php:308
 msgid "Result Limit"
-msgstr ""
+msgstr "Límite de resultados"
 
 #: metrics/base.php:309
 msgid "uncheck"
-msgstr ""
+msgstr "desmarcar"
 
 #: metrics/base.php:311 metrics/network-home.php:12 metrics/network-home.php:13
 #: metrics/network-home.php:14 metrics/network-home.php:48
 msgid "Home"
-msgstr ""
+msgstr "Casa"
 
 #: metrics/base.php:313
 msgid "Events (30 Days)"
-msgstr ""
+msgstr "Eventos (30 días)"
 
 #: metrics/base.php:315
 msgid "All Active/Inactive"
-msgstr ""
+msgstr "Todo activo / inactivo"
 
 #: metrics/base.php:316 metrics/network-maps-hovermap.php:12
 #: metrics/network-maps-hovermap.php:13 metrics/network-maps-hovermap.php:14
 #: metrics/network-maps-hovermap.php:51
 msgid "Hover Map"
-msgstr ""
+msgstr "Mapa hover"
 
 #: metrics/loader.php:16
 msgid "Network"
-msgstr ""
+msgstr "Red"
 
 #: metrics/network-activity-map.php:15 metrics/network-activity-map.php:16
 #: metrics/network-activity-map.php:17 metrics/network-activity-map.php:63
 msgid "Map"
-msgstr ""
+msgstr "Mapa"
 
 #: metrics/network-activity-stream.php:12
 #: metrics/network-activity-stream.php:13
 #: metrics/network-activity-stream.php:14
 #: metrics/network-activity-stream.php:51
 msgid "Log"
-msgstr ""
+msgstr "Iniciar sesión"
 
 #: metrics/network-activity.php:12 metrics/network-activity.php:13
 #: metrics/network-activity.php:14 metrics/network-activity.php:25
 msgid "Activity"
-msgstr ""
+msgstr "Actividad"
 
 #: metrics/network-maps-area.php:15 metrics/network-maps-area.php:16
 #: metrics/network-maps-area.php:17 metrics/network-maps-area.php:110
 msgid "Area Maps"
-msgstr ""
+msgstr "Mapas de área"
 
 #: metrics/network-maps-locationlist.php:12
 #: metrics/network-maps-locationlist.php:13
 #: metrics/network-maps-locationlist.php:14
 #: metrics/network-maps-locationlist.php:46
 msgid "Location List"
-msgstr ""
+msgstr "Lista de ubicaciones"
 
 #: metrics/network-maps.php:12 metrics/network-maps.php:13
 #: metrics/network-maps.php:14 metrics/network-maps.php:25
 msgid "Maps"
-msgstr ""
+msgstr "Mapas"
 
 #: metrics/network-sites.php:12 metrics/network-sites.php:13
 #: metrics/network-sites.php:14 metrics/network-sites.php:45
 msgid "Site Reports"
-msgstr ""
+msgstr "Informes del sitio"
 
 #: metrics/network-statistics.php:12 metrics/network-statistics.php:13
 #: metrics/network-statistics.php:14 metrics/network-statistics.php:25
 msgid "Statistics"
-msgstr ""
+msgstr "Estadísticas"
 
 #: shared/permissions.php:41
 msgid "Network Dashboard Transfer Both Ways"
-msgstr ""
+msgstr "Transferencia de panel de red en ambos sentidos"
 
 #: shared/permissions.php:42
 msgid "Network Dashboard Receiving Only"
-msgstr ""
+msgstr "Tablero de red solo recepción"
 
 #: shared/permissions.php:43
 msgid "Network Dashboard Sending Only"
-msgstr ""
+msgstr "Solo envío de panel de red"
 
 #: shared/site-profile.php:99
 msgid "Network Dashboard Site Profile"
-msgstr ""
+msgstr "Perfil del sitio del panel de red"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Network Dashboard"
-msgstr ""
+msgstr "Herramientas para discípulos: panel de red"
 
 #: admin/customize-site-linking.php:10 metrics/mapbox-maps.php:31
 #: metrics/mapbox-personal-maps.php:31 post-type/module-base.php:393
@@ -879,460 +879,460 @@ msgstr ""
 #: post-type/module-base.php:466 post-type/module-base.php:483
 #: post-type/module-base.php:520
 msgid "Streams"
-msgstr ""
+msgstr "Corrientes"
 
 #: metrics/mapbox-maps.php:30
 msgid "Stream Maps"
-msgstr ""
+msgstr "Stream Maps"
 
 #: metrics/mapbox-personal-maps.php:30
 msgid "Streams Maps"
-msgstr ""
+msgstr "Streams Maps"
 
 #: post-type/module-base.php:103
 msgctxt "Optional Documentation"
 msgid "A useful way to stream related items and can help stream contacts associated with noteworthy characteristics. e.g. business owner, sports lover. The contacts can also be filtered using these tags."
-msgstr ""
+msgstr "Una forma útil de transmitir elementos relacionados y puede ayudar a transmitir contactos asociados con características notables. p.ej. dueño de negocio, amante de los deportes. Los contactos también se pueden filtrar utilizando estas etiquetas."
 
 #: post-type/module-base.php:138
 msgctxt "Stream Status label"
 msgid "New"
-msgstr ""
+msgstr "Nuevo"
 
 #: post-type/module-base.php:139
 msgctxt "Stream Status field description"
 msgid "New stream added to the system"
-msgstr ""
+msgstr "Nueva secuencia agregada al sistema"
 
 #: post-type/module-base.php:143
 msgctxt "Stream Status label"
 msgid "Model"
-msgstr ""
+msgstr "Modelo"
 
 #: post-type/module-base.php:144
 msgctxt "Stream Status field description"
 msgid "This stream has been proposed and is in initial conversations"
-msgstr ""
+msgstr "Esta corriente ha sido propuesta y está en conversaciones iniciales."
 
 #: post-type/module-base.php:148
 msgctxt "Stream Status label"
 msgid "Assist"
-msgstr ""
+msgstr "Ayudar"
 
 #: post-type/module-base.php:149
 msgctxt "Stream Status field description"
 msgid "This stream is confirmed, on the calendar."
-msgstr ""
+msgstr "Esta secuencia está confirmada, en el calendario."
 
 #: post-type/module-base.php:153
 msgctxt "Stream Status label"
 msgid "Watch"
-msgstr ""
+msgstr "Reloj"
 
 #: post-type/module-base.php:154
 msgctxt "Stream Status field description"
 msgid "This stream is confirmed, on the calendar, or currently active."
-msgstr ""
+msgstr "Esta transmisión está confirmada, en el calendario o actualmente activa."
 
 #: post-type/module-base.php:158
 msgctxt "Stream Status label"
 msgid "Leave"
-msgstr ""
+msgstr "Salir"
 
 #: post-type/module-base.php:159
 msgctxt "Stream Status field description"
 msgid "This stream has successfully completed"
-msgstr ""
+msgstr "Esta transmisión se completó con éxito"
 
 #: post-type/module-base.php:163
 msgctxt "Stream Status label"
 msgid "Paused"
-msgstr ""
+msgstr "Pausado"
 
 #: post-type/module-base.php:164
 msgctxt "Stream Status field description"
 msgid "This contact is currently on hold. It has potential of getting scheduled in the future."
-msgstr ""
+msgstr "Este contacto está actualmente en espera. Tiene potencial de programarse en el futuro."
 
 #: post-type/module-base.php:168
 msgctxt "Stream Status label"
 msgid "Closed"
-msgstr ""
+msgstr "Cerrado"
 
 #: post-type/module-base.php:169
 msgctxt "Stream Status field description"
 msgid "This stream is no longer going to happen."
-msgstr ""
+msgstr "Esta corriente ya no va a suceder."
 
 #: post-type/module-base.php:177
 msgid "Select the main person who is responsible for reporting on this stream."
-msgstr ""
+msgstr "Seleccione la persona principal responsable de informar sobre esta transmisión."
 
 #: post-type/module-base.php:186
 msgctxt "Optional Documentation"
 msgid "The person who planted and/or is coaching this stream. Only one person can be assigned to a stream while multiple people can be coaches / church planters of this stream."
-msgstr ""
+msgstr "La persona que plantó y / o está entrenando esta corriente. Solo se puede asignar una persona a una secuencia, mientras que varias personas pueden ser entrenadores / plantadores de iglesias de esta secuencia."
 
 #: post-type/module-base.php:204
 msgctxt "Optional Documentation"
 msgid "The people streams represented by this stream."
-msgstr ""
+msgstr "Las corrientes de personas representadas por esta corriente."
 
 #: post-type/module-base.php:309
 msgid "Parent Stream"
-msgstr ""
+msgstr "Transmisión principal"
 
 #: post-type/module-base.php:310
 msgctxt "Optional Documentation"
 msgid "A stream that launched this stream."
-msgstr ""
+msgstr "Una corriente que lanzó esta corriente."
 
 #: post-type/module-base.php:321
 msgid "Peer Streams"
-msgstr ""
+msgstr "Corrientes de pares"
 
 #: post-type/module-base.php:322
 msgctxt "Optional Documentation"
 msgid "A related stream that isn't a parent/child in relationship. It might indicate streams that collaborate, are about to merge, recently split, etc."
-msgstr ""
+msgstr "Una corriente relacionada que no es una relación padre / hijo. Puede indicar transmisiones que colaboran, están a punto de fusionarse, se han dividido recientemente, etc."
 
 #: post-type/module-base.php:333
 msgid "Child Streams"
-msgstr ""
+msgstr "Streams secundarios"
 
 #: post-type/module-base.php:334
 msgctxt "Optional Documentation"
 msgid "A stream that has been birthed out of this stream."
-msgstr ""
+msgstr "Una corriente que ha nacido de esta corriente."
 
 #: post-type/module-base.php:369
 msgid "Leader in Stream"
-msgstr ""
+msgstr "Líder en Stream"
 
 #: post-type/module-base.php:370
 msgctxt "Optional Documentation"
 msgid "Leader of a stream"
-msgstr ""
+msgstr "Líder de una corriente"
 
 #: post-type/module-base.php:380
 msgid "Key Disciple in Stream"
-msgstr ""
+msgstr "Discípulo clave en Stream"
 
 #: post-type/module-base.php:381
 msgctxt "Optional Documentation"
 msgid "Disciple in a stream."
-msgstr ""
+msgstr "Discípulo en un arroyo."
 
 #: post-type/module-base.php:536
 msgid "Connections"
-msgstr ""
+msgstr "Conexiones"
 
 #: post-type/module-reports.php:432
 msgid "Add Report"
-msgstr ""
+msgstr "Agregar informe"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Streams"
-msgstr ""
+msgstr "Herramientas para discípulos: corrientes"
 
 #: logging/log-generations.php:11
 msgid "Pre-Group Generations"
-msgstr ""
+msgstr "Generaciones previas al grupo"
 
 #: logging/log-generations.php:17
 msgid "Group Generations"
-msgstr ""
+msgstr "Generaciones grupales"
 
 #: logging/log-generations.php:23
 msgid "Church Generations"
-msgstr ""
+msgstr "Generaciones de iglesias"
 
 #: logging/log-generations.php:29
 msgid "Team Generations"
-msgstr ""
+msgstr "Generaciones de equipo"
 
 #: logging/log-generations.php:76
 msgid "%s is reporting a new pre-group generation."
-msgstr ""
+msgstr "% s informa sobre una nueva generación previa al grupo."
 
 #: logging/log-generations.php:81
 msgid "%s is reporting a new group generation."
-msgstr ""
+msgstr "% s informa sobre una nueva generación de grupos."
 
 #: logging/log-generations.php:86
 msgid "%s is reporting a new church generation."
-msgstr ""
+msgstr "% s informa sobre una nueva generación de iglesias."
 
 #: logging/log-generations.php:91
 msgid "%s is reporting a new leadership team generation."
-msgstr ""
+msgstr "% s informa sobre una nueva generación de equipos de liderazgo."
 
 #: logging/log-new-posts.php:11
 msgid "New Contact"
-msgstr ""
+msgstr "Contacto nuevo"
 
 #: logging/log-new-posts.php:16
 msgid "New Pre-Group"
-msgstr ""
+msgstr "Nuevo pregrupo"
 
 #: logging/log-new-posts.php:21
 msgid "New Group"
-msgstr ""
+msgstr "Nuevo grupo"
 
 #: logging/log-new-posts.php:26
 msgid "New Church"
-msgstr ""
+msgstr "Nueva iglesia"
 
 #: logging/log-new-posts.php:31
 msgid "New Team"
-msgstr ""
+msgstr "Nuevo equipo"
 
 #: logging/log-new-posts.php:36
 msgid "New Baptism"
-msgstr ""
+msgstr "Nuevo bautismo"
 
 #: logging/log-new-posts.php:41
 msgid "New Coaching"
-msgstr ""
+msgstr "Coaching nuevo"
 
 #: logging/log-new-posts.php:164
 msgid "%s is reporting a new contact."
-msgstr ""
+msgstr "% s informa de un nuevo contacto."
 
 #: logging/log-new-posts.php:169
 msgid "%s is reporting a new pre-group formed."
-msgstr ""
+msgstr "% s informa que se formó un nuevo grupo previo."
 
 #: logging/log-new-posts.php:174
 msgid "%s is reporting a new group formed."
-msgstr ""
+msgstr "% s informa que se formó un nuevo grupo."
 
 #: logging/log-new-posts.php:179
 msgid "%s is reporting a new church."
-msgstr ""
+msgstr "% s informa sobre una nueva iglesia."
 
 #: logging/log-new-posts.php:184
 msgid "%s is reporting a new leadership team formed."
-msgstr ""
+msgstr "% s informa que se formó un nuevo equipo de liderazgo."
 
 #: logging/log-new-posts.php:189
 msgid "%s is reporting a new baptism."
-msgstr ""
+msgstr "% s informa de un nuevo bautismo."
 
 #: logging/log-new-posts.php:194
 msgid "%s is reporting an coaching relationship."
-msgstr ""
+msgstr "% s informa sobre una relación de coaching."
 
 #: metrics/network-maps-area.php:74 metrics/network-maps-area.php:83
 #: metrics/network-maps-area.php:91 metrics/network-maps-area.php:99
 msgid "Active"
-msgstr ""
+msgstr "Activo"
 
 #: metrics/network-maps-area.php:75
 msgid "Paused"
-msgstr ""
+msgstr "Pausado"
 
 #: metrics/network-maps-area.php:76
 msgid "Closed"
-msgstr ""
+msgstr "Cerrado"
 
 #: metrics/network-maps-area.php:84 metrics/network-maps-area.php:92
 #: metrics/network-maps-area.php:100
 msgid "Inactive"
-msgstr ""
+msgstr "Inactivo"
 
 #. Plugin URI of the plugin/theme
 #: 
 msgid "https://github.com/DiscipleTools/disciple-tools-network-dashboard"
-msgstr ""
+msgstr "https://github.com/DiscipleTools/disciple-tools-network-dashboard"
 
 #. Description of the plugin/theme
 #: 
 msgid "Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging."
-msgstr ""
+msgstr "Conecte este sitio de Disciple Tools a una red más grande de sitios. Agrega totales sensibles a la seguridad, mapeo, registro de actividad."
 
 #. Author URI of the plugin/theme
 #: 
 msgid "https://github.com/DiscipleTools"
-msgstr ""
+msgstr "https://github.com/DiscipleTools"
 
 #. Plugin URI of the plugin/theme
 #: 
 msgid "https://github.com/DiscipleTools/disciple-tools-streams"
-msgstr ""
+msgstr "https://github.com/DiscipleTools/disciple-tools-streams"
 
 #. Description of the plugin/theme
 #: 
 msgid "Disciple Tools Streams Extension adds recording of streams and cross reference them with contacts, groups, and locations."
-msgstr ""
+msgstr "Disciple Tools Streams Extension agrega grabación de transmisiones y referencias cruzadas con contactos, grupos y ubicaciones."
 
 #: disciple-tools-training.php:297
 msgid "'Disciple Tools - Training' plugin requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or make sure it is latest version."
-msgstr ""
+msgstr "El complemento 'Disciple Tools - Training' requiere el tema 'Disciple Tools' para funcionar. Active el tema 'Disciple Tools' o asegúrese de que sea la última versión."
 
 #: disciple-tools-training.php:299
 msgid "Current Disciple Tools version: %1$s, required version: %2$s"
-msgstr ""
+msgstr "Versión actual de Disciple Tools:% 1 $ s, versión requerida:% 2 $ s"
 
 #. Plugin URI of the plugin/theme
 #: 
 msgid "https://github.com/DiscipleTools/disciple-tools-training"
-msgstr ""
+msgstr "https://github.com/DiscipleTools/disciple-tools-training"
 
 #. Description of the plugin/theme
 #: 
 msgid "Disciple Tools Training Extension adds recording of trainings and cross reference them with contacts, groups, and locations."
-msgstr ""
+msgstr "La Extensión de entrenamiento de Disciple Tools agrega grabaciones de entrenamientos y referencia cruzada con contactos, grupos y ubicaciones."
 
 #: post-type/module-base.php:128
 msgid "Duplicates"
-msgstr ""
+msgstr "Duplicados"
 
 #: post-type/module-base.php:185
 msgid "Coach"
-msgstr ""
+msgstr "Entrenador"
 
 #: post-type/module-base.php:253
 msgid "Leaders Total"
-msgstr ""
+msgstr "Líderes Total"
 
 #: post-type/module-base.php:271
 msgid "Disciples Total"
-msgstr ""
+msgstr "Discípulos Total"
 
 #: post-type/module-base.php:277
 msgid "Key Disciples"
-msgstr ""
+msgstr "Discípulos clave"
 
 #: post-type/module-base.php:288
 msgid "Groups Total"
-msgstr ""
+msgstr "Total de grupos"
 
 #: post-type/module-base.php:348
 msgid "Trainings Total"
-msgstr ""
+msgstr "Total de entrenamientos"
 
 #: includes/admin/admin-menu-and-tabs.php:63
 msgid "Dashboard Plugin"
-msgstr ""
+msgstr "Complemento de panel"
 
 #: includes/admin/admin-menu-and-tabs.php:84 includes/functions.php:84
 msgid "Dashboard"
-msgstr ""
+msgstr "Tablero"
 
 #: includes/rest-api.php:80
 msgid "%s days since last update"
-msgstr ""
+msgstr "%s días desde la última actualización"
 
 #: includes/rest-api.php:416
 msgid "Accept"
-msgstr ""
+msgstr "Aceptar"
 
 #: includes/rest-api.php:417
 msgid "Decline"
-msgstr ""
+msgstr "Rechazar"
 
 #: includes/rest-api.php:418
 msgid "# Contacts Assigned"
-msgstr ""
+msgstr "N. ° de contactos asignados"
 
 #: includes/rest-api.php:419
 msgid "# First Meetings"
-msgstr ""
+msgstr "# Primeras reuniones"
 
 #: includes/rest-api.php:420
 msgid "# Faith milestones"
-msgstr ""
+msgstr "# Hitos de fe"
 
 #: includes/rest-api.php:421
 msgid "Hurray! You are caught up."
-msgstr ""
+msgstr "¡Viva! Estás atrapado."
 
 #: includes/rest-api.php:422
 msgid "remove"
-msgstr ""
+msgstr "eliminar"
 
 #: includes/rest-api.php:423
 msgid "mark as complete"
-msgstr ""
+msgstr "marcar como completo"
 
 #: includes/rest-api.php:424
 msgid "No task created"
-msgstr ""
+msgstr "No se creó una tarea"
 
 #: includes/rest-api.php:425
 msgid "Reminder"
-msgstr ""
+msgstr "Recordatorio"
 
 #: includes/rest-api.php:426
 msgid "No note set"
-msgstr ""
+msgstr "No se asignó una nota"
 
 #: includes/template-dashboard.php:30
 msgid "Add a contact"
-msgstr ""
+msgstr "Añade un contacto"
 
 #: includes/template-dashboard.php:33
 msgid "View Contacts List"
-msgstr ""
+msgstr "Ver lista de contactos"
 
 #: includes/template-dashboard.php:47
 msgid "Pending Contacts"
-msgstr ""
+msgstr "Contactos pendientes"
 
 #: includes/template-dashboard.php:52 includes/template-dashboard.php:70
 msgid "View All"
-msgstr ""
+msgstr "Ver todo"
 
 #: includes/template-dashboard.php:65
 msgid "Update Needed"
-msgstr ""
+msgstr "Actualización requerida"
 
 #: includes/template-dashboard.php:79
 msgid "Contact Workload"
-msgstr ""
+msgstr "Carga de trabajo de contacto"
 
 #: includes/template-dashboard.php:83
 msgid "Choose an option to let the dispatcher(s) know if you are ready for new contacts"
-msgstr ""
+msgstr "Elija una opción para informar al despachador (es) si está listo para nuevos contactos"
 
 #: includes/template-dashboard.php:93
 msgid "Set travel or dates unavailable"
-msgstr ""
+msgstr "Establecer viajes o fechas no disponibles"
 
 #: includes/template-dashboard.php:106
 msgid "Personal Benchmarks"
-msgstr ""
+msgstr "Benchmarks personales"
 
 #: includes/template-dashboard.php:135
 msgid "Faith Milestone Totals"
-msgstr ""
+msgstr "Totales de hitos de fe"
 
 #: includes/template-dashboard.php:138
 msgid "Milestones on your active contacts"
-msgstr ""
+msgstr "Hitos en sus contactos activos"
 
 #: includes/template-dashboard.php:149
 msgid "Seeker Path Progress"
-msgstr ""
+msgstr "Progreso de la ruta del buscador"
 
 #: includes/template-dashboard.php:152
 msgid "No data to show yet. You have no active contacts"
-msgstr ""
+msgstr "Aún no hay datos para mostrar. No tienes contactos activos"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Dashboard"
-msgstr ""
+msgstr "Herramientas para discípulos - Tablero"
 
 #. Plugin URI of the plugin/theme
 #: 
 msgid "https://github.com/DiscipleTools/disciple-tools-dashboard"
-msgstr ""
+msgstr "https://github.com/DiscipleTools/disciple-tools-dashboard"
 
 #. Description of the plugin/theme
 #: 
 msgid "The multiplier dashboard upgrades the multipliers experience as soon as they log into the system giving them a landing page with stats."
-msgstr ""
+msgstr "El panel del multiplicador actualiza la experiencia de los multiplicadores tan pronto como inician sesión en el sistema, lo que les proporciona una página de destino con estadísticas."
 
