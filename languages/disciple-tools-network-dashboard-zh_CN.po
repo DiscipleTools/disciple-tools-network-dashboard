@@ -5,490 +5,490 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Generator: POEditor.com\n"
 "Project-Id-Version: Disciple Tools Plugins\n"
-"Language: sl\n"
+"Language: zh-Hans\n"
 
 #: disciple-tools-dashboard.php:253 disciple-tools-dashboard.php:264
 msgid "Whoah, partner!"
-msgstr "Joj, partner!"
+msgstr "哇，伙伴！"
 
 #: disciple-tools-dashboard.php:276
 msgid "Method does not exist."
-msgstr "Metoda ne obstaja."
+msgstr "方法不存在。"
 
 #: metrics/mapbox-maps.php:30
 msgid "Training Maps"
-msgstr "Zemljevidi za trening"
+msgstr "训练图"
 
 #: post-type/module-base.php:354
 msgid "Trainings"
-msgstr "Treningi"
+msgstr "培训课程"
 
 #: metrics/mapbox-personal-maps.php:30
 msgid "Trainings Maps"
-msgstr "Zemljevidi za treninge"
+msgstr "培训地图"
 
 #: network/customize-site-linking.php:10 post-type/module-base.php:54
 msgid "Training"
-msgstr "Usposabljanje"
+msgstr "训练"
 
 #: post-type/module-base.php:59
 msgid "Multiplier"
-msgstr "Množitelj"
+msgstr "乘数"
 
 #: post-type/module-base.php:65
 msgid "Dispatcher"
-msgstr "Dispečer"
+msgstr "调度员"
 
 #: post-type/module-base.php:72
 msgid "Disciple.Tools Admin"
-msgstr "Učenec"
+msgstr "门徒工具管理员"
 
 #: post-type/module-base.php:79
 msgid "Administrator"
-msgstr "Skrbnik"
+msgstr "管理员"
 
 #: post-type/module-base.php:432
 msgid "Members"
-msgstr "Člani"
+msgstr "会员"
 
 #: post-type/module-base.php:433
 msgid "Contacts"
-msgstr "Stiki"
+msgstr "联络人"
 
 #: post-type/module-base.php:294 post-type/module-base.php:450
 msgid "Groups"
-msgstr "Skupine"
+msgstr "团体"
 
 #: post-type/module-base.php:259 post-type/module-base.php:467
 msgid "Leaders"
-msgstr "Voditelji"
+msgstr "领导者"
 
 #: post-type/module-base.php:484
 msgid "Coaches"
-msgstr "Trenerji"
+msgstr "教练员"
 
 #: post-type/module-base.php:497
 msgid "Planted by"
-msgstr "Posadil"
+msgstr "种植者"
 
 #: post-type/module-base.php:498
 msgid "Planting"
-msgstr "Sajenje"
+msgstr "种植"
 
 #: post-type/module-base.php:203 post-type/module-base.php:519
 msgid "People Groups"
-msgstr "Skupine ljudi"
+msgstr "人民团体"
 
 #: post-type/module-base.php:102
 msgid "Tags"
-msgstr "Oznake"
+msgstr "标签"
 
 #: post-type/module-base.php:215
 msgctxt "Optional Documentation"
 msgid "A useful way to training related items and can help training contacts associated with noteworthy characteristics. e.g. business owner, sports lover. The contacts can also be filtered using these tags."
-msgstr "Koristni način za predmete, povezane z usposabljanjem, in lahko pomaga pri vzpostavljanju stikov, povezanih z omembe vrednimi lastnostmi. npr. lastnik podjetja, ljubitelj športa. Stike je mogoče filtrirati tudi s pomočjo teh oznak."
+msgstr "培训相关项目的有用方法，可以帮助培训与值得注意的特征相关的联系人。例如企业主，体育爱好者。也可以使用这些标签过滤联系人。"
 
 #: post-type/module-base.php:111
 msgid "Follow"
-msgstr "Sledite"
+msgstr "跟随"
 
 #: post-type/module-base.php:118
 msgid "Un-Follow"
-msgstr "Ne sledi"
+msgstr "取消关注"
 
 #: includes/template-dashboard.php:164
 msgid "Tasks"
-msgstr "Naloge"
+msgstr "任务"
 
 #: post-type/module-base.php:249
 msgctxt "Training Status label"
 msgid "New"
-msgstr "Novo"
+msgstr "新"
 
 #: post-type/module-base.php:250
 msgctxt "Training Status field description"
 msgid "New training added to the system"
-msgstr "Sistem je dodan nov trening"
+msgstr "系统新增了培训"
 
 #: post-type/module-base.php:254
 msgctxt "Training Status label"
 msgid "Proposed"
-msgstr "Predlagano"
+msgstr "建议的"
 
 #: post-type/module-base.php:255
 msgctxt "Training Status field description"
 msgid "This training has been proposed and is in initial conversations"
-msgstr "Ta trening je predlagan in je v začetnih pogovorih"
+msgstr "这项培训已经提出并且正在初步对话中"
 
 #: post-type/module-base.php:259
 msgctxt "Training Status label"
 msgid "Scheduled"
-msgstr "Načrtovano"
+msgstr "预定的"
 
 #: post-type/module-base.php:260
 msgctxt "Training Status field description"
 msgid "This training is confirmed, on the calendar."
-msgstr "Ta trening je potrjen na koledarju."
+msgstr "日历上已确认此培训。"
 
 #: post-type/module-base.php:264
 msgctxt "Training Status label"
 msgid "In Progress"
-msgstr "V teku"
+msgstr "进行中"
 
 #: post-type/module-base.php:265
 msgctxt "Training Status field description"
 msgid "This training is confirmed, on the calendar, or currently active."
-msgstr "To usposabljanje je potrjeno, v koledarju ali trenutno aktivno."
+msgstr "该培训已在日历中确认，或当前处于活动状态。"
 
 #: post-type/module-base.php:269
 msgctxt "Training Status label"
 msgid "Complete"
-msgstr "Dokončano"
+msgstr "完成"
 
 #: post-type/module-base.php:270
 msgctxt "Training Status field description"
 msgid "This training has successfully completed"
-msgstr "To usposabljanje je bilo uspešno zaključeno"
+msgstr "该培训已成功完成"
 
 #: post-type/module-base.php:274
 msgctxt "Training Status label"
 msgid "Paused"
-msgstr "Začasno ustavljeno"
+msgstr "已暂停"
 
 #: post-type/module-base.php:275
 msgctxt "Training Status field description"
 msgid "This contact is currently on hold. It has potential of getting scheduled in the future."
-msgstr "Ta stik je trenutno na čakanju. V prihodnosti lahko načrtuje načrtovanje."
+msgstr "此联系人当前处于保留状态。它有可能在将来安排。"
 
 #: post-type/module-base.php:279
 msgctxt "Training Status label"
 msgid "Closed"
-msgstr "Zaprto"
+msgstr "关闭"
 
 #: post-type/module-base.php:280
 msgctxt "Training Status field description"
 msgid "This training is no longer going to happen."
-msgstr "Ta trening se ne bo več zgodil."
+msgstr "这项培训将不再发生。"
 
 #: post-type/module-base.php:176
 msgid "Assigned To"
-msgstr "Dodeljena"
+msgstr "分配给"
 
 #: post-type/module-base.php:288
 msgid "Select the main person who is responsible for reporting on this training."
-msgstr "Izberite glavno osebo, ki je odgovorna za poročanje o tem usposabljanju."
+msgstr "选择负责报告此培训的主要人员。"
 
 #: post-type/module-base.php:185
 msgid "Training Coach / Church Planter"
-msgstr "Izobraževalni trener / cerkovnik"
+msgstr "培训教练/教会主持人"
 
 #: post-type/module-base.php:297
 msgctxt "Optional Documentation"
 msgid "The person who planted and/or is coaching this training. Only one person can be assigned to a training while multiple people can be coaches / church planters of this training."
-msgstr "Oseba, ki je posadila in / ali vodi ta trening. Na trening se lahko dodeli samo ena oseba, medtem ko je lahko več ljudi trenerjev / načrtovalcev cerkve tega treninga."
+msgstr "种植和/或指导该培训的人。只能将一个人分配给一次培训，而可以由多人担任该培训的教练/教会建立者。"
 
 #: post-type/module-base.php:196
 msgid "Requires Update"
-msgstr "Zahteva posodobitev"
+msgstr "需要更新"
 
 #: post-type/module-base.php:313
 msgid "Video Link"
-msgstr "Video povezava"
+msgstr "影片连结"
 
 #: post-type/module-base.php:314
 msgctxt "Optional Documentation"
 msgid "Link to video chat service"
-msgstr "Povezava do storitve video klepeta"
+msgstr "链接到视频聊天服务"
 
 #: post-type/module-base.php:321
 msgid "Notes"
-msgstr "Opombe"
+msgstr "笔记"
 
 #: post-type/module-base.php:322
 msgctxt "Optional Documentation"
 msgid "Notes on when the trainings will happen"
-msgstr "Opombe o tem, kdaj bodo treningi"
+msgstr "关于何时进行培训的说明"
 
 #: post-type/module-base.php:331 post-type/module-base.php:543
 msgid "Meeting Times"
-msgstr "Časi sestankov"
+msgstr "会议时间"
 
 #: post-type/module-base.php:219 post-type/module-base.php:228
 msgid "Locations"
-msgstr "Lokacije"
+msgstr "地点"
 
 #: post-type/module-base.php:220 post-type/module-base.php:229
 msgctxt "Optional Documentation"
 msgid "The general location where this contact is located."
-msgstr "Splošno mesto, kjer je ta stik."
+msgstr "此联系人所在的常规位置。"
 
 #: post-type/module-base.php:236
 msgid "Address"
-msgstr "Naslov"
+msgstr "地址"
 
 #: post-type/module-base.php:413
 msgid "Parent Training"
-msgstr "Izobraževanje staršev"
+msgstr "家长培训"
 
 #: post-type/module-base.php:414
 msgctxt "Optional Documentation"
 msgid "A training that launched this training."
-msgstr "Usposabljanje, ki je začelo to usposabljanje."
+msgstr "启动此培训的培训。"
 
 #: post-type/module-base.php:424
 msgid "Peer Training"
-msgstr "Vzajemno usposabljanje"
+msgstr "同伴训练"
 
 #: post-type/module-base.php:425
 msgctxt "Optional Documentation"
 msgid "A related training that isn't a parent/child in relationship. It might indicate trainings that collaborate, are about to merge, recently split, etc."
-msgstr "Sorodno usposabljanje, ki ni v razmerju starš / otrok. Lahko kaže na treninge, ki sodelujejo, se bodo kmalu združili, nedavno razdelili itd."
+msgstr "并非亲子关系中的相关培训。它可能表明协作，即将合并，最近分裂的培训等。"
 
 #: post-type/module-base.php:435
 msgid "Child Training"
-msgstr "Izobraževanje otrok"
+msgstr "儿童训练"
 
 #: post-type/module-base.php:436
 msgctxt "Optional Documentation"
 msgid "A training that has been birthed out of this training."
-msgstr "Trening, ki je bil rojen s tega treninga."
+msgstr "从此培训中诞生的一种培训。"
 
 #: post-type/module-base.php:446 post-type/module-base.php:542
 #: post-type/module-base.php:653
 msgid "Member List"
-msgstr "Seznam članov"
+msgstr "会员名单"
 
 #: post-type/module-base.php:447
 msgctxt "Optional Documentation"
 msgid "The contacts who are members of this training."
-msgstr "Stiki, ki so člani tega usposabljanja."
+msgstr "参加此培训的联系人。"
 
 #: post-type/module-base.php:464
 msgctxt "Optional Documentation"
 msgid "The people trainings represented by this training."
-msgstr "Izobraževanje ljudi, ki ga predstavlja to izobraževanje."
+msgstr "此培训代表的人员培训。"
 
 #: post-type/module-base.php:484
 msgid "Member Count"
-msgstr "Število članov"
+msgstr "会员人数"
 
 #: post-type/module-base.php:485 post-type/module-base.php:492
 msgctxt "Optional Documentation"
 msgid "The number of members in this training. It will automatically be updated when new members are added or removed in the member list. Change this number manually to included people who may not be in the system but are also members of the training."
-msgstr "Število članov na tem usposabljanju. Samodejno se bo posodobil, ko bodo na seznamu članov dodani ali odstranjeni novi člani. Ročno spremenite to številko na vključene osebe, ki morda niso v sistemu, vendar so tudi člani usposabljanja."
+msgstr "此培训的成员人数。在成员列表中添加或删除新成员时，它将自动更新。手动更改此数字，以包括可能不在系统中但也是培训成员的人员。"
 
 #: post-type/module-base.php:491
 msgid "Leader Count"
-msgstr "Števec voditeljev"
+msgstr "领导者数"
 
 #: post-type/module-base.php:503
 msgid "Training as Leader"
-msgstr "Usposabljanje za vodjo"
+msgstr "领导培训"
 
 #: post-type/module-base.php:504
 msgctxt "Optional Documentation"
 msgid "Leader of a training"
-msgstr "Vodja treninga"
+msgstr "培训负责人"
 
 #: post-type/module-base.php:514
 msgid "Training as Participant"
-msgstr "Izobraževanje kot udeleženec"
+msgstr "参加培训"
 
 #: post-type/module-base.php:515
 msgctxt "Optional Documentation"
 msgid "Participant in a training."
-msgstr "Udeleženec usposabljanja."
+msgstr "参加培训。"
 
 #: post-type/module-base.php:537
 msgid "Other"
-msgstr "Drugo"
+msgstr "其他"
 
 #: post-type/module-base.php:568
 msgctxt "input field placeholder"
 msgid "Search Users"
-msgstr "Iskanje uporabnikov"
+msgstr "搜索用户"
 
 #: post-type/module-base.php:601
 msgctxt "Search 'something'"
 msgid "Search %s"
-msgstr "Išči% s"
+msgstr "搜索％s"
 
 #: post-type/module-base.php:656
 msgid "Create"
-msgstr "Ustvari"
+msgstr "创造"
 
 #: post-type/module-base.php:661
 msgid "Select"
-msgstr "Izberite"
+msgstr "选择"
 
 #: post-type/module-base.php:666
 msgid "To add new members, click on 'Create' or 'Select'."
-msgstr "Če želite dodati nove člane, kliknite »Ustvari« ali »Izberi«."
+msgstr "要添加新成员，请单击“创建”或“选择”。"
 
 #: post-type/module-base.php:671
 msgctxt "Add members modal"
 msgid "Add members from existing contacts"
-msgstr "Dodajte člane iz obstoječih stikov"
+msgstr "从现有联系人添加成员"
 
 #: post-type/module-base.php:672
 msgctxt "Add members modal"
 msgid "In the 'Member List' field, type the name of an existing contact to add them to this training."
-msgstr "V polje »Seznam članov« vnesite ime obstoječega stika, da ga dodate na to usposabljanje."
+msgstr "在“成员列表”字段中，键入现有联系人的姓名，以将其添加到此培训中。"
 
 #: post-type/module-base.php:681
 msgid "Close"
-msgstr "Zapri"
+msgstr "关"
 
 #: post-type/module-base.php:879
 msgid "Removed %1$s: %2$s"
-msgstr "Odstranjeno% 1 $ s:% 2 $ s"
+msgstr "已删除％1 $ s：％2 $ s"
 
 #: post-type/module-base.php:882
 msgid "Added %1$s: %2$s"
-msgstr "Dodano% 1 $ s:% 2 $ s"
+msgstr "添加了％1 $ s：％2 $ s"
 
 #: post-type/module-base.php:885
 msgid "Updated %1$s: %2$s to %3$s"
-msgstr "Posodobljeno% 1 $ s:% 2 $ s na% 3 $ s"
+msgstr "已将％1 $ s：％2 $ s更新为％3 $ s"
 
 #: post-type/module-base.php:942
 msgctxt "List Filters"
 msgid "Assigned to me"
-msgstr "Dodeljeno meni"
+msgstr "分配给我"
 
 #: post-type/module-base.php:950 post-type/module-base.php:1007
 #: post-type/module-base.php:1015
 msgctxt "List Filters"
 msgid "All"
-msgstr "Vse"
+msgstr "所有"
 
 #: post-type/module-reports.php:85
 msgid "Reports"
-msgstr "Poročila"
+msgstr "报告书"
 
 #: post-type/module-reports.php:121
 msgid "Total Groups"
-msgstr "Skupno skupin"
+msgstr "总组数"
 
 #: post-type/module-reports.php:122
 msgid "Total Baptisms"
-msgstr "Skupni krsti"
+msgstr "总洗礼"
 
 #: post-type/module-reports.php:123
 msgid "Countries"
-msgstr "Države"
+msgstr "国别"
 
 #: post-type/module-reports.php:124
 msgid "States"
-msgstr "Državah"
+msgstr "状态"
 
 #: post-type/module-reports.php:125
 msgid "Counties"
-msgstr "Okrožja"
+msgstr "县"
 
 #: post-type/module-public-calendar.php:432
 #: post-type/module-registration.php:385
 msgid "Add"
-msgstr "Dodaj"
+msgstr "加"
 
 #: post-type/module-registration.php:31
 msgid "Apps"
-msgstr "Aplikacije"
+msgstr "应用"
 
 #: post-type/module-registration.php:59
 msgid "copy link"
-msgstr "kopiraj povezavo"
+msgstr "复制链接"
 
 #: post-type/module-registration.php:61
 msgid "edit form"
-msgstr "uredite obrazec"
+msgstr "编辑表格"
 
 #: post-type/module-registration.php:63
 msgid "report"
-msgstr "poročilo"
+msgstr "报告"
 
 #: post-type/module-registration.php:67
 msgid "create link"
-msgstr "ustvari povezavo"
+msgstr "建立连结"
 
 #: post-type/module-registration.php:114
 msgid "link"
-msgstr "povezava"
+msgstr "链接"
 
 #: post-type/module-registration.php:116
 msgid "show on calendar"
-msgstr "oddaja na koledarju"
+msgstr "在日历上显示"
 
 #: post-type/module-registration.php:118
 msgid "open registration"
-msgstr "odprta registracija"
+msgstr "公开注册 "
 
 #: post-type/module-registration.php:265
 msgid "add"
-msgstr "dodajte"
+msgstr "加"
 
 #: post-type/module-registration.php:266
 msgid "Use"
-msgstr "Uporaba"
+msgstr "采用"
 
 #: post-type/module-registration.php:267 post-type/module-registration.php:695
 msgid "Search Location"
-msgstr "Iskanje lokacije"
+msgstr "搜索位置"
 
 #: post-type/module-registration.php:268
 msgid "Delete Location"
-msgstr "Izbriši lokacijo"
+msgstr "删除位置"
 
 #: post-type/module-registration.php:269
 msgid "Open Mapping"
-msgstr "Odprite preslikavo"
+msgstr "打开映射"
 
 #: post-type/module-registration.php:270
 msgid "clear"
-msgstr "jasno"
+msgstr "明确"
 
 #: post-type/module-registration.php:384
 msgid "Register for Training"
-msgstr "Prijavite se na usposabljanje"
+msgstr "报名参加培训"
 
 #: post-type/module-registration.php:386
 msgid "Join Training"
-msgstr "Pridružite se treningu"
+msgstr "参加培训"
 
 #: post-type/module-registration.php:387
 msgid "Join in"
-msgstr "Pridruži se"
+msgstr "加入"
 
 #: post-type/module-registration.php:700
 msgid "Clear"
-msgstr "Jasno"
+msgstr "明确"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Training"
-msgstr "Orodja za učence - Usposabljanje"
+msgstr "门徒工具-培训"
 
 #: includes/admin/admin-menu-and-tabs.php:62
 msgid "Extensions (DT)"
-msgstr "Razširitve (DT)"
+msgstr "扩展名（DT）"
 
 #: admin/menu-and-tabs.php:64 admin/menu-and-tabs.php:65
 #: admin/menu-and-tabs.php:103
 msgid "Network Dashboard"
-msgstr "Nadzorna plošča omrežja"
+msgstr "网络仪表板"
 
 #: includes/admin/admin-menu-and-tabs.php:79
 msgid "You do not have sufficient permissions to access this page."
-msgstr "Nimate dovolj dovoljenj za dostop do te strani."
+msgstr "您没有足够的权限访问此页面。"
 
 #: admin/menu-and-tabs.php:107 admin/menu-and-tabs.php:130
 #: admin/menu-and-tabs.php:135
 msgid "nav-tab-active"
-msgstr "nav-tab-active"
+msgstr "导航选项卡"
 
 #: admin/migrations/0000-initial.php:21
 msgid "Network Dashboard Viewer"
-msgstr "Pregledovalnik omrežne nadzorne plošče"
+msgstr "网络仪表板查看器"
 
 #: metrics/base.php:220
 msgid "ID"
@@ -496,7 +496,7 @@ msgstr "ID"
 
 #: metrics/base.php:221 metrics/base.php:255
 msgid "Site"
-msgstr "Spletna stran"
+msgstr "现场"
 
 #: metrics/base.php:224 metrics/base.php:254 metrics/network-maps-area.php:89
 #: metrics/network-maps-area.php:133 metrics/network-statistics-users.php:12
@@ -504,374 +504,374 @@ msgstr "Spletna stran"
 #: metrics/network-statistics-users.php:14
 #: metrics/network-statistics-users.php:50
 msgid "Users"
-msgstr "Uporabniki"
+msgstr "用户数"
 
 #: metrics/base.php:225
 msgid "Timestamp"
-msgstr "Časovni žig"
+msgstr "时间戳记"
 
 #: metrics/base.php:226
 msgid "Visit"
-msgstr "Obiščite"
+msgstr "访问"
 
 #: metrics/base.php:227
 msgid "View"
-msgstr "Pogled"
+msgstr "视图"
 
 #: metrics/base.php:229
 msgid "Active Snapshot"
-msgstr "Aktivni posnetek"
+msgstr "活动快照"
 
 #: metrics/base.php:230
 msgid "Generations"
-msgstr "Generacije"
+msgstr "世代"
 
 #: metrics/base.php:231
 msgid "Follow-up Funnel"
-msgstr "Nadaljni tok"
+msgstr "后续程序"
 
 #: metrics/base.php:232
 msgid "On-Going Meetings"
-msgstr "Srečanja v teku"
+msgstr "正在进行的会议"
 
 #: metrics/base.php:233
 msgid "Coaching"
-msgstr "Treniranje"
+msgstr "辅导课程"
 
 #: metrics/base.php:234
 msgid "Baptized"
-msgstr "Krščen"
+msgstr "受洗"
 
 #: metrics/base.php:235
 msgid "Active Groups"
-msgstr "Aktivne skupine"
+msgstr "活跃团体"
 
 #: metrics/base.php:236 metrics/base.php:258
 msgid "Church"
-msgstr "Cerkev"
+msgstr "教会"
 
 #: metrics/base.php:237
 msgid "Health Metrics"
-msgstr "Meritve zdravja"
+msgstr "健康指标"
 
 #: metrics/base.php:238
 msgid "Total Users"
-msgstr "Skupno število uporabnikov"
+msgstr "总用户"
 
 #: metrics/base.php:239
 msgid "Responders"
-msgstr "Odzivniki"
+msgstr "回应者"
 
 #: metrics/base.php:240
 msgid "Dispatchers"
-msgstr "Dispečerji"
+msgstr "调度员"
 
 #: metrics/base.php:241
 msgid "Multipliers"
-msgstr "Množitelji"
+msgstr "乘数"
 
 #: metrics/base.php:242
 msgid "Admins"
-msgstr "Skrbniki"
+msgstr "管理员"
 
 #: metrics/base.php:243
 msgid "User Login Activity"
-msgstr "Aktivnost prijave uporabnika"
+msgstr "用户登录活动"
 
 #: metrics/base.php:244
 msgid "Users Active in the Last 30 Days"
-msgstr "Uporabniki, aktivni v zadnjih 30 dneh"
+msgstr "最近30天活跃的用户"
 
 #: metrics/base.php:245
 msgid "Practicing"
-msgstr "Vadba"
+msgstr "练习"
 
 #: metrics/base.php:246
 msgid "Not Practicing"
-msgstr "Ne vadim"
+msgstr "不练习"
 
 #: metrics/base.php:247
 msgid "Chart Funnel"
-msgstr "Diagram toka"
+msgstr "图表渠道"
 
 #: metrics/base.php:250
 msgid "Contact"
-msgstr "Kontakt"
+msgstr "联系"
 
 #: metrics/base.php:251
 msgid "Group"
-msgstr "Skupina"
+msgstr "组"
 
 #: metrics/base.php:253
 msgid "User"
-msgstr "Uporabnik"
+msgstr "用户"
 
 #: metrics/base.php:256 metrics/base.php:301
 msgid "Sites"
-msgstr "Spletna mesta"
+msgstr "网站"
 
 #: metrics/base.php:257
 msgid "Baptisms"
-msgstr "Krsti"
+msgstr "洗礼"
 
 #: metrics/base.php:259 metrics/network-maps-area.php:97
 #: metrics/network-maps-area.php:127
 msgid "Churches"
-msgstr "Cerkve"
+msgstr "教堂"
 
 #: metrics/base.php:260
 msgid "Location"
-msgstr "Lokacija"
+msgstr "位置"
 
 #: metrics/base.php:261
 msgid "Types"
-msgstr "Vrste"
+msgstr "种类"
 
 #: metrics/base.php:263
 msgid "modify filter"
-msgstr "spremeni filter"
+msgstr "修改过滤器"
 
 #: metrics/base.php:264
 msgid "Filter List"
-msgstr "Seznam filtrov"
+msgstr "筛选清单"
 
 #: metrics/base.php:265
 msgid "reset data"
-msgstr "ponastavi podatke"
+msgstr "重置数据"
 
 #: post-type/module-base.php:133
 msgid "Status"
-msgstr "Stanje"
+msgstr "状态"
 
 #: metrics/base.php:268
 msgid "Status - All"
-msgstr "Stanje - Vse"
+msgstr "状态-全部"
 
 #: metrics/base.php:270
 msgid "Zoom Level"
-msgstr "Povečava"
+msgstr "缩放等级"
 
 #: metrics/base.php:271
 msgid "Auto Zoom"
-msgstr "Samodejni zoom"
+msgstr "自动缩放"
 
 #: metrics/base.php:272
 msgid "World"
-msgstr "Svet"
+msgstr "世界"
 
 #: metrics/base.php:273
 msgid "Country"
-msgstr "Država"
+msgstr "国家"
 
 #: metrics/base.php:274
 msgid "State"
-msgstr "Država"
+msgstr "州"
 
 #: includes/template-dashboard.php:23
 msgid "Active Contacts"
-msgstr "Aktivni stiki"
+msgstr "活动联系人"
 
 #: metrics/base.php:277
 msgid "Paused Contacts"
-msgstr "Začasno ustavljeni stiki"
+msgstr "通讯录已暂停"
 
 #: metrics/base.php:278
 msgid "Closed Contacts"
-msgstr "Zaprti stiki"
+msgstr "封闭的联系人"
 
 #: metrics/base.php:279
 msgid "Total Contacts"
-msgstr "Skupaj stikov"
+msgstr "总联络人"
 
 #: metrics/base.php:280
 msgid "New Contacts"
-msgstr "Novi stiki"
+msgstr "新联络人"
 
 #: metrics/base.php:282
 msgid "New Baptisms"
-msgstr "Novi krsti"
+msgstr "新洗礼"
 
 #: metrics/base.php:283
 msgid "Baptism Generations"
-msgstr "Krstne generacije"
+msgstr "洗礼世代"
 
 #: metrics/base.php:284
 msgid "Select Location"
-msgstr "Izberite Lokacija"
+msgstr "选择位置"
 
 #: metrics/base.php:286
 msgid "New Groups"
-msgstr "Nove skupine"
+msgstr "新组"
 
 #: metrics/base.php:287
 msgid "Pre-Group"
-msgstr "Predskupina"
+msgstr "小组前"
 
 #: metrics/base.php:288
 msgid "Pre-Groups"
-msgstr "Predskupine"
+msgstr "小组前"
 
 #: metrics/base.php:290
 msgid "Last 7 Days"
-msgstr "Zadnjih 7 dni"
+msgstr "最近7天"
 
 #: metrics/base.php:291
 msgid "Last 30 Days"
-msgstr "Zadnjih 30 dni"
+msgstr "最近30天"
 
 #: metrics/base.php:292
 msgid "Last 60 Days"
-msgstr "Zadnjih 60 dni"
+msgstr "最近60天"
 
 #: metrics/base.php:293
 msgid "Last 12 Months"
-msgstr "Zadnjih 12 mesecev"
+msgstr "最近12个月"
 
 #: metrics/base.php:294
 msgid "Last 24 Months"
-msgstr "Zadnjih 24 mesecev"
+msgstr "最近24个月"
 
 #: metrics/base.php:295
 msgid "This Year"
-msgstr "To leto"
+msgstr "今年"
 
 #: metrics/base.php:297
 msgid "Activity Map"
-msgstr "Zemljevid dejavnosti"
+msgstr "活动地图"
 
 #: metrics/base.php:298 metrics/network-activity-stats.php:11
 #: metrics/network-activity-stats.php:12 metrics/network-activity-stats.php:13
 #: metrics/network-activity-stats.php:57
 msgid "Stats"
-msgstr "Statistika"
+msgstr "统计资料"
 
 #: metrics/base.php:299
 msgid "Activities"
-msgstr "Dejavnosti"
+msgstr "活动项目"
 
 #: metrics/base.php:300
 msgid "Actions"
-msgstr "Dejanja"
+msgstr "动作"
 
 #: metrics/base.php:302
 msgid "By Action Type"
-msgstr "Po vrsti dejanja"
+msgstr "按动作类型"
 
 #: metrics/base.php:303
 msgid "Key"
-msgstr "Ključ"
+msgstr "键"
 
 #: metrics/base.php:304
 msgid "Name"
-msgstr "Ime"
+msgstr "名称"
 
 #: metrics/base.php:305
 msgid "Total Activities"
-msgstr "Skupne dejavnosti"
+msgstr "活动总数"
 
 #: metrics/base.php:306
 msgid "Feed"
-msgstr "Krma"
+msgstr "饲料"
 
 #: metrics/base.php:307
 msgid "Time"
-msgstr "Čas"
+msgstr "时间"
 
 #: metrics/base.php:308
 msgid "Result Limit"
-msgstr "Omejitev rezultata"
+msgstr "结果限制"
 
 #: metrics/base.php:309
 msgid "uncheck"
-msgstr "počistite"
+msgstr "取消选中"
 
 #: metrics/base.php:311 metrics/network-home.php:12 metrics/network-home.php:13
 #: metrics/network-home.php:14 metrics/network-home.php:48
 msgid "Home"
-msgstr "Domov"
+msgstr "家"
 
 #: metrics/base.php:313
 msgid "Events (30 Days)"
-msgstr "Dogodki (30 dni)"
+msgstr "活动（30天）"
 
 #: metrics/base.php:315
 msgid "All Active/Inactive"
-msgstr "Vse aktivno / neaktivno"
+msgstr "全部有效/无效"
 
 #: metrics/base.php:316 metrics/network-maps-hovermap.php:12
 #: metrics/network-maps-hovermap.php:13 metrics/network-maps-hovermap.php:14
 #: metrics/network-maps-hovermap.php:51
 msgid "Hover Map"
-msgstr "Zemljevid miške"
+msgstr "悬停地图"
 
 #: metrics/loader.php:16
 msgid "Network"
-msgstr "Omrežje"
+msgstr "网络"
 
 #: metrics/network-activity-map.php:15 metrics/network-activity-map.php:16
 #: metrics/network-activity-map.php:17 metrics/network-activity-map.php:63
 msgid "Map"
-msgstr "Zemljevid"
+msgstr "地图"
 
 #: metrics/network-activity-stream.php:12
 #: metrics/network-activity-stream.php:13
 #: metrics/network-activity-stream.php:14
 #: metrics/network-activity-stream.php:51
 msgid "Log"
-msgstr "Dnevnik"
+msgstr "日志记录"
 
 #: metrics/network-activity.php:12 metrics/network-activity.php:13
 #: metrics/network-activity.php:14 metrics/network-activity.php:25
 msgid "Activity"
-msgstr "Dejavnost"
+msgstr "活动"
 
 #: metrics/network-maps-area.php:15 metrics/network-maps-area.php:16
 #: metrics/network-maps-area.php:17 metrics/network-maps-area.php:110
 msgid "Area Maps"
-msgstr "Zemljevidi območja"
+msgstr "区域地图"
 
 #: metrics/network-maps-locationlist.php:12
 #: metrics/network-maps-locationlist.php:13
 #: metrics/network-maps-locationlist.php:14
 #: metrics/network-maps-locationlist.php:46
 msgid "Location List"
-msgstr "Seznam lokacij"
+msgstr "位置清单"
 
 #: metrics/network-maps.php:12 metrics/network-maps.php:13
 #: metrics/network-maps.php:14 metrics/network-maps.php:25
 msgid "Maps"
-msgstr "Zemljevidi"
+msgstr "地图"
 
 #: metrics/network-sites.php:12 metrics/network-sites.php:13
 #: metrics/network-sites.php:14 metrics/network-sites.php:45
 msgid "Site Reports"
-msgstr "Poročila o spletnih mestih"
+msgstr "网站报告"
 
 #: metrics/network-statistics.php:12 metrics/network-statistics.php:13
 #: metrics/network-statistics.php:14 metrics/network-statistics.php:25
 msgid "Statistics"
-msgstr "Statistika"
+msgstr "统计"
 
 #: shared/permissions.php:41
 msgid "Network Dashboard Transfer Both Ways"
-msgstr "Omrežna nadzorna plošča prenaša v obe smeri"
+msgstr "网络仪表板双向传输"
 
 #: shared/permissions.php:42
 msgid "Network Dashboard Receiving Only"
-msgstr "Omrežna nadzorna plošča samo prejema"
+msgstr "网络仪表板仅接收"
 
 #: shared/permissions.php:43
 msgid "Network Dashboard Sending Only"
-msgstr "Samo pošiljanje nadzorne plošče omrežja"
+msgstr "网络仪表板仅发送"
 
 #: shared/site-profile.php:99
 msgid "Network Dashboard Site Profile"
-msgstr "Profil spletnega mesta nadzorne plošče"
+msgstr "网络仪表板站点配置文件"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Network Dashboard"
-msgstr "Orodja za učence - omrežna nadzorna plošča"
+msgstr "门徒工具-网络仪表板"
 
 #: admin/customize-site-linking.php:10 metrics/mapbox-maps.php:31
 #: metrics/mapbox-personal-maps.php:31 post-type/module-base.php:393
@@ -879,268 +879,268 @@ msgstr "Orodja za učence - omrežna nadzorna plošča"
 #: post-type/module-base.php:466 post-type/module-base.php:483
 #: post-type/module-base.php:520
 msgid "Streams"
-msgstr "Potoki"
+msgstr "流"
 
 #: metrics/mapbox-maps.php:30
 msgid "Stream Maps"
-msgstr "Pretočni zemljevidi"
+msgstr "流图"
 
 #: metrics/mapbox-personal-maps.php:30
 msgid "Streams Maps"
-msgstr "Zemljevidi tokov"
+msgstr "流地图"
 
 #: post-type/module-base.php:103
 msgctxt "Optional Documentation"
 msgid "A useful way to stream related items and can help stream contacts associated with noteworthy characteristics. e.g. business owner, sports lover. The contacts can also be filtered using these tags."
-msgstr "Koristni način pretakanja povezanih elementov in lahko pomaga pri pretakanju stikov, povezanih z omembe vrednimi lastnostmi. npr. lastnik podjetja, ljubitelj športa. Stike je mogoče filtrirati tudi s pomočjo teh oznak."
+msgstr "流式传输相关项目的一种有用方法，可以帮助流式传输与值得注意的特征相关联的联系人。例如企业主，体育爱好者。也可以使用这些标签过滤联系人。"
 
 #: post-type/module-base.php:138
 msgctxt "Stream Status label"
 msgid "New"
-msgstr "Novo"
+msgstr "新"
 
 #: post-type/module-base.php:139
 msgctxt "Stream Status field description"
 msgid "New stream added to the system"
-msgstr "V sistem je dodan nov tok"
+msgstr "新流添加到系统"
 
 #: post-type/module-base.php:143
 msgctxt "Stream Status label"
 msgid "Model"
-msgstr "Model"
+msgstr "模型"
 
 #: post-type/module-base.php:144
 msgctxt "Stream Status field description"
 msgid "This stream has been proposed and is in initial conversations"
-msgstr "Ta tok je predlagan in je v začetnih pogovorih"
+msgstr "该信息流已经提出，并且正在初步对话中"
 
 #: post-type/module-base.php:148
 msgctxt "Stream Status label"
 msgid "Assist"
-msgstr "Asist"
+msgstr "助攻"
 
 #: post-type/module-base.php:149
 msgctxt "Stream Status field description"
 msgid "This stream is confirmed, on the calendar."
-msgstr "Ta tok je potrjen v koledarju."
+msgstr "在日历上已确认此流。"
 
 #: post-type/module-base.php:153
 msgctxt "Stream Status label"
 msgid "Watch"
-msgstr "Pazi"
+msgstr "看"
 
 #: post-type/module-base.php:154
 msgctxt "Stream Status field description"
 msgid "This stream is confirmed, on the calendar, or currently active."
-msgstr "Ta tok je potrjen, v koledarju ali trenutno aktiven."
+msgstr "此流已在日历上确认，或当前处于活动状态。"
 
 #: post-type/module-base.php:158
 msgctxt "Stream Status label"
 msgid "Leave"
-msgstr "Pustite"
+msgstr "离开"
 
 #: post-type/module-base.php:159
 msgctxt "Stream Status field description"
 msgid "This stream has successfully completed"
-msgstr "Ta tok je bil uspešno zaključen"
+msgstr "此流已成功完成"
 
 #: post-type/module-base.php:163
 msgctxt "Stream Status label"
 msgid "Paused"
-msgstr "Začasno ustavljeno"
+msgstr "已暂停"
 
 #: post-type/module-base.php:164
 msgctxt "Stream Status field description"
 msgid "This contact is currently on hold. It has potential of getting scheduled in the future."
-msgstr "Ta stik je trenutno na čakanju. V prihodnosti lahko načrtuje načrtovanje."
+msgstr "此联系人当前处于保留状态。它有可能在将来安排。"
 
 #: post-type/module-base.php:168
 msgctxt "Stream Status label"
 msgid "Closed"
-msgstr "Zaprto"
+msgstr "关闭"
 
 #: post-type/module-base.php:169
 msgctxt "Stream Status field description"
 msgid "This stream is no longer going to happen."
-msgstr "Ta tok se ne bo več zgodil."
+msgstr "此流将不再发生。"
 
 #: post-type/module-base.php:177
 msgid "Select the main person who is responsible for reporting on this stream."
-msgstr "Izberite glavno osebo, ki je odgovorna za poročanje o tem toku."
+msgstr "选择负责对此流进行报告的主要人员。"
 
 #: post-type/module-base.php:186
 msgctxt "Optional Documentation"
 msgid "The person who planted and/or is coaching this stream. Only one person can be assigned to a stream while multiple people can be coaches / church planters of this stream."
-msgstr "Oseba, ki je zasadila in / ali trenira ta tok. V potok je mogoče dodeliti samo eno osebo, medtem ko je lahko več ljudi trenerjev / posaditeljev cerkve tega potoka."
+msgstr "种植和/或指导此信息流的人。只能将一个人分配到该流中，而可以将多个人指定为该流的教练/教堂创建者。"
 
 #: post-type/module-base.php:204
 msgctxt "Optional Documentation"
 msgid "The people streams represented by this stream."
-msgstr "Ljudski tokovi, ki jih predstavlja ta tok."
+msgstr "此流代表的人员流。"
 
 #: post-type/module-base.php:309
 msgid "Parent Stream"
-msgstr "Starševski tok"
+msgstr "父流"
 
 #: post-type/module-base.php:310
 msgctxt "Optional Documentation"
 msgid "A stream that launched this stream."
-msgstr "Tok, ki je zagnal ta tok."
+msgstr "启动此流的流。"
 
 #: post-type/module-base.php:321
 msgid "Peer Streams"
-msgstr "Vrstniški tokovi"
+msgstr "对等流"
 
 #: post-type/module-base.php:322
 msgctxt "Optional Documentation"
 msgid "A related stream that isn't a parent/child in relationship. It might indicate streams that collaborate, are about to merge, recently split, etc."
-msgstr "Sorodni tok, ki ni starš / otrok v zvezi. Lahko kaže na tokove, ki sodelujejo, se bodo združili, pred kratkim razdelili itd."
+msgstr "不是亲子关系的相关流。它可能指示协作，即将合并，最近拆分等的流。"
 
 #: post-type/module-base.php:333
 msgid "Child Streams"
-msgstr "Otroški tokovi"
+msgstr "子流"
 
 #: post-type/module-base.php:334
 msgctxt "Optional Documentation"
 msgid "A stream that has been birthed out of this stream."
-msgstr "Potok, ki je bil rojen iz tega potoka."
+msgstr "从此流中诞生的流。"
 
 #: post-type/module-base.php:369
 msgid "Leader in Stream"
-msgstr "Vodja v toku"
+msgstr "流媒体负责人"
 
 #: post-type/module-base.php:370
 msgctxt "Optional Documentation"
 msgid "Leader of a stream"
-msgstr "Vodja toka"
+msgstr "流的领导"
 
 #: post-type/module-base.php:380
 msgid "Key Disciple in Stream"
-msgstr "Ključni učenec v toku"
+msgstr "流中的关键门徒"
 
 #: post-type/module-base.php:381
 msgctxt "Optional Documentation"
 msgid "Disciple in a stream."
-msgstr "Učenec v toku."
+msgstr "流中的门徒。"
 
 #: post-type/module-base.php:536
 msgid "Connections"
-msgstr "Povezave"
+msgstr "连接数"
 
 #: post-type/module-reports.php:432
 msgid "Add Report"
-msgstr "Dodaj poročilo"
+msgstr "新增报告"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Streams"
-msgstr "Orodja za učence - tokovi"
+msgstr "门徒工具-流"
 
 #: logging/log-generations.php:11
 msgid "Pre-Group Generations"
-msgstr "Generacije pred skupinami"
+msgstr "小组前世代"
 
 #: logging/log-generations.php:17
 msgid "Group Generations"
-msgstr "Skupinske generacije"
+msgstr "群体世代"
 
 #: logging/log-generations.php:23
 msgid "Church Generations"
-msgstr "Cerkvene generacije"
+msgstr "教会世代"
 
 #: logging/log-generations.php:29
 msgid "Team Generations"
-msgstr "Skupinske generacije"
+msgstr "团队世代"
 
 #: logging/log-generations.php:76
 msgid "%s is reporting a new pre-group generation."
-msgstr "% s poroča o novi generaciji predskupin."
+msgstr "％s报告了新一代的分组前。"
 
 #: logging/log-generations.php:81
 msgid "%s is reporting a new group generation."
-msgstr "% s poroča o novi generaciji skupine."
+msgstr "％s报告了新一代的群组。"
 
 #: logging/log-generations.php:86
 msgid "%s is reporting a new church generation."
-msgstr "% s poroča o novi cerkveni generaciji."
+msgstr "％s报告了新一代的教会。"
 
 #: logging/log-generations.php:91
 msgid "%s is reporting a new leadership team generation."
-msgstr "% s poroča o novi generaciji vodstvene ekipe."
+msgstr "％s报告了新一代的领导团队。"
 
 #: logging/log-new-posts.php:11
 msgid "New Contact"
-msgstr "Nov stik"
+msgstr "新联系人"
 
 #: logging/log-new-posts.php:16
 msgid "New Pre-Group"
-msgstr "Nova predskupina"
+msgstr "新预组"
 
 #: logging/log-new-posts.php:21
 msgid "New Group"
-msgstr "Nova skupina"
+msgstr "新组"
 
 #: logging/log-new-posts.php:26
 msgid "New Church"
-msgstr "Nova cerkev"
+msgstr "新教堂"
 
 #: logging/log-new-posts.php:31
 msgid "New Team"
-msgstr "Nova ekipa"
+msgstr "新团队"
 
 #: logging/log-new-posts.php:36
 msgid "New Baptism"
-msgstr "Nov krst"
+msgstr "新洗礼"
 
 #: logging/log-new-posts.php:41
 msgid "New Coaching"
-msgstr "Novo treniranje"
+msgstr "新教练"
 
 #: logging/log-new-posts.php:164
 msgid "%s is reporting a new contact."
-msgstr "% s poroča o novem stiku."
+msgstr "％s正在报告新联系人。"
 
 #: logging/log-new-posts.php:169
 msgid "%s is reporting a new pre-group formed."
-msgstr "% s poroča o ustanovljeni novi predskupini."
+msgstr "％s报告了一个新的预备组。"
 
 #: logging/log-new-posts.php:174
 msgid "%s is reporting a new group formed."
-msgstr "% s poroča o ustanovljeni novi skupini."
+msgstr "％s报告了一个新的组。"
 
 #: logging/log-new-posts.php:179
 msgid "%s is reporting a new church."
-msgstr "% s poroča o novi cerkvi."
+msgstr "％s报告了一座新教堂。"
 
 #: logging/log-new-posts.php:184
 msgid "%s is reporting a new leadership team formed."
-msgstr "% s poroča o ustanovljeni novi vodstveni skupini."
+msgstr "％s报告了新成立的领导团队。"
 
 #: logging/log-new-posts.php:189
 msgid "%s is reporting a new baptism."
-msgstr "% s poroča o novem krstu."
+msgstr "％s报告了新的洗礼。"
 
 #: logging/log-new-posts.php:194
 msgid "%s is reporting an coaching relationship."
-msgstr "% s poroča o trenerskem odnosu."
+msgstr "％s报告了教练关系。"
 
 #: metrics/network-maps-area.php:74 metrics/network-maps-area.php:83
 #: metrics/network-maps-area.php:91 metrics/network-maps-area.php:99
 msgid "Active"
-msgstr "Aktivno"
+msgstr "活性"
 
 #: metrics/network-maps-area.php:75
 msgid "Paused"
-msgstr "Začasno ustavljeno"
+msgstr "已暂停"
 
 #: metrics/network-maps-area.php:76
 msgid "Closed"
-msgstr "Zaprto"
+msgstr "关闭"
 
 #: metrics/network-maps-area.php:84 metrics/network-maps-area.php:92
 #: metrics/network-maps-area.php:100
 msgid "Inactive"
-msgstr "Neaktivno"
+msgstr "不活跃"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1150,7 +1150,7 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-network-dashboard"
 #. Description of the plugin/theme
 #: 
 msgid "Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging."
-msgstr "Povežite to spletno mesto Disciple Tools z večjo mrežo spletnih mest. Dodaja varnostno občutljive vsote, preslikavo, beleženje dejavnosti."
+msgstr "将此门徒工具站点连接到更大的站点网络。添加安全性敏感的总计，映射，活动日志记录。"
 
 #. Author URI of the plugin/theme
 #: 
@@ -1165,15 +1165,15 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-streams"
 #. Description of the plugin/theme
 #: 
 msgid "Disciple Tools Streams Extension adds recording of streams and cross reference them with contacts, groups, and locations."
-msgstr "Razširitev tokov Disciple Tools doda snemanje tokov in jih navzkrižno sklicuje s stiki, skupinami in lokacijami."
+msgstr "门徒工具Streams Extension添加了流的记录，并与联系人，组和位置进行交叉引用。"
 
 #: disciple-tools-training.php:297
 msgid "'Disciple Tools - Training' plugin requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or make sure it is latest version."
-msgstr "Vtičnik »Orodja za učence - Vadba« zahteva delovanje teme »Orodja za učence«. Aktivirajte temo »Orodja za učence« ali se prepričajte, da je najnovejša različica."
+msgstr "“培训工具-培训”插件需要使用“培训工具”主题。请激活“门徒工具”主题或确保它是最新版本。"
 
 #: disciple-tools-training.php:299
 msgid "Current Disciple Tools version: %1$s, required version: %2$s"
-msgstr "Trenutna različica orodij za učence:% 1 $ s, obvezna različica:% 2 $ s"
+msgstr "当前门徒工具版本：％1 $ s，必需版本：％2 $ s"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1183,148 +1183,148 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-training"
 #. Description of the plugin/theme
 #: 
 msgid "Disciple Tools Training Extension adds recording of trainings and cross reference them with contacts, groups, and locations."
-msgstr "Disciple Tools Training Extension doda snemanje vadb in njihovo sklicevanje s stiki, skupinami in lokacijami."
+msgstr "门徒工具培训扩展添加了培训记录，并与联系人，组和位置进行交叉引用。"
 
 #: post-type/module-base.php:128
 msgid "Duplicates"
-msgstr "Dvojniki"
+msgstr "重复项"
 
 #: post-type/module-base.php:185
 msgid "Coach"
-msgstr "Trener"
+msgstr "教练"
 
 #: post-type/module-base.php:253
 msgid "Leaders Total"
-msgstr "Voditelji skupaj"
+msgstr "领导者合计"
 
 #: post-type/module-base.php:271
 msgid "Disciples Total"
-msgstr "Učenci skupaj"
+msgstr "弟子总数"
 
 #: post-type/module-base.php:277
 msgid "Key Disciples"
-msgstr "Ključni učenci"
+msgstr "重点学科"
 
 #: post-type/module-base.php:288
 msgid "Groups Total"
-msgstr "Skupine skupaj"
+msgstr "小组总数"
 
 #: post-type/module-base.php:348
 msgid "Trainings Total"
-msgstr "Treningi skupaj"
+msgstr "培训总数"
 
 #: includes/admin/admin-menu-and-tabs.php:63
 msgid "Dashboard Plugin"
-msgstr "Vtičnik za nadzorno ploščo"
+msgstr "仪表板插件"
 
 #: includes/admin/admin-menu-and-tabs.php:84 includes/functions.php:84
 msgid "Dashboard"
-msgstr "Armaturna plošča"
+msgstr "仪表板"
 
 #: includes/rest-api.php:80
 msgid "%s days since last update"
-msgstr "% s dni od zadnje posodobitve"
+msgstr "自上次更新以来的％s天"
 
 #: includes/rest-api.php:416
 msgid "Accept"
-msgstr "Sprejmi"
+msgstr "接受"
 
 #: includes/rest-api.php:417
 msgid "Decline"
-msgstr "Zavrni"
+msgstr "下降"
 
 #: includes/rest-api.php:418
 msgid "# Contacts Assigned"
-msgstr "# Stiki dodeljeni"
+msgstr "＃个已分配的联系人"
 
 #: includes/rest-api.php:419
 msgid "# First Meetings"
-msgstr "# Prva srečanja"
+msgstr "＃第一次会议"
 
 #: includes/rest-api.php:420
 msgid "# Faith milestones"
-msgstr "# Mejniki vere"
+msgstr "＃信念里程碑"
 
 #: includes/rest-api.php:421
 msgid "Hurray! You are caught up."
-msgstr "Hura! Ujeti ste."
+msgstr "欢呼！你被抓了。"
 
 #: includes/rest-api.php:422
 msgid "remove"
-msgstr "Odstrani"
+msgstr "去掉"
 
 #: includes/rest-api.php:423
 msgid "mark as complete"
-msgstr "označi kot popolno"
+msgstr "标记为完成"
 
 #: includes/rest-api.php:424
 msgid "No task created"
-msgstr "Nobena naloga ni ustvarjena"
+msgstr "未创建任务"
 
 #: includes/rest-api.php:425
 msgid "Reminder"
-msgstr "Opomnik"
+msgstr "提醒"
 
 #: includes/rest-api.php:426
 msgid "No note set"
-msgstr "Opomba ni nastavljena"
+msgstr "没有音符集"
 
 #: includes/template-dashboard.php:30
 msgid "Add a contact"
-msgstr "Dodajte stik"
+msgstr "添加联系人"
 
 #: includes/template-dashboard.php:33
 msgid "View Contacts List"
-msgstr "Ogled seznama stikov"
+msgstr "查看联系人列表"
 
 #: includes/template-dashboard.php:47
 msgid "Pending Contacts"
-msgstr "Čakajoči stiki"
+msgstr "待处理的联络人"
 
 #: includes/template-dashboard.php:52 includes/template-dashboard.php:70
 msgid "View All"
-msgstr "Poglej vse"
+msgstr "查看全部"
 
 #: includes/template-dashboard.php:65
 msgid "Update Needed"
-msgstr "Potrebna posodobitev"
+msgstr "需要更新"
 
 #: includes/template-dashboard.php:79
 msgid "Contact Workload"
-msgstr "Obrnite se na obremenitev"
+msgstr "联系工作量"
 
 #: includes/template-dashboard.php:83
 msgid "Choose an option to let the dispatcher(s) know if you are ready for new contacts"
-msgstr "Izberite možnost, da dispečerja obvestite, ali ste pripravljeni na nove stike"
+msgstr "选择一个选项，让调度员知道您是否准备好与新联系人联系"
 
 #: includes/template-dashboard.php:93
 msgid "Set travel or dates unavailable"
-msgstr "Nastavite potovanje ali datume ni na voljo"
+msgstr "设置旅行或日期不可用"
 
 #: includes/template-dashboard.php:106
 msgid "Personal Benchmarks"
-msgstr "Osebna merila uspešnosti"
+msgstr "个人基准"
 
 #: includes/template-dashboard.php:135
 msgid "Faith Milestone Totals"
-msgstr "Faith Milestone Vsote"
+msgstr "信仰里程碑总计"
 
 #: includes/template-dashboard.php:138
 msgid "Milestones on your active contacts"
-msgstr "Mejniki vaših aktivnih stikov"
+msgstr "活动联系人的里程碑"
 
 #: includes/template-dashboard.php:149
 msgid "Seeker Path Progress"
-msgstr "Napredek poti iskalca"
+msgstr "寻求路径进展"
 
 #: includes/template-dashboard.php:152
 msgid "No data to show yet. You have no active contacts"
-msgstr "Ni podatkov za prikaz. Nimate aktivnih stikov"
+msgstr "尚无数据显示。您没有活动的联系人"
 
 #. Plugin Name of the plugin/theme
 #: 
 msgid "Disciple Tools - Dashboard"
-msgstr "Orodja za učence - Nadzorna plošča"
+msgstr "门徒工具-仪表板"
 
 #. Plugin URI of the plugin/theme
 #: 
@@ -1334,5 +1334,5 @@ msgstr "https://github.com/DiscipleTools/disciple-tools-dashboard"
 #. Description of the plugin/theme
 #: 
 msgid "The multiplier dashboard upgrades the multipliers experience as soon as they log into the system giving them a landing page with stats."
-msgstr "Nadzorna plošča množitelja nadgradi izkušnjo množitelja takoj, ko se prijavijo v sistem in jim dajo ciljno stran s statistiko"
+msgstr "乘数仪表板登录系统后立即升级乘数体验，从而为他们提供具有统计信息的登录页面"
 
