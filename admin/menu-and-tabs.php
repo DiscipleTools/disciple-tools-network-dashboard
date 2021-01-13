@@ -53,8 +53,8 @@ class DT_Network_Dashboard_Menu {
      * @since 0.1
      */
     public function register_menu() {
-        add_menu_page( __( 'Extensions (DT)', 'disciple_tools' ),
-            __( 'Extensions (DT)', 'disciple_tools' ),
+        add_menu_page( __( 'Extensions (DT)', 'disciple-tools-network-dashboard' ),
+            __( 'Extensions (DT)', 'disciple-tools-network-dashboard' ),
             'manage_dt',
             'dt_extensions',
             array( $this, 'extensions_menu' ),

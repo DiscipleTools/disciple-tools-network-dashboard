@@ -13,7 +13,7 @@ add_action( 'dt_off_canvas_nav', 'dt_network_dashboard_top_nav_desktop', 50 );
 function dt_network_dashboard_top_nav_desktop() {
     if ( dt_network_dashboard_has_metrics_permissions() ) {
         ?>
-        <li><a href="<?php echo esc_url( site_url( '/network/' ) ); ?>"><?php esc_html_e( "Network" ); ?></a></li><?php
+        <li><a href="<?php echo esc_url( site_url( '/network/' ) ); ?>"><?php esc_html_e( "Network", 'disciple-tools-network-dashboard' ); ?></a></li><?php
     }
 }
 
