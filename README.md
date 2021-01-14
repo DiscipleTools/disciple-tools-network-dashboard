@@ -35,5 +35,10 @@ The Network Dashboard creates a combined dashboard for multiple Disciple.Tools s
 [![Alt text](https://img.youtube.com/vi/Gjt2UvkR13A/maxresdefault.jpg)](https://www.youtube.com/watch?v=Gjt2UvkR13A)
 [View Video](https://www.youtube.com/watch?v=Gjt2UvkR13A)
 
+## Site Linking Walkthrough
+
+[![Alt text](https://img.youtube.com/vi/kDw1RYRg9VA/maxresdefault.jpg)](https://www.youtube.com/watch?v=kDw1RYRg9VA)
+[View Video](https://www.youtube.com/watch?v=kDw1RYRg9VA)
+
 
 
