@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/DiscipleTools/disciple-tools-network-dashboard.svg?branch=master)](https://travis-ci.org/DiscipleTools/disciple-tools-network-dashboard)
+[![Build Status](https://travis-ci.com/DiscipleTools/disciple-tools-network-dashboard.svg?branch=master)](https://travis-ci.com/DiscipleTools/disciple-tools-network-dashboard)
 
 # Disciple Tools - Network Dashboard
 
