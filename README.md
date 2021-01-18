@@ -37,7 +37,6 @@ will be immediately communicated across the network to feed prayer and praise co
 - __Does not support daisy chaining site reports.__ I.e. Site-A sends Site-B data, but Site-B never sends Site-A's data to
 Site-C. The Network Dashboard only passes data to explicit connections. This is to protect the data owners control of
 how far the data can be transfered and displayed.
--
 
 ## Requirements
 
