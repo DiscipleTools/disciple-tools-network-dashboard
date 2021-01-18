@@ -65,11 +65,6 @@ system for git. For a more details on contribution see the
 [contribution guidelines](https://github.com/DiscipleTools/disciple-tools-network-dashboard/blob/master/CONTRIBUTING.md).
 
 
-## Screenshots
-
-![]()
-
-
 ## Videos
 #### Version 2.0 - Video Walk-through
 
@@ -81,5 +76,7 @@ system for git. For a more details on contribution see the
 [![Alt text](https://img.youtube.com/vi/kDw1RYRg9VA/maxresdefault.jpg)](https://www.youtube.com/watch?v=kDw1RYRg9VA)
 [View Video](https://www.youtube.com/watch?v=kDw1RYRg9VA)
 
+## Screenshot
 
+![screenshot](https://raw.githubusercontent.com/DiscipleTools/disciple-tools-network-dashboard/master/documentation/files/images/nd-screenshot.png)
 
