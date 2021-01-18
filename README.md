@@ -2,40 +2,81 @@
 
 # Disciple Tools - Network Dashboard
 
-The Network Dashboard is a Disciple.Tools power tool!
+The Network Dashboard creates report data sharing between multiple Disciple.Tools systems. It seeks to
+facilitate solidarity, saturation, data safety, and prayer guidance.
 
-The Network Dashboard creates a combined dashboard for multiple Disciple.Tools systems. It offers an "out of the box" dashboard of activity and movement progress that can be shared safely between Disciple.Tools partners.
+It offers an "out of the box" dashboard of activity and movement progress that can be shared safely between
+Disciple.Tools partner sites.
 
-***
+__The Network Dashboard is a Disciple.Tools power tool!__
 
-## Table of Contents
-**Installation**
-* [Installation Instructions](https://github.com/DiscipleTools/disciple-tools-network-dashboard/wiki/Installing)
+## Purpose
 
-**Big Picture**
-* [Network Building Concepts](https://github.com/DiscipleTools/disciple-tools-network-dashboard/wiki/Concepts)
-* [Security](https://github.com/DiscipleTools/disciple-tools-network-dashboard/wiki/Security)
-* [User Permissions](https://github.com/DiscipleTools/disciple-tools-network-dashboard/wiki/Permissions)
-* [Terms and Types of Data Shared](https://github.com/DiscipleTools/disciple-tools-network-dashboard/wiki/Terms-and-Types-of-Data-Shared)
+- __Solidarity:__ Multiple teams working in the same geographic area can combine their Disciple.Tools movement data
+for solidarity in the kingdom advancement in that area (i.e. solidarity as in: "we're in this together"
+or "our win is your win, your win is our win. Maranatha!" ).
+- __Saturation:__ Multiple teams can see clearly the saturation of contacts, groups, and workers in their geographic area
+for the purpose [seeing where the kingdom isn't](https://zume.training/eyes-to-see-where-the-kingdom-isnt/).
+- __Data Safety:__ Great effort has been put into the removal of Personally Identifiable Data (understanding the rising
+concern with privacy laws) and reducing precision of location data, but in a way that is still valuable to
+saturation efforts and movement health understanding.
+- __Prayer Guidance:__ Using the new shared activity logging, movement events (new baptisms, new contacts, new churches, etc),
+will be immediately communicated across the network to feed prayer and praise coverage.
 
-**Admin Panel**
-* [Profile Tab](https://github.com/DiscipleTools/disciple-tools-network-dashboard/wiki/Profile-Tab)
-* [Incoming Tabs](https://github.com/DiscipleTools/disciple-tools-network-dashboard/wiki/Incoming-Tabs)
-* [Outgoing Tab](https://github.com/DiscipleTools/disciple-tools-network-dashboard/wiki/Outgoing-Tab)
-* [System Tab](https://github.com/DiscipleTools/disciple-tools-network-dashboard/wiki/System-Tab)
+## Usage
 
-**Developer Extensions**
-* [Activity Log Extension](https://github.com/DiscipleTools/disciple-tools-network-dashboard/wiki/Activity-Log-Extension)
+#### Will Do
 
-***
+- Display combined maps and statistics from multiple Disciple.Tools sites.
+- Automatically run daily collections from all connected Disciple.Tools sites.
+- Supports linking and unlinking systems. When a link is removed, data in remote system is removed.
+- Runs on basic Wordpress server without additional Geospacial systems or customer server configurations.
+
+#### Will Not Do
+
+- __Does not support daisy chaining site reports.__ I.e. Site-A sends Site-B data, but Site-B never sends Site-A's data to
+Site-C. The Network Dashboard only passes data to explicit connections. This is to protect the data owners control of
+how far the data can be transfered and displayed.
+-
+
+## Requirements
+
+- Disciple Tools Theme installed on a Wordpress Server.
+- Site must have SSL enabled.
 
 
-## Network Dashboard Video Walkthrough
+## Installing
+
+- Install as a standard Disciple.Tools/Wordpress plugin in the system Admin/Plugins area.
+- Requires the user role of Administrator.
+
+## Documentation
+
+View the [Documentation Wiki](https://github.com/DiscipleTools/disciple-tools-network-dashboard/wiki) for extensive explanation of the plugin.
+
+
+## Contribution
+
+Contributions welcome. You can report issues and bugs in the
+[Issues](https://github.com/DiscipleTools/disciple-tools-network-dashboard/issues) section of the repo. You can present ideas
+in the [Discussions](https://github.com/DiscipleTools/disciple-tools-network-dashboard/discussions) section of the repo. And
+code contributions are welcome using the [Pull Request](https://github.com/DiscipleTools/disciple-tools-network-dashboard/pulls)
+system for git. For a more details on contribution see the
+[contribution guidelines](https://github.com/DiscipleTools/disciple-tools-network-dashboard/blob/master/CONTRIBUTING.md).
+
+
+## Screenshots
+
+![]()
+
+
+## Videos
+#### Version 2.0 - Video Walk-through
 
 [![Alt text](https://img.youtube.com/vi/Gjt2UvkR13A/maxresdefault.jpg)](https://www.youtube.com/watch?v=Gjt2UvkR13A)
 [View Video](https://www.youtube.com/watch?v=Gjt2UvkR13A)
 
-## Site Linking Walkthrough
+#### Site-to-Site Linking Walk-through
 
 [![Alt text](https://img.youtube.com/vi/kDw1RYRg9VA/maxresdefault.jpg)](https://www.youtube.com/watch?v=kDw1RYRg9VA)
 [View Video](https://www.youtube.com/watch?v=kDw1RYRg9VA)
