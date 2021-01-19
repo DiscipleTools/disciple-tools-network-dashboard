@@ -691,6 +691,9 @@ class DT_Network_Activity_Log {
         else if ( get_post_meta( $post_id, 'location_grid', true ) ){
             $grid = get_post_meta( $post_id, 'location_grid', true );
             $row = Disciple_Tools_Mapping_Queries::get_by_grid_id( $grid );
+            if ( empty( $row ) ){
+                return $location;
+            }
             $object = new Location_Grid_Geocoder();
             $label = $object->_format_full_name( $row );
             $location = [
@@ -722,7 +725,7 @@ class DT_Network_Activity_Log {
         $site_id = dt_network_site_id();
         return $wpdb->get_results( $wpdb->prepare( "
                 SELECT
-                   a.object_id as site_object_id,
+                   distinct(a.object_id) as site_object_id,
                    'new_contact' as action,
                    a.hist_time as timestamp
                 FROM $wpdb->dt_activity_log as a
