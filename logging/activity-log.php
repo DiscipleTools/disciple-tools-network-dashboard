@@ -672,24 +672,8 @@ class DT_Network_Activity_Log {
             'location_value' => [],
         ];
 
-        $grid_meta = get_post_meta( $post_id, 'location_grid_meta', true );
-        if ( $grid_meta ) {
-            $row = Location_Grid_Meta::get_location_grid_meta_by_id( $grid_meta );
-            if ( $row ) {
-                $location = [
-                    'location_type' => 'complete',
-                    'location_value' => [
-                        'lng' => $row['lng'],
-                        'lat' => $row['lat'],
-                        'level' => $row['level'],
-                        'label' => $row['label'],
-                        'grid_id' => $row['grid_id'],
-                    ],
-                ];
-            }
-        }
-        else if ( get_post_meta( $post_id, 'location_grid', true ) ){
-            $grid = get_post_meta( $post_id, 'location_grid', true );
+        $grid = get_post_meta( $post_id, 'location_grid', true );
+        if ( ! empty( $grid ) ){
             $row = Disciple_Tools_Mapping_Queries::get_by_grid_id( $grid );
             $object = new Location_Grid_Geocoder();
             $label = $object->_format_full_name( $row );
