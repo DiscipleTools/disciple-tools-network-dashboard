@@ -148,7 +148,10 @@ class DT_Network_Dashboard_Migration_Engine
     public static function display_migration_and_lock(){
         add_action( "dt_utilities_system_details", function () {
             $lock = get_option( 'dt_network_dashboard_migration_lock', 0 ); ?>
-            <tr><td>Network Dashboard Migration version: <?php echo esc_html( self::$migration_number ) ?>. Lock: <?php echo esc_html( $lock ); ?>  </td></tr>
+            <tr>
+                <td>Network Dashboard Migration version: <?php echo esc_html( self::$migration_number ) ?>. Lock: <?php echo esc_html( $lock ); ?>  </td>
+                <td> <button name="reset_lock" value="dt_network_dashboard_migration_lock">Reset Lock</button></td>
+            </tr>
         <?php });
     }
 }
