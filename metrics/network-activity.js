@@ -46,7 +46,7 @@ window.load_activity_filter = () => {
     // initialize vars
     let container = jQuery('#activity-list');
     if ( typeof window.activity_filter === 'undefined' ){
-        window.activity_filter = { 'end': '-7 days' }
+        window.activity_filter = { 'start': '-7 days', 'actions': [], 'sites': [] }
     }
     // query and reload data
     function load_data() {
@@ -133,11 +133,11 @@ window.load_activity_filter = () => {
                 var diff = now - start;
                 var oneDay = 1000 * 60 * 60 * 24;
                 var day = Math.floor(diff / oneDay);
-                window.activity_filter.end = '-'+day+' days'
+                window.activity_filter.start = '-'+day+' days'
             } else if ( '30' === time_range) {
-                window.activity_filter.end = '-30 days'
+                window.activity_filter.start = '-30 days'
             } else {
-                window.activity_filter.end = '-7 days'
+                window.activity_filter.start = '-7 days'
             }
 
             window.activity_filter.limit = jQuery('#record_limit').val()
