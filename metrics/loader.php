@@ -8,13 +8,15 @@ if ( 'show' !== get_option( 'dt_network_dashboard_show_tab' ) ){
 /**
  * Add Top Navigation
  */
-add_action( 'dt_top_nav_desktop', 'dt_network_dashboard_top_nav_desktop', 50 );
-add_action( 'dt_off_canvas_nav', 'dt_network_dashboard_top_nav_desktop', 50 );
-function dt_network_dashboard_top_nav_desktop() {
+add_filter( 'desktop_navbar_menu_options', 'dt_network_dashboard_top_nav_desktop', 110, 1 );
+function dt_network_dashboard_top_nav_desktop( $tabs ) {
     if ( dt_network_dashboard_has_metrics_permissions() ) {
-        ?>
-        <li><a href="<?php echo esc_url( site_url( '/network/' ) ); ?>"><?php esc_html_e( "Network", 'disciple-tools-network-dashboard' ); ?></a></li><?php
+        $tabs['network'] = [
+            "link" => site_url( '/network/' ),
+            "label" => __( "Network", 'disciple-tools-network-dashboard' )
+        ];
     }
+    return $tabs;
 }
 
 /**
