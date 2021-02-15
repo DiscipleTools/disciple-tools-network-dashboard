@@ -318,6 +318,8 @@ class DT_Network_Dashboard_Metrics_Base {
             'map_1' => __( 'Hover Map', 'disciple-tools-network-dashboard' ),
 
             'results' => __( 'Results', 'disciple-tools-network-dashboard' ),
+            'has_location' => __( 'Has location data', 'disciple-tools-network-dashboard' ),
+            'no_location' => __( 'Without location data', 'disciple-tools-network-dashboard' ),
         ];
     }
 
