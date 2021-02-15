@@ -613,8 +613,8 @@ class DT_Network_Dashboard_Metrics_Base {
         }
 
         $defaults = [
-            'start' => time(),
-            'end' => strtotime( '-7 days' ),
+            'start' => '-7 days',
+            'end' => time(),
             'limit' => 2000,
             'offset' => 0,
             'boundary' => [], // n_lat, s_lat, e_lng, w_lng lnglat, sw lnglat
@@ -630,15 +630,15 @@ class DT_Network_Dashboard_Metrics_Base {
             $filter['start'] = strtotime( sanitize_text_field( wp_unslash( $filters['start'] ) ) );
         }
         if ( empty( $filter['start'] ) || $filter['start'] > time() || $filter['start'] < strtotime( '30 years ago' ) ) {
-            $filter['start'] = time();
+            $filter['start'] = strtotime( sanitize_text_field( wp_unslash( '- 7 days' ) ) );
         }
 
         /* process end time */
         if ( isset( $filters['end'] ) && ! empty( $filters['end'] ) ){
             $filter['end'] = strtotime( sanitize_text_field( wp_unslash( $filters['end'] ) ) );
         }
-        if ( $filter['end'] > time() || empty( $filter['end'] ) || $filter['end'] < strtotime( '30 years ago' ) ) {
-            $filter['end'] = strtotime( '-30 days' );
+        if ( empty( $filter['end'] ) || $filter['end'] < strtotime( '30 years ago' ) ) {
+            $filter['end'] = time();
         }
 
         /**
@@ -690,8 +690,8 @@ class DT_Network_Dashboard_Metrics_Base {
                 	AND	pname.meta_key = 'name'
                 LEFT JOIN $wpdb->postmeta as pvisibility ON pid.ID=pvisibility.post_id
                 	AND	pvisibility.meta_key = 'visibility'
-                WHERE ml.timestamp < %s
-                  AND ml.timestamp > %s
+                WHERE ml.timestamp > %s
+                  AND ml.timestamp < %s
                   AND ( pvisibility.meta_value != 'hide' || ml.site_id = %s )
                   $additional_where
                 ORDER BY ml.timestamp DESC
