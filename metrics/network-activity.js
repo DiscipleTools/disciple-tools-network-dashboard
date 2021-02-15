@@ -76,103 +76,108 @@ window.load_activity_filter = () => {
     load_data()
     load_filters()
 
+    // list to refresh filter button
+    jQuery('.filter_list_button').on('click', function(){
+      jQuery('#filters').empty().html(spinner)
+      jQuery('#activity-list').prepend(spinner)
+
+      jQuery('.loading-spinner').addClass('active')
+
+      let time_range = jQuery('#time_range').val()
+      if ( 'this_year' === time_range) {
+        var now = new Date();
+        var start = new Date(now.getFullYear(), 0, 0);
+        var diff = now - start;
+        var oneDay = 1000 * 60 * 60 * 24;
+        var day = Math.floor(diff / oneDay);
+        window.activity_filter.start = '-'+day+' days'
+      } else if ( '12m' === time_range) {
+        window.activity_filter.start = '-365 days'
+      } else if ( '24m' === time_range) {
+        window.activity_filter.start = '-24 months'
+      } else if ( '60' === time_range) {
+        window.activity_filter.start = '-60 days'
+      } else if ( '30' === time_range) {
+        window.activity_filter.start = '-30 days'
+      } else {
+        window.activity_filter.start = '-7 days'
+      }
+
+      window.activity_filter.limit = jQuery('#record_limit').val()
+
+      // add site filters
+      let sites = []
+      jQuery.each( jQuery('#filters_section button.sites').not('.hollow'), function(i,v){
+        sites.push(v.value)
+      })
+      window.activity_filter.sites = sites
+
+      // add action filters
+      let actions = []
+      jQuery.each( jQuery('#filters_section button.actions').not('.hollow'), function(i,v){
+        actions.push(v.value)
+      })
+      window.activity_filter.actions = actions
+
+      load_data()
+      load_filters()
+      jQuery('.filter_list_button').removeClass('warning').addClass('hollow')
+    })
+
+
     function write_activity_list(){
         container.empty()
+
         jQuery.each( window.feed, function(i,v){
-            container.append(`<h2>${v.label} (${v.list.length} events)</h2>`)
-            container.append(`<ul id="${i}"></ul>`)
-            let sublist = jQuery('#'+i)
-            jQuery.each(v.list, function(ii,vv){
-                sublist.append(`<li><strong>(${vv.time})</strong> ${vv.message} </li>`)
-            })
+          container.append(`<h2>${v.label} (${v.list.length} events)</h2>`)
+          container.append(`<ul id="${i}"></ul>`)
+          let sublist = jQuery('#'+i)
+          jQuery.each(v.list, function(ii,vv){
+            sublist.append(`<li><strong>(${vv.time})</strong> ${vv.message} </li>`)
+          })
         })
 
-        jQuery('.loading-spinner').removeClass('active')
+        if ( window.feed.length < 1 ) {
+          container.append(`${_.escape( network_base_script.trans.results ) /*Results*/} : 0`)
+        }
+
+      jQuery('.loading-spinner').removeClass('active')
     }
     function write_filters(){
 
-        jQuery('#filters').html(`Results: ${window.activity_stats.records_count}`)
+        jQuery('#filters').html(`${_.escape( network_base_script.trans.results ) /*Results*/}: ${window.activity_stats.records_count}`)
 
         let site_list = jQuery('#site-list')
-        let hollow = ''
         site_list.empty()
         jQuery.each( window.activity_stats.sites, function(sli,slv){
-          site_list.append(`<button class="button small sites hollow" id="site-filter-${sli}" value="${sli}">${_.escape( slv )}</button> `)
+          site_list.append(`<button class="button small sites hollow" id="site-filter-${_.escape( sli )}" value="${_.escape( sli )}">${_.escape( slv )}</button> `)
           if ( jQuery.inArray( sli, window.activity_filter.sites ) >= 0 ) {
-            jQuery('#site-filter-'+sli).removeClass('hollow')
+            jQuery('#site-filter-'+_.escape( sli )).removeClass('hollow')
           }
         })
-
 
         let action_list = jQuery('#action-filter')
         action_list.empty()
         jQuery.each( window.activity_stats.actions, function(ali,alv){
-          action_list.append(`<button class="button small actions hollow" id="action-filter-${ali}" value="${ali}">${_.escape( alv.label )}</button> `)
+          action_list.append(`<button class="button small actions hollow" id="action-filter-${_.escape( ali )}" value="${_.escape( ali )}">${_.escape( alv.label )}</button> `)
           if ( jQuery.inArray( ali, window.activity_filter.actions ) >= 0 ) {
-            jQuery('#action-filter-'+ali).removeClass('hollow')
+            jQuery('#action-filter-'+_.escape( ali )).removeClass('hollow')
           }
         })
 
         // list to button changes
         jQuery('#filters_section button').on('click', function(){
-            let item = jQuery(this)
-            if ( item.hasClass('hollow') ){
-                item.removeClass('hollow')
-            } else {
-                item.addClass('hollow')
-            }
-            jQuery('.filter_list_button').removeClass('hollow').addClass('warning')
+          let item = jQuery(this)
+          if ( item.hasClass('hollow') ){
+            item.removeClass('hollow')
+          } else {
+            item.addClass('hollow')
+          }
+          jQuery('.filter_list_button').removeClass('hollow').addClass('warning')
         })
         jQuery('#filters_section select').on('change', function(){
-            jQuery('.filter_list_button').removeClass('hollow').addClass('warning')
+          jQuery('.filter_list_button').removeClass('hollow').addClass('warning')
         })
 
-        // list to refresh filter button
-        jQuery('.filter_list_button').on('click', function(){
-            jQuery('#filters').empty().html(spinner)
-            jQuery('#activity-list').prepend(spinner)
-
-            jQuery('.loading-spinner').addClass('active')
-
-            let time_range = jQuery('#time_range').val()
-            if ( 'this_year' === time_range) {
-                var now = new Date();
-                var start = new Date(now.getFullYear(), 0, 0);
-                var diff = now - start;
-                var oneDay = 1000 * 60 * 60 * 24;
-                var day = Math.floor(diff / oneDay);
-                window.activity_filter.start = '-'+day+' days'
-            } else if ( '12m' === time_range) {
-                window.activity_filter.start = '-365 days'
-            } else if ( '24m' === time_range) {
-                window.activity_filter.start = '-24 months'
-            } else if ( '60' === time_range) {
-                window.activity_filter.start = '-60 days'
-            } else if ( '30' === time_range) {
-                window.activity_filter.start = '-30 days'
-            } else {
-                window.activity_filter.start = '-7 days'
-            }
-
-            window.activity_filter.limit = jQuery('#record_limit').val()
-
-            // add site filters
-            let sites = []
-            jQuery.each( jQuery('#filters_section button.sites').not('.hollow'), function(i,v){
-                sites.push(v.value)
-            })
-           window.activity_filter.sites = sites
-
-            // add action filters
-            let actions = []
-            jQuery.each( jQuery('#filters_section button.actions').not('.hollow'), function(i,v){
-                actions.push(v.value)
-            })
-            window.activity_filter.actions = actions
-
-            load_data()
-            load_filters()
-            jQuery('.filter_list_button').removeClass('warning').addClass('hollow')
-        })
     }
 }

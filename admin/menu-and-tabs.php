@@ -1159,7 +1159,16 @@ class DT_Network_Dashboard_Tab_System
                         }
                     }
                 }
+
             endif; // is multisite
+
+            /* DELETE SITE */
+                if ( isset( $_POST['delete-site'] ) ){
+
+                    $id = sanitize_text_field( wp_unslash( $_POST['delete-site'] ) );
+
+                    DT_Network_Dashboard_Site_Post_Type::delete( $id );
+                }
 
             /* SNAPSHOT */
             if ( isset( $_POST['new-remote-snapshot'] ) ){
@@ -1236,6 +1245,7 @@ class DT_Network_Dashboard_Tab_System
                         <th></th>
                         <th>Activity</th>
                         <th></th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -1283,6 +1293,9 @@ class DT_Network_Dashboard_Tab_System
                             <td>
                                 <button name="delete-<?php echo esc_attr( $site['type'] ) ?>-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Delete All Site Activity</button>
                                 <button name="new-<?php echo esc_attr( $site['type'] ) ?>-activity" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Collect New Activity</button>
+                            </td>
+                            <td style="width:100px; border-left: 1px solid lightgrey;">
+                                <button name="delete-site" type="submit" value="<?php echo esc_attr( $site['id'] ) ?>" class="button" >Delete Site</button>
                             </td>
                         </tr>
                         <?php

@@ -316,6 +316,8 @@ class DT_Network_Dashboard_Metrics_Base {
 
             'stats_1' => __( 'All Active/Inactive', 'disciple-tools-network-dashboard' ),
             'map_1' => __( 'Hover Map', 'disciple-tools-network-dashboard' ),
+
+            'results' => __( 'Results', 'disciple-tools-network-dashboard'),
         ];
     }
 
@@ -724,8 +726,8 @@ class DT_Network_Dashboard_Metrics_Base {
 
     public static function get_activity_stats( $filters = [] ) {
         $logs = self::get_activity_log( $filters );
-        if ( empty( $logs ) ){
-            return [];
+        if ( empty( $logs ) ) {
+            $logs = [];
         }
 
         $stats = [

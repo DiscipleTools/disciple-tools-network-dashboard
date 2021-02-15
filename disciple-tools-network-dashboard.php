@@ -17,7 +17,7 @@
  *          https://www.gnu.org/licenses/gpl-2.0.html
  *
  * @version 2.2 Fixed filters on activity log.
- * 
+ *
  */
 if ( ! defined( 'ABSPATH' ) ) {
     return; // return if accessed directly
