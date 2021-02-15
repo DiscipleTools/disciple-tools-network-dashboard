@@ -17,6 +17,7 @@ class DT_Network_Dashboard_Metrics_Base {
     public $js_object_name = ''; // This object will be loaded into the metrics.js file by the wp_localize_script.
     public $js_file_name = ''; // should be full file name plus extension
     public $permissions = [ 'dt_all_access_contacts', 'view_project_metrics', 'view_network_dashboard' ];
+    public static $activity_filter;
 
     private static $_instance = null;
     public static function instance() {
@@ -307,6 +308,7 @@ class DT_Network_Dashboard_Metrics_Base {
             'activity_11' => __( 'Time', 'disciple-tools-network-dashboard' ),
             'activity_12' => __( 'Result Limit', 'disciple-tools-network-dashboard' ),
             'activity_13' => __( 'uncheck', 'disciple-tools-network-dashboard' ),
+            'activity_14' => __( 'check', 'disciple-tools-network-dashboard' ),
 
             'home_1' => __( 'Home', 'disciple-tools-network-dashboard' ),
             'home_2' => __( 'Countries', 'disciple-tools-network-dashboard' ),
@@ -715,6 +717,8 @@ class DT_Network_Dashboard_Metrics_Base {
 
         wp_cache_set( __METHOD__, $results, __METHOD__, 10 );
 
+        self::$activity_filter = $filter; // define the current activity filter used for the query
+
         return $results;
     }
 
@@ -754,6 +758,8 @@ class DT_Network_Dashboard_Metrics_Base {
             }
             $stats['actions_totals'][$log['action']]++;
         }
+
+        $stats['activity_filter'] = self::$activity_filter; // return the current activity filter used for the query
 
         return $stats;
     }
