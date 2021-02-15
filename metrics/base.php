@@ -633,7 +633,11 @@ class DT_Network_Dashboard_Metrics_Base {
 
         /* process start time */
         if ( isset( $filters['start'] ) && ! empty( $filters['start'] ) ){
-            $filter['start'] = strtotime( sanitize_text_field( wp_unslash( $filters['start'] ) ) );
+            if ( is_numeric( $filters['start'] ) ) {
+                $filter['start'] = sanitize_text_field( wp_unslash( $filters['start'] ) );
+            } else {
+                $filter['start'] = strtotime( sanitize_text_field( wp_unslash( $filters['start'] ) ) );
+            }
         }
         if ( empty( $filter['start'] ) || $filter['start'] > time() || $filter['start'] < strtotime( '30 years ago' ) ) {
             $filter['start'] = strtotime( sanitize_text_field( wp_unslash( '- 7 days' ) ) );

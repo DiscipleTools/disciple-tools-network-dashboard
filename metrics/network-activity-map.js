@@ -174,12 +174,30 @@ jQuery(document).ready(function(){
           window.current_bounds = map.getBounds()
           window.activity_filter.boundary = { 'n_lat': window.current_bounds._ne.lat, 's_lat': window.current_bounds._sw.lat, 'e_lng': window.current_bounds._ne.lng, 'w_lng': window.current_bounds._sw.lng}
           window.load_activity_filter()
+
+          jQuery('.filter_list_button').on('click', function(){
+            $('#activity-filter-modal').foundation('close');
+            setTimeout(
+              function()
+              {
+                load_map_geojson()
+              }, 500);
+          })
           load_map_geojson()
       })
       map.on('dragend', function(e){
           window.current_bounds = map.getBounds()
           window.activity_filter.boundary = { 'n_lat': window.current_bounds._ne.lat, 's_lat': window.current_bounds._sw.lat, 'e_lng': window.current_bounds._ne.lng, 'w_lng': window.current_bounds._sw.lng}
           window.load_activity_filter()
+
+          jQuery('.filter_list_button').on('click', function(){
+            $('#activity-filter-modal').foundation('close');
+            setTimeout(
+              function()
+              {
+                load_map_geojson()
+              }, 500);
+          })
           load_map_geojson()
       })
 })
