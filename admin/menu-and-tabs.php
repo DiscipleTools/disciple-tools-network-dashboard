@@ -1163,12 +1163,12 @@ class DT_Network_Dashboard_Tab_System
             endif; // is multisite
 
             /* DELETE SITE */
-                if ( isset( $_POST['delete-site'] ) ){
+            if ( isset( $_POST['delete-site'] ) ){
 
-                    $id = sanitize_text_field( wp_unslash( $_POST['delete-site'] ) );
+                $id = sanitize_text_field( wp_unslash( $_POST['delete-site'] ) );
 
-                    DT_Network_Dashboard_Site_Post_Type::delete( $id );
-                }
+                DT_Network_Dashboard_Site_Post_Type::delete( $id );
+            }
 
             /* SNAPSHOT */
             if ( isset( $_POST['new-remote-snapshot'] ) ){

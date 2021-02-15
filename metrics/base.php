@@ -317,7 +317,7 @@ class DT_Network_Dashboard_Metrics_Base {
             'stats_1' => __( 'All Active/Inactive', 'disciple-tools-network-dashboard' ),
             'map_1' => __( 'Hover Map', 'disciple-tools-network-dashboard' ),
 
-            'results' => __( 'Results', 'disciple-tools-network-dashboard'),
+            'results' => __( 'Results', 'disciple-tools-network-dashboard' ),
         ];
     }
 
