@@ -5,7 +5,7 @@
  * Description: Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging.
  * Text Domain: disciple-tools-network-dashboard
  * Domain Path: /languages
- * Version: 2.2
+ * Version: 2.3
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
  * Requires at least: 4.7.0
@@ -17,6 +17,7 @@
  *          https://www.gnu.org/licenses/gpl-2.0.html
  *
  * @version 2.2 Fixed filters on activity log.
+ * @version 2.3 Fix to the map and filter data
  *
  */
 if ( ! defined( 'ABSPATH' ) ) {
