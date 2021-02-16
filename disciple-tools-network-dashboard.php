@@ -214,23 +214,6 @@ class DT_Network_Dashboard {
      */
     private function setup_actions() {
 
-        // Check for plugin updates
-        if ( ! class_exists( 'Puc_v4_Factory' ) ) {
-            require( get_template_directory() . '/dt-core/libraries/plugin-update-checker/plugin-update-checker.php' );
-        }
-        /**
-         * Below is the publicly hosted .json file that carries the version information. This file can be hosted
-         * anywhere as long as it is publicly accessible. You can download the version file listed below and use it as
-         * a template.
-         * Also, see the instructions for version updating to understand the steps involved.
-         * @see https://github.com/DiscipleTools/disciple-tools-version-control/wiki/How-to-Update-the-Starter-Plugin
-         */
-        Puc_v4_Factory::buildUpdateChecker(
-            'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-network-dashboard-version-control.json',
-            __FILE__,
-            'disciple-tools-network-dashboard'
-        );
-
         // load internationalization
         add_action( 'after_setup_theme', array( $this, 'i18n' ), 51 );
     }
@@ -443,3 +426,31 @@ if ( ! function_exists( 'recursive_sanitize_text_field' ) ){
         return dt_recursive_sanitize_array( $array );
     }
 }
+
+
+/**
+ * Check for plugin updates even when the active theme is not Disciple.Tools
+ *
+ * Below is the publicly hosted .json file that carries the version information. This file can be hosted
+ * anywhere as long as it is publicly accessible. You can download the version file listed below and use it as
+ * a template.
+ * Also, see the instructions for version updating to understand the steps involved.
+ * @see https://github.com/DiscipleTools/disciple-tools-version-control/wiki/How-to-Update-the-Starter-Plugin
+ */
+add_action( 'plugins_loaded', function (){
+    if ( is_admin() ){
+        // Check for plugin updates
+        if ( ! class_exists( 'Puc_v4_Factory' ) ) {
+            if ( file_exists( get_template_directory() . '/dt-core/libraries/plugin-update-checker/plugin-update-checker.php' )){
+                require( get_template_directory() . '/dt-core/libraries/plugin-update-checker/plugin-update-checker.php' );
+            }
+        }
+        if ( class_exists( 'Puc_v4_Factory' ) ){
+            Puc_v4_Factory::buildUpdateChecker(
+                'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-network-dashboard-version-control.json',
+                __FILE__,
+                'disciple-tools-network-dashboard'
+            );
+        }
+    }
+});
