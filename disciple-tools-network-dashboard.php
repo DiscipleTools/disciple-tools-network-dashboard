@@ -137,6 +137,7 @@ class DT_Network_Dashboard {
      * @return void
      */
     private function __construct() {
+        $this->dir_path = plugin_dir_path( __FILE__ );
     }
 
     /**
