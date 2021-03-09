@@ -17,8 +17,8 @@ class DT_Network_Dashboard_Migration_0006 extends DT_Network_Dashboard_Migration
 
         DT_Network_Dashboard::get_instance();
 
-        if ( ! file_exists( trailingslashit( WP_CONTENT_DIR ) .  'plugins/disciple-tools-network-dashboard/logging/activity-log.php' ) ) {
-            require_once( trailingslashit( WP_CONTENT_DIR ) . 'plugins/disciple-tools-network-dashboard/logging/activity-log.php' );
+        if ( file_exists( trailingslashit( DT_Network_Dashboard::get_instance()->dir_path ) .  'logging/activity-log.php' ) ) {
+            require_once( trailingslashit( DT_Network_Dashboard::get_instance()->dir_path ) .  'logging/activity-log.php' );
         }
 
         $results = DT_Network_Activity_Log::query_new_baptism();
