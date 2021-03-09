@@ -1118,7 +1118,13 @@ class DT_Network_Dashboard_Metrics_Base {
                     $data[$index] = $gen;
                     continue;
                 }
-                $data[$index]['value'] = $gen['value'] + $data[$index]['value'];
+                if ( ! isset( $data[$index]['value'] ) ) {
+                    continue;
+                }
+                if ( ! isset( $gen['value'] ) ) {
+                    continue;
+                }
+                $data[$index]['value'] = (int) $gen['value'] + (int) $data[$index]['value'];
             }
         }
 
