@@ -34,13 +34,13 @@ function write_area( settings ) {
 
     /* build status list */
     let status_list = `<option value="none" disabled></option>
-                      <option value="none" disabled>${_.escape( network_base_script.trans.status ) /*Status*/}</option>
+                      <option value="none" disabled>${window.lodash.escape( network_base_script.trans.status ) /*Status*/}</option>
                       <option value="none"></option>
-                      <option value="all" selected>${_.escape( network_base_script.trans.status_all ) /*Status - All*/}</option>
+                      <option value="all" selected>${window.lodash.escape( network_base_script.trans.status_all ) /*Status - All*/}</option>
                       <option value="none" disabled>-----</option>
                       `
     jQuery.each(status, function(i,v){
-        status_list += `<option value="${i}">${_.escape( v.label )}</option>`
+        status_list += `<option value="${i}">${window.lodash.escape( v.label )}</option>`
     })
     status_list += `<option value="none"></option>`
 
@@ -78,25 +78,25 @@ function write_area( settings ) {
                     <div id='legend' class='legend'>
                         <div class="grid-x grid-margin-x grid-padding-x">
                             <div class="cell small-2 center info-bar-font">
-                                ${_.escape( title )} 
+                                ${window.lodash.escape( title )}
                             </div>
                             <div class="cell small-2 center border-left">
                                 <select id="level" class="small" style="width:170px;">
                                     <option value="none" disabled></option>
-                                    <option value="none" disabled>${_.escape( network_base_script.trans.zoom_level ) /*Zoom Level*/}</option>
+                                    <option value="none" disabled>${window.lodash.escape( network_base_script.trans.zoom_level ) /*Zoom Level*/}</option>
                                     <option value="none"></option>
-                                    <option value="auto" selected>${_.escape( network_base_script.trans.auto_zoom ) /*Auto Zoom*/}</option>
+                                    <option value="auto" selected>${window.lodash.escape( network_base_script.trans.auto_zoom ) /*Auto Zoom*/}</option>
                                     <option value="none" disabled>-----</option>
-                                    <option value="world">${_.escape( network_base_script.trans.world ) /*World*/}</option>
-                                    <option value="admin0">${_.escape( network_base_script.trans.country ) /*Country*/}</option>
-                                    <option value="admin1">${_.escape( network_base_script.trans.state ) /*State*/}</option>
+                                    <option value="world">${window.lodash.escape( network_base_script.trans.world ) /*World*/}</option>
+                                    <option value="admin0">${window.lodash.escape( network_base_script.trans.country ) /*Country*/}</option>
+                                    <option value="admin1">${window.lodash.escape( network_base_script.trans.state ) /*State*/}</option>
                                     <option value="none" disabled></option>
-                                </select> 
+                                </select>
                             </div>
                             <div class="cell small-2 center border-left">
                                 <select id="status" class="small" style="width:170px;">
                                     ${status_list}
-                                </select> 
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,7 @@ function write_area( settings ) {
                         <div id="geocode-details-content"></div>
                     </div>
                 </div>
-                
+
              `)
 
             // set info box
@@ -410,7 +410,7 @@ function write_area( settings ) {
                 }
 
                 let content = jQuery('#geocode-details-content')
-                content.empty().html(`<img src="${_.escape( obj.theme_uri )}spinner.svg" class="spinner-image" alt="spinner"/>`)
+                content.empty().html(`<img src="${window.lodash.escape( obj.theme_uri )}spinner.svg" class="spinner-image" alt="spinner"/>`)
 
                 jQuery('#geocode-details').show()
 
@@ -423,7 +423,7 @@ function write_area( settings ) {
                         if ( details.admin0_grid_id ) {
                             list.append( `
                               <div id="admin0_wrapper" class="cell callout center">
-                               <h4>${_.escape( details.admin0_name )}</h4><h4><span id="admin0_count">0</span></h4>
+                               <h4>${window.lodash.escape( details.admin0_name )}</h4><h4><span id="admin0_count">0</span></h4>
                               </div>
                             `)
                             if ( details.admin0_grid_id in window.grid_data ) {
@@ -434,7 +434,7 @@ function write_area( settings ) {
                             list.append( `
                               <div class="cell small-6"></div><div class="cell small-6" style="border-left: 1px solid lightgrey"></div>
                               <div id="admin1_wrapper" class="cell callout center">
-                               <h4>${_.escape( details.admin1_name )}</h4><h4><span id="admin1_count">0</span></h4>
+                               <h4>${window.lodash.escape( details.admin1_name )}</h4><h4><span id="admin1_count">0</span></h4>
                               </div>
                             `)
 
@@ -446,7 +446,7 @@ function write_area( settings ) {
                             list.append( `
                             <div class="cell small-6"></div><div class="cell small-6" style="border-left: 1px solid lightgrey"></div>
                               <div id="admin2_wrapper" class="cell callout center">
-                               <h4>${_.escape( details.admin2_name )}</h4><h4><span id="admin2_count">0</span></h4>
+                               <h4>${window.lodash.escape( details.admin2_name )}</h4><h4><span id="admin2_count">0</span></h4>
                               </div>
                             `)
 
