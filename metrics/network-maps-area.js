@@ -78,7 +78,7 @@ function write_area( settings ) {
                     <div id='legend' class='legend'>
                         <div class="grid-x grid-margin-x grid-padding-x">
                             <div class="cell small-2 center info-bar-font">
-                                ${_.escape( title )} 
+                                ${_.escape( title )}
                             </div>
                             <div class="cell small-2 center border-left">
                                 <select id="level" class="small" style="width:170px;">
@@ -91,12 +91,12 @@ function write_area( settings ) {
                                     <option value="admin0">${_.escape( network_base_script.trans.country ) /*Country*/}</option>
                                     <option value="admin1">${_.escape( network_base_script.trans.state ) /*State*/}</option>
                                     <option value="none" disabled></option>
-                                </select> 
+                                </select>
                             </div>
                             <div class="cell small-2 center border-left">
                                 <select id="status" class="small" style="width:170px;">
                                     ${status_list}
-                                </select> 
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -108,7 +108,7 @@ function write_area( settings ) {
                         <div id="geocode-details-content"></div>
                     </div>
                 </div>
-                
+
              `)
 
             // set info box
@@ -252,6 +252,7 @@ function write_area( settings ) {
                     level = 'admin2'
                 }
                 load_detail_panel( e.lngLat.lng, e.lngLat.lat, level )
+                load_layer( e.lngLat.lng, e.lngLat.lat, level )
             })
 
             // Status
@@ -384,7 +385,10 @@ function write_area( settings ) {
                                             }
                                         });
 
-                                        remove_layer( data.grid_id, event_type )
+                                        if ( window.current_level !== level ) {
+                                          remove_layer( data.grid_id, event_type )
+                                        }
+                                        window.current_level = level
 
                                     }) // end get geojson collection
 
