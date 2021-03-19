@@ -149,13 +149,13 @@ function write_sites_list( load_reveal = false ) {
     list.empty().html(`
             <table id="site-table" class="display" style="cursor:pointer;" data-order='[[ 1, "asc" ]]' data-page-length='25'>
               <thead>
-                <th>${_.escape( network_base_script.trans.base_1 ) /*ID*/}</th>
-                <th>${_.escape( network_base_script.trans.base_2 ) /*Site*/}</th>
-                <th>${_.escape( network_base_script.trans.base_3 )/*Contacts*/}</th>
-                <th>${_.escape( network_base_script.trans.base_4 ) /*Groups*/}</th>
-                <th>${_.escape( network_base_script.trans.base_5 ) /*Users*/}</th>
-                <th>${_.escape( network_base_script.trans.base_6 ) /*Timestamp*/}</th>
-                <th>${_.escape( network_base_script.trans.base_7 ) /*Visit*/}</th>
+                <th>${window.lodash.escape( network_base_script.trans.base_1 ) /*ID*/}</th>
+                <th>${window.lodash.escape( network_base_script.trans.base_2 ) /*Site*/}</th>
+                <th>${window.lodash.escape( network_base_script.trans.base_3 )/*Contacts*/}</th>
+                <th>${window.lodash.escape( network_base_script.trans.base_4 ) /*Groups*/}</th>
+                <th>${window.lodash.escape( network_base_script.trans.base_5 ) /*Users*/}</th>
+                <th>${window.lodash.escape( network_base_script.trans.base_6 ) /*Timestamp*/}</th>
+                <th>${window.lodash.escape( network_base_script.trans.base_7 ) /*Visit*/}</th>
               </thead>
               </table>
           `)
@@ -170,7 +170,7 @@ function write_sites_list( load_reveal = false ) {
             {data: 'groups'},
             {data: 'users'},
             {data: 'date'},
-            {data: null, "defaultContent": "<button class='button small' style='margin:0' >"+_.escape( network_base_script.trans.base_8 )+"</button>"}
+            {data: null, "defaultContent": "<button class='button small' style='margin:0' >"+window.lodash.escape( network_base_script.trans.base_8 )+"</button>"}
         ],
         "columnDefs": [
             {
@@ -212,200 +212,200 @@ function show_single_site(id, name) {
 
     let chartDiv = jQuery('#site-modal-content')
     chartDiv.empty().html(`
-              <span class="section-header">${_.escape( name )}</span>
+              <span class="section-header">${window.lodash.escape( name )}</span>
               <hr style="max-width:100%;">
-              
+
               <br>
-              <span class="section-header">${_.escape( network_base_script.trans.site_1 ) /*Active Snapshot*/}</span>
+              <span class="section-header">${window.lodash.escape( network_base_script.trans.site_1 ) /*Active Snapshot*/}</span>
               <div class="grid-x grid-padding-x grid-padding-y">
                   <div class="cell">
                       <div class="grid-x callout">
                           <div class="medium-4 cell center">
-                          <h4>${_.escape( network_base_script.trans.contacts ) /*Contacts*/}<br><span class="total_contacts">${_.escape( data.contacts.current_state.status.active )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.contacts ) /*Contacts*/}<br><span class="total_contacts">${window.lodash.escape( data.contacts.current_state.status.active )}</span></h4>
                           </div>
                           <div class="medium-4 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.groups ) /*Groups*/}<br><span class="total_groups">${_.escape( data.groups.current_state.total_active )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.groups ) /*Groups*/}<br><span class="total_groups">${window.lodash.escape( data.groups.current_state.total_active )}</span></h4>
                           </div>
                           <div class="medium-4 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.users ) /*Users*/}<br><span id="total_users">${_.escape( data.users.current_state.total_users )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.users ) /*Users*/}<br><span id="total_users">${window.lodash.escape( data.users.current_state.total_users )}</span></h4>
                           </div>
                       </div>
                   </div>
               </div>
-              
+
               <div class="grid-x grid-padding-x grid-padding-y">
                   <div class="cell">
-                      ${_.escape( network_base_script.trans.site_2 ) /*Generations*/}<br>
-                      <button class="button generation-buttons" id="g-baptisms" onclick="load_gen_chart( 'generations-div', '${id}', 'g-baptisms' );set_buttons('generation-buttons', 'g-baptisms' )">${_.escape( network_base_script.trans.baptisms ) /*Baptisms*/}</button> 
-                      <button class="button hollow generation-buttons" id="g-groups" onclick="load_gen_chart( 'generations-div', '${id}', 'g-groups' );set_buttons('generation-buttons', 'g-groups' )">${_.escape( network_base_script.trans.groups ) /*Groups*/}</button> 
-                      <button class="button hollow generation-buttons" id="g-churches" onclick="load_gen_chart( 'generations-div', '${id}', 'g-churches' );set_buttons('generation-buttons', 'g-churches' )">${_.escape( network_base_script.trans.churches ) /*Churches*/}</button> 
+                      ${window.lodash.escape( network_base_script.trans.site_2 ) /*Generations*/}<br>
+                      <button class="button generation-buttons" id="g-baptisms" onclick="load_gen_chart( 'generations-div', '${id}', 'g-baptisms' );set_buttons('generation-buttons', 'g-baptisms' )">${window.lodash.escape( network_base_script.trans.baptisms ) /*Baptisms*/}</button>
+                      <button class="button hollow generation-buttons" id="g-groups" onclick="load_gen_chart( 'generations-div', '${id}', 'g-groups' );set_buttons('generation-buttons', 'g-groups' )">${window.lodash.escape( network_base_script.trans.groups ) /*Groups*/}</button>
+                      <button class="button hollow generation-buttons" id="g-churches" onclick="load_gen_chart( 'generations-div', '${id}', 'g-churches' );set_buttons('generation-buttons', 'g-churches' )">${window.lodash.escape( network_base_script.trans.churches ) /*Churches*/}</button>
                       <div id="generations-div" style="height:300px;width:100%;"></div>
                   </div>
-                  
+
               </div>
-              
+
               <div class="grid-x grid-padding-y grid-margin-y">
                   <div class="cell">
                       <br><br>
                       <hr>
                   </div>
               </div>
-              
+
               <!-- CONTACTS -->
-              <span class="section-header">${_.escape( network_base_script.trans.contacts ) /*Contacts*/}</span>
+              <span class="section-header">${window.lodash.escape( network_base_script.trans.contacts ) /*Contacts*/}</span>
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell">
-                      
+
                       <div class="grid-x callout">
                           <div class="medium-3 cell center">
-                          <h4>${_.escape( network_base_script.trans.active_contacts ) /*Active Contacts*/}<br><span class="total_contacts">${_.escape( data.contacts.current_state.status.active )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.active_contacts ) /*Active Contacts*/}<br><span class="total_contacts">${window.lodash.escape( data.contacts.current_state.status.active )}</span></h4>
                           </div>
                           <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.paused_contacts ) /*Paused Contacts*/}<br><span class="total_groups">${_.escape( data.contacts.current_state.status.paused )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.paused_contacts ) /*Paused Contacts*/}<br><span class="total_groups">${window.lodash.escape( data.contacts.current_state.status.paused )}</span></h4>
                           </div>
                           <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.closed_contacts ) /*Closed Contacts*/}<br><span id="total_users">${_.escape( data.contacts.current_state.status.closed )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.closed_contacts ) /*Closed Contacts*/}<br><span id="total_users">${window.lodash.escape( data.contacts.current_state.status.closed )}</span></h4>
                           </div>
                           <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.total_contacts ) /*Total Contacts*/}<br><span id="total_users">${_.escape( data.contacts.current_state.all_contacts )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.total_contacts ) /*Total Contacts*/}<br><span id="total_users">${window.lodash.escape( data.contacts.current_state.all_contacts )}</span></h4>
                           </div>
                       </div>
                   </div>
               </div>
-              
+
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell">
-                      ${_.escape( network_base_script.trans.new_contacts ) /*New Contacts*/}<br>
-                      <button class="button hollow new-contact-buttons" id="c-7-days" onclick="load_line_chart( 'line-chart-div', '${id}', 'days', 7 );set_buttons('new-contact-buttons', 'c-7-days' )">${_.escape( network_base_script.trans.last_7_days ) /*Last 7 days*/}</button> 
-                      <button class="button new-contact-buttons" id="c-30-days"  onclick="load_line_chart( 'line-chart-div', '${id}', 'days', 30 );set_buttons('new-contact-buttons', 'c-30-days' )">${_.escape( network_base_script.trans.last_30_days ) /*Last 30 days*/}</button> 
-                      <button class="button hollow new-contact-buttons" id="c-60-days"  onclick="load_line_chart( 'line-chart-div', '${id}', 'days', 60 );set_buttons('new-contact-buttons', 'c-60-days' )">${_.escape( network_base_script.trans.last_60_days ) /*Last 60 days*/}</button> 
-                      <button class="button hollow new-contact-buttons" id="c-12-months"  onclick="load_line_chart( 'line-chart-div', '${id}', 'months', 12 );set_buttons('new-contact-buttons', 'c-12-months' )">${_.escape( network_base_script.trans.last_12_months ) /*Last 12 Months*/}</button>
-                      <button class="button hollow new-contact-buttons" id="c-24-months"  onclick="load_line_chart( 'line-chart-div', '${id}', 'months', 24 );set_buttons('new-contact-buttons', 'c-24-months' )">${_.escape( network_base_script.trans.last_24_months ) /*Last 24 Months*/}</button>
+                      ${window.lodash.escape( network_base_script.trans.new_contacts ) /*New Contacts*/}<br>
+                      <button class="button hollow new-contact-buttons" id="c-7-days" onclick="load_line_chart( 'line-chart-div', '${id}', 'days', 7 );set_buttons('new-contact-buttons', 'c-7-days' )">${window.lodash.escape( network_base_script.trans.last_7_days ) /*Last 7 days*/}</button>
+                      <button class="button new-contact-buttons" id="c-30-days"  onclick="load_line_chart( 'line-chart-div', '${id}', 'days', 30 );set_buttons('new-contact-buttons', 'c-30-days' )">${window.lodash.escape( network_base_script.trans.last_30_days ) /*Last 30 days*/}</button>
+                      <button class="button hollow new-contact-buttons" id="c-60-days"  onclick="load_line_chart( 'line-chart-div', '${id}', 'days', 60 );set_buttons('new-contact-buttons', 'c-60-days' )">${window.lodash.escape( network_base_script.trans.last_60_days ) /*Last 60 days*/}</button>
+                      <button class="button hollow new-contact-buttons" id="c-12-months"  onclick="load_line_chart( 'line-chart-div', '${id}', 'months', 12 );set_buttons('new-contact-buttons', 'c-12-months' )">${window.lodash.escape( network_base_script.trans.last_12_months ) /*Last 12 Months*/}</button>
+                      <button class="button hollow new-contact-buttons" id="c-24-months"  onclick="load_line_chart( 'line-chart-div', '${id}', 'months', 24 );set_buttons('new-contact-buttons', 'c-24-months' )">${window.lodash.escape( network_base_script.trans.last_24_months ) /*Last 24 Months*/}</button>
                       <div id="line-chart-div" style="height:500px;width:100%;"></div>
                   </div>
               </div>
-              
+
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell medium-10">
-                      ${_.escape( network_base_script.trans.site_3 ) /*Follow-up Funnel*/}
+                      ${window.lodash.escape( network_base_script.trans.site_3 ) /*Follow-up Funnel*/}
                       <div id="follow-up-funnel-chart-div" style="height:400px;width:100%;"></div>
                   </div>
                   <div class="cell medium-2 center" style="border-left: 1px solid #ccc">
                       <div class="grid-x grid-margin-y">
-                          <div class="cell" style="padding-top:1.2em;"><h4>${_.escape( network_base_script.trans.site_4 ) /*On-Going Meetings*/}<br><span>${_.escape( data.contacts.follow_up_funnel.ongoing_meetings )}</span></h4></div>
-                          <div class="cell" style="padding-top:1.2em;"><h4>${_.escape( network_base_script.trans.site_5 ) /*Coaching*/}<br><span>${_.escape( data.contacts.follow_up_funnel.coaching )}</span></h4></div>
-                          <div class="cell" style="padding-top:1.2em;"><h4>${_.escape( network_base_script.trans.site_6 ) /*Baptized*/}<br><span>${_.escape( data.contacts.baptisms.current_state.all_baptisms )}</span></h4></div>
+                          <div class="cell" style="padding-top:1.2em;"><h4>${window.lodash.escape( network_base_script.trans.site_4 ) /*On-Going Meetings*/}<br><span>${window.lodash.escape( data.contacts.follow_up_funnel.ongoing_meetings )}</span></h4></div>
+                          <div class="cell" style="padding-top:1.2em;"><h4>${window.lodash.escape( network_base_script.trans.site_5 ) /*Coaching*/}<br><span>${window.lodash.escape( data.contacts.follow_up_funnel.coaching )}</span></h4></div>
+                          <div class="cell" style="padding-top:1.2em;"><h4>${window.lodash.escape( network_base_script.trans.site_6 ) /*Baptized*/}<br><span>${window.lodash.escape( data.contacts.baptisms.current_state.all_baptisms )}</span></h4></div>
                       </div>
                   </div>
               </div>
-              
-             
+
+
               <div class="grid-x grid-padding-y grid-margin-y grid-margin-y">
                   <div class="cell">
                       <br><br>
                       <hr>
                   </div>
               </div>
-              
+
               <!-- GROUPS -->
-              <span class="section-header">${_.escape( network_base_script.trans.groups ) /*Groups*/}</span>
+              <span class="section-header">${window.lodash.escape( network_base_script.trans.groups ) /*Groups*/}</span>
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell">
                       <div class="grid-x callout">
                           <div class="medium-3 cell center">
-                          <h4>${_.escape( network_base_script.trans.site_7 ) /*Active Groups*/}<br><span class="total_contacts">${_.escape( data.groups.current_state.all )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.site_7 ) /*Active Groups*/}<br><span class="total_contacts">${window.lodash.escape( data.groups.current_state.all )}</span></h4>
                           </div>
                           <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.pre_groups ) /*Pre-Group*/}<br><span class="total_groups">${_.escape( data.groups.current_state.active.pre_group )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.pre_groups ) /*Pre-Group*/}<br><span class="total_groups">${window.lodash.escape( data.groups.current_state.active.pre_group )}</span></h4>
                           </div>
                           <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.group ) /*Group*/}<br><span id="total_users">${_.escape( data.groups.current_state.active.group )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.group ) /*Group*/}<br><span id="total_users">${window.lodash.escape( data.groups.current_state.active.group )}</span></h4>
                           </div>
                           <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.site_8 ) /*Church*/}<br><span id="total_users">${_.escape( data.groups.current_state.active.church )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.site_8 ) /*Church*/}<br><span id="total_users">${window.lodash.escape( data.groups.current_state.active.church )}</span></h4>
                           </div>
                       </div>
                   </div>
               </div>
-              
+
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell">
-                      ${_.escape( network_base_script.trans.new_groups ) /*New Groups */}<br>
-                      <button class="button hollow new-group-buttons" id="g-7-days" onclick="load_line_chart( 'group-line-chart-div', '${id}', 'days', 7 );set_buttons('new-group-buttons', 'g-7-days' )">${_.escape( network_base_script.trans.last_7_days ) /*Last 7 days*/}</button> 
-                      <button class="button new-group-buttons" id="g-30-days"  onclick="load_line_chart( 'group-line-chart-div', '${id}', 'days', 30 );set_buttons('new-group-buttons', 'g-30-days' )">${_.escape( network_base_script.trans.last_30_days ) /*Last 30 days*/}</button> 
-                      <button class="button hollow new-group-buttons" id="g-60-days"  onclick="load_line_chart( 'group-line-chart-div', '${id}', 'days', 60 );set_buttons('new-group-buttons', 'g-60-days' )">${_.escape( network_base_script.trans.last_60_days ) /*Last 60 days*/}</button> 
-                      <button class="button hollow new-group-buttons" id="g-12-months"  onclick="load_line_chart( 'group-line-chart-div', '${id}', 'months', 12 );set_buttons('new-group-buttons', 'g-12-months' )">${_.escape( network_base_script.trans.last_12_months ) /*Last 12 Months*/}</button>
-                      <button class="button hollow new-group-buttons" id="g-24-months"  onclick="load_line_chart( 'group-line-chart-div', '${id}', 'months', 24 );set_buttons('new-group-buttons', 'g-24-months' )">${_.escape( network_base_script.trans.last_24_months ) /*Last 24 Months*/}</button>
+                      ${window.lodash.escape( network_base_script.trans.new_groups ) /*New Groups */}<br>
+                      <button class="button hollow new-group-buttons" id="g-7-days" onclick="load_line_chart( 'group-line-chart-div', '${id}', 'days', 7 );set_buttons('new-group-buttons', 'g-7-days' )">${window.lodash.escape( network_base_script.trans.last_7_days ) /*Last 7 days*/}</button>
+                      <button class="button new-group-buttons" id="g-30-days"  onclick="load_line_chart( 'group-line-chart-div', '${id}', 'days', 30 );set_buttons('new-group-buttons', 'g-30-days' )">${window.lodash.escape( network_base_script.trans.last_30_days ) /*Last 30 days*/}</button>
+                      <button class="button hollow new-group-buttons" id="g-60-days"  onclick="load_line_chart( 'group-line-chart-div', '${id}', 'days', 60 );set_buttons('new-group-buttons', 'g-60-days' )">${window.lodash.escape( network_base_script.trans.last_60_days ) /*Last 60 days*/}</button>
+                      <button class="button hollow new-group-buttons" id="g-12-months"  onclick="load_line_chart( 'group-line-chart-div', '${id}', 'months', 12 );set_buttons('new-group-buttons', 'g-12-months' )">${window.lodash.escape( network_base_script.trans.last_12_months ) /*Last 12 Months*/}</button>
+                      <button class="button hollow new-group-buttons" id="g-24-months"  onclick="load_line_chart( 'group-line-chart-div', '${id}', 'months', 24 );set_buttons('new-group-buttons', 'g-24-months' )">${window.lodash.escape( network_base_script.trans.last_24_months ) /*Last 24 Months*/}</button>
                       <div id="group-line-chart-div" style="height:500px;width:100%;"></div>
                   </div>
               </div>
-              
+
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
-                  
+
                   <div class="cell medium-6">
-                      ${_.escape( network_base_script.trans.site_8 ) /*Health Metrics*/}
+                      ${window.lodash.escape( network_base_script.trans.site_8 ) /*Health Metrics*/}
                       <div id="health-bar-chart-div" style="height:500px;width:100%;"></div>
                   </div>
                   <div class="cell medium-6">
-                      ${_.escape( network_base_script.trans.site_19 ) /*Chart Funnel*/}
+                      ${window.lodash.escape( network_base_script.trans.site_19 ) /*Chart Funnel*/}
                       <div id="church-funnel-chart-div" style="height:500px;width:100%;"></div>
                   </div>
               </div>
-              
+
               <div class="grid-x grid-padding-y grid-margin-y">
                   <div class="cell">
                       <br><br>
                       <hr>
                   </div>
               </div>
-              
+
               <!-- USERS -->
-              
-              <span class="section-header">${_.escape( network_base_script.trans.users ) /*Users*/}</span>
+
+              <span class="section-header">${window.lodash.escape( network_base_script.trans.users ) /*Users*/}</span>
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell">
                       <div class="grid-x callout">
                           <div class="medium-3 cell center">
-                          <h4>${_.escape( network_base_script.trans.site_10 ) /*Total Users*/}<br><span class="total_contacts">${_.escape( data.users.current_state.total_users )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.site_10 ) /*Total Users*/}<br><span class="total_contacts">${window.lodash.escape( data.users.current_state.total_users )}</span></h4>
                           </div>
                           <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.site_11 ) /*Responders*/}<br><span id="total_users">${_.escape( data.users.current_state.roles.responders )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.site_11 ) /*Responders*/}<br><span id="total_users">${window.lodash.escape( data.users.current_state.roles.responders )}</span></h4>
                           </div>
                           <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.site_12 ) /*Dispatchers*/}<br><span id="total_users">${_.escape( data.users.current_state.roles.dispatchers )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.site_12 ) /*Dispatchers*/}<br><span id="total_users">${window.lodash.escape( data.users.current_state.roles.dispatchers )}</span></h4>
                           </div>
                           <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.site_13 ) /*Multipliers*/}<br><span class="total_groups">${_.escape( data.users.current_state.roles.multipliers )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.site_13 ) /*Multipliers*/}<br><span class="total_groups">${window.lodash.escape( data.users.current_state.roles.multipliers )}</span></h4>
                           </div>
                           <div class="medium-2 cell center" style="border-left: 1px solid #ccc">
-                          <h4>${_.escape( network_base_script.trans.site_14 ) /*Admins*/}<br><span id="total_users">${_.escape( data.users.current_state.roles.admins )}</span></h4>
+                          <h4>${window.lodash.escape( network_base_script.trans.site_14 ) /*Admins*/}<br><span id="total_users">${window.lodash.escape( data.users.current_state.roles.admins )}</span></h4>
                           </div>
                       </div>
                   </div>
               </div>
-              
+
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell">
-                      ${_.escape( network_base_script.trans.site_15 ) /*User Login Activity*/}<br>
-                      <button class="button hollow active-user-buttons" id="ua-7-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 7 );set_buttons('active-user-buttons', 'ua-7-days' )">${_.escape( network_base_script.trans.last_7_days ) /*Last 7 days*/}</button> 
-                      <button class="button active-user-buttons" id="ua-30-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 30 );set_buttons('active-user-buttons', 'ua-30-days' )">${_.escape( network_base_script.trans.last_30_days ) /*Last 30 days*/}</button> 
-                      <button class="button hollow active-user-buttons" id="ua-60-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 60 );set_buttons('active-user-buttons', 'ua-60-days' )">${_.escape( network_base_script.trans.last_60_days ) /*Last 60 days*/}</button> 
-                      <button class="button hollow active-user-buttons" id="ua-12-months" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'months', 12 );set_buttons('active-user-buttons', 'ua-12-months' )">${_.escape( network_base_script.trans.last_12_months ) /*Last 12 Months*/}</button>
-                      <button class="button hollow active-user-buttons" id="ua-24-months" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'months', 24 );set_buttons('active-user-buttons', 'ua-24-months' )">${_.escape( network_base_script.trans.last_24_months ) /*Last 24 Months*/}</button>
+                      ${window.lodash.escape( network_base_script.trans.site_15 ) /*User Login Activity*/}<br>
+                      <button class="button hollow active-user-buttons" id="ua-7-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 7 );set_buttons('active-user-buttons', 'ua-7-days' )">${window.lodash.escape( network_base_script.trans.last_7_days ) /*Last 7 days*/}</button>
+                      <button class="button active-user-buttons" id="ua-30-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 30 );set_buttons('active-user-buttons', 'ua-30-days' )">${window.lodash.escape( network_base_script.trans.last_30_days ) /*Last 30 days*/}</button>
+                      <button class="button hollow active-user-buttons" id="ua-60-days" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'days', 60 );set_buttons('active-user-buttons', 'ua-60-days' )">${window.lodash.escape( network_base_script.trans.last_60_days ) /*Last 60 days*/}</button>
+                      <button class="button hollow active-user-buttons" id="ua-12-months" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'months', 12 );set_buttons('active-user-buttons', 'ua-12-months' )">${window.lodash.escape( network_base_script.trans.last_12_months ) /*Last 12 Months*/}</button>
+                      <button class="button hollow active-user-buttons" id="ua-24-months" onclick="load_line_chart( 'user-activity-chart-div', '${id}', 'months', 24 );set_buttons('active-user-buttons', 'ua-24-months' )">${window.lodash.escape( network_base_script.trans.last_24_months ) /*Last 24 Months*/}</button>
                       <div id="user-activity-chart-div" style="height:500px;width:100%;"></div>
                   </div>
               </div>
-              
+
               <div class="grid-x grid-padding-x grid-padding-y grid-margin-y">
                   <div class="cell medium-6">
-                      ${_.escape( network_base_script.trans.site_16 ) /*Users Active in the Last 30 Days*/}
+                      ${window.lodash.escape( network_base_script.trans.site_16 ) /*Users Active in the Last 30 Days*/}
                       <div id="system-engagement-pie-chart-div" style="height:400px;width:100%;"></div>
                   </div>
                   <div class="cell medium-6">
-                      
+
                   </div>
               </div>
-                      
+
           `);
 
     load_line_chart('line-chart-div', id, 'days', 30)
@@ -562,8 +562,8 @@ function health_stacked_bar_chart(div, values) {
         return series;
     }
 
-    createSeries('practicing', _.escape( network_base_script.trans.site_17 ) ) /*Practicing*/
-    createSeries('not_practicing', _.escape( network_base_script.trans.site_18 ) ) /*Not Practicing*/
+    createSeries('practicing', window.lodash.escape( network_base_script.trans.site_17 ) ) /*Practicing*/
+    createSeries('not_practicing', window.lodash.escape( network_base_script.trans.site_18 ) ) /*Not Practicing*/
 
 
     // Legend

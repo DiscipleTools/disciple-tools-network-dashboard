@@ -10,22 +10,22 @@ window.load_activity_filter = () => {
     `)
     jQuery('#activity-filter-wrapper').html(`
         <div class="grid-x" id="filters_section">
-        <div class="cell"><button type="button" id="filter_list_button" class="button small filter_list_button hollow">${_.escape( network_base_script.trans.filter_list ) /*Filter List*/}</button> <span class="loading-spinner"></span></div>
+        <div class="cell"><button type="button" id="filter_list_button" class="button small filter_list_button hollow">${window.lodash.escape( network_base_script.trans.filter_list ) /*Filter List*/}</button> <span class="loading-spinner"></span></div>
         <div class="cell" id="filters">${spinner}</div>
         <div class="cell"><hr></div>
         <div class="cell">
-            <strong>${_.escape( network_base_script.trans.activity_11 ) /*Time*/}</strong><br>
+            <strong>${window.lodash.escape( network_base_script.trans.activity_11 ) /*Time*/}</strong><br>
             <select name="time_range" id="time_range">
-                <option value="7">${_.escape( network_base_script.trans.last_7_days ) /*Last 7 Days*/}</option>
-                <option value="30">${_.escape( network_base_script.trans.last_30_days ) /*Last 30 Days*/}</option>
-                <option value="60">${_.escape( network_base_script.trans.last_60_days ) /*Last 60 Days*/}</option>
-                <option value="12m">${_.escape( network_base_script.trans.last_12_months ) /*Last 12 Months*/}</option>
-                <option value="24m">${_.escape( network_base_script.trans.last_24_months ) /*Last 24 Months*/}</option>
-                <option value="this_year">${_.escape( network_base_script.trans.this_year ) /*This Year*/}</option>
+                <option value="7">${window.lodash.escape( network_base_script.trans.last_7_days ) /*Last 7 Days*/}</option>
+                <option value="30">${window.lodash.escape( network_base_script.trans.last_30_days ) /*Last 30 Days*/}</option>
+                <option value="60">${window.lodash.escape( network_base_script.trans.last_60_days ) /*Last 60 Days*/}</option>
+                <option value="12m">${window.lodash.escape( network_base_script.trans.last_12_months ) /*Last 12 Months*/}</option>
+                <option value="24m">${window.lodash.escape( network_base_script.trans.last_24_months ) /*Last 24 Months*/}</option>
+                <option value="this_year">${window.lodash.escape( network_base_script.trans.this_year ) /*This Year*/}</option>
             </select>
         </div>
         <div class="cell">
-            <strong>${_.escape( network_base_script.trans.activity_12 ) /*Result Limit*/}</strong><br>
+            <strong>${window.lodash.escape( network_base_script.trans.activity_12 ) /*Result Limit*/}</strong><br>
             <select name="record_limit" id="record_limit">
                 <option value="2000">2000</option>
                 <option value="5000">5000</option>
@@ -33,11 +33,11 @@ window.load_activity_filter = () => {
             </select>
         </div>
         <div class="cell">
-            <p><strong>${_.escape( network_base_script.trans.sites ) /*Sites*/}</strong>  <a style="float:right;" onclick="jQuery('.sites').addClass('hollow');">${_.escape( network_base_script.trans.activity_13 ) /*uncheck*/}</a> <a style="float:right;" onclick="jQuery('.sites').removeClass('hollow');">${_.escape( network_base_script.trans.activity_14 ) /*check*/} |&nbsp;</a></p>
+            <p><strong>${window.lodash.escape( network_base_script.trans.sites ) /*Sites*/}</strong>  <a style="float:right;" onclick="jQuery('.sites').addClass('hollow');">${window.lodash.escape( network_base_script.trans.activity_13 ) /*uncheck*/}</a> <a style="float:right;" onclick="jQuery('.sites').removeClass('hollow');">${window.lodash.escape( network_base_script.trans.activity_14 ) /*check*/} |&nbsp;</a></p>
             <div id="site-list">${spinner}</div>
         </div>
         <div class="cell">
-            <p><strong>${_.escape( network_base_script.trans.types ) /*Types*/}</strong>  <a style="float:right;" onclick="jQuery('.actions').addClass('hollow');">${_.escape( network_base_script.trans.activity_13 ) /*uncheck*/}</a> <a style="float:right;" onclick="jQuery('.actions').removeClass('hollow');">${_.escape( network_base_script.trans.activity_14 ) /*check*/} |&nbsp;</a></p>
+            <p><strong>${window.lodash.escape( network_base_script.trans.types ) /*Types*/}</strong>  <a style="float:right;" onclick="jQuery('.actions').addClass('hollow');">${window.lodash.escape( network_base_script.trans.activity_13 ) /*uncheck*/}</a> <a style="float:right;" onclick="jQuery('.actions').removeClass('hollow');">${window.lodash.escape( network_base_script.trans.activity_14 ) /*check*/} |&nbsp;</a></p>
             <div id="action-filter">${spinner}</div>
         </div>
 
@@ -45,8 +45,8 @@ window.load_activity_filter = () => {
     <div class="grid-x">
         <div class="cell">
              <hr>
-             <button type="button" id="filter_list_button" class="button small filter_list_button hollow">${_.escape( network_base_script.trans.filter_list ) /*Filter List*/}</button> <span class="loading-spinner"></span>
-             <button class="button clear" onclick="reset()">${_.escape( network_base_script.trans.reset_data ) /*reset data*/}</button> <span class="reset-spinner"></span>
+             <button type="button" id="filter_list_button" class="button small filter_list_button hollow">${window.lodash.escape( network_base_script.trans.filter_list ) /*Filter List*/}</button> <span class="loading-spinner"></span>
+             <button class="button clear" onclick="reset()">${window.lodash.escape( network_base_script.trans.reset_data ) /*reset data*/}</button> <span class="reset-spinner"></span>
         </div>
     </div>
     `)
@@ -138,30 +138,30 @@ window.load_activity_filter = () => {
         })
 
         if ( window.feed.length < 1 ) {
-          container.append(`${_.escape( network_base_script.trans.results ) /*Results*/} : 0`)
+          container.append(`${window.lodash.escape( network_base_script.trans.results ) /*Results*/} : 0`)
         }
 
       jQuery('.loading-spinner').removeClass('active')
     }
     function write_filters(){
 
-        jQuery('#filters').html(`${_.escape( network_base_script.trans.results ) /*Results*/}: ${window.activity_stats.records_count}`)
+        jQuery('#filters').html(`${window.lodash.escape( network_base_script.trans.results ) /*Results*/}: ${window.activity_stats.records_count}`)
 
         let site_list = jQuery('#site-list')
         site_list.empty()
         jQuery.each( window.activity_stats.sites, function(sli,slv){
-          site_list.append(`<button class="button small sites hollow" id="site-filter-${_.escape( sli )}" value="${_.escape( sli )}">${_.escape( slv )}</button> `)
+          site_list.append(`<button class="button small sites hollow" id="site-filter-${window.lodash.escape( sli )}" value="${window.lodash.escape( sli )}">${window.lodash.escape( slv )}</button> `)
           if ( jQuery.inArray( sli, window.activity_filter.sites ) >= 0 ) {
-            jQuery('#site-filter-'+_.escape( sli )).removeClass('hollow')
+            jQuery('#site-filter-'+window.lodash.escape( sli )).removeClass('hollow')
           }
         })
 
         let action_list = jQuery('#action-filter')
         action_list.empty()
         jQuery.each( window.activity_stats.actions, function(ali,alv){
-          action_list.append(`<button class="button small actions hollow" id="action-filter-${_.escape( ali )}" value="${_.escape( ali )}">${_.escape( alv.label )}</button> `)
+          action_list.append(`<button class="button small actions hollow" id="action-filter-${window.lodash.escape( ali )}" value="${window.lodash.escape( ali )}">${window.lodash.escape( alv.label )}</button> `)
           if ( jQuery.inArray( ali, window.activity_filter.actions ) >= 0 ) {
-            jQuery('#action-filter-'+_.escape( ali )).removeClass('hollow')
+            jQuery('#action-filter-'+window.lodash.escape( ali )).removeClass('hollow')
           }
         })
 

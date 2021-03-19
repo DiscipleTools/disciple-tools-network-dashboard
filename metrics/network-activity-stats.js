@@ -7,36 +7,36 @@ jQuery(document).ready(function(){
 
     // write page layout with spinners
     chartDiv.empty().html(`
-            
-            <span class="section-header">${_.escape( network_base_script.trans.activity_2 ) /*Stats*/}</span>
+
+            <span class="section-header">${window.lodash.escape( network_base_script.trans.activity_2 ) /*Stats*/}</span>
             <hr style="max-width:100%;">
             <div class="grid-x grid-padding-x">
                 <div class="medium-3 cell">
                     <div id="activity-filter-wrapper"></div>
                 </div>
                 <div class="medium-9 cell" style="border-left: 1px solid lightgrey;">
-                    
+
                     <!-- Stats Body -->
                     <div class="grid-x callout">
                       <div class="medium-3 cell center">
-                        <h4>${_.escape( network_base_script.trans.activity_3 ) /*Activities*/}<br><span id="activities_count">${spinner}</span></h4>
+                        <h4>${window.lodash.escape( network_base_script.trans.activity_3 ) /*Activities*/}<br><span id="activities_count">${spinner}</span></h4>
                       </div>
                       <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
-                        <h4>${_.escape( network_base_script.trans.activity_4 ) /*Actions*/}<br><span id="actions_count">${spinner}</span></h4>
+                        <h4>${window.lodash.escape( network_base_script.trans.activity_4 ) /*Actions*/}<br><span id="actions_count">${spinner}</span></h4>
                       </div>
                       <div class="medium-3 cell center" style="border-left: 1px solid #ccc">
-                        <h4>${_.escape( network_base_script.trans.activity_5 ) /*Sites*/}<br><span id="sites_count">${spinner}</span></h4>
+                        <h4>${window.lodash.escape( network_base_script.trans.activity_5 ) /*Sites*/}<br><span id="sites_count">${spinner}</span></h4>
                       </div>
                     </div>
                     <hr>
-                    
-                    <span class="section-header">${_.escape( network_base_script.trans.activity_6 ) /*By Action Type*/}</span>
+
+                    <span class="section-header">${window.lodash.escape( network_base_script.trans.activity_6 ) /*By Action Type*/}</span>
                     <div class="grid-x grid-padding-x">
                         <div class="cell">
                             <div id="action-type-table-wrapper" style="padding:0 1em;">${spinner}</div>
                         </div>
                     </div>
-                   
+
                 </div>
             </div>
             `)
@@ -62,9 +62,9 @@ jQuery(document).ready(function(){
         list.empty().html(`
             <table id="action-type-table" class="display" style="cursor:pointer;" data-order='[[ 1, "asc" ]]' data-page-length='20'>
               <thead>
-                <th>${_.escape( network_base_script.trans.activity_7 ) /*Key*/}</th>
-                <th>${_.escape( network_base_script.trans.activity_8 ) /*Name*/}</th>
-                <th>${_.escape( network_base_script.trans.activity_9 ) /*Total Activities*/}</th>
+                <th>${window.lodash.escape( network_base_script.trans.activity_7 ) /*Key*/}</th>
+                <th>${window.lodash.escape( network_base_script.trans.activity_8 ) /*Name*/}</th>
+                <th>${window.lodash.escape( network_base_script.trans.activity_9 ) /*Total Activities*/}</th>
               </thead>
               </table>
           `)

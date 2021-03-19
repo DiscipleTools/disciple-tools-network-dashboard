@@ -7,10 +7,10 @@ jQuery(document).ready(function(){
 
     // write page layout with spinners
     chartDiv.empty().html(`
-        <span class="section-header">${_.escape( network_base_script.trans.sites ) /*Sites*/}</span>
-        
+        <span class="section-header">${window.lodash.escape( network_base_script.trans.sites ) /*Sites*/}</span>
+
         <hr style="max-width:100%;">
-        
+
         <div class="grid-x grid-padding-x">
             <div class="cell">
                 <div id="list-sites">${spinner}</div>
@@ -22,9 +22,9 @@ jQuery(document).ready(function(){
                 <h2><span aria-hidden="true">&times;</span></h2>
              </button>
         </div>
-        
+
          <hr style="max-width:100%;">
-        <div><button class="button clear" onclick="reset()">${_.escape( network_base_script.trans.reset_data ) /*reset data*/}</button> <span class="reset-spinner"></span></div>
+        <div><button class="button clear" onclick="reset()">${window.lodash.escape( network_base_script.trans.reset_data ) /*reset data*/}</button> <span class="reset-spinner"></span></div>
        `)
 
     // call for data

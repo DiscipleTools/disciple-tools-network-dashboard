@@ -8,11 +8,11 @@ jQuery(document).ready(function(){
 
     // write page layout with spinners
     chartDiv.empty().html(`
-        <span class="section-header">${_.escape( network_base_script.trans.map_1 ) /*Hover Map*/}</span>
+        <span class="section-header">${window.lodash.escape( network_base_script.trans.map_1 ) /*Hover Map*/}</span>
             <hr style="max-width:100%;">
             <div id="mapping_chart">${spinner}</div>
-            
-            <div><button class="button clear" onclick="reset()">${_.escape( network_base_script.trans.reset_data ) /*reset data*/}</button> <span class="reset-spinner"></span></div>
+
+            <div><button class="button clear" onclick="reset()">${window.lodash.escape( network_base_script.trans.reset_data ) /*reset data*/}</button> <span class="reset-spinner"></span></div>
         `)
 
     makeRequest('POST', 'network/base', {'type': 'locations_list'} )

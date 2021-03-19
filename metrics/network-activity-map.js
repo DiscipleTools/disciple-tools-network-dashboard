@@ -32,7 +32,7 @@ jQuery(document).ready(function(){
                     height: ${window.innerHeight - 200}px !important;
                 }
             </style>
-            <span class="section-header float-left" >${_.escape( network_base_script.trans.activity_1 ) /*Activity Map*/}</span><span class="float-right"><button class="button small" data-open="activity-filter-modal">${_.escape( network_base_script.trans.modify_filter ) /*modify_filter*/}</button></span>
+            <span class="section-header float-left" >${window.lodash.escape( network_base_script.trans.activity_1 ) /*Activity Map*/}</span><span class="float-right"><button class="button small" data-open="activity-filter-modal">${window.lodash.escape( network_base_script.trans.modify_filter ) /*modify_filter*/}</button></span>
                 <hr style="max-width:100%;">
                 <div class="grid-x grid-padding-x">
                 <div class="medium-9 cell">
@@ -43,7 +43,7 @@ jQuery(document).ready(function(){
                 <div class="medium-3 cell">
                     <div class="grid-x">
                         <div class="cell">
-                            <div>${_.escape( network_base_script.trans.has_location ) /*Has location data*/}: <span id="with">0</span> | ${_.escape( network_base_script.trans.no_location ) /*Without location data*/}: <span id="without">0</span></div>
+                            <div>${window.lodash.escape( network_base_script.trans.has_location ) /*Has location data*/}: <span id="with">0</span> | ${window.lodash.escape( network_base_script.trans.no_location ) /*Without location data*/}: <span id="without">0</span></div>
                             <hr>
                             <div id="activity-list-wrapper"></div>
                         </div>

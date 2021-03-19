@@ -42,24 +42,24 @@ jQuery(document).ready(function(){
                 }
               }
             </style>
-        
+
             <!-- List Widget -->
             <div id="map_wrapper" class="map_wrapper">
               <div id="map_drill_wrapper" class="grid-x grid-margin-x map_drill_wrapper">
                 <div id="location_list_drilldown" class="cell auto location_list_drilldown"></div>
               </div>
               <hr id="map_hr_1" class="map_hr">
-              
+
               <div id="map_header_wrapper" class="map_header_wrapper">
                 <strong id="section_title" class="section_title" ></strong><br>
                 <span id="current_level" class="current_level"></span>
               </div>
-              
+
               <div id="location_list" class="location_list">${spinner}</div>
               <hr id="map_hr_2" class="map_hr">
             </div> <!-- end widget -->
-            
-            <div><button class="button clear" onclick="reset()">${_.escape( network_base_script.trans.reset_data ) /*reset data*/}</button> <span class="reset-spinner"></span></div>
+
+            <div><button class="button clear" onclick="reset()">${window.lodash.escape( network_base_script.trans.reset_data ) /*reset data*/}</button> <span class="reset-spinner"></span></div>
           `);
 
         if ( LISTDATA.data ){
@@ -123,7 +123,7 @@ jQuery(document).ready(function(){
                     // multiple child
                     jQuery('#section_title').empty()
                     jQuery('#current_level').empty()
-                    jQuery('#location_list').empty().append( `${ _.escape( network_base_script.trans.select_location ) /* select location */ }` )
+                    jQuery('#location_list').empty().append( `${ window.lodash.escape( network_base_script.trans.select_location ) /* select location */ }` )
                     DRILLDOWN.hide_spinner()
                     return;
                 }
@@ -185,7 +185,7 @@ jQuery(document).ready(function(){
 
             // Self Data
             let self_population = map_data.self.population_formatted
-            jQuery('#current_level').empty().html(`${_.escape(translations.population)}: ${_.escape( self_population )}`)
+            jQuery('#current_level').empty().html(`${window.lodash.escape(translations.population)}: ${window.lodash.escape( self_population )}`)
 
             // Build List
             let locations = jQuery('#location_list')
@@ -194,12 +194,12 @@ jQuery(document).ready(function(){
             let html = `<table id="country-list-table" class="display">`
 
             // Header Section
-            html += `<thead><tr><th>${_.escape(translations.name)}</th><th>${_.escape(translations.population)}</th>`
+            html += `<thead><tr><th>${window.lodash.escape(translations.name)}</th><th>${window.lodash.escape(translations.population)}</th>`
 
             /* Additional Columns */
             if ( LISTDATA.data.custom_column_labels ) {
                 jQuery.each( LISTDATA.data.custom_column_labels, function(i,v) {
-                    html += `<th>${_.escape( v.label )}</th>`
+                    html += `<th>${window.lodash.escape( v.label )}</th>`
                 })
             }
             /* End Additional Columns */
@@ -208,7 +208,7 @@ jQuery(document).ready(function(){
             // End Header Section
 
             // Children List Section
-            let sorted_children =  _.sortBy(map_data.children, [function(o) { return o.name; }]);
+            let sorted_children =  window.lodash.sortBy(map_data.children, [function(o) { return o.name; }]);
 
             html += `<tbody>`
 
@@ -216,13 +216,13 @@ jQuery(document).ready(function(){
                 let population = v.population_formatted
 
                 html += `<tr>
-        <td><strong><a onclick="DRILLDOWN.get_drill_down('location_list_drilldown', ${_.escape( v.grid_id )} )">${_.escape( v.name )}</a></strong></td>
-        <td>${_.escape( population )}</td>`
+        <td><strong><a onclick="DRILLDOWN.get_drill_down('location_list_drilldown', ${window.lodash.escape( v.grid_id )} )">${window.lodash.escape( v.name )}</a></strong></td>
+        <td>${window.lodash.escape( population )}</td>`
 
                 /* Additional Columns */
                 if ( LISTDATA.data.custom_column_data[v.grid_id] ) {
                     jQuery.each( LISTDATA.data.custom_column_data[v.grid_id], function(ii,vv) {
-                        html += `<td><strong>${_.escape( vv )}</strong></td>`
+                        html += `<td><strong>${window.lodash.escape( vv )}</strong></td>`
                     })
                 } else {
                     jQuery.each( LISTDATA.data.custom_column_labels, function(ii,vv) {
