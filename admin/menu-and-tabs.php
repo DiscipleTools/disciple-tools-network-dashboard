@@ -129,6 +129,11 @@ class DT_Network_Dashboard_Menu {
                     System
                 </a>
 
+                <a href="<?php echo esc_attr( $link ) . 'public' ?>" class="nav-tab
+                <?php echo ( $tab == 'public' ) ? esc_attr( 'nav-tab-active' ) : ''; ?>">
+                    Public Links
+                </a>
+
                 <a href="<?php echo esc_attr( $link ) . 'upgrades' ?>" class="nav-tab
                 <?php echo ( $tab == 'upgrades' ) ? 'nav-tab-active' : ''; ?>">
                     Upgrades
@@ -156,6 +161,10 @@ class DT_Network_Dashboard_Menu {
                     break;
                 case "outgoing":
                     $object = new DT_Network_Dashboard_Tab_Outgoing();
+                    $object->content();
+                    break;
+                case "public":
+                    $object = new DT_Network_Dashboard_Tab_Public_Links();
                     $object->content();
                     break;
                 case "system":
@@ -805,6 +814,98 @@ class DT_Network_Dashboard_Tab_Outgoing
         <br>
         <?php
     }
+}
+
+class DT_Network_Dashboard_Tab_Public_Links
+{
+    public function content() {
+        if ( isset( $_POST ) ){
+            $this->process();
+        }
+        ?>
+        <div class="wrap">
+            <div id="poststuff">
+                <div id="post-body" class="metabox-holder columns-1">
+                    <div id="post-body-content">
+                        <!-- Main Column -->
+
+                        <?php $this->links() ?>
+
+                        <!-- End Main Column -->
+                    </div><!-- end post-body-content -->
+                </div><!-- post-body meta box container -->
+            </div><!--poststuff end -->
+        </div><!-- wrap end -->
+        <?php
+    }
+
+    public function process() {
+        if ( isset( $_POST['public_links_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['public_links_nonce'] ) ), 'public_links' ) )  {
+            dt_write_log( $_POST );
+
+            $stored_links = get_option('dt_network_dashboard_supported_public_links');
+            if ( isset( $_POST['enable'] ) ) {
+                $key = sanitize_text_field( wp_unslash( $_POST['enable'] ) );
+                $stored_links[$key] = 'enable';
+            }
+            if ( isset( $_POST['disable'] ) ) {
+                $key = sanitize_text_field( wp_unslash( $_POST['disable'] ) );
+                $stored_links[$key] = 'disable';
+            }
+
+            update_option('dt_network_dashboard_supported_public_links', $stored_links );
+        }
+    }
+
+    public function links(){
+        /**
+         * Example:
+         * $supported_links[] = [ 'name' => 'Name Name', 'key' => 'key_key_key' ]
+         */
+        $supported_links = apply_filters('dt_network_dashboard_supported_public_links', $supported_links = [] );
+        $stored_links = get_option('dt_network_dashboard_supported_public_links');
+        ?>
+        <form method="post">
+            <?php wp_nonce_field('public_links', 'public_links_nonce') ?>
+            <table class="widefat striped">
+            <thead>
+                <tr>
+                    <td colspan="4">Public Links</td>
+                </tr>
+            </thead>
+                <tbody>
+                    <?php
+                    foreach( $supported_links as $link ){
+                        if ( isset( $link['key'], $link['name'], $link['url'] ) ) {
+                            ?>
+                            <tr>
+                                <td>
+                                <strong><?php echo esc_html( $link['name'] ) ?></strong>
+                                </td>
+                                <td>
+                                <?php echo esc_html( $link['description'] ) ?? '' ?>
+                                </td>
+                                <td>
+                                <a href="<?php echo trailingslashit( site_url() ) . esc_attr( $link['url'] )  ?>" target="_blank"><?php echo esc_attr( $link['url'] ) ?></a>
+                                </td>
+                                <td style="float:right;">
+                                <?php if ( isset( $stored_links[$link['key']] ) && 'enable' === $stored_links[$link['key']] ) { ?>
+                                    <button type="submit" name="disable" value="<?php echo esc_attr( $link['key'] ) ?>" class="button">Disable</button>
+                                <?php } else { ?>
+                                    <button type="submit" name="enable" value="<?php echo esc_attr( $link['key'] ) ?>" class="button">Enable</button>
+                                <?php } ?>
+                                </td>
+                            </tr>
+                            <?php
+                        }
+                    }
+                    ?>
+                </tbody>
+            </table>
+        </form>
+        <?php
+    }
+
 }
 
 /**

@@ -169,6 +169,9 @@ class DT_Network_Dashboard {
         require_once( 'metrics/loader.php' );
         require_once( 'metrics/mapping-module-config.php' );
 
+        // MAGIC LINKS
+        require_once( 'magic-links/training-map.php' );
+
         // CRON
         if ( ! class_exists( 'Disciple_Tools_Async_Task' ) ) {
             require_once( get_theme_file_path() . '/dt-core/wp-async-request.php' ); // must load before cron
