@@ -5,13 +5,15 @@ if ( strpos( dt_get_url_path(), 'network_app' ) !== false ){
     DT_Network_Dashboard_Public_Heatmap_Trainings::instance();
 }
 
-add_filter('dt_network_dashboard_supported_public_links', function( $supported_links  ){
-$supported_links[] = [
+add_filter('dt_network_dashboard_supported_public_links', function( $supported_links ){
+    $supported_links[] = [
     'name' => 'Training Map',
     'description' => 'Maps training saturation by admin2 counties globally.',
     'key' => 'network_app_trainings_goal_map',
     'url' => 'network_app/trainings_goal_map'
-]; return $supported_links; }, 10, 1 );
+    ];
+    return $supported_links;
+}, 10, 1 );
 
 
 class DT_Network_Dashboard_Public_Heatmap_Trainings
@@ -533,7 +535,7 @@ class DT_Network_Dashboard_Public_Heatmap_Trainings
         return $data;
     }
 
-    public function get_geojson( ) {
+    public function get_geojson() {
         global $wpdb;
         $results = $wpdb->get_results( "SELECT * FROM $wpdb->dt_location_grid WHERE post_type = 'trainings'", ARRAY_A );
 
@@ -551,8 +553,7 @@ class DT_Network_Dashboard_Public_Heatmap_Trainings
             // build feature
             $features[] = array(
                 'type' => 'Feature',
-                'properties' => array(
-                ),
+                'properties' => array(),
                 'geometry' => array(
                     'type' => 'Point',
                     'coordinates' => array(

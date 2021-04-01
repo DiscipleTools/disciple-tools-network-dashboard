@@ -170,7 +170,14 @@ class DT_Network_Dashboard {
         require_once( 'metrics/mapping-module-config.php' );
 
         // MAGIC LINKS
-        require_once( 'magic-links/training-map.php' );
+        $format_files = scandir( plugin_dir_path( __FILE__ ) . '/magic-links/' );
+        if ( !empty( $format_files )) {
+            foreach ($format_files as $file) {
+                if (substr( $file, -4, '4' ) === '.php') {
+                    require_once( plugin_dir_path( __FILE__ ) . '/magic-links/' . $file );
+                }
+            }
+        }
 
         // CRON
         if ( ! class_exists( 'Disciple_Tools_Async_Task' ) ) {

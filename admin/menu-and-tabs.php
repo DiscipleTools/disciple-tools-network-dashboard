@@ -840,10 +840,9 @@ class DT_Network_Dashboard_Tab_Public_Links
     }
 
     public function process() {
-        if ( isset( $_POST['public_links_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['public_links_nonce'] ) ), 'public_links' ) )  {
-            dt_write_log( $_POST );
+        if ( isset( $_POST['public_links_nonce'] ) && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['public_links_nonce'] ) ), 'public_links' ) ) {
 
-            $stored_links = get_option('dt_network_dashboard_supported_public_links');
+            $stored_links = get_option( 'dt_network_dashboard_supported_public_links' );
             if ( isset( $_POST['enable'] ) ) {
                 $key = sanitize_text_field( wp_unslash( $_POST['enable'] ) );
                 $stored_links[$key] = 'enable';
@@ -853,7 +852,7 @@ class DT_Network_Dashboard_Tab_Public_Links
                 $stored_links[$key] = 'disable';
             }
 
-            update_option('dt_network_dashboard_supported_public_links', $stored_links );
+            update_option( 'dt_network_dashboard_supported_public_links', $stored_links );
         }
     }
 
@@ -862,11 +861,11 @@ class DT_Network_Dashboard_Tab_Public_Links
          * Example:
          * $supported_links[] = [ 'name' => 'Name Name', 'key' => 'key_key_key' ]
          */
-        $supported_links = apply_filters('dt_network_dashboard_supported_public_links', $supported_links = [] );
-        $stored_links = get_option('dt_network_dashboard_supported_public_links');
+        $supported_links = apply_filters( 'dt_network_dashboard_supported_public_links', $supported_links = [] );
+        $stored_links = get_option( 'dt_network_dashboard_supported_public_links' );
         ?>
         <form method="post">
-            <?php wp_nonce_field('public_links', 'public_links_nonce') ?>
+            <?php wp_nonce_field( 'public_links', 'public_links_nonce' ) ?>
             <table class="widefat striped">
             <thead>
                 <tr>
@@ -875,7 +874,7 @@ class DT_Network_Dashboard_Tab_Public_Links
             </thead>
                 <tbody>
                     <?php
-                    foreach( $supported_links as $link ){
+                    foreach ( $supported_links as $link ){
                         if ( isset( $link['key'], $link['name'], $link['url'] ) ) {
                             ?>
                             <tr>
@@ -890,9 +889,9 @@ class DT_Network_Dashboard_Tab_Public_Links
                                 </td>
                                 <td style="float:right;">
                                 <?php if ( isset( $stored_links[$link['key']] ) && 'enable' === $stored_links[$link['key']] ) { ?>
-                                    <button type="submit" name="disable" value="<?php echo esc_attr( $link['key'] ) ?>" class="button">Disable</button>
+                                    <button type="submit" name="disable" value="<?php echo esc_attr( $link['key'] ) ?>" class="button button-small button-primary">Disable</button>
                                 <?php } else { ?>
-                                    <button type="submit" name="enable" value="<?php echo esc_attr( $link['key'] ) ?>" class="button">Enable</button>
+                                    <button type="submit" name="enable" value="<?php echo esc_attr( $link['key'] ) ?>" class="button button-small button-secondary">Enable</button>
                                 <?php } ?>
                                 </td>
                             </tr>
