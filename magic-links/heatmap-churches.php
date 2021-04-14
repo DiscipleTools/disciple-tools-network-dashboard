@@ -1,9 +1,10 @@
 <?php
 if ( !defined( 'ABSPATH' ) ) { exit; } // Exit if accessed directly.
 
-if ( strpos( dt_get_url_path(), 'network_app' ) !== false ){
+if ( strpos( dt_get_url_path(), 'network_app' ) !== false || dt_is_rest() ){
     DT_Network_Dashboard_Public_Heatmap_Churches::instance();
 }
+
 
 add_filter('dt_network_dashboard_supported_public_links', function( $supported_links ){
     $supported_links[] = [
@@ -46,7 +47,7 @@ class DT_Network_Dashboard_Public_Heatmap_Churches
         add_filter( 'dt_magic_url_register_types', [ $this, '_register_type' ], 10, 1 );
 
         // register REST and REST access
-        add_filter( 'dt_allow_rest_access', [ $this, '_authorize_url' ], 10, 1 );
+        add_filter( 'dt_allow_rest_access', [ $this, '_authorize_url' ], 100, 1 );
         add_action( 'rest_api_init', [ $this, 'add_endpoints' ] );
 
 
@@ -92,6 +93,7 @@ class DT_Network_Dashboard_Public_Heatmap_Churches
         add_filter( 'dt_blank_access', [ $this, '_has_access' ] );
         add_filter( 'dt_allow_non_login_access', function(){ return true;
         }, 100, 1 );
+
     }
 
     public function _register_type( array $types ) : array {
@@ -230,6 +232,7 @@ class DT_Network_Dashboard_Public_Heatmap_Churches
         <script>
             let jsObject = [<?php echo json_encode([
                 'map_key' => DT_Mapbox_API::get_key(),
+                'mirror_url' => dt_get_location_grid_mirror( true ),
                 'theme_uri' => trailingslashit( get_stylesheet_directory_uri() ),
                 'root' => esc_url_raw( rest_url() ),
                 'nonce' => wp_create_nonce( 'wp_rest' ),
@@ -237,6 +240,7 @@ class DT_Network_Dashboard_Public_Heatmap_Churches
                 'trans' => [
                     'add' => __( 'Add Magic', 'disciple_tools' ),
                 ],
+                'grid_data' => $this->grid_list(),
             ]) ?>][0]
 
             jQuery(document).ready(function(){
@@ -259,10 +263,10 @@ class DT_Network_Dashboard_Public_Heatmap_Churches
                         jQuery('#error').html(e)
                     })
             }
-            window.get_grid_data = () => {
+            window.get_grid_data = (grid_id) => {
                 return jQuery.ajax({
                     type: "POST",
-                    data: JSON.stringify({ action: 'POST', parts: jsObject.parts }),
+                    data: JSON.stringify({ action: 'POST', parts: jsObject.parts, grid_id: grid_id }),
                     contentType: "application/json; charset=utf-8",
                     dataType: "json",
                     url: jsObject.root + jsObject.parts.root + '/v1/' + jsObject.parts.type + '/grid_totals',
@@ -293,7 +297,6 @@ class DT_Network_Dashboard_Public_Heatmap_Churches
 
             }
         </script>
-        <!--        <script src="--><?php //echo plugin_dir_url(__FILE__) . 'training-maps.js?ver=' . filemtime( plugin_dir_path( __FILE__ ) . 'training-maps.js' ) ?><!--" type="text/javascript" defer=""></script>-->
         <?php
         return true;
     }
@@ -302,10 +305,49 @@ class DT_Network_Dashboard_Public_Heatmap_Churches
         <div id="custom-style"></div>
         <div id="wrapper">
             <div id="map-wrapper">
-                <div style="position:absolute; top: 10px; left: 10px; z-index: 100;" id="zoom-id"></div>
+                <div style="position:absolute; top: 10px; left:10px; right:40px; z-index: 10;background-color:white; opacity: .8;padding:5px; margin: 0 10px;">
+                    <div class="grid-x">
+                        <div class="cell small-4"></div>
+                        <div class="cell small-4" style="text-align:center;" id="name-id">Hover and zoom for locations</div>
+                        <div class="cell small-4"></div>
+                    </div>
+                </div>
+
                 <div id='map'><span class="loading-spinner active"></span></div>
             </div>
         </div>
+        <div class="off-canvas position-left is-closed" id="offCanvasNestedPush" data-transition-time=".3s" data-off-canvas>
+            <div class="grid-x grid-padding-x " style="margin-top:1rem;">
+                <div class="cell">
+                    <h1 id="title">Title</h1>
+                    <hr>
+                </div>
+                <div class="cell">
+                    <h2>Saturation: <span id="saturation-goal">0</span>%</h2>
+                    <meter id="meter" style="height:3rem;width:100%;" value="30" min="0" low="33" high="66" optimum="100" max="100"></meter>
+                </div>
+                <div class="cell">
+                    <h2>Population: <span id="population">0</span></h2>
+                </div>
+                <div class="cell">
+                    <h2>Churches Needed: <span id="needed">0</span></h2>
+                </div>
+                <div class="cell">
+                    <hr>
+                </div>
+                <div class="cell ">
+                    <div class="callout" style="background-color:whitesmoke;">
+                        <h2>Details:</h2>
+                        <div id="slider-content"></div>
+                    </div>
+
+                </div>
+            </div>
+            <button class="close-button" data-close aria-label="Close modal" type="button">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
         <script>
             jQuery(document).ready(function($){
 
@@ -321,88 +363,152 @@ class DT_Network_Dashboard_Public_Heatmap_Churches
                         #map {
                             height: ${window.innerHeight}px !important;
                         }
+                        .off-canvas {
+                        width:${window.innerWidth * .50}px;
+                        background-color:white;
+                        }
                     </style>`)
 
-                window.get_grid_data().then(function(grid_data){
+                 // window.get_grid_data().then(function(grid_data){
                     $('#map').empty()
                     mapboxgl.accessToken = jsObject.map_key;
                     var map = new mapboxgl.Map({
                         container: 'map',
-                        style: 'mapbox://styles/mapbox/light-v10',
+                        // style: 'mapbox://styles/mapbox/light-v10',
+                        style: 'mapbox://styles/mapbox/streets-v11',
                         center: [-98, 38.88],
                         minZoom: 2,
                         maxZoom: 8,
                         zoom: 2
                     });
 
+                    map.addControl(new mapboxgl.NavigationControl());
                     map.dragRotate.disable();
                     map.touchZoomRotate.disableRotation();
-                    map.addControl(new mapboxgl.NavigationControl());
 
-                    // grid memory vars
-                    window.grid_data = grid_data
-                    window.previous_grid_id = 0
-                    window.previous_grid_list = []
+                    window.previous_hover = false
 
                     map.on('load', function() {
-                        window.previous_grid_id = '1'
-                        window.previous_grid_list.push('1')
-                        jQuery.get('https://storage.googleapis.com/location-grid-mirror/collection/1.geojson', null, null, 'json')
+
+                        let asset_list = []
+                        var i = 1;
+                        while( i <= 46 ){
+                            asset_list.push(i+'.geojson')
+                            i++
+                        }
+
+                        jQuery.each(asset_list, function(i,v){
+
+                            jQuery.get( jsObject.mirror_url + 'saturation/tiles/1000features/'+v, null, null, 'json')
                             .done(function (geojson) {
+
                                 jQuery.each(geojson.features, function (i, v) {
-                                    if (window.grid_data[geojson.features[i].properties.id]) {
-                                        geojson.features[i].properties.value = parseInt(window.grid_data[geojson.features[i].properties.id].count)
+                                    if (jsObject.grid_data[geojson.features[i].properties.id]) {
+                                        geojson.features[i].properties.value = parseInt(jsObject.grid_data[geojson.features[i].properties.id].percent)
                                     } else {
                                         geojson.features[i].properties.value = 0
                                     }
                                 })
-                                map.addSource('1', {
+
+                                map.addSource(i.toString(), {
                                     'type': 'geojson',
                                     'data': geojson
                                 });
                                 map.addLayer({
-                                    'id': '1',
-                                    'type': 'fill',
-                                    'source': '1',
+                                    'id': i.toString()+'line',
+                                    'type': 'line',
+                                    'source': i.toString(),
                                     'paint': {
-                                        'fill-color': [
-                                            'interpolate',
-                                            ['linear'],
-                                            ['get', 'value'],
-                                            0,
-                                            'rgba(0, 0, 0, 0)',
-                                            1,
-                                            '#547df8',
-                                            50,
-                                            '#3754ab',
-                                            100,
-                                            '#22346a'
-                                        ],
-                                        'fill-opacity': 0.75
+                                        'line-color': '#323A68',
+                                        'line-width': .2
                                     }
                                 });
+                                // map.addLayer({
+                                //     'id': i.toString()+'fills',
+                                //     'type': 'fill',
+                                //     'source': i.toString(),
+                                //     'layout': {},
+                                //     'paint': {
+                                //         'fill-color': [
+                                //             'interpolate',
+                                //             ['linear'],
+                                //             ['get', 'value'],
+                                //             0,
+                                //             'rgba(0, 0, 0, 0)',
+                                //             1,
+                                //             '#547df8',
+                                //             50,
+                                //             '#3754ab',
+                                //             100,
+                                //             '#22346a'
+                                //         ]
+                                //         // 'fill-opacity': [
+                                //         //     'case',
+                                //         //     ['boolean', ['feature-state', 'hover'], false],
+                                //         //     .8,
+                                //         //     .5
+                                //         // ]
+                                //     }
+                                // });
                                 map.addLayer({
-                                    'id': '1line',
-                                    'type': 'line',
-                                    'source': '1',
+                                    'id': i.toString() + 'fills',
+                                    'type': 'fill',
+                                    'source': i.toString(),
                                     'paint': {
-                                        'line-color': 'black',
-                                        'line-width': 2
+                                        'fill-color': '#ffae00',
+                                        'fill-opacity': [
+                                            'case',
+                                            ['boolean', ['feature-state', 'hover'], false],
+                                            .8,
+                                            0
+                                        ]
                                     }
+                                })
+                                map.on('mousemove', i.toString()+'fills', function (e) {
+                                    if ( window.previous_hover ) {
+                                        map.setFeatureState(
+                                            window.previous_hover,
+                                            { hover: false }
+                                        )
+                                    }
+                                    window.previous_hover = { source: i.toString(), id: e.features[0].id }
+                                    if (e.features.length > 0) {
+                                        jQuery('#name-id').html(e.features[0].properties.full_name)
+                                        map.setFeatureState(
+                                            window.previous_hover,
+                                            {hover: true}
+                                        );
+                                    }
+                                });
+                                map.on('click', i.toString()+'fills', function (e) {
+
+                                    $('#title').html(e.features[0].properties.full_name)
+                                    $('#meter').val(jsObject.grid_data[e.features[0].properties.grid_id].percent)
+                                    $('#saturation-goal').html(jsObject.grid_data[e.features[0].properties.grid_id].percent)
+                                    $('#population').html(jsObject.grid_data[e.features[0].properties.grid_id].population)
+
+                                    let need = jsObject.grid_data[e.features[0].properties.grid_id].population / 25000
+                                    $('#needed').html(Math.ceil(need))
+
+                                    let sc = $('#slider-content')
+                                    sc.html('<span class="loading-spinner active"></span>')
+
+                                    window.get_grid_data(e.features[0].properties.grid_id)
+                                    .done(function(data){
+                                        sc.empty()
+                                        $.each(data, function(i,v){
+                                            sc.append(`<div>${i} : ${v}</div>`)
+                                        })
+                                    })
+
+                                    $('#offCanvasNestedPush').foundation('toggle', e);
+
                                 });
                             })
-
+                        })
                     })
 
-                    map.on('zoom', function(){
-                        jQuery('#zoom-id').html(map.getZoom())
-                    })
-
-                    map.on('zoomend', function(){
-                        console.log(map.getZoom())
-                    })
-
-                })
+                // }) /*end grid_id*/
             })
         </script>
         <?php
@@ -433,43 +539,17 @@ class DT_Network_Dashboard_Public_Heatmap_Churches
                 ),
             )
         );
-        register_rest_route(
-            $namespace,
-            '/get_grid_list',
-            array(
-                array(
-                    'methods'  => WP_REST_Server::CREATABLE,
-                    'callback' => array( $this, 'get_grid_list' ),
-                ),
-            )
-        );
-        register_rest_route(
-            $namespace,
-            '/grid_country_totals',
-            array(
-                array(
-                    'methods'  => WP_REST_Server::CREATABLE,
-                    'callback' => array( $this, 'grid_country_totals' ),
-                ),
-            )
-        );
-        register_rest_route(
-            $namespace,
-            '/points_geojson',
-            array(
-                array(
-                    'methods'  => WP_REST_Server::CREATABLE,
-                    'callback' => array( $this, 'points_geojson' ),
-                ),
-            )
-        );
     }
 
     public function grid_totals( WP_REST_Request $request ){
         $params = $request->get_json_params() ?? $request->get_body_params();
 
+        if ( ! isset( $params['grid_id'] ) ) {
+            return new WP_Error(__METHOD__, 'no grid id' );
+        }
+        return Disciple_Tools_Mapping_Queries::get_by_grid_id( $params['grid_id'] );
 //        $sites = DT_Network_Dashboard_Metrics_Base::get_sites();
-        $grid_list = array();
+//        $grid_list = array();
 //        if ( ! empty( $sites ) ) {
 //            foreach ( $sites as $key => $site ) {
 //                foreach ( $site['locations'][$post_type][$status] as $grid ) {
@@ -484,9 +564,86 @@ class DT_Network_Dashboard_Public_Heatmap_Churches
 //                }
 //            }
 //        }
-
-        return $grid_list;
+//        return $grid_list;
     }
+    public function grid_list(){
+        global $wpdb;
+        $list = $wpdb->get_results("
+        SELECT
+        lg0.grid_id, lg0.population
+        FROM $wpdb->dt_location_grid lg0
+        LEFT JOIN $wpdb->dt_location_grid as a0 ON lg0.admin0_grid_id=a0.grid_id
+        WHERE lg0.level < 1
+        AND lg0.country_code NOT IN (
+            SELECT lg23.country_code FROM $wpdb->dt_location_grid lg23 WHERE lg23.level_name = 'admin1' GROUP BY lg23.country_code
+        )
+        AND a0.name NOT IN ('China', 'India', 'France', 'Spain', 'Pakistan', 'Bangladesh')
+        AND a0.name NOT IN ('Romania', 'Estonia', 'Bhutan', 'Croatia', 'Solomon Islands', 'Guyana', 'Iceland', 'Vanuatu', 'Cape Verde', 'Samoa', 'Faroe Islands', 'Norway', 'Uruguay', 'Mongolia', 'United Arab Emirates', 'Slovenia', 'Bulgaria', 'Honduras', 'Columbia', 'Namibia', 'Switzerland', 'Western Sahara')
+
+        UNION ALL
+        --
+        # Only admin1
+        --
+        SELECT
+        lg1.grid_id, lg1.population
+        FROM $wpdb->dt_location_grid as lg1
+        LEFT JOIN $wpdb->dt_location_grid as a0 ON lg1.admin0_grid_id=a0.grid_id
+        WHERE lg1.country_code NOT IN (
+        SELECT lg22.country_code FROM $wpdb->dt_location_grid lg22 WHERE lg22.level_name = 'admin2' GROUP BY lg22.country_code
+        ) AND lg1.level_name != 'admin0'
+        AND a0.name NOT IN ('China', 'India', 'France', 'Spain', 'Pakistan', 'Bangladesh')
+        AND a0.name NOT IN ('Romania', 'Estonia', 'Bhutan', 'Croatia', 'Solomon Islands', 'Guyana', 'Iceland', 'Vanuatu', 'Cape Verde', 'Samoa', 'Faroe Islands', 'Norway', 'Uruguay', 'Mongolia', 'United Arab Emirates', 'Slovenia', 'Bulgaria', 'Honduras', 'Columbia', 'Namibia', 'Switzerland', 'Western Sahara')
+
+
+        UNION ALL
+        --
+        # Has admin2
+        --
+        SELECT
+        lg2.grid_id, lg2.population
+        FROM $wpdb->dt_location_grid lg2
+        LEFT JOIN $wpdb->dt_location_grid as a0 ON lg2.admin0_grid_id=a0.grid_id
+        WHERE lg2.level_name = 'admin2'
+        AND a0.name NOT IN ('China', 'India', 'France', 'Spain', 'Pakistan', 'Bangladesh')
+        AND a0.name NOT IN ('Romania', 'Estonia', 'Bhutan', 'Croatia', 'Solomon Islands', 'Guyana', 'Iceland', 'Vanuatu', 'Cape Verde', 'Samoa', 'Faroe Islands', 'Norway', 'Uruguay', 'Mongolia', 'United Arab Emirates', 'Slovenia', 'Bulgaria', 'Honduras', 'Columbia', 'Namibia', 'Switzerland', 'Western Sahara')
+
+        UNION ALL
+
+        # Exceptions admin3
+
+        SELECT
+        lge.grid_id, lge.population
+        FROM $wpdb->dt_location_grid lge
+        LEFT JOIN $wpdb->dt_location_grid as a0 ON lge.admin0_grid_id=a0.grid_id
+        WHERE a0.name IN ('China', 'India', 'France', 'Spain', 'Pakistan', 'Bangladesh')
+            AND lge.level_name = 'admin3'
+
+
+        UNION ALL
+
+        # Exceptions admin1
+
+        SELECT
+        lge1.grid_id, lge1.population
+        FROM $wpdb->dt_location_grid lge1
+        LEFT JOIN $wpdb->dt_location_grid as a0 ON lge1.admin0_grid_id=a0.grid_id
+        WHERE lge1.level_name = 'admin1'
+        AND a0.name IN ('Romania', 'Estonia', 'Bhutan', 'Croatia', 'Solomon Islands', 'Guyana', 'Iceland', 'Vanuatu', 'Cape Verde', 'Samoa', 'Faroe Islands', 'Norway', 'Uruguay', 'Mongolia', 'United Arab Emirates', 'Slovenia', 'Bulgaria', 'Honduras', 'Columbia', 'Namibia', 'Switzerland', 'Western Sahara')
+
+        ", ARRAY_A );
+
+        $data = [];
+        foreach( $list as $v ){
+            $data[$v['grid_id']] = [
+                'grid_id' => $v['grid_id'],
+                'percent' => rand( 0, 100 ),
+                'population' => $v['population'],
+            ];
+        }
+
+        return $data;
+    }
+
     public function endpoint( WP_REST_Request $request ) {
         $params = $request->get_params();
 
