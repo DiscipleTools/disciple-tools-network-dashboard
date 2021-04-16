@@ -128,11 +128,12 @@ class DT_Network_Dashboard_Menu {
                 <?php echo ( $tab == 'system' ) ? esc_attr( 'nav-tab-active' ) : ''; ?>">
                     System
                 </a>
-
+                <!-- @todo section in dev
                 <a href="<?php echo esc_attr( $link ) . 'public' ?>" class="nav-tab
                 <?php echo ( $tab == 'public' ) ? esc_attr( 'nav-tab-active' ) : ''; ?>">
                     Public Links
                 </a>
+                -->
 
                 <a href="<?php echo esc_attr( $link ) . 'upgrades' ?>" class="nav-tab
                 <?php echo ( $tab == 'upgrades' ) ? 'nav-tab-active' : ''; ?>">
