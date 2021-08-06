@@ -156,6 +156,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 array(
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => array( $this, 'endpoint' ),
+                    'permission_callback' => '__return_true',
                 ),
             )
         );
@@ -168,6 +169,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 array(
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => array( $this, 'grid_totals' ),
+                    'permission_callback' => '__return_true',
                 ),
             )
         );
@@ -178,6 +180,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 array(
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => array( $this, 'get_grid_list' ),
+                    'permission_callback' => '__return_true',
                 ),
             )
         );
@@ -188,6 +191,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 array(
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => array( $this, 'grid_country_totals' ),
+                    'permission_callback' => '__return_true',
                 ),
             )
         );
@@ -198,6 +202,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
                 array(
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => array( $this, 'points_geojson' ),
+                    'permission_callback' => '__return_true',
                 ),
             )
         );

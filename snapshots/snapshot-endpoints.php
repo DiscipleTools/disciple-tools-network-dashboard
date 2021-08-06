@@ -60,6 +60,7 @@ class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpo
             array(
                 'methods'  => 'POST',
                 'callback' => array( $this, 'live_stats' ),
+                'permission_callback' => '__return_true',
             )
         );
         register_rest_route(
@@ -68,6 +69,7 @@ class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpo
             array(
                 'methods'  => 'POST',
                 'callback' => array( $this, 'profile' ),
+                'permission_callback' => '__return_true',
             )
         );
 

@@ -277,6 +277,7 @@ class DT_Network_Dashboard_Site_Links_Endpoint extends DT_Network_Dashboard_Endp
             array(
                 'methods'  => 'POST',
                 'callback' => array( $this, 'profile' ),
+                'permission_callback' => '__return_true',
             )
         );
     }

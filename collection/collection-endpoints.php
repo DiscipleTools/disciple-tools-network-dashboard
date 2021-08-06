@@ -59,6 +59,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             array(
                 'methods'  => 'POST',
                 'callback' => array( $this, 'collector' ),
+                'permission_callback' => '__return_true',
             )
         );
 
@@ -68,6 +69,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             array(
                 'methods'  => 'POST',
                 'callback' => array( $this, 'trigger_activity' ),
+                'permission_callback' => '__return_true',
             )
         );
 
@@ -77,6 +79,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             array(
                 'methods'  => 'POST',
                 'callback' => array( $this, 'activity' ),
+                'permission_callback' => '__return_true',
             )
         );
     }

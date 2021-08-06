@@ -67,6 +67,7 @@ class DT_Network_Dashboard_Metrics_Statistics_Users extends DT_Network_Dashboard
                 array(
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => array( $this, 'endpoint' ),
+                    'permission_callback' => '__return_true',
                 ),
             )
         );

@@ -68,6 +68,7 @@ class DT_Network_Dashboard_Metrics_Maps_Hovermap extends DT_Network_Dashboard_Me
                 array(
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => array( $this, 'endpoint' ),
+                    'permission_callback' => '__return_true',
                 ),
             )
         );

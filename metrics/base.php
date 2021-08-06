@@ -69,6 +69,7 @@ class DT_Network_Dashboard_Metrics_Base {
                 [
                     'methods'  => WP_REST_Server::CREATABLE,
                     'callback' => [ $this, 'base_endpoint' ],
+                    'permission_callback' => '__return_true',
                 ],
             ]
         );
@@ -79,6 +80,7 @@ class DT_Network_Dashboard_Metrics_Base {
                 [
                     'methods'  => WP_REST_Server::READABLE,
                     'callback' => [ $this, 'base_endpoint' ],
+                    'permission_callback' => '__return_true',
                 ],
             ]
         );
