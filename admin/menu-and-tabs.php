@@ -192,8 +192,8 @@ class DT_Network_Dashboard_Tab_Profile
                     <div id="post-body-content">
                         <!-- Main Column -->
 
-                        <?php $this->box_network_tab(); ?>
                         <?php DT_Network_Dashboard_Site_Link_Metabox::admin_box_local_site_profile(); ?>
+                        <?php $this->box_network_tab(); ?>
                         <?php $this->box_diagram() ?>
 
                         <!-- End Main Column -->
@@ -208,16 +208,21 @@ class DT_Network_Dashboard_Tab_Profile
         if ( isset( $_POST['show-tab'] )
             && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['show-tab'] ) ), 'show-tab'.get_current_user_id() )
             && isset( $_POST['tab'] ) ) {
+
             $tab = sanitize_text_field( wp_unslash( $_POST['tab'] ) );
             update_option( 'dt_network_dashboard_show_tab', $tab, true );
+
+            $dedicated = sanitize_text_field( wp_unslash( $_POST['dedicated'] ) );
+            update_option( 'dt_network_dashboard_dedicated', $dedicated, true );
         }
         $tab = get_option( 'dt_network_dashboard_show_tab' );
+        $dedicated = get_option( 'dt_network_dashboard_dedicated' );
         ?>
         <form method="POST">
         <?php wp_nonce_field( 'show-tab'.get_current_user_id(), 'show-tab' ) ?>
         <table class="widefat striped">
             <thead>
-                <tr><td>Show Tab</td><td></td><td></td></tr>
+                <tr><td>Tabs</td><td></td><td></td></tr>
             </thead>
             <tbody>
             <tr>
@@ -229,7 +234,19 @@ class DT_Network_Dashboard_Tab_Profile
                     </select>
                 </td>
                 <td>
-                    To show the network dashboard, you must enable this feature. The background tasks of the network dashboard will run and facilitate connection to other sites, even with the "Network" tab hidden.
+                    To show the network dashboard in the DT top menu, you must enable this feature. The background tasks of the network dashboard will run and facilitate connection to other sites, even with the "Network" tab hidden.
+                </td>
+            </tr>
+            <tr>
+                <td style="width:115px;"></td>
+                <td>
+                    <select name="dedicated">
+                        <option value="no" <?php echo ( 'no' === $dedicated || empty( $dedicated ) ) ? 'selected' : ''; ?>>Normal tabs (Default)</option>
+                        <option value="yes" <?php echo ( 'yes' === $dedicated ) ? 'selected' : ''; ?>>Remove all other tabs</option>
+                    </select>
+                </td>
+                <td>
+                    Remove all other tabs except network dashboard for all users except DT Administrators.
                 </td>
             </tr>
             <tr>
@@ -342,8 +359,6 @@ class DT_Network_Dashboard_Tab_Profile
         <br>
         <?php
     }
-
-
 
 }
 

@@ -5,7 +5,7 @@
  * Description: Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging.
  * Text Domain: disciple-tools-network-dashboard
  * Domain Path: /languages
- * Version: 2.5.1
+ * Version: 2.6
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
  * Requires at least: 4.7.0
@@ -179,6 +179,31 @@ class DT_Network_Dashboard {
             require_once( 'admin/menu-and-tabs.php' );
         }
 
+        if ( 'yes' === get_option( 'dt_network_dashboard_dedicated' ) ) {
+            add_filter( 'dt_front_page', function(){
+                return home_url( '/network/' );
+            } );
+            add_filter( 'dt_non_standard_front_page', function(){
+                return home_url( '/network/' );
+            } );
+        }
+
+
+        add_filter( 'dt_set_roles_and_permissions', [ $this, 'dt_set_roles_and_permissions' ], 100, 1 );
+    }
+
+    public function dt_set_roles_and_permissions( $expected_roles ) {
+        $expected_roles["network_dashboard_viewer"] = [
+            "label" => __( 'Network Dashboard Viewer', 'disciple_tools' ),
+            "description" => "Can view the network dashboard.",
+            "permissions" => [
+                'access_settings' => true,
+                'view_project_metrics' => true,
+            ],
+            "order" => 100
+        ];
+
+        return $expected_roles;
     }
 
     /**

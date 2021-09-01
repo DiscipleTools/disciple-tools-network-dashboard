@@ -11,6 +11,9 @@ if ( 'show' !== get_option( 'dt_network_dashboard_show_tab' ) ){
 add_filter( 'desktop_navbar_menu_options', 'dt_network_dashboard_top_nav_desktop', 110, 1 );
 function dt_network_dashboard_top_nav_desktop( $tabs ) {
     if ( dt_network_dashboard_has_metrics_permissions() ) {
+        if ( 'yes' === get_option( 'dt_network_dashboard_dedicated' ) && ! user_can( get_current_user_id(), 'manage_dt' ) ){
+            $tabs = [];
+        }
         $tabs['network'] = [
             "link" => site_url( '/network/' ),
             "label" => __( "Network", 'disciple-tools-network-dashboard' )
@@ -18,6 +21,7 @@ function dt_network_dashboard_top_nav_desktop( $tabs ) {
     }
     return $tabs;
 }
+
 
 /**
  * Has permissions
