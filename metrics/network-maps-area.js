@@ -416,7 +416,7 @@ function write_area( settings ) {
                 }
 
                 let content = jQuery('#geocode-details-content')
-                content.empty().html(`<img src="${window.lodash.escape( obj.theme_uri )}spinner.svg" class="spinner-image" alt="spinner"/>`)
+              content.empty().append(`<span class="loading-spinner active"></span><div class="grid-x" id="hierarchy-list"></div><br><div class="grid-x" id="reporting-sites"></div>`)
 
                 jQuery('#geocode-details').show()
 
@@ -424,7 +424,7 @@ function write_area( settings ) {
                 makeRequest('GET', obj.theme_uri + 'dt-mapping/location-grid-list-api.php?type=geocode&longitude='+lng+'&latitude='+lat+'&level='+level+'&nonce='+obj.nonce )
                     .done(details=>{
                         /* hierarchy list*/
-                        content.empty().append(`<div class="grid-x" id="hierarchy-list"></div>`)
+                        jQuery('.loading-spinner').removeClass('active')
                         let list = jQuery('#hierarchy-list')
                         if ( details.admin0_grid_id ) {
                             list.append( `
@@ -438,7 +438,7 @@ function write_area( settings ) {
                         }
                         if ( details.admin1_grid_id ) {
                             list.append( `
-                              <div class="cell small-6"></div><div class="cell small-6" style="border-left: 1px solid lightgrey"></div>
+                              <div class="cell small-6">&nbsp;</div><div class="cell small-6" style="border-left: 1px solid lightgrey"></div>
                               <div id="admin1_wrapper" class="cell callout center">
                                <h4>${window.lodash.escape( details.admin1_name )}</h4><h4><span id="admin1_count">0</span></h4>
                               </div>
@@ -450,7 +450,7 @@ function write_area( settings ) {
                         }
                         if ( details.admin2_grid_id ) {
                             list.append( `
-                            <div class="cell small-6"></div><div class="cell small-6" style="border-left: 1px solid lightgrey"></div>
+                            <div class="cell small-6">&nbsp;</div><div class="cell small-6" style="border-left: 1px solid lightgrey"></div>
                               <div id="admin2_wrapper" class="cell callout center">
                                <h4>${window.lodash.escape( details.admin2_name )}</h4><h4><span id="admin2_count">0</span></h4>
                               </div>
@@ -462,7 +462,21 @@ function write_area( settings ) {
                         }
                         /* end hierarchy list */
 
+// @todo add reporting sites to list
+                      let reporting_sites = jQuery('#reporting-sites')
+                      reporting_sites.append(`
+                        <br>
+                        <hr>
+                          <div id="admin2_wrapper" class="cell callout center">
+                            <h4>Reporting Sites</h4>
+                          </div>
+                       </div>
+                      `)
+
                     }); // end geocode
+
+
+
             }
             function get_level( ) {
                 let level = jQuery('#level').val()
