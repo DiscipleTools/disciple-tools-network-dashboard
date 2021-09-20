@@ -1,6 +1,6 @@
 <?php
 /**
- * Plugin Name: Disciple Tools - Network Dashboard
+ *Plugin Name: Disciple.Tools - Network Dashboard
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
  * Description: Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging.
  * Text Domain: disciple-tools-network-dashboard
