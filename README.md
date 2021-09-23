@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.com/DiscipleTools/disciple-tools-network-dashboard.svg?branch=master)](https://travis-ci.com/DiscipleTools/disciple-tools-network-dashboard)
 
 ![Network Dashboard](https://raw.githubusercontent.com/DiscipleTools/disciple-tools-network-dashboard/master/documentation/network-dashboard-banner.png)
-# Disciple Tools - Network Dashboard
+# Disciple.Tools - Network Dashboard
 
 The Network Dashboard creates report data sharing between multiple Disciple.Tools systems. It seeks to
 facilitate solidarity, saturation, data safety, and prayer guidance.
@@ -41,7 +41,7 @@ how far the data can be transfered and displayed.
 
 ## Requirements
 
-- Disciple Tools Theme installed on a Wordpress Server.
+- Disciple.Tools Theme installed on a Wordpress Server.
 - Site must have SSL enabled.
 
 

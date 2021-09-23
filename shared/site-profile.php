@@ -29,7 +29,7 @@ if ( ! function_exists( 'dt_network_site_profile' ) ) {
 
 
 /**
- * Gets/Creates a Permanent ID for the Disciple Tools site. This allows for network duplicate checking etc.
+ * Gets/Creates a Permanent ID for the Disciple.Tools site. This allows for network duplicate checking etc.
  * @return string
  * @throws Exception
  */

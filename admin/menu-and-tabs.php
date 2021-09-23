@@ -62,7 +62,7 @@ class DT_Network_Dashboard_Menu {
     }
 
     /**
-     * Menu stub. Replaced when Disciple Tools Theme fully loads.
+     * Menu stub. Replaced when Disciple.Tools Theme fully loads.
      */
     public function extensions_menu() {}
 
@@ -72,7 +72,7 @@ class DT_Network_Dashboard_Menu {
      */
     public function content() {
 
-        if ( !current_user_can( 'manage_dt' ) ) { // manage dt is a permission that is specific to Disciple Tools and allows admins, strategists and dispatchers into the wp-admin
+        if ( !current_user_can( 'manage_dt' ) ) { // manage dt is a permission that is specific to Disciple.Tools and allows admins, strategists and dispatchers into the wp-admin
             wp_die( esc_attr__( 'You do not have sufficient permissions to access this page.' ) );
         }
 
@@ -1361,7 +1361,7 @@ class DT_Network_Dashboard_Tab_System
                 <th>Site</th>
                 <th>Last Collection</th>
                 <th>Network Dashboard</th>
-                <th>Disciple Tools</th>
+                <th>Disciple.Tools</th>
                 <th>Misc
                 <span style="float:right;">
                     <button type="submit" name="refresh" value="true" class="button">Refresh</button>
@@ -1771,7 +1771,7 @@ class DT_Network_Dashboard_Tab_Upgrades
             <tbody>
             <tr>
                 <td>
-                    These are a few third party enhancements you can add to improve your Disciple Tools and Network Dashboard system.
+                    These are a few third party enhancements you can add to improve your Disciple.Tools and Network Dashboard system.
                 </td>
             </tr>
             <tr>
@@ -1848,11 +1848,11 @@ class DT_Network_Dashboard_Tab_Tutorial
                         <dt>Local vs Network Functions</dt>
                         <dd>This plugin has two functions.
                             <ol>
-                                <li> First to extend Disciple Tools with structured mapping data
+                                <li> First to extend Disciple.Tools with structured mapping data
                                     and to make it easy to install those locations for a team to use as they reach out to a certain area.
                                 </li>
-                                <li>This plugin also has the ability to add a network (global) dashboard to Disciple Tools for
-                                    multiple Disciple Tools teams to connect their systems and share reporting (i.e. celebration) of the
+                                <li>This plugin also has the ability to add a network (global) dashboard to Disciple.Tools for
+                                    multiple Disciple.Tools teams to connect their systems and share reporting (i.e. celebration) of the
                                     work between them.
                                 </li>
                             </ol>

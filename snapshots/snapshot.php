@@ -1,6 +1,6 @@
 <?php
 /**
- * Core functions to power the network features of Disciple Tools
+ * Core functions to power the network features of Disciple.Tools
  *
  * @class      Disciple_Tools_Notifications
  * @version    0.1.0

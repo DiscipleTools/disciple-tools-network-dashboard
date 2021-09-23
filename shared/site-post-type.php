@@ -517,7 +517,7 @@ class DT_Network_Dashboard_Site_Post_Type {
     }
 
     /**
-     * Lists all multiste disciple tools sites. Can be limited to only those with the network dashboard installed.
+     * Lists all multiste Disciple.Tools sites. Can be limited to only those with the network dashboard installed.
      * @param false $active_dashboards_only
      * @return array
      */

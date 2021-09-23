@@ -6,8 +6,8 @@ class DT_Network_Dashboard_Queries {
         global $wpdb;
 
         $results = $wpdb->get_results("
-                SELECT 
-                  post_title as name, 
+                SELECT
+                  post_title as name,
                   ID as id
                 FROM $wpdb->posts as p
                 JOIN $wpdb->postmeta as pm
@@ -15,7 +15,7 @@ class DT_Network_Dashboard_Queries {
 					AND pm.meta_key = 'type'
 				LEFT JOIN $wpdb->postmeta as pm2
                   ON p.ID=pm2.post_id
-					AND pm2.meta_key = 'non_wp' 
+					AND pm2.meta_key = 'non_wp'
                   WHERE p.post_type = 'site_link_system'
                   AND p.post_status = 'publish'
                   AND ( pm.meta_value = 'network_dashboard_both'
@@ -54,7 +54,7 @@ class DT_Network_Dashboard_Queries {
         global $wpdb;
 
         $results = $wpdb->get_var($wpdb->prepare( "
-                SELECT 
+                SELECT
                   pm.post_id as site_post_id
                 FROM $wpdb->posts as p
                 JOIN $wpdb->postmeta as pm
@@ -76,7 +76,7 @@ class DT_Network_Dashboard_Queries {
         global $wpdb;
 
         $results = $wpdb->get_var("
-                SELECT 
+                SELECT
                   count(id)
                 FROM $wpdb->posts as p
                 JOIN $wpdb->postmeta as pm
@@ -84,7 +84,7 @@ class DT_Network_Dashboard_Queries {
 					AND pm.meta_key = 'type'
 				LEFT JOIN $wpdb->postmeta as pm2
                   ON p.ID=pm2.post_id
-					AND pm2.meta_key = 'non_wp' 
+					AND pm2.meta_key = 'non_wp'
                   WHERE p.post_type = 'site_link_system'
                   AND p.post_status = 'publish'
                   AND ( pm.meta_value = 'network_dashboard_both'
@@ -99,7 +99,7 @@ class DT_Network_Dashboard_Queries {
         global $wpdb;
 
         $results = $wpdb->get_results("
-                 SELECT 
+                 SELECT
                  CASE
                     WHEN e.meta_value IS NOT NULL THEN e.meta_value
                     WHEN f.meta_value IS NOT NULL THEN f.meta_value

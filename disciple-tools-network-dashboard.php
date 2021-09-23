@@ -2,7 +2,7 @@
 /**
  *Plugin Name: Disciple.Tools - Network Dashboard
  * Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
- * Description: Connect this Disciple Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging.
+ * Description: Connect this Disciple.Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging.
  * Text Domain: disciple-tools-network-dashboard
  * Domain Path: /languages
  * Version: 2.6
@@ -341,12 +341,12 @@ register_deactivation_hook( __FILE__, array( 'DT_Network_Dashboard', 'deactivati
 
 
 /**
- * Admin alert for when Disciple Tools Theme is not available
+ * Admin alert for when Disciple.Tools Theme is not available
  */
 function dt_network_dashboard_no_disciple_tools_theme_found() {
     ?>
     <div class="notice notice-error">
-        <p><?php echo esc_html( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard'." ); ?></p>
+        <p><?php echo esc_html( "'Disciple.Tools - Network Dashboard' requires 'Disciple.Tools' theme to work. Please activate 'Disciple.Tools' theme or deactivate 'Disciple.Tools - Network Dashboard'." ); ?></p>
     </div>
     <?php
 }
@@ -397,7 +397,7 @@ if ( !function_exists( 'dt_write_log' ) ) {
 
 if ( ! function_exists( 'dt_is_child_theme_of_disciple_tools' ) ) {
     /**
-     * Returns true if this is a child theme of Disciple Tools, and false if it is not.
+     * Returns true if this is a child theme of Disciple.Tools, and false if it is not.
      *
      * @return bool
      */
@@ -418,7 +418,7 @@ function dt_network_dashboard_admin_notice() {
         global $dt_network_dashboard_required_dt_theme_version;
         // multiple dismissible notice states ?>
         <div class="notice notice-error notice-dt-network-dashboard is-dismissible" data-notice="dt-demo">
-            <p><?php echo esc_html( sprintf( "'Disciple Tools - Network Dashboard' requires 'Disciple Tools' theme version %s to work. Please activate 'Disciple Tools' theme or deactivate 'Disciple Tools - Network Dashboard'.", $dt_network_dashboard_required_dt_theme_version ) ); ?></p>
+            <p><?php echo esc_html( sprintf( "'Disciple.Tools - Network Dashboard' requires 'Disciple.Tools' theme version %s to work. Please activate 'Disciple.Tools' theme or deactivate 'Disciple.Tools - Network Dashboard'.", $dt_network_dashboard_required_dt_theme_version ) ); ?></p>
         </div>
         <script>
             jQuery(function($) {
