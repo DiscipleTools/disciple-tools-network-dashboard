@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.com/DiscipleTools/disciple-tools-network-dashboard.svg?branch=master)](https://travis-ci.com/DiscipleTools/disciple-tools-network-dashboard)
-
 ![Plugin Banner](https://raw.githubusercontent.com/DiscipleTools/disciple-tools-network-dashboard/master/documentation/network-dashboard-banner.png)
 # Disciple.Tools - Network Dashboard
 
@@ -79,4 +77,6 @@ system for git. For a more details on contribution see the
 ## Screenshot
 
 ![screenshot](https://raw.githubusercontent.com/DiscipleTools/disciple-tools-network-dashboard/master/documentation/files/images/nd-screenshot.png)
+
+[![Build Status](https://travis-ci.com/DiscipleTools/disciple-tools-network-dashboard.svg?branch=master)](https://travis-ci.com/DiscipleTools/disciple-tools-network-dashboard)
 
