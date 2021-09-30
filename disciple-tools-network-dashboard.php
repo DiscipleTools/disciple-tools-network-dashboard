@@ -18,6 +18,7 @@
  *
  * @version 2.2 Fixed filters on activity log.
  * @version 2.3 Fix to the map and filter data
+ * @version 2.6 Banners
  *
  */
 if ( ! defined( 'ABSPATH' ) ) {
