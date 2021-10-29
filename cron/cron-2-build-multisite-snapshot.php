@@ -6,7 +6,7 @@
 if ( is_multisite() ){
     if ( dt_is_current_multisite_dashboard_approved() ) {
 
-        if ( !wp_next_scheduled( 'dt_network_dashboard_collect_multisite_snapshots' )) {
+        if ( !wp_next_scheduled( 'dt_network_dashboard_collect_multisite_snapshots' ) ) {
             wp_schedule_event( strtotime( 'tomorrow 2am' ), 'daily', 'dt_network_dashboard_collect_multisite_snapshots' );
         }
         add_action( 'dt_network_dashboard_collect_multisite_snapshots', 'dt_network_dashboard_multisite_snapshot_async' );

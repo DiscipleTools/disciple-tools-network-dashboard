@@ -3,7 +3,7 @@
  * Scheduled Cron Service
  */
 
-if ( !wp_next_scheduled( 'dt_network_dashboard_collect_remote_sites' )) {
+if ( !wp_next_scheduled( 'dt_network_dashboard_collect_remote_sites' ) ) {
     wp_schedule_event( strtotime( 'tomorrow 5am' ), 'daily', 'dt_network_dashboard_collect_remote_sites' );
 }
 add_action( 'dt_network_dashboard_collect_remote_sites', 'dt_network_dashboard_collect_remote_sites' );

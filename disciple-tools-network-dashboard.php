@@ -274,7 +274,7 @@ class DT_Network_Dashboard {
         $mo_file = $domain . '-' . $locale . '.mo';
         $path = realpath( dirname( __FILE__ ) . '/languages' );
 
-        if ($path && file_exists( $path )) {
+        if ( $path && file_exists( $path ) ) {
             load_textdomain( $domain, $path . '/' . $mo_file );
         }
     }

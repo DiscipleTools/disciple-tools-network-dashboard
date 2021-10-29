@@ -15,11 +15,11 @@ class DT_Network_Dashboard_Snapshot
     public static function snapshot_report( $force_refresh = false ) {
         /* Check last process */
         $time = get_option( 'dt_snapshot_report_timestamp' );
-        if ($time < ( time() - ( 24 * 60 * 60 ) )) {
+        if ( $time < ( time() - ( 24 * 60 * 60 ) ) ) {
             $force_refresh = true;
         }
 
-        if ( !$force_refresh) {
+        if ( !$force_refresh ) {
             return get_option( 'dt_snapshot_report' );
         }
 
@@ -42,7 +42,7 @@ class DT_Network_Dashboard_Snapshot
         $report_data['timestamp'] = time();
         $report_data['status'] = 'OK';
 
-        if ($report_data) {
+        if ( $report_data ) {
             update_option( 'dt_snapshot_report', $report_data, false );
             update_option( 'dt_snapshot_report_timestamp', time(), false );
 

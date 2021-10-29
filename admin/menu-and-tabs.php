@@ -141,7 +141,7 @@ class DT_Network_Dashboard_Menu {
             </h2>
 
             <?php
-            switch ($tab) {
+            switch ( $tab ) {
                 case "profile":
                     $object = new DT_Network_Dashboard_Tab_Profile();
                     $object->content();
@@ -212,8 +212,10 @@ class DT_Network_Dashboard_Tab_Profile
             $tab = sanitize_text_field( wp_unslash( $_POST['tab'] ) );
             update_option( 'dt_network_dashboard_show_tab', $tab, true );
 
-            $dedicated = sanitize_text_field( wp_unslash( $_POST['dedicated'] ) );
-            update_option( 'dt_network_dashboard_dedicated', $dedicated, true );
+            if ( isset( $_POST['dedicated'] ) ){
+                $dedicated = sanitize_text_field( wp_unslash( $_POST['dedicated'] ) );
+                update_option( 'dt_network_dashboard_dedicated', $dedicated, true );
+            }
         }
         $tab = get_option( 'dt_network_dashboard_show_tab' );
         $dedicated = get_option( 'dt_network_dashboard_dedicated' );
@@ -312,7 +314,7 @@ class DT_Network_Dashboard_Tab_Profile
                                     else if ( is_multisite() && 'multisite' === $site['type'] && dt_network_dashboard_multisite_is_approved() && 'reject' !== $site['receive_activity'] ) {
                                         echo '<div class="row"><span class="nd-site-box multisite">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
-                                    else if ('network_dashboard_receiving' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'reject' !== $site['receive_activity'] ) {
+                                    else if ( 'network_dashboard_receiving' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'reject' !== $site['receive_activity'] ) {
                                         echo '<div class="row"><span class="nd-site-box remote">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
                                 }
@@ -346,7 +348,7 @@ class DT_Network_Dashboard_Tab_Profile
                                     else if ( is_multisite() && 'multisite' === $site['type'] && dt_network_dashboard_multisite_is_approved() && 'none' !== $site['send_activity'] && in_array( $site['type_id'], $approved_sites_ids ) ) {
                                         echo '<div class="row"><span class="nd-site-box multisite">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
-                                    else if ('network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'none' !== $site['send_activity'] ) {
+                                    else if ( 'network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'none' !== $site['send_activity'] ) {
                                         echo '<div class="row"><span class="nd-site-box remote">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
                                 }
@@ -671,7 +673,7 @@ class DT_Network_Dashboard_Tab_Outgoing
 
             if ( isset( $_POST['send_activity'] ) && ! empty( $_POST['send_activity'] ) && is_array( $_POST['send_activity'] ) ) {
                 $send_activity = dt_recursive_sanitize_array( $_POST['send_activity'] ); // @phpcs:ignore
-                foreach ($send_activity as $i => $v ) {
+                foreach ( $send_activity as $i => $v ) {
                     DT_Network_Dashboard_Site_Post_Type::update_send_activity( sanitize_text_field( wp_unslash( $i ) ), sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
@@ -700,7 +702,7 @@ class DT_Network_Dashboard_Tab_Outgoing
         <tr>
             <td>
             <?php
-            if ( !is_array( $sites )) :
+            if ( !is_array( $sites ) ) :
                 ?>
                 No site links found. Go to <a href="<?php echo esc_url( admin_url() ) ?>edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type.
                 <?php
@@ -719,7 +721,7 @@ class DT_Network_Dashboard_Tab_Outgoing
                         <?php
                         $i = 0;
                         foreach ( $sites as $site ) {
-                            if ('network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] ) {
+                            if ( 'network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] ) {
                                 $i++;
                                 ?>
                                 <tr>
@@ -742,7 +744,7 @@ class DT_Network_Dashboard_Tab_Outgoing
                                 <?php
                             }
                         }
-                        if (0 === $i ) {
+                        if ( 0 === $i ) {
                             ?>
                             <tr>
                                 <td>No sites found</td>
@@ -775,7 +777,7 @@ class DT_Network_Dashboard_Tab_Outgoing
                                 continue;
                             }
 
-                            if ('multisite' === $site['type'] && in_array( $site['type_id'], $multisites ) && in_array( $site['type_id'], $approved_sites_ids ) ) {
+                            if ( 'multisite' === $site['type'] && in_array( $site['type_id'], $multisites ) && in_array( $site['type_id'], $approved_sites_ids ) ) {
                                 $i++;
                                 ?>
                                 <tr>

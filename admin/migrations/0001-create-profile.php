@@ -39,7 +39,7 @@ class DT_Network_Dashboard_Migration_0001 extends DT_Network_Dashboard_Migration
     public function dt_network_site_id() {
         $site_id = get_option( 'dt_site_id' );
 
-        if ( empty( $site_id )) {
+        if ( empty( $site_id ) ) {
             $site_id = hash( 'sha256', bin2hex( random_bytes( 40 ) ) );
             add_option( 'dt_site_id', $site_id, '', 'yes' );
         }

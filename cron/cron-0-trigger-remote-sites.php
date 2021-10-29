@@ -3,32 +3,32 @@
  * Scheduled Cron Service
  */
 
-if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_1am' )) {
+if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_1am' ) ) {
     wp_schedule_event( strtotime( 'tomorrow 1:05 am' ), 'daily', 'dt_network_dashboard_trigger_sites_1am' );
 }
 add_action( 'dt_network_dashboard_trigger_sites_1am', 'dt_network_dashboard_trigger_sites' );
 
-if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_2am' )) {
+if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_2am' ) ) {
     wp_schedule_event( strtotime( 'tomorrow 2:05 am' ), 'daily', 'dt_network_dashboard_trigger_sites_2am' );
 }
 add_action( 'dt_network_dashboard_trigger_sites_2am', 'dt_network_dashboard_trigger_sites' );
 
-if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_3am' )) {
+if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_3am' ) ) {
     wp_schedule_event( strtotime( 'tomorrow 3:05 am' ), 'daily', 'dt_network_dashboard_trigger_sites_3am' );
 }
 add_action( 'dt_network_dashboard_trigger_sites_3am', 'dt_network_dashboard_trigger_sites' );
 
-if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_4am' )) {
+if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_4am' ) ) {
     wp_schedule_event( strtotime( 'tomorrow 4:05 am' ), 'daily', 'dt_network_dashboard_trigger_sites_4am' );
 }
 add_action( 'dt_network_dashboard_trigger_sites_4am', 'dt_network_dashboard_trigger_sites' );
 
-if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_5am' )) {
+if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_5am' ) ) {
     wp_schedule_event( strtotime( 'tomorrow 5:05 am' ), 'daily', 'dt_network_dashboard_trigger_sites_5am' );
 }
 add_action( 'dt_network_dashboard_trigger_sites_5am', 'dt_network_dashboard_trigger_sites' );
 
-if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_6am' )) {
+if ( !wp_next_scheduled( 'dt_network_dashboard_trigger_sites_6am' ) ) {
     wp_schedule_event( strtotime( 'tomorrow 6:05 am' ), 'daily', 'dt_network_dashboard_trigger_sites_6am' );
 }
 add_action( 'dt_network_dashboard_trigger_sites_6am', 'dt_network_dashboard_trigger_sites' );

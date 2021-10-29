@@ -56,7 +56,7 @@ class DT_Network_Dashboard_Site_Post_Type {
             )
         );
         $result = wp_remote_post( 'https://' . $site['url'] . '/wp-json/dt-public/v1/network_dashboard/profile', $args );
-        if ( is_wp_error( $result )) {
+        if ( is_wp_error( $result ) ) {
             return $result;
         }
         if ( ! isset( $result['body'] ) || empty( $result['body'] ) ) {
@@ -74,7 +74,7 @@ class DT_Network_Dashboard_Site_Post_Type {
         $dt_network_dashboard_id = get_post_meta( $id, 'dt_network_dashboard', true );
         if ( empty( $dt_network_dashboard_id ) || ! get_post_meta( $dt_network_dashboard_id, 'type_id', true ) ) {
             $dt_network_dashboard_id = self::create( $site_profile, 'remote', $id );
-            if ( is_wp_error( $dt_network_dashboard_id )) {
+            if ( is_wp_error( $dt_network_dashboard_id ) ) {
                 return $dt_network_dashboard_id;
             }
         }
@@ -321,7 +321,7 @@ class DT_Network_Dashboard_Site_Post_Type {
      */
     public static function all_sites() : array {
 
-        if (wp_cache_get( __METHOD__ )) {
+        if ( wp_cache_get( __METHOD__ ) ) {
             return wp_cache_get( __METHOD__ );
         }
         global $wpdb;

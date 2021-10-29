@@ -124,7 +124,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
 
         // request activity log from most recent site_record_id
         $site_vars = Site_Link_System::get_site_connection_vars( $params['site_post_id'], 'post_id' );
-        if (is_wp_error( $site_vars )) {
+        if ( is_wp_error( $site_vars ) ) {
             dt_write_log( __METHOD__, 'FAIL ID: ' . $params['site_post_id'] . ' (Failed to get valid site link connection details)' );
             return $site_vars;
         }
@@ -136,7 +136,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             )
         );
         $result = wp_remote_post( 'https://' . $site_vars['url'] . '/wp-json/dt-public/v1/network_dashboard/activity', $args );
-        if (is_wp_error( $result )) {
+        if ( is_wp_error( $result ) ) {
             dt_write_log( __METHOD__, 'FAIL ID: ' . $site_vars['url'] . ' (Failed to get valid site link connection details)' );
         }
 
@@ -174,7 +174,7 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
                 'status' => 'REJECT',
                 'error' => 'Activity collection is rejected by administrator configuration.',
             );
-        } else if ( 'live' === $send_activity_configuration) {
+        } else if ( 'live' === $send_activity_configuration ) {
             return array(
                 'status' => 'REJECT',
                 'error' => 'Activity log is currently being send live and does not need to be collected.',

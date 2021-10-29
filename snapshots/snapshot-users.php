@@ -37,7 +37,7 @@ class DT_Network_Dashboard_Snapshot_Users {
         $total_users = count_users();
 
         $inactive = $total_users['total_users'] - $active;
-        if ($inactive < 1) {
+        if ( $inactive < 1 ) {
             $inactive = 0;
         }
 
@@ -72,20 +72,20 @@ class DT_Network_Dashboard_Snapshot_Users {
 
         $data['total_users'] = (int) $users['total_users'];
 
-        foreach ($users['avail_roles'] as $role => $count) {
-            if ($role === 'marketer') {
+        foreach ( $users['avail_roles'] as $role => $count ) {
+            if ( $role === 'marketer' ) {
                 $data['roles']['responders'] = $data['roles']['responders'] + $count;
             }
-            if ($role === 'dispatcher') {
+            if ( $role === 'dispatcher' ) {
                 $data['roles']['dispatchers'] = $data['roles']['dispatchers'] + $count;
             }
-            if ($role === 'multiplier') {
+            if ( $role === 'multiplier' ) {
                 $data['roles']['multipliers'] = $data['roles']['multipliers'] + $count;
             }
-            if ($role === 'administrator' || $role === 'dt_admin') {
+            if ( $role === 'administrator' || $role === 'dt_admin' ) {
                 $data['roles']['admins'] = $data['roles']['admins'] + $count;
             }
-            if ($role === 'strategist') {
+            if ( $role === 'strategist' ) {
                 $data['roles']['strategists'] = $data['roles']['strategists'] + $count;
             }
         }

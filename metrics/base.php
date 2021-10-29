@@ -21,7 +21,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
     private static $_instance = null;
     public static function instance() {
-        if (is_null( self::$_instance )) {
+        if ( is_null( self::$_instance ) ) {
             self::$_instance = new self();
         }
         return self::$_instance;
@@ -37,12 +37,12 @@ class DT_Network_Dashboard_Metrics_Base {
         return dt_network_dashboard_has_metrics_permissions();
     }
 
-    public function filter_mapping_module_data( $data) {
+    public function filter_mapping_module_data( $data ) {
         $data['custom_column_labels'] = $this->location_data_types();
         return $data;
     }
 
-    public function add_url( $template_for_url) {
+    public function add_url( $template_for_url ) {
         $template_for_url['network'] = 'template-metrics.php';
         return $template_for_url;
     }
@@ -57,7 +57,7 @@ class DT_Network_Dashboard_Metrics_Base {
         }
     }
 
-    public function menu( $content) {
+    public function menu( $content ) {
         return $content;
     }
 
@@ -341,8 +341,8 @@ class DT_Network_Dashboard_Metrics_Base {
         $new = [];
 
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-        if ( !empty( $sites )) {
-            foreach ($sites as $site) {
+        if ( !empty( $sites ) ) {
+            foreach ( $sites as $site ) {
                 if ( 'multisite' === $site['type'] ){
                     continue;
                 }
@@ -350,15 +350,15 @@ class DT_Network_Dashboard_Metrics_Base {
                     continue;
                 }
                 $snapshot = maybe_unserialize( $site['snapshot'] );
-                if ( !empty( $snapshot['partner_id'] )) {
+                if ( !empty( $snapshot['partner_id'] ) ) {
                     $new[$snapshot['partner_id']] = $snapshot;
                     $new[$snapshot['partner_id']]['partner_name'] = $site['name'];
                 }
             }
         }
 
-        if (dt_is_current_multisite_dashboard_approved()) {
-            foreach ($sites as $key => $site) {
+        if ( dt_is_current_multisite_dashboard_approved() ) {
+            foreach ( $sites as $key => $site ) {
                 if ( 'multisite' !== $site['type'] ){
                     continue;
                 }
@@ -366,7 +366,7 @@ class DT_Network_Dashboard_Metrics_Base {
                     continue;
                 }
                 $snapshot = maybe_unserialize( $site['snapshot'] );
-                if ( !empty( $snapshot['partner_id'] )) {
+                if ( !empty( $snapshot['partner_id'] ) ) {
                     $new[$snapshot['partner_id']] = $snapshot;
                 }
             }
@@ -394,8 +394,8 @@ class DT_Network_Dashboard_Metrics_Base {
         $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
 
         $new = [];
-        if ( !empty( $sites )) {
-            foreach ($sites as $key => $site) {
+        if ( !empty( $sites ) ) {
+            foreach ( $sites as $key => $site ) {
                 if ( 'multisite' === $site['type'] ){
                     continue;
                 }
@@ -403,7 +403,7 @@ class DT_Network_Dashboard_Metrics_Base {
                     continue;
                 }
                 $snapshot = maybe_unserialize( $site['snapshot'] );
-                if ( !empty( $snapshot['partner_id'] )) {
+                if ( !empty( $snapshot['partner_id'] ) ) {
                     $new[] = [
                         'id' => $snapshot['partner_id'],
                         'name' => ucwords( $site['name'] ),
@@ -416,8 +416,8 @@ class DT_Network_Dashboard_Metrics_Base {
             }
         }
 
-        if (dt_is_current_multisite_dashboard_approved()) {
-            foreach ($sites as $key => $site) {
+        if ( dt_is_current_multisite_dashboard_approved() ) {
+            foreach ( $sites as $key => $site ) {
                 if ( 'multisite' !== $site['type'] ){
                     continue;
                 }
@@ -425,7 +425,7 @@ class DT_Network_Dashboard_Metrics_Base {
                     continue;
                 }
                 $snapshot = maybe_unserialize( $site['snapshot'] );
-                if ( !empty( $snapshot['partner_id'] )) {
+                if ( !empty( $snapshot['partner_id'] ) ) {
                     $new[] = [
                         'id' => $snapshot['partner_id'],
                         'name' => ucwords( $snapshot['profile']['partner_name'] ),
@@ -540,18 +540,18 @@ class DT_Network_Dashboard_Metrics_Base {
         ];
         $sites = self::get_sites();
 
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
         $custom_column_data = [];
-        foreach ($sites as $id => $site) {
-            foreach ($site['locations']['list'] as $grid_id => $stats) {
+        foreach ( $sites as $id => $site ) {
+            foreach ( $site['locations']['list'] as $grid_id => $stats ) {
                 if ( !isset( $custom_column_data[$grid_id] ) ) {
                     $custom_column_data[$grid_id] = [];
                     $i = 0;
                     $label_counts = count( $data_types );
-                    while ($i <= $label_counts -1 ) {
+                    while ( $i <= $label_counts -1 ) {
                         $custom_column_data[$grid_id][$i] = 0;
                         $i++;
                     }
@@ -565,11 +565,11 @@ class DT_Network_Dashboard_Metrics_Base {
 
         $data["custom_column_data"] = $custom_column_data;
 
-        foreach ($sites as $id => $site) {
+        foreach ( $sites as $id => $site ) {
 
             // list
-            foreach ($site['locations']['list'] as $grid_id => $stats) {
-                if ( !isset( $data['list'][$grid_id] )) {
+            foreach ( $site['locations']['list'] as $grid_id => $stats ) {
+                if ( !isset( $data['list'][$grid_id] ) ) {
                     $data['list'][ $grid_id ] = [
                         "contacts" => 0,
                         "groups" => 0,
@@ -591,9 +591,9 @@ class DT_Network_Dashboard_Metrics_Base {
             // complete list
             $list_location_grids = array_keys( $data['list'] );
             $location_grid_properties = self::format_location_grid_types( Disciple_Tools_Mapping_Queries::get_by_grid_id_list( $list_location_grids, true ) );
-            if ( !empty( $location_grid_properties )) {
-                foreach ($location_grid_properties as $value) {
-                    foreach ($value as $k => $v) {
+            if ( !empty( $location_grid_properties ) ) {
+                foreach ( $location_grid_properties as $value ) {
+                    foreach ( $value as $k => $v ) {
                         $data['list'][$value['grid_id']][$k] = $v;
                     }
                 }
@@ -610,7 +610,7 @@ class DT_Network_Dashboard_Metrics_Base {
         global $wpdb;
         $hash = hash( 'sha256', maybe_serialize( $filters ) );
 
-        if (wp_cache_get( __METHOD__, $hash )) {
+        if ( wp_cache_get( __METHOD__, $hash ) ) {
             return wp_cache_get( __METHOD__, $hash );
         }
 
@@ -774,35 +774,35 @@ class DT_Network_Dashboard_Metrics_Base {
         return $stats;
     }
 
-    public static function format_location_grid_types( $query) {
-        if ( !empty( $query ) || !is_array( $query )) {
-            foreach ($query as $index => $value) {
-                if (isset( $value['grid_id'] )) {
+    public static function format_location_grid_types( $query ) {
+        if ( !empty( $query ) || !is_array( $query ) ) {
+            foreach ( $query as $index => $value ) {
+                if ( isset( $value['grid_id'] ) ) {
                     $query[$index]['grid_id'] = (int) $value['grid_id'];
                 }
-                if (isset( $value['population'] )) {
+                if ( isset( $value['population'] ) ) {
                     $query[$index]['population'] = (int) $value['population'];
                     $query[$index]['population_formatted'] = number_format( (int) $value['population'] );
                 }
-                if (isset( $value['latitude'] )) {
+                if ( isset( $value['latitude'] ) ) {
                     $query[$index]['latitude'] = (float) $value['latitude'];
                 }
-                if (isset( $value['longitude'] )) {
+                if ( isset( $value['longitude'] ) ) {
                     $query[$index]['longitude'] = (float) $value['longitude'];
                 }
-                if (isset( $value['parent_id'] )) {
+                if ( isset( $value['parent_id'] ) ) {
                     $query[$index]['parent_id'] = (float) $value['parent_id'];
                 }
-                if (isset( $value['admin0_grid_id'] )) {
+                if ( isset( $value['admin0_grid_id'] ) ) {
                     $query[$index]['admin0_grid_id'] = (float) $value['admin0_grid_id'];
                 }
-                if (isset( $value['admin1_grid_id'] )) {
+                if ( isset( $value['admin1_grid_id'] ) ) {
                     $query[$index]['admin1_grid_id'] = (float) $value['admin1_grid_id'];
                 }
-                if (isset( $value['admin2_grid_id'] )) {
+                if ( isset( $value['admin2_grid_id'] ) ) {
                     $query[$index]['admin2_grid_id'] = (float) $value['admin2_grid_id'];
                 }
-                if (isset( $value['admin3_grid_id'] )) {
+                if ( isset( $value['admin3_grid_id'] ) ) {
                     $query[$index]['admin3_grid_id'] = (float) $value['admin3_grid_id'];
                 }
             }
@@ -838,9 +838,9 @@ class DT_Network_Dashboard_Metrics_Base {
      *
      * @return array
      */
-    public static function get_day_list( $number_of_days = 60) {
+    public static function get_day_list( $number_of_days = 60 ) {
         $d = [];
-        for ($i = 0; $i < $number_of_days; $i++) {
+        for ( $i = 0; $i < $number_of_days; $i++ ) {
             $d[gmdate( "Y-m-d", strtotime( '-' . $i . ' days' ) )] = [
                 'date' => gmdate( "Y-m-d", strtotime( '-' . $i . ' days' ) ),
                 'value' => 0,
@@ -858,9 +858,9 @@ class DT_Network_Dashboard_Metrics_Base {
      *
      * @return array
      */
-    public static function get_month_list( $number_of_months = 25) {
+    public static function get_month_list( $number_of_months = 25 ) {
         $d = [];
-        for ($i = 0; $i < $number_of_months; $i++) {
+        for ( $i = 0; $i < $number_of_months; $i++ ) {
             $d[gmdate( "Y-m", strtotime( '-' . $i . ' months' ) ) . '-01'] = [
                 'date' => gmdate( "Y-m", strtotime( '-' . $i . ' months' ) ) . '-01',
                 'value' => 0,
@@ -874,14 +874,14 @@ class DT_Network_Dashboard_Metrics_Base {
         $dates2 = [];
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
         // extract days
-        foreach ($sites as $key => $site) {
-            foreach ($site[$type]['added']['sixty_days'] as $day) {
-                if (isset( $dates1[$day['date']]['value'] ) && $day['value']) {
+        foreach ( $sites as $key => $site ) {
+            foreach ( $site[$type]['added']['sixty_days'] as $day ) {
+                if ( isset( $dates1[$day['date']]['value'] ) && $day['value'] ) {
                     $dates1[$day['date']]['value'] = $dates1[$day['date']]['value'] + $day['value'];
                 }
             }
@@ -889,26 +889,26 @@ class DT_Network_Dashboard_Metrics_Base {
 
         arsort( $dates1 );
 
-        foreach ($dates1 as $d) {
+        foreach ( $dates1 as $d ) {
             $dates2[] = $d;
         }
 
         return $dates2;
     }
 
-    public static function compile_by_months( $type) {
+    public static function compile_by_months( $type ) {
         $dates1 = self::get_month_list( 25 );
         $dates2 = [];
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
         // extract months
-        foreach ($sites as $key => $site) {
-            foreach ($site[$type]['added']['twenty_four_months'] as $day) {
-                if (isset( $dates1[$day['date']]['value'] ) && $day['value']) {
+        foreach ( $sites as $key => $site ) {
+            foreach ( $site[$type]['added']['twenty_four_months'] as $day ) {
+                if ( isset( $dates1[$day['date']]['value'] ) && $day['value'] ) {
                     $dates1[$day['date']]['value'] = $dates1[$day['date']]['value'] + $day['value'];
                 }
             }
@@ -916,7 +916,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
         arsort( $dates1 );
 
-        foreach ($dates1 as $d) {
+        foreach ( $dates1 as $d ) {
             $dates2[] = $d;
         }
 
@@ -928,14 +928,14 @@ class DT_Network_Dashboard_Metrics_Base {
         $dates2 = [];
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
         // extract days
-        foreach ($sites as $key => $site) {
-            foreach ($site['contacts']['baptisms']['added']['sixty_days'] as $day) {
-                if (isset( $dates1[$day['date']]['value'] ) && $day['value']) {
+        foreach ( $sites as $key => $site ) {
+            foreach ( $site['contacts']['baptisms']['added']['sixty_days'] as $day ) {
+                if ( isset( $dates1[$day['date']]['value'] ) && $day['value'] ) {
                     $dates1[$day['date']]['value'] = $dates1[$day['date']]['value'] + $day['value'];
                 }
             }
@@ -943,7 +943,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
         arsort( $dates1 );
 
-        foreach ($dates1 as $d) {
+        foreach ( $dates1 as $d ) {
             $dates2[] = $d;
         }
 
@@ -955,14 +955,14 @@ class DT_Network_Dashboard_Metrics_Base {
         $dates2 = [];
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
         // extract months
-        foreach ($sites as $key => $site) {
-            foreach ($site['contacts']['baptisms']['added']['twenty_four_months'] as $day) {
-                if (isset( $dates1[$day['date']]['value'] ) && $day['value']) {
+        foreach ( $sites as $key => $site ) {
+            foreach ( $site['contacts']['baptisms']['added']['twenty_four_months'] as $day ) {
+                if ( isset( $dates1[$day['date']]['value'] ) && $day['value'] ) {
                     $dates1[$day['date']]['value'] = $dates1[$day['date']]['value'] + $day['value'];
                 }
             }
@@ -970,7 +970,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
         arsort( $dates1 );
 
-        foreach ($dates1 as $d) {
+        foreach ( $dates1 as $d ) {
             $dates2[] = $d;
         }
 
@@ -982,14 +982,14 @@ class DT_Network_Dashboard_Metrics_Base {
         $dates2 = [];
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
         // extract days
-        foreach ($sites as $key => $site) {
-            foreach ($site['users']['login_activity']['sixty_days'] as $day) {
-                if (isset( $dates1[$day['date']]['value'] ) && $day['value']) {
+        foreach ( $sites as $key => $site ) {
+            foreach ( $site['users']['login_activity']['sixty_days'] as $day ) {
+                if ( isset( $dates1[$day['date']]['value'] ) && $day['value'] ) {
                     $dates1[$day['date']]['value'] = $dates1[$day['date']]['value'] + $day['value'];
                 }
             }
@@ -997,7 +997,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
         arsort( $dates1 );
 
-        foreach ($dates1 as $d) {
+        foreach ( $dates1 as $d ) {
             $dates2[] = $d;
         }
 
@@ -1009,14 +1009,14 @@ class DT_Network_Dashboard_Metrics_Base {
         $dates2 = [];
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
         // extract months
-        foreach ($sites as $key => $site) {
-            foreach ($site['users']['login_activity']['twenty_four_months'] as $day) {
-                if (isset( $dates1[$day['date']]['value'] ) && $day['value']) {
+        foreach ( $sites as $key => $site ) {
+            foreach ( $site['users']['login_activity']['twenty_four_months'] as $day ) {
+                if ( isset( $dates1[$day['date']]['value'] ) && $day['value'] ) {
                     $dates1[$day['date']]['value'] = $dates1[$day['date']]['value'] + $day['value'];
                 }
             }
@@ -1024,7 +1024,7 @@ class DT_Network_Dashboard_Metrics_Base {
 
         arsort( $dates1 );
 
-        foreach ($dates1 as $d) {
+        foreach ( $dates1 as $d ) {
             $dates2[] = $d;
         }
 
@@ -1035,15 +1035,15 @@ class DT_Network_Dashboard_Metrics_Base {
         $data = [];
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
-        foreach ($sites as $key => $site) {
+        foreach ( $sites as $key => $site ) {
             if ( ! isset( $site['users']['last_thirty_day_engagement'] ) ){
                 continue;
             }
-            foreach ( $site['users']['last_thirty_day_engagement'] as $index => $value) {
+            foreach ( $site['users']['last_thirty_day_engagement'] as $index => $value ) {
                 if ( ! isset( $data[$index] ) ) {
                     $data[$index] = $value;
                     continue;
@@ -1059,15 +1059,15 @@ class DT_Network_Dashboard_Metrics_Base {
         $data = [];
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
-        foreach ($sites as $key => $site) {
+        foreach ( $sites as $key => $site ) {
             if ( ! isset( $site['groups']['church_generations'] ) ){
                 continue;
             }
-            foreach ($site['groups']['church_generations'] as $index => $gen) {
+            foreach ( $site['groups']['church_generations'] as $index => $gen ) {
                 if ( ! isset( $data[$index] ) ) {
                     $data[$index] = $gen;
                     continue;
@@ -1083,15 +1083,15 @@ class DT_Network_Dashboard_Metrics_Base {
         $data = [];
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
-        foreach ($sites as $key => $site) {
+        foreach ( $sites as $key => $site ) {
             if ( ! isset( $site['groups']['group_generations'] ) ){
                 continue;
             }
-            foreach ($site['groups']['group_generations'] as $index => $gen) {
+            foreach ( $site['groups']['group_generations'] as $index => $gen ) {
                 if ( ! isset( $data[$index] ) ) {
                     $data[$index] = $gen;
                     continue;
@@ -1107,15 +1107,15 @@ class DT_Network_Dashboard_Metrics_Base {
         $data = [];
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
-        foreach ($sites as $key => $site) {
+        foreach ( $sites as $key => $site ) {
             if ( ! isset( $site['contacts']['baptisms']['generations'] ) ){
                 continue;
             }
-            foreach ($site['contacts']['baptisms']['generations'] as $index => $gen) {
+            foreach ( $site['contacts']['baptisms']['generations'] as $index => $gen ) {
                 if ( ! isset( $data[$index] ) ) {
                     $data[$index] = $gen;
                     continue;
@@ -1137,11 +1137,11 @@ class DT_Network_Dashboard_Metrics_Base {
         $data = [];
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
-        foreach ($sites as $key => $site) {
+        foreach ( $sites as $key => $site ) {
             if ( ! isset( $site['users']['current_state']['roles'] ) ){
                 continue;
             }
@@ -1162,11 +1162,11 @@ class DT_Network_Dashboard_Metrics_Base {
         $data['total'] = 0;
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
-        foreach ($sites as $key => $site) {
+        foreach ( $sites as $key => $site ) {
             if ( ! isset( $site['contacts']['current_state']['status'] ) ){
                 continue;
             }
@@ -1193,11 +1193,11 @@ class DT_Network_Dashboard_Metrics_Base {
         $data['total'] = 0;
 
         $sites = self::get_sites();
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
-        foreach ($sites as $key => $site) {
+        foreach ( $sites as $key => $site ) {
             if ( ! isset( $site['groups']['current_state']['active'] ) ){
                 continue;
             }
@@ -1229,22 +1229,22 @@ class DT_Network_Dashboard_Metrics_Base {
             'total_sites' => 0,
             'total_activities' => 0,
         ];
-        if (empty( $sites )) {
+        if ( empty( $sites ) ) {
             return [];
         }
 
-        foreach ($sites as $key => $site) {
+        foreach ( $sites as $key => $site ) {
             $data['total_contacts'] = $data['total_contacts'] + $site['contacts']['current_state']['status']['active'];
             $data['total_groups'] = $data['total_groups'] + $site['groups']['current_state']['total_active'];
             $data['total_users'] = $data['total_users'] + $site['users']['current_state']['total_users'];
 
-            if ( !empty( $site['locations']['current_state']['active_admin0_grid_ids'] )) {
-                foreach ($site['locations']['current_state']['active_admin0_grid_ids'] as $grid_id) {
+            if ( !empty( $site['locations']['current_state']['active_admin0_grid_ids'] ) ) {
+                foreach ( $site['locations']['current_state']['active_admin0_grid_ids'] as $grid_id ) {
                     $data['countries'][$grid_id] = true;
                 }
             }
         }
-        if ( !empty( $data['countries'] )) {
+        if ( !empty( $data['countries'] ) ) {
             $data['total_countries'] = count( $data['countries'] );
         }
 
@@ -1349,7 +1349,7 @@ DT_Network_Dashboard_Metrics_Base::instance();
 class DT_Network_Dashboard_Metrics_Base_Loader extends DT_Network_Dashboard_Metrics_Base {
     private static $_instance = null;
     public static function instance() {
-        if (is_null( self::$_instance )) {
+        if ( is_null( self::$_instance ) ) {
             self::$_instance = new self();
         }
         return self::$_instance;

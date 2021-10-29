@@ -1,6 +1,6 @@
 <?php
 
-if (defined( 'ABSPATH' )) {
+if ( defined( 'ABSPATH' ) ) {
     exit;
 }
 
@@ -48,32 +48,32 @@ define( 'DOING_AJAX', true );
 define( 'SHORTINIT', 1 );
 
 /**** LOAD NEEDED FILES *****/
-if ( !isset( $_SERVER['DOCUMENT_ROOT'] )) {
+if ( !isset( $_SERVER['DOCUMENT_ROOT'] ) ) {
     _dt_network_doing_it_wrong( 'missing server info' );
 }
 require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php'; //@phpcs:ignore
 require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-includes/post.php'; //@phpcs:ignore
 require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-includes/meta.php'; //@phpcs:ignore
 
-if ( !defined( 'WP_CONTENT_URL' )) {
+if ( !defined( 'WP_CONTENT_URL' ) ) {
     define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . '/wp-content' );
 }
 
 require_once( '../logging/activity-log.php' );
 
 $mapping_path = ABSPATH . 'wp-content/themes/disciple-tools-theme/dt-mapping/';
-if (file_exists( $mapping_path . 'geocode-api/location-grid-geocoder.php' )) {
+if ( file_exists( $mapping_path . 'geocode-api/location-grid-geocoder.php' ) ) {
     require_once( $mapping_path. 'geocode-api/location-grid-geocoder.php' ); // Location grid geocoder
 } else {
     _dt_network_doing_it_wrong( 'did not find geocoder file' );
 }
-if (file_exists( $mapping_path . 'geocode-api/ipstack-api.php' )) {
+if ( file_exists( $mapping_path . 'geocode-api/ipstack-api.php' ) ) {
     require_once( $mapping_path. 'geocode-api/ipstack-api.php' ); // Location grid geocoder
 } else {
     _dt_network_doing_it_wrong( 'did not find ipstack file' );
 }
 $theme_path = ABSPATH . 'wp-content/themes/disciple-tools-theme/';
-if (file_exists( $theme_path . 'dt-core/admin/site-link-post-type.php' )) {
+if ( file_exists( $theme_path . 'dt-core/admin/site-link-post-type.php' ) ) {
     require_once( $theme_path. 'dt-core/admin/site-link-post-type.php' ); // Location grid geocoder
 } else {
     _dt_network_doing_it_wrong( 'did not find site linking file' );

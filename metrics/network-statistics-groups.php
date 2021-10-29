@@ -54,7 +54,7 @@ class DT_Network_Dashboard_Metrics_Statistics_Groups extends DT_Network_Dashboar
         return $tree;
     }
 
-    public function add_url( $template_for_url) {
+    public function add_url( $template_for_url ) {
         $template_for_url[$this->url] = 'template-metrics.php';
         return $template_for_url;
     }

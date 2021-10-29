@@ -36,7 +36,7 @@ if ( ! function_exists( 'dt_network_site_profile' ) ) {
 if ( ! function_exists( 'dt_network_site_id' ) ) {
     function dt_network_site_id() {
         $site_id = get_option( 'dt_site_id' );
-        if (empty( $site_id )) {
+        if ( empty( $site_id ) ) {
             $site_id = hash( 'sha256', bin2hex( random_bytes( 40 ) ) );
             add_option( 'dt_site_id', $site_id, '', 'yes' );
         }
@@ -173,7 +173,7 @@ class DT_Network_Dashboard_Site_Link_Metabox {
         $partner_profile = dt_network_site_profile();
 
         // process post action
-        if (isset( $_POST['partner_profile_form'] )
+        if ( isset( $_POST['partner_profile_form'] )
             && isset( $_POST['_wpnonce'] )
             && wp_verify_nonce( sanitize_text_field( wp_unslash( $_POST['_wpnonce'] ) ), 'partner_profile' . get_current_user_id() )
             && isset( $_POST['partner_name'] )

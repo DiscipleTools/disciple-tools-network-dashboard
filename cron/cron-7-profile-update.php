@@ -13,7 +13,7 @@
 /**
  * Scheduled Cron Service
  */
-if ( !wp_next_scheduled( 'dt_network_dashboard_profile_update' )) {
+if ( !wp_next_scheduled( 'dt_network_dashboard_profile_update' ) ) {
     wp_schedule_event( strtotime( 'tomorrow 6 am' ), 'daily', 'dt_network_dashboard_profile_update' );
 }
 add_action( 'dt_network_dashboard_profile_update', 'dt_network_dashboard_profiles_update' );
@@ -26,7 +26,7 @@ function dt_network_dashboard_profiles_update() {
 
     $file = 'profile-collection';
 
-    if ( !dt_is_todays_log( $file )) {
+    if ( !dt_is_todays_log( $file ) ) {
         dt_reset_log( $file );
 
         dt_save_log( $file, '', false );
@@ -39,14 +39,14 @@ function dt_network_dashboard_profiles_update() {
 
     // Get list of sites
     $sites = DT_Network_Dashboard_Site_Post_Type::all_sites();
-    if (empty( $sites )) {
+    if ( empty( $sites ) ) {
         dt_save_log( $file, 'No sites found to collect.', false );
         return false;
     }
 
     // Remote Profile Collection
-    foreach ($sites as $site) {
-        if ($site['id'] === get_current_blog_id()) {
+    foreach ( $sites as $site ) {
+        if ( $site['id'] === get_current_blog_id() ) {
             continue;
         }
         if ( $site['type'] === 'multisite' ){
@@ -58,10 +58,10 @@ function dt_network_dashboard_profiles_update() {
     }
 
     /* Multisite Collection */
-    if (dt_is_current_multisite_dashboard_approved()) {
+    if ( dt_is_current_multisite_dashboard_approved() ) {
         // collect multisite
-        foreach ($sites as $site) {
-            if ( $site['id'] === get_current_blog_id()) {
+        foreach ( $sites as $site ) {
+            if ( $site['id'] === get_current_blog_id() ) {
                 continue;
             }
             if ( $site['type'] === 'remote' ){

@@ -40,7 +40,7 @@ class DT_Network_Dashboard_Migration_0002 extends DT_Network_Dashboard_Migration
                 ) $charset_collate;",
         );
 
-        foreach ( $query as $name => $table) {
+        foreach ( $query as $name => $table ) {
             $rv = $wpdb->query( $table ); // WPCS: unprepared SQL OK
         }
     }

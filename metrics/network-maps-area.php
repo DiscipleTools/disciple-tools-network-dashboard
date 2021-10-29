@@ -139,7 +139,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         return $tree;
     }
 
-    public function add_url( $template_for_url) {
+    public function add_url( $template_for_url ) {
 //        $template_for_url[$this->url] = 'template-metrics.php';
         $template_for_url[$this->url.'/contacts'] = 'template-metrics.php';
         $template_for_url[$this->url.'/groups'] = 'template-metrics.php';

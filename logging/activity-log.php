@@ -1,5 +1,5 @@
 <?php
-if ( ! defined( 'ABSPATH' )) {
+if ( ! defined( 'ABSPATH' ) ) {
     exit;
 }
 
@@ -266,7 +266,7 @@ class DT_Network_Activity_Log {
                         $data['level'] = $grid_response['level_name'];
                         $data['grid_id'] = $grid_response['grid_id'];
 
-                        switch ($grid_response['level_name']) {
+                        switch ( $grid_response['level_name'] ) {
                             case 'admin5':
                             case 'admin4':
                             case 'admin3':
@@ -322,7 +322,7 @@ class DT_Network_Activity_Log {
                         $data['payload']['country'] = $grid_response['admin0_name'];
 
                         if ( empty( $data['label'] ) ) {
-                            switch ($grid_response['level_name']) {
+                            switch ( $grid_response['level_name'] ) {
                                 case 'admin5':
                                 case 'admin4':
                                 case 'admin3':

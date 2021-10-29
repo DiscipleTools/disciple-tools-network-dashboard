@@ -46,7 +46,7 @@ if ( ! dt_network_dashboard_has_metrics_permissions() ){
 // test if within url /network
 $url_path = dt_get_url_path();
 $is_rest = dt_is_rest();
-if ('network' !== substr( $url_path, '0', 7 ) && ! $is_rest ) {
+if ( 'network' !== substr( $url_path, '0', 7 ) && ! $is_rest ) {
     return;
 }
 
@@ -57,7 +57,7 @@ require_once( 'mapping-module-config.php' );
 // scan load
 $dir = scandir( __DIR__ );
 foreach ( $dir as $file ){
-    if ( 'network' === substr( $file, 0, 7 ) && 'php' === substr( $file, -3, 3 )){
+    if ( 'network' === substr( $file, 0, 7 ) && 'php' === substr( $file, -3, 3 ) ){
         require_once( $file );
     }
 }
