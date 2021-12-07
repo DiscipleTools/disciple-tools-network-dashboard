@@ -384,7 +384,7 @@ class DT_Network_Activity_Log {
                     continue 2;
             }
 
-            $data['payload'] = serialize( $data['payload'] );
+            $data['payload'] = maybe_serialize( $data['payload'] );
 
             $data['hash'] = hash( 'sha256', serialize( $data ) );
 
@@ -459,6 +459,91 @@ class DT_Network_Activity_Log {
         do_action( 'dt_network_dashboard_post_activity_log_insert' );
 
         return $process_status;
+    }
+
+    public static function insert( $record ) {
+        global $wpdb;
+
+        $hash = hash( 'sha256', maybe_serialize( $record ) );
+
+        $args = wp_parse_args(
+            $record,
+            [
+                'site_id' => null,
+                'site_record_id' => null,
+                'site_object_id' => null,
+                'action' => null,
+                'category' => null,
+                'lng' => null,
+                'lat' => null,
+                'level' => null,
+                'label' => null,
+                'grid_id' => null,
+                'payload' => [
+                    'language_code' => get_locale()
+                ],
+                'timestamp' => time(),
+                'hash' => $hash,
+            ]
+        );
+
+        // Make sure for non duplicate.
+        $check_duplicate = $wpdb->get_row(
+            $wpdb->prepare(
+                "SELECT
+                    `id`
+                FROM
+                    `$wpdb->dt_movement_log`
+                WHERE hash = %s;",
+                $hash
+            )
+        );
+
+        if ( $check_duplicate ) {
+            return false;
+        }
+
+        if ( is_array( $args['payload'] ) ) {
+            $args['payload'] = maybe_serialize( $args['payload'] );
+        }
+
+        $wpdb->insert(
+            $wpdb->dt_movement_log,
+            [
+                'site_id' => $args['site_id'],
+                'site_record_id' => $args['site_record_id'],
+                'site_object_id' => $args['site_object_id'],
+                'action' => $args['action'],
+                'category' => $args['category'],
+                'lng' => $args['lng'],
+                'lat' => $args['lat'],
+                'level' => $args['level'],
+                'label' => $args['label'],
+                'grid_id' => $args['grid_id'],
+                'payload' => $args['payload'],
+                'timestamp' => time(),
+                'hash' => $hash,
+            ],
+            [
+                '%s', // site_id
+                '%d', // site_record_id
+                '%d', // site_object_id
+                '%s', // action
+                '%s', // category
+                '%f', // lng
+                '%f', // lat
+                '%s', // level
+                '%s', // label
+                '%d', // grid_id
+                '%s', // payload
+                '%d', // timestamp
+                '%s', // hash
+            ]
+        );
+
+        $log_id = $wpdb->insert_id;
+
+        return $log_id;
     }
 
     public static function transfer_insert( array $record ) {
@@ -557,6 +642,13 @@ class DT_Network_Activity_Log {
             $index = 0;
             foreach ( $results as $value ){
                 if ( ! in_array( $value['site_object_id'], $converted ) ){
+                    if ( is_array( $value["payload"] ) ) {
+                        $value["payload"] = maybe_serialize( $value["payload"] );
+                    }
+                    else if ( ! is_serialized( $value["payload"] ) ) {
+                        $value["payload"] = maybe_serialize( $value["payload"] );
+                    }
+
                     $index++;
                     $query .= $wpdb->prepare( "( %s, %s, %s, %s, %s, %f, %f, %s, %s, %d, %s, %s, %s ), ",
                         $value["site_id"],
@@ -569,7 +661,7 @@ class DT_Network_Activity_Log {
                         $value["level"],
                         $value["label"],
                         $value["grid_id"],
-                        maybe_serialize( $value["payload"] ),
+                        $value["payload"],
                         $value["timestamp"],
                         $value["hash"]
                     );
@@ -638,7 +730,7 @@ class DT_Network_Activity_Log {
                     ],
                     'timestamp' => $value['timestamp'],
                 ];
-                $data['payload'] = serialize( $data['payload'] );
+                $data['payload'] = maybe_serialize( $data['payload'] );
                 $data['hash'] = hash( 'sha256', serialize( $data ) );
 
                 $query .= $wpdb->prepare( "( %s, %s, %s, %s, %s, %f, %f, %s, %s, %d, %s, %s, %s ), ",
