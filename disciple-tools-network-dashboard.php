@@ -5,7 +5,7 @@
  * Description: Connect this Disciple.Tools site to a larger network of sites. Adds security sensitive totals, mapping, activity logging.
  * Text Domain: disciple-tools-network-dashboard
  * Domain Path: /languages
- * Version: 2.6
+ * Version: 2.6.1
  * Author URI: https://github.com/DiscipleTools
  * GitHub Plugin URI: https://github.com/DiscipleTools/disciple-tools-network-dashboard
  * Requires at least: 4.7.0
@@ -476,7 +476,7 @@ add_action( 'plugins_loaded', function (){
         }
         if ( class_exists( 'Puc_v4_Factory' ) ){
             Puc_v4_Factory::buildUpdateChecker(
-                'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-version-control/master/disciple-tools-network-dashboard-version-control.json',
+                'https://raw.githubusercontent.com/DiscipleTools/disciple-tools-network-dashboard/master/version-control.json',
                 __FILE__,
                 'disciple-tools-network-dashboard'
             );
