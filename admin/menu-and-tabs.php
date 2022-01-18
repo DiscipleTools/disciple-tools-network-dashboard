@@ -221,8 +221,10 @@ class DT_Network_Dashboard_Tab_Profile
             $tab = sanitize_text_field( wp_unslash( $_POST['tab'] ) );
             update_option( 'dt_network_dashboard_show_tab', $tab, true );
 
-            $dedicated = sanitize_text_field( wp_unslash( $_POST['dedicated'] ) );
-            update_option( 'dt_network_dashboard_dedicated', $dedicated, true );
+            if ( isset( $_POST['dedicated'] ) ){
+                $dedicated = sanitize_text_field( wp_unslash( $_POST['dedicated'] ) );
+                update_option( 'dt_network_dashboard_dedicated', $dedicated, true );
+            }
         }
         $tab = get_option( 'dt_network_dashboard_show_tab' );
         $dedicated = get_option( 'dt_network_dashboard_dedicated' );
@@ -784,7 +786,7 @@ class DT_Network_Dashboard_Tab_Outgoing
                                 continue;
                             }
 
-                            if ('multisite' === $site['type'] && in_array( $site['type_id'], $multisites ) && in_array( $site['type_id'], $approved_sites_ids ) ) {
+                            if ( 'multisite' === $site['type'] && in_array( $site['type_id'], $multisites ) && in_array( $site['type_id'], $approved_sites_ids ) ) {
                                 $i++;
                                 ?>
                                 <tr>
