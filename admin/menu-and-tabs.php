@@ -124,6 +124,11 @@ class DT_Network_Dashboard_Menu {
                     Outgoing
                 </a>
 
+                <a href="<?php echo esc_attr( $link ) . 'webhooks' ?>" class="nav-tab
+                <?php echo ( $tab == 'webhooks' ) ? esc_attr( 'nav-tab-active' ) : ''; ?>">
+                    Webhook
+                </a>
+
                 <a href="<?php echo esc_attr( $link ) . 'system' ?>" class="nav-tab
                 <?php echo ( $tab == 'system' ) ? esc_attr( 'nav-tab-active' ) : ''; ?>">
                     System
@@ -141,7 +146,7 @@ class DT_Network_Dashboard_Menu {
             </h2>
 
             <?php
-            switch ( $tab ) {
+            switch ($tab) {
                 case "profile":
                     $object = new DT_Network_Dashboard_Tab_Profile();
                     $object->content();
@@ -156,6 +161,10 @@ class DT_Network_Dashboard_Menu {
                     break;
                 case "outgoing":
                     $object = new DT_Network_Dashboard_Tab_Outgoing();
+                    $object->content();
+                    break;
+                case "webhooks":
+                    $object = new DT_Network_Dashboard_Tab_Webhooks();
                     $object->content();
                     break;
                 case "system":
@@ -212,10 +221,8 @@ class DT_Network_Dashboard_Tab_Profile
             $tab = sanitize_text_field( wp_unslash( $_POST['tab'] ) );
             update_option( 'dt_network_dashboard_show_tab', $tab, true );
 
-            if ( isset( $_POST['dedicated'] ) ){
-                $dedicated = sanitize_text_field( wp_unslash( $_POST['dedicated'] ) );
-                update_option( 'dt_network_dashboard_dedicated', $dedicated, true );
-            }
+            $dedicated = sanitize_text_field( wp_unslash( $_POST['dedicated'] ) );
+            update_option( 'dt_network_dashboard_dedicated', $dedicated, true );
         }
         $tab = get_option( 'dt_network_dashboard_show_tab' );
         $dedicated = get_option( 'dt_network_dashboard_dedicated' );
@@ -314,7 +321,7 @@ class DT_Network_Dashboard_Tab_Profile
                                     else if ( is_multisite() && 'multisite' === $site['type'] && dt_network_dashboard_multisite_is_approved() && 'reject' !== $site['receive_activity'] ) {
                                         echo '<div class="row"><span class="nd-site-box multisite">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
-                                    else if ( 'network_dashboard_receiving' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'reject' !== $site['receive_activity'] ) {
+                                    else if ('network_dashboard_receiving' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'reject' !== $site['receive_activity'] ) {
                                         echo '<div class="row"><span class="nd-site-box remote">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
                                 }
@@ -348,7 +355,7 @@ class DT_Network_Dashboard_Tab_Profile
                                     else if ( is_multisite() && 'multisite' === $site['type'] && dt_network_dashboard_multisite_is_approved() && 'none' !== $site['send_activity'] && in_array( $site['type_id'], $approved_sites_ids ) ) {
                                         echo '<div class="row"><span class="nd-site-box multisite">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
-                                    else if ( 'network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'none' !== $site['send_activity'] ) {
+                                    else if ('network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'none' !== $site['send_activity'] ) {
                                         echo '<div class="row"><span class="nd-site-box remote">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
                                 }
@@ -673,7 +680,7 @@ class DT_Network_Dashboard_Tab_Outgoing
 
             if ( isset( $_POST['send_activity'] ) && ! empty( $_POST['send_activity'] ) && is_array( $_POST['send_activity'] ) ) {
                 $send_activity = dt_recursive_sanitize_array( $_POST['send_activity'] ); // @phpcs:ignore
-                foreach ( $send_activity as $i => $v ) {
+                foreach ($send_activity as $i => $v ) {
                     DT_Network_Dashboard_Site_Post_Type::update_send_activity( sanitize_text_field( wp_unslash( $i ) ), sanitize_text_field( wp_unslash( $v ) ) );
                 }
             }
@@ -702,7 +709,7 @@ class DT_Network_Dashboard_Tab_Outgoing
         <tr>
             <td>
             <?php
-            if ( !is_array( $sites ) ) :
+            if ( !is_array( $sites )) :
                 ?>
                 No site links found. Go to <a href="<?php echo esc_url( admin_url() ) ?>edit.php?post_type=site_link_system">Site Links</a> and create a site link, and then select "Network Report" as the type.
                 <?php
@@ -721,7 +728,7 @@ class DT_Network_Dashboard_Tab_Outgoing
                         <?php
                         $i = 0;
                         foreach ( $sites as $site ) {
-                            if ( 'network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] ) {
+                            if ('network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] ) {
                                 $i++;
                                 ?>
                                 <tr>
@@ -744,7 +751,7 @@ class DT_Network_Dashboard_Tab_Outgoing
                                 <?php
                             }
                         }
-                        if ( 0 === $i ) {
+                        if (0 === $i ) {
                             ?>
                             <tr>
                                 <td>No sites found</td>
@@ -777,7 +784,7 @@ class DT_Network_Dashboard_Tab_Outgoing
                                 continue;
                             }
 
-                            if ( 'multisite' === $site['type'] && in_array( $site['type_id'], $multisites ) && in_array( $site['type_id'], $approved_sites_ids ) ) {
+                            if ('multisite' === $site['type'] && in_array( $site['type_id'], $multisites ) && in_array( $site['type_id'], $approved_sites_ids ) ) {
                                 $i++;
                                 ?>
                                 <tr>
@@ -824,6 +831,321 @@ class DT_Network_Dashboard_Tab_Outgoing
     }
 }
 
+/**
+ * Class DT_Network_Dashboard_Tab_Webhooks
+ */
+class DT_Network_Dashboard_Tab_Webhooks
+{
+    public function content() {
+        DT_Network_Dashboard_Snapshot::snapshot_report();
+        ?>
+        <div class="wrap">
+            <div id="poststuff">
+                <div id="post-body" class="metabox-holder columns-2">
+                    <div id="post-body-content">
+                        <!-- Main Column -->
+
+                        <?php $this->box_webhooks() ?>
+
+                        <!-- End Main Column -->
+                    </div><!-- end post-body-content -->
+                    <div id="postbox-container-1" class="postbox-container">
+                        <!-- Right Column -->
+
+                        <?php $this->box_instructions() ?>
+
+                        <!-- End Right Column -->
+                    </div><!-- postbox-container 1 -->
+                    <div id="postbox-container-2" class="postbox-container">
+                    </div><!-- postbox-container 2 -->
+                </div><!-- post-body meta box container -->
+            </div><!--poststuff end -->
+        </div><!-- wrap end -->
+        <script type="text/javascript">
+            function handleWebhookAccessTokenShowChange(checkbox) {
+                const type = checkbox.checked ? "text" : "password";
+                document.getElementById("<?php echo $this->WEBHOOK_ACCESS_TOKEN ?>").setAttribute("type", type);
+            }
+            function handleWebhookScheduleChange() {
+                /* TODO
+                const selectedIndex = document.getElementById("<?php echo $this->WEBHOOK_SCHEDULE?>").selectedIndex;
+                const value = document.getElementById("<?php echo $this->WEBHOOK_SCHEDULE?>").options[selectedIndex].value;
+                console.log(`value: ${ value }`);
+                // if custom, add a new field for dynamic entry
+                */
+            }
+        </script>
+        <?php
+    }
+	
+    public function console(): void {
+        echo '<script> console.error('.json_encode(func_get_args(), JSON_HEX_TAG).'); </script>';
+    }
+
+    private $PLUGIN_PREFIX              = 'dt_network_dashboard';
+    private $WEBHOOK_NONCE              = 'webhook_nonce';
+    private $WEBHOOK_ENDPOINT_URL       = 'webhook_endpoint_url';
+    private $WEBHOOK_ACCESS_TOKEN       = 'webhook_access_token';
+    private $WEBHOOK_SCHEDULE           = 'webhook_schedule';
+    private $WEBHOOK_SCHEDULE_ENABLED   = 'webhook_schedule_enabled';
+    private $WEBHOOK_CONFIG             = 'webhook_config';
+    private $WEBHOOK_UPDATE             = 'webhook_update';
+    private $WEBHOOK_SEND_NOW           = 'webhook_send_now';
+
+    private function get_webhook_endpoint_url() {
+        return get_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_ENDPOINT_URL );
+    }
+
+    private function set_webhook_endpoint_url( $url ) {
+        update_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_ENDPOINT_URL, $url );
+    }
+
+    private function get_webhook_access_token() {
+        return get_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_ACCESS_TOKEN );
+    }
+
+    private function set_webhook_access_token( $token ) {
+        update_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_ACCESS_TOKEN, $token );
+    }
+
+    private function get_webhook_schedule() {
+        return get_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_SCHEDULE );
+    }
+
+    private function set_webhook_schedule( $schedule ) {
+        update_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_SCHEDULE, $schedule );
+    }
+
+    private function get_webhook_schedule_enabled() {
+        return get_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_SCHEDULE_ENABLED );
+    }
+
+    private function set_webhook_schedule_enabled( $enabled ) {
+        $hook_name = 'dt_network_dashboard_webhook_schedule_daily';
+        $callback = 'dt_network_dashboard_push_webhooks';
+	if ( ! $enabled ) {
+            // unschedule previous
+            $timestamp = wp_next_scheduled( $hook_name );
+            if ( $timestamp ) {
+                wp_unschedule_event( $timestamp, $hook_name );
+                //wp_clear_scheduled_hook( $hook_name );
+            }
+            /* TODO: move to plugin uninstall
+            if ( has_action ( $hook_name ) ) {
+                remove_action( $hook_name );
+            }
+             */
+            $enabled = false;
+            $url = $this->get_webhook_endpoint_url();
+            $token = $this->get_webhook_access_token();
+            $webhook_config[] = array(
+                'enabled' => $enabled,
+                'url' => $url,
+                'token' => $token
+            );
+            // NOTE: current version is only supporting a single webhook
+            $this->set_webhook_config( $webhook_config );
+            update_option ( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_SCHEDULE_ENABLED, false );
+        } else {
+            // schedule new 
+            if ( ! has_action ( $hook_name ) ) {
+                $this->console( 'ADD THE ACTION', $hook_name );
+                add_action( $hook_name, $callback );
+            }
+            if ( !wp_next_scheduled( $hook_name ) ) {
+                //wp_schedule_event( strtotime( 'tomorrow 3am' ), 'daily', $hook );
+                wp_schedule_single_event( strtotime( '+11 minutes' ), $hook_name );
+            }
+            $enabled = true;
+            $url = $this->get_webhook_endpoint_url();
+            $token = $this->get_webhook_access_token();
+            $webhook_config[] = array(
+                'enabled' => $enabled,
+                'url' => $url,
+                'token' => $token
+            );
+            // NOTE: current version is only supporting a single webhook
+            $this->set_webhook_config( $webhook_config );
+            update_option ( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_SCHEDULE_ENABLED, true );
+        }
+    }
+
+    private function set_webhook_config( $webhook_config ) {
+        $this->console( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_CONFIG, $webhook_config );
+        update_option ( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_CONFIG, $webhook_config );
+    }
+
+    public function box_webhooks() {
+        //$link = 'admin.php?page='.$this->token.'&tab=';
+        if ( isset( $_POST[$this->WEBHOOK_NONCE] ) && wp_verify_nonce(  $_POST[$this->WEBHOOK_NONCE], $this->WEBHOOK_NONCE . '_' . get_current_user_id() ) ) {
+            if ( isset( $_POST[$this->WEBHOOK_ENDPOINT_URL] ) && isset( $_POST[$this->WEBHOOK_UPDATE] ) ) {
+                $this->console( 'WEBHOOK_ENDPOINT_URL', $_POST[$this->WEBHOOK_ENDPOINT_URL] );
+                $this->set_webhook_endpoint_url( $_POST[$this->WEBHOOK_ENDPOINT_URL] );
+            }
+            if ( isset( $_POST[$this->WEBHOOK_ACCESS_TOKEN] ) && isset( $_POST[$this->WEBHOOK_UPDATE] ) ) {
+                $this->console( 'WEBHOOK_ACCESS_TOKEN', $_POST[$this->WEBHOOK_ACCESS_TOKEN] );
+                $this->set_webhook_access_token( sanitize_text_field( wp_unslash( $_POST[$this->WEBHOOK_ACCESS_TOKEN] ) ) );  
+            }
+            if ( isset( $_POST[$this->WEBHOOK_SCHEDULE] ) && ! empty( $_POST[$this->WEBHOOK_SCHEDULE] ) && isset( $_POST[$this->WEBHOOK_UPDATE] ) ) {
+                $this->console( 'WEBHOOK_SCHEDULE', $_POST[$this->WEBHOOK_SCHEDULE] );
+                $this->set_webhook_schedule( $_POST[$this->WEBHOOK_SCHEDULE] );  
+            }
+            if ( isset( $_POST[$this->WEBHOOK_SCHEDULE_ENABLED] ) && isset( $_POST[$this->WEBHOOK_UPDATE] ) )  {
+                if ( is_admin() ) {
+                    $this->console( 'WEBHOOK_SCHEDULE_ENABLED', true );
+                    $this->set_webhook_schedule_enabled( true );  
+                }
+            }
+            if ( !isset( $_POST[$this->WEBHOOK_SCHEDULE_ENABLED] ) && isset( $_POST[$this->WEBHOOK_UPDATE] ) )  {
+                if ( is_admin() ) {
+                    $this->console( 'WEBHOOK_SCHEDULE_ENABLED', false );
+                    $this->set_webhook_schedule_enabled( false );  
+                }
+            }
+            if ( isset( $_POST[$this->WEBHOOK_SEND_NOW] ) ) {
+                $this->console( 'WEBHOOK_SEND_NOW', "yay!" );
+                $hook_name = 'dt_network_dashboard_webhook_schedule_daily';
+                do_action( $hook_name );
+            }
+        }
+        ?>
+        <!-- Box -->
+        <table id=webhooks_table_section" class="widefat striped">
+            <thead>
+                <tr>
+                    <th>Webhook Configuration</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>
+                        <form method="POST">
+                            <?php wp_nonce_field( $this->WEBHOOK_NONCE . '_' . get_current_user_id(), $this->WEBHOOK_NONCE ) ?>
+                            <table class="widefat striped">
+                                <tr>
+                                    <td style="vertical-align: middle;">Endpoint URL</td>
+                                    <td>
+                                    <input type="text" style="min-width: 100%;" id="<?php echo $this->WEBHOOK_ENDPOINT_URL ?>" name="<?php echo $this->WEBHOOK_ENDPOINT_URL ?>" value="<?php echo esc_attr( $this->get_webhook_endpoint_url() ) ?>" />
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;">Access Token</td>
+                                    <td>
+                                    <input type="password" style="min-width: 100%;" id="<?php echo $this->WEBHOOK_ACCESS_TOKEN ?>" name="<?php echo $this->WEBHOOK_ACCESS_TOKEN ?>" value="<?php echo esc_attr( $this->get_webhook_access_token() ) ?>" />
+                                    <input type="checkbox" onchange="handleWebhookAccessTokenShowChange(this);">Show Access Token?</input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;">Schedule</td>
+                                    <td>
+                                    <select onchange="handleWebhookScheduleChange();" id="<?php echo $this->WEBHOOK_SCHEDULE ?>" name="<?php echo $this->WEBHOOK_SCHEDULE ?>" style="min-width: 100%;">
+                                        <?php
+                                        $schedules = wp_get_schedules();
+                                        if ( ! empty( $schedules ) && ! is_wp_error( $schedules ) ) {
+                                            foreach ( $schedules as $option ) {
+                                                $selected_option = $this->get_webhook_schedule();
+                                                if ( !isset ($selected_option ) ) $selected_option = 'Once Daily';
+                                                $selected = ( $option['display'] === $selected_option ) ? 'selected' : '';
+                                                // NOTE: fixed/single option for now to match daily snapshot of Network Dashboard plugin
+                                                if ( $option['display'] === 'Once Daily' ) {
+                                                    // NOTE: using 'display' as the value for simplicity, to enable custom values use the 'interval' (seconds)
+                                                    echo '<option ' . $selected . ' value="' . $option['display'] . '">' . $option['display'] . '</option>';
+                                                }
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                    <input type="checkbox" id="<?php echo $this->WEBHOOK_SCHEDULE_ENABLED ?>" name="<?php echo $this->WEBHOOK_SCHEDULE_ENABLED ?>" <?php echo $this->get_webhook_schedule_enabled() ? 'checked' : '' ?>>Enabled?</input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="vertical-align: middle;">Manual</td>
+                                    <td>
+                                        <button id="<?php echo $this->WEBHOOK_SEND_NOW ?>" name="<?php echo $this->WEBHOOK_SEND_NOW ?>" type="submit" class="button float-right"><?php esc_html_e( "Send data to webhook now", 'disciple_tools' ) ?></button>
+                                    </td>
+                                </tr>
+                            </table>
+                            <br>
+                            <span style="float:right;">
+                                <button id="<?php echo $this->WEBHOOK_UPDATE ?>" name="<?php echo $this->WEBHOOK_UPDATE ?>" type="submit" class="button float-right"><?php esc_html_e( "Update", 'disciple_tools' ) ?></button>
+                            </span>
+                        </form>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+        // TODO
+        echo '<pre>'; print_r( _get_cron_array() ); echo '</pre>';
+    }
+
+    public function box_instructions() {
+        ?>
+        <!-- Box -->
+        <table class="widefat striped">
+            <thead>
+            <th>Webhook Help</th>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    A <a href="https://en.wikipedia.org/wiki/Webhook">Webhook</a> enables D.T to push data, events, notifications, etc... to external endpoint(s). D.T uses HTTPS to send these data as a JSON payload.
+                   <!--
+                   Logging is <a href=" echo esc_attr( $link ) . 'system' ">captured here</a> for debugging purposes.
+                   -->
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Endpoint URL</strong><br>
+                    Endpoint URL is a standard URL with protocol, domain, path, with optional port and query params (e.g., https://disciple.tools/api/webhook/network-dashboard).  If you need to include additional fields than will be send in the request body by the plugin, then you should either do so as a query param on the URL (i.e., http://localhost:3000/api/webhook/network-dashboard?id=123) or embedded within the Access Token (i.e., a JWT that includes an ID property).
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Access Token</strong><br>
+                    Access Token is an <i>optional</i> field.  The specified value will be included in the HTTPS request as a Bearer Token in the Authorization Header (e.g., 'Authorization: Bearer [access_token]').  If you leave this field empty, then the header will not be sent (useful when you are using a public endpoint with no authentication).
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Schedule</strong><br>
+                    Select the frequency for D.T to automatically send data to the webhook. By default, the webhook will be invoked "Once Daily".
+                    <br/><br/><p><u>NOTE</u>: Currently there is only one option, and that matches the daily snapshot of the Network Dashboard plugin. Future versions of this plugin <i>may</i> include a variety of options, including a custom interval option.</p> 
+                    <!--
+                    <br/><br/><p><u>NOTE</u>: If you would like to pause/disable a Webhook, then you can do so by specifying <code>-1</code> in the "Custom" option field.</p> 
+                    -->
+                    <br/><p><strong>Important!</strong><br></p>
+                    Wordpress/Disciple.Tools Cron System depends on visits to trigger background processes. If the site is not visited regularly
+                    like a normal website would be, it is possible to use an external cron service to call the site regularly and trigger these
+		    background tasks. If the plugin is configured for frequent schedules and you notice these services not running when expected, 
+                    you can schedule an external cron service to connect to the site on a regular basis.
+                    <br/><br/><p><strong>Cron Services</strong></p>
+                    <ul>
+                        <li><a href="https://cron-job.org/en/">Cron-Job.org</a></li>
+                        <li><a href="https://www.easycron.com/">EasyCron</a></li>
+                        <li><a href="https://cronless.com/">Cronless</a></li>
+                        <li>Or Google "free cron services"</li>
+                    </ul>
+                    <br/><p><strong>Cron URL</strong><br></p>
+                    <code><?php echo esc_url( site_url() ) . '/wp-cron.php' ?></code>
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    <strong>Manual</strong><br>
+                    Send data to webhook now. This is useful for testing, or when you do not want to enable or wait for a scheduled delivery.
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <br>
+        <!-- End Box -->
+        <?php
+    }
+}
 /**
  * Class DT_Network_Dashboard_Tab_Tutorial
  */
