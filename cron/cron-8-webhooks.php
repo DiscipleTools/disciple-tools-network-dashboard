@@ -33,7 +33,10 @@ function dt_network_dashboard_push_webhooks() {
             }
             $url = $webhook['url'];
             $token = $webhook['token'];
-            $headers = array( 'Content-Type' => 'application/json; charset=utf-8');
+            $headers = array(
+                'Content-Type' => 'application/json; charset=utf-8',
+                'User-Agent' => 'custom/disciple-tools-network-dashboard-plugin/1.0'
+            );
             if ( $token ) {
                 $headers['Authorization'] = 'Bearer ' . $token;
             }
