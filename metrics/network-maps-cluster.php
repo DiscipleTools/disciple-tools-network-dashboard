@@ -56,7 +56,7 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         $tree[$this->base_slug]['children'][$this->slug] = array(
             'key' => $this->key,
             'label' => $this->menu_title,
-            'url' => '/'.$this->url,
+            'url' => trailingslashit( site_url() ) . $this->url,
             'children' => array()
         );
         return $tree;

@@ -49,7 +49,7 @@ class DT_Network_Dashboard_Metrics_Activity_Feed extends DT_Network_Dashboard_Me
         $tree[$this->base_slug]['children'][$this->slug] = array(
             'key' => $this->key,
             'label' => __( 'Log', 'disciple-tools-network-dashboard' ),
-            'url' => '/'.$this->url,
+            'url' => trailingslashit( site_url() ) . $this->url,
             'children' => array()
         );
         return $tree;

@@ -48,7 +48,7 @@ class DT_Network_Dashboard_Metrics_Statistics_Users extends DT_Network_Dashboard
         $tree[$this->base_slug]['children'][$this->slug] = array(
             'key' => $this->key,
             'label' => __( 'Users', 'disciple-tools-network-dashboard' ),
-            'url' => '/'.$this->url,
+            'url' => trailingslashit( site_url() ) . $this->url,
             'children' => array()
         );
         return $tree;

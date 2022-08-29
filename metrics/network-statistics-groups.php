@@ -48,7 +48,7 @@ class DT_Network_Dashboard_Metrics_Statistics_Groups extends DT_Network_Dashboar
         $tree[$this->base_slug]['children'][$this->slug] = array(
             'key' => $this->key,
             'label' => __( 'Groups', 'disciple-tools-network-dashboard' ),
-            'url' => '/'.$this->url,
+            'url' => trailingslashit( site_url() ) . $this->url,
             'children' => array()
         );
         return $tree;

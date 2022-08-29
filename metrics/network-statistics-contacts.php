@@ -49,7 +49,7 @@ class DT_Network_Dashboard_Metrics_Overviews_Statistics extends DT_Network_Dashb
         $tree[$this->base_slug]['children'][$this->slug] = array(
             'key' => $this->key,
             'label' => __( 'Contacts', 'disciple-tools-network-dashboard' ),
-            'url' => '/'.$this->url,
+            'url' => trailingslashit( site_url() ) . $this->url,
             'children' => array()
         );
         return $tree;

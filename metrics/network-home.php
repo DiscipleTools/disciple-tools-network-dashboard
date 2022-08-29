@@ -46,7 +46,7 @@ class DT_Network_Dashboard_Metrics_Home extends DT_Network_Dashboard_Metrics_Bas
         $tree[$this->base_slug] = array(
             'key' => $this->key,
             'label' => __( 'Home', 'disciple-tools-network-dashboard' ),
-            'url' => '/' . $this->url,
+            'url' => trailingslashit( site_url() ) . $this->url,
             'children' => array()
         );
         return $tree;

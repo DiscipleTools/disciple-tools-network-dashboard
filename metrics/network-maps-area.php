@@ -108,30 +108,30 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         $tree[$this->base_slug]['children'][$this->slug] = array(
             'key' => $this->key,
             'label' => __( 'Area Maps', 'disciple-tools-network-dashboard' ),
-            'url' => '/'.$this->url,
+            'url' => trailingslashit( site_url() ) . $this->url,
             'children' => array(
                 array(
                     'key' => $this->key . '_contacts',
                     'label' => __( 'Contacts', 'disciple-tools-network-dashboard' ),
-                    'url' => '/'.$this->url . '/contacts',
+                    'url' => trailingslashit( site_url() ) .$this->url . '/contacts',
                     'children' => array()
                 ),
                 array(
                     'key' => $this->key . '_groups',
                     'label' => __( 'Groups', 'disciple-tools-network-dashboard' ),
-                    'url' => '/'.$this->url. '/groups',
+                    'url' => trailingslashit( site_url() ) .$this->url. '/groups',
                     'children' => array()
                 ),
                 array(
                     'key' => $this->key . '_churches',
                     'label' => __( 'Churches', 'disciple-tools-network-dashboard' ),
-                    'url' => '/'.$this->url. '/churches',
+                    'url' => trailingslashit( site_url() ) .$this->url. '/churches',
                     'children' => array()
                 ),
                 array(
                     'key' => $this->key . '_users',
                     'label' => __( 'Users', 'disciple-tools-network-dashboard' ),
-                    'url' => '/'.$this->url. '/users',
+                    'url' => trailingslashit( site_url() ) .$this->url. '/users',
                     'children' => array()
                 ),
             )

@@ -44,7 +44,7 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
         $tree[$this->base_slug]['children'][$this->slug] = array(
             'key' => $this->key,
             'label' => __( 'Location List', 'disciple-tools-network-dashboard' ),
-            'url' => '/'.$this->url,
+            'url' => trailingslashit( site_url() ) . $this->url,
             'children' => array()
         );
         return $tree;
