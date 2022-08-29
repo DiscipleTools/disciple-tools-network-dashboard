@@ -1,19 +1,19 @@
 
 jQuery(document).ready(function() {
 
-    if( window.location.pathname.match("/network/maps/area/contacts")  ) {
+    if( window.location.pathname.match("/network/maps/area/contacts" )  ) {
         jQuery('#network_maps_area_contacts').prop('style', 'font-weight:900;')
         write_area( 'contact_settings' )
     }
-    else if ( window.location.pathname.match("/network/maps/area/groups") ) {
+    else if ( window.location.pathname.match("/network/maps/area/groups" ) ) {
         jQuery('#network_maps_area_groups').prop('style', 'font-weight:900;')
         write_area( 'group_settings' )
     }
-    else if ( window.location.pathname.match("/network/maps/area/churches") ) {
+    else if ( window.location.pathname.match("/network/maps/area/churches" ) ) {
         jQuery('#network_maps_area_churches').prop('style', 'font-weight:900;')
         write_area( 'church_settings' )
     }
-    else if ( window.location.pathname.match("/network/maps/area/users") ) {
+    else if ( window.location.pathname.match("/network/maps/area/users" ) ) {
         jQuery('#network_maps_area_users').prop('style', 'font-weight:900;')
         write_area( 'user_settings' )
     }
