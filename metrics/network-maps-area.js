@@ -177,8 +177,8 @@ function write_area( settings ) {
                         .done(function (geojson) {
 
                             jQuery.each(geojson.features, function (i, v) {
-                                if (window.grid_data[geojson.features[i].properties.id]) {
-                                    geojson.features[i].properties.value = parseInt(window.grid_data[geojson.features[i].properties.id].count)
+                                if (window.grid_data[geojson.features[i].properties.grid_id]) {
+                                    geojson.features[i].properties.value = parseInt(window.grid_data[geojson.features[i].properties.grid_id].count)
                                 } else {
                                     geojson.features[i].properties.value = 0
                                 }
@@ -340,8 +340,8 @@ function write_area( settings ) {
 
                                         // add data to geojson properties
                                         jQuery.each(geojson.features, function (i, v) {
-                                            if (window.grid_data[geojson.features[i].properties.id]) {
-                                                geojson.features[i].properties.value = parseInt(window.grid_data[geojson.features[i].properties.id].count)
+                                            if (window.grid_data[geojson.features[i].properties.grid_id]) {
+                                                geojson.features[i].properties.value = parseInt(window.grid_data[geojson.features[i].properties.grid_id].count)
                                             } else {
                                                 geojson.features[i].properties.value = 0
                                             }
