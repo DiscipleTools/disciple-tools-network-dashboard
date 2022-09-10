@@ -866,12 +866,12 @@ class DT_Network_Dashboard_Tab_Webhooks
         <script type="text/javascript">
             function handleWebhookAccessTokenShowChange(checkbox) {
                 const type = checkbox.checked ? "text" : "password";
-                document.getElementById("<?php echo $this->WEBHOOK_ACCESS_TOKEN ?>").setAttribute("type", type);
+                document.getElementById("<?php echo esc_attr( $this->webhook_access_token ) ?>").setAttribute("type", type);
             }
             function handleWebhookScheduleChange() {
                 /* TODO
-                const selectedIndex = document.getElementById("<?php echo $this->WEBHOOK_SCHEDULE?>").selectedIndex;
-                const value = document.getElementById("<?php echo $this->WEBHOOK_SCHEDULE?>").options[selectedIndex].value;
+                const selectedIndex = document.getElementById("<?php echo esc_attr( $this->webhook_schedule ) ?>").selectedIndex;
+                const value = document.getElementById("<?php echo esc_attr( $this->webhook_schedule ) ?>").options[selectedIndex].value;
                 console.log(`value: ${ value }`);
                 // if custom, add a new field for dynamic entry
                 */
@@ -879,53 +879,53 @@ class DT_Network_Dashboard_Tab_Webhooks
         </script>
         <?php
     }
-	
+
     public function console(): void {
-        echo '<script> console.error('.json_encode(func_get_args(), JSON_HEX_TAG).'); </script>';
+        echo '<script> console.error('.json_encode( func_get_args(), JSON_HEX_TAG ).'); </script>';
     }
 
-    private $PLUGIN_PREFIX              = 'dt_network_dashboard';
-    private $WEBHOOK_NONCE              = 'webhook_nonce';
-    private $WEBHOOK_ENDPOINT_URL       = 'webhook_endpoint_url';
-    private $WEBHOOK_ACCESS_TOKEN       = 'webhook_access_token';
-    private $WEBHOOK_SCHEDULE           = 'webhook_schedule';
-    private $WEBHOOK_SCHEDULE_ENABLED   = 'webhook_schedule_enabled';
-    private $WEBHOOK_CONFIG             = 'webhook_config';
-    private $WEBHOOK_UPDATE             = 'webhook_update';
-    private $WEBHOOK_SEND_NOW           = 'webhook_send_now';
+    private $plugin_prefix               = 'dt_network_dashboard';
+    private $webhook_notice              = 'webhook_nonce';
+    private $webhook_endpoint_url       = 'webhook_endpoint_url';
+    private $webhook_access_token       = 'webhook_access_token';
+    private $webhook_schedule          = 'webhook_schedule';
+    private $webhook_schedule_enabled   = 'webhook_schedule_enabled';
+    private $webhook_config             = 'webhook_config';
+    private $webhook_update             = 'webhook_update';
+    private $webhook_send_now           = 'webhook_send_now';
 
     private function get_webhook_endpoint_url() {
-        return get_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_ENDPOINT_URL );
+        return get_option( $this->plugin_prefix  . '_' . $this->webhook_endpoint_url );
     }
 
     private function set_webhook_endpoint_url( $url ) {
-        update_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_ENDPOINT_URL, $url );
+        update_option( $this->plugin_prefix  . '_' . $this->webhook_endpoint_url, $url );
     }
 
     private function get_webhook_access_token() {
-        return get_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_ACCESS_TOKEN );
+        return get_option( $this->plugin_prefix  . '_' . $this->webhook_access_token );
     }
 
     private function set_webhook_access_token( $token ) {
-        update_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_ACCESS_TOKEN, $token );
+        update_option( $this->plugin_prefix  . '_' . $this->webhook_access_token, $token );
     }
 
     private function get_webhook_schedule() {
-        return get_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_SCHEDULE );
+        return get_option( $this->plugin_prefix  . '_' . $this->webhook_schedule );
     }
 
     private function set_webhook_schedule( $schedule ) {
-        update_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_SCHEDULE, $schedule );
+        update_option( $this->plugin_prefix  . '_' . $this->webhook_schedule, $schedule );
     }
 
     private function get_webhook_schedule_enabled() {
-        return get_option( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_SCHEDULE_ENABLED );
+        return get_option( $this->plugin_prefix  . '_' . $this->webhook_schedule_enabled );
     }
 
     private function set_webhook_schedule_enabled( $enabled ) {
         $hook_name = 'dt_network_dashboard_webhook_schedule_daily';
         $callback = 'dt_network_dashboard_push_webhooks';
-	if ( ! $enabled ) {
+        if ( ! $enabled ) {
             // unschedule previous
             $timestamp = wp_next_scheduled( $hook_name );
             if ( $timestamp ) {
@@ -947,10 +947,10 @@ class DT_Network_Dashboard_Tab_Webhooks
             );
             // NOTE: current version is only supporting a single webhook
             $this->set_webhook_config( $webhook_config );
-            update_option ( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_SCHEDULE_ENABLED, false );
+            update_option( $this->plugin_prefix  . '_' . $this->webhook_schedule_enabled, false );
         } else {
-            // schedule new 
-            if ( ! has_action ( $hook_name ) ) {
+            // schedule new
+            if ( ! has_action( $hook_name ) ) {
                 $this->console( 'ADD THE ACTION', $hook_name );
                 add_action( $hook_name, $callback );
             }
@@ -968,44 +968,44 @@ class DT_Network_Dashboard_Tab_Webhooks
             );
             // NOTE: current version is only supporting a single webhook
             $this->set_webhook_config( $webhook_config );
-            update_option ( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_SCHEDULE_ENABLED, true );
+            update_option( $this->plugin_prefix  . '_' . $this->webhook_schedule_enabled, true );
         }
     }
 
     private function set_webhook_config( $webhook_config ) {
-        $this->console( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_CONFIG, $webhook_config );
-        update_option ( $this->PLUGIN_PREFIX . '_' . $this->WEBHOOK_CONFIG, $webhook_config );
+        $this->console( $this->plugin_prefix  . '_' . $this->webhook_config, $webhook_config );
+        update_option( $this->plugin_prefix  . '_' . $this->webhook_config, $webhook_config );
     }
 
     public function box_webhooks() {
         //$link = 'admin.php?page='.$this->token.'&tab=';
-        if ( isset( $_POST[$this->WEBHOOK_NONCE] ) && wp_verify_nonce(  $_POST[$this->WEBHOOK_NONCE], $this->WEBHOOK_NONCE . '_' . get_current_user_id() ) ) {
-            if ( isset( $_POST[$this->WEBHOOK_ENDPOINT_URL] ) && isset( $_POST[$this->WEBHOOK_UPDATE] ) ) {
-                $this->console( 'WEBHOOK_ENDPOINT_URL', $_POST[$this->WEBHOOK_ENDPOINT_URL] );
-                $this->set_webhook_endpoint_url( $_POST[$this->WEBHOOK_ENDPOINT_URL] );
+        if ( isset( $_POST[$this->webhook_notice] ) && wp_verify_nonce( wp_unslash( $_POST[$this->webhook_notice] ), $this->webhook_notice . '_' . get_current_user_id() ) ) { // phpcs:ignore
+            if ( isset( $_POST[$this->webhook_endpoint_url] ) && isset( $_POST[$this->webhook_update] ) ) {
+                $this->console( 'webhook_endpoint_url', $_POST[$this->webhook_endpoint_url] ); // phpcs:ignore
+                $this->set_webhook_endpoint_url( $_POST[$this->webhook_endpoint_url] ); // phpcs:ignore
             }
-            if ( isset( $_POST[$this->WEBHOOK_ACCESS_TOKEN] ) && isset( $_POST[$this->WEBHOOK_UPDATE] ) ) {
-                $this->console( 'WEBHOOK_ACCESS_TOKEN', $_POST[$this->WEBHOOK_ACCESS_TOKEN] );
-                $this->set_webhook_access_token( sanitize_text_field( wp_unslash( $_POST[$this->WEBHOOK_ACCESS_TOKEN] ) ) );  
+            if ( isset( $_POST[$this->webhook_access_token] ) && isset( $_POST[$this->webhook_update] ) ) {
+                $this->console( 'webhook_access_token', $_POST[$this->webhook_access_token] ); // phpcs:ignore
+                $this->set_webhook_access_token( sanitize_text_field( wp_unslash( $_POST[$this->webhook_access_token] ) ) ); // phpcs:ignore
             }
-            if ( isset( $_POST[$this->WEBHOOK_SCHEDULE] ) && ! empty( $_POST[$this->WEBHOOK_SCHEDULE] ) && isset( $_POST[$this->WEBHOOK_UPDATE] ) ) {
-                $this->console( 'WEBHOOK_SCHEDULE', $_POST[$this->WEBHOOK_SCHEDULE] );
-                $this->set_webhook_schedule( $_POST[$this->WEBHOOK_SCHEDULE] );  
+            if ( isset( $_POST[$this->webhook_schedule] ) && ! empty( $_POST[$this->webhook_schedule] ) && isset( $_POST[$this->webhook_update] ) ) {
+                $this->console( 'webhook_schedule', $_POST[$this->webhook_schedule] ); // phpcs:ignore
+                $this->set_webhook_schedule( $_POST[$this->webhook_schedule] ); // phpcs:ignore
             }
-            if ( isset( $_POST[$this->WEBHOOK_SCHEDULE_ENABLED] ) && isset( $_POST[$this->WEBHOOK_UPDATE] ) )  {
+            if ( isset( $_POST[$this->webhook_schedule_enabled] ) && isset( $_POST[$this->webhook_update] ) ) {
                 if ( is_admin() ) {
-                    $this->console( 'WEBHOOK_SCHEDULE_ENABLED', true );
-                    $this->set_webhook_schedule_enabled( true );  
+                    $this->console( 'webhook_schedule_enabled', true );
+                    $this->set_webhook_schedule_enabled( true );
                 }
             }
-            if ( !isset( $_POST[$this->WEBHOOK_SCHEDULE_ENABLED] ) && isset( $_POST[$this->WEBHOOK_UPDATE] ) )  {
+            if ( !isset( $_POST[$this->webhook_schedule_enabled] ) && isset( $_POST[$this->webhook_update] ) ) {
                 if ( is_admin() ) {
-                    $this->console( 'WEBHOOK_SCHEDULE_ENABLED', false );
-                    $this->set_webhook_schedule_enabled( false );  
+                    $this->console( 'webhook_schedule_enabled', false );
+                    $this->set_webhook_schedule_enabled( false );
                 }
             }
-            if ( isset( $_POST[$this->WEBHOOK_SEND_NOW] ) ) {
-                $this->console( 'WEBHOOK_SEND_NOW', "yay!" );
+            if ( isset( $_POST[$this->webhook_send_now] ) ) {
+                $this->console( 'webhook_send_now', "yay!" );
                 $hook_name = 'dt_network_dashboard_webhook_schedule_daily';
                 do_action( $hook_name );
             }
@@ -1022,54 +1022,55 @@ class DT_Network_Dashboard_Tab_Webhooks
                 <tr>
                     <td>
                         <form method="POST">
-                            <?php wp_nonce_field( $this->WEBHOOK_NONCE . '_' . get_current_user_id(), $this->WEBHOOK_NONCE ) ?>
+                            <?php wp_nonce_field( $this->webhook_notice . '_' . get_current_user_id(), $this->webhook_notice ) ?>
                             <table class="widefat striped">
                                 <tr>
                                     <td style="vertical-align: middle;">Endpoint URL</td>
                                     <td>
-                                    <input type="text" style="min-width: 100%;" id="<?php echo $this->WEBHOOK_ENDPOINT_URL ?>" name="<?php echo $this->WEBHOOK_ENDPOINT_URL ?>" value="<?php echo esc_attr( $this->get_webhook_endpoint_url() ) ?>" />
+                                    <input type="text" style="min-width: 100%;" id="<?php echo esc_url( $this->webhook_endpoint_url ) ?>" name="<?php echo esc_url( $this->webhook_endpoint_url ) ?>" value="<?php echo esc_attr( $this->get_webhook_endpoint_url() ) ?>" />
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;">Access Token</td>
                                     <td>
-                                    <input type="password" style="min-width: 100%;" id="<?php echo $this->WEBHOOK_ACCESS_TOKEN ?>" name="<?php echo $this->WEBHOOK_ACCESS_TOKEN ?>" value="<?php echo esc_attr( $this->get_webhook_access_token() ) ?>" />
+                                    <input type="password" style="min-width: 100%;" id="<?php echo esc_attr( $this->webhook_access_token ) ?>" name="<?php echo esc_attr( $this->webhook_access_token ) ?>" value="<?php echo esc_attr( $this->get_webhook_access_token() ) ?>" />
                                     <input type="checkbox" onchange="handleWebhookAccessTokenShowChange(this);">Show Access Token?</input>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;">Schedule</td>
                                     <td>
-                                    <select onchange="handleWebhookScheduleChange();" id="<?php echo $this->WEBHOOK_SCHEDULE ?>" name="<?php echo $this->WEBHOOK_SCHEDULE ?>" style="min-width: 100%;">
+                                    <select onchange="handleWebhookScheduleChange();" id="<?php echo esc_html( $this->webhook_schedule ) ?>" name="<?php echo esc_html( $this->webhook_schedule ) ?>" style="min-width: 100%;">
                                         <?php
                                         $schedules = wp_get_schedules();
                                         if ( ! empty( $schedules ) && ! is_wp_error( $schedules ) ) {
                                             foreach ( $schedules as $option ) {
                                                 $selected_option = $this->get_webhook_schedule();
-                                                if ( !isset ($selected_option ) ) $selected_option = 'Once Daily';
+                                                if ( !isset( $selected_option ) ) { $selected_option = 'Once Daily';
+                                                }
                                                 $selected = ( $option['display'] === $selected_option ) ? 'selected' : '';
                                                 // NOTE: fixed/single option for now to match daily snapshot of Network Dashboard plugin
                                                 if ( $option['display'] === 'Once Daily' ) {
                                                     // NOTE: using 'display' as the value for simplicity, to enable custom values use the 'interval' (seconds)
-                                                    echo '<option ' . $selected . ' value="' . $option['display'] . '">' . $option['display'] . '</option>';
+                                                    echo '<option ' . esc_html( $selected ) . ' value="' . esc_html( $option['display'] ) . '">' . esc_html( $option['display'] ) . '</option>';
                                                 }
                                             }
                                         }
                                         ?>
                                     </select>
-                                    <input type="checkbox" id="<?php echo $this->WEBHOOK_SCHEDULE_ENABLED ?>" name="<?php echo $this->WEBHOOK_SCHEDULE_ENABLED ?>" <?php echo $this->get_webhook_schedule_enabled() ? 'checked' : '' ?>>Enabled?</input>
+                                    <input type="checkbox" id="<?php echo esc_attr( $this->webhook_schedule_enabled ) ?>" name="<?php echo esc_attr( $this->webhook_schedule_enabled ) ?>" <?php echo esc_attr( $this->get_webhook_schedule_enabled() ? 'checked' : '' ) ?>>Enabled?</input>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td style="vertical-align: middle;">Manual</td>
                                     <td>
-                                        <button id="<?php echo $this->WEBHOOK_SEND_NOW ?>" name="<?php echo $this->WEBHOOK_SEND_NOW ?>" type="submit" class="button float-right"><?php esc_html_e( "Send data to webhook now", 'disciple_tools' ) ?></button>
+                                        <button id="<?php echo esc_html( $this->webhook_send_now ) ?>" name="<?php echo esc_html( $this->webhook_send_now ) ?>" type="submit" class="button float-right"><?php esc_html_e( "Send data to webhook now", 'disciple_tools' ) ?></button>
                                     </td>
                                 </tr>
                             </table>
                             <br>
                             <span style="float:right;">
-                                <button id="<?php echo $this->WEBHOOK_UPDATE ?>" name="<?php echo $this->WEBHOOK_UPDATE ?>" type="submit" class="button float-right"><?php esc_html_e( "Update", 'disciple_tools' ) ?></button>
+                                <button id="<?php echo esc_attr( $this->webhook_update ) ?>" name="<?php echo esc_attr( $this->webhook_update ) ?>" type="submit" class="button float-right"><?php esc_html_e( "Update", 'disciple_tools' ) ?></button>
                             </span>
                         </form>
                     </td>
@@ -1080,7 +1081,9 @@ class DT_Network_Dashboard_Tab_Webhooks
         <!-- End Box -->
         <?php
         // TODO
-        echo '<pre>'; print_r( _get_cron_array() ); echo '</pre>';
+        echo '<pre>';
+        print_r( _get_cron_array() );
+        echo '</pre>';
     }
 
     public function box_instructions() {
@@ -1115,14 +1118,14 @@ class DT_Network_Dashboard_Tab_Webhooks
                 <td>
                     <strong>Schedule</strong><br>
                     Select the frequency for D.T to automatically send data to the webhook. By default, the webhook will be invoked "Once Daily".
-                    <br/><br/><p><u>NOTE</u>: Currently there is only one option, and that matches the daily snapshot of the Network Dashboard plugin. Future versions of this plugin <i>may</i> include a variety of options, including a custom interval option.</p> 
+                    <br/><br/><p><u>NOTE</u>: Currently there is only one option, and that matches the daily snapshot of the Network Dashboard plugin. Future versions of this plugin <i>may</i> include a variety of options, including a custom interval option.</p>
                     <!--
-                    <br/><br/><p><u>NOTE</u>: If you would like to pause/disable a Webhook, then you can do so by specifying <code>-1</code> in the "Custom" option field.</p> 
+                    <br/><br/><p><u>NOTE</u>: If you would like to pause/disable a Webhook, then you can do so by specifying <code>-1</code> in the "Custom" option field.</p>
                     -->
                     <br/><p><strong>Important!</strong><br></p>
                     Wordpress/Disciple.Tools Cron System depends on visits to trigger background processes. If the site is not visited regularly
                     like a normal website would be, it is possible to use an external cron service to call the site regularly and trigger these
-		    background tasks. If the plugin is configured for frequent schedules and you notice these services not running when expected, 
+            background tasks. If the plugin is configured for frequent schedules and you notice these services not running when expected,
                     you can schedule an external cron service to connect to the site on a regular basis.
                     <br/><br/><p><strong>Cron Services</strong></p>
                     <ul>

@@ -5,7 +5,7 @@
 
 $hook_name = 'dt_network_dashboard_webhook_schedule_daily';
 $callback = 'dt_network_dashboard_push_webhooks';
-if ( ! has_action ( $hook_name ) ) {
+if ( ! has_action( $hook_name ) ) {
     add_action( $hook_name, $callback );
 }
 
@@ -42,7 +42,7 @@ function dt_network_dashboard_push_webhooks() {
             }
             $args = array(
                 'method' => 'POST',
-		'headers' => $headers,
+            'headers' => $headers,
                 'body' => json_encode(
                     array(
                         'snapshot' => $snapshot
@@ -55,7 +55,7 @@ function dt_network_dashboard_push_webhooks() {
                 continue;
             }
             dt_write_log( __METHOD__, 'SUCCESS: ' . $maybe_serialize( $result ) );
-        } catch (Exception $e) {
+        } catch ( Exception $e ) {
             dt_write_log( $e );
         }
     }
