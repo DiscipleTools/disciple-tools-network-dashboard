@@ -363,7 +363,7 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         $results = $wpdb->get_results("
             SELECT lgm.label as l, p.post_title as n, lgm.post_id as pid, lgm.lng, lgm.lat, lg.admin0_grid_id as a0, lg.admin1_grid_id as a1
             FROM $wpdb->dt_location_grid_meta as lgm
-                 LEFT JOIN $wpdb->posts as p ON p.ID=lgm.post_id
+                 JOIN $wpdb->posts as p ON p.ID=lgm.post_id
                  LEFT JOIN $wpdb->dt_location_grid as lg ON lg.grid_id=lgm.grid_id
             WHERE lgm.post_type = 'trainings'
             LIMIT 40000;
