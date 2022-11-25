@@ -48,12 +48,12 @@ define( 'DOING_AJAX', true );
 define( 'SHORTINIT', 1 );
 
 /**** LOAD NEEDED FILES *****/
-if ( !isset( $_SERVER['DOCUMENT_ROOT'] ) ) {
-    _dt_network_doing_it_wrong( 'missing server info' );
-}
-require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php'; //@phpcs:ignore
-require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-includes/post.php'; //@phpcs:ignore
-require_once $_SERVER['DOCUMENT_ROOT'] . '/wp-includes/meta.php'; //@phpcs:ignore
+$wordpress_root_path = preg_replace( '/wp-content(?!.*wp-content).*/', '', __DIR__ );
+require_once( $wordpress_root_path . 'wp-load.php' );
+
+require_once $wordpress_root_path . 'wp-load.php';
+require_once $wordpress_root_path . 'wp-includes/post.php';
+require_once $wordpress_root_path . 'wp-includes/meta.php';
 
 if ( !defined( 'WP_CONTENT_URL' ) ) {
     define( 'WP_CONTENT_URL', get_option( 'siteurl' ) . '/wp-content' );
