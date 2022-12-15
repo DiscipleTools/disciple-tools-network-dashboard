@@ -1671,8 +1671,8 @@ class DT_Network_Dashboard_Tab_System
             }
             dt_network_dashboard_profiles_update();
 
-            if ( get_option( 'dt_network_dashboard_migration_lock' ) ){
-                delete_option( 'dt_network_dashboard_migration_lock' );
+            if ( get_transient( 'dt_network_dashboard_migration_lock' ) ){
+                delete_transient( 'dt_network_dashboard_migration_lock' );
                 delete_option( 'dt_network_dashboard_migration_number' );
             }
         }
@@ -1898,7 +1898,7 @@ class DT_Network_Dashboard_Tab_System
             }
 
             if ( isset( $_POST['migrations'] ) ) {
-                delete_option( 'dt_network_dashboard_migration_lock' );
+                delete_transient( 'dt_network_dashboard_migration_lock' );
                 delete_option( 'dt_network_dashboard_migration_number' );
                 $trigger_refresh = true;
             }
