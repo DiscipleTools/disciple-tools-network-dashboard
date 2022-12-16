@@ -11,16 +11,27 @@ class DT_Network_Dashboard_Migration_0008 extends DT_Network_Dashboard_Migration
      */
     public function up() {
         global $wpdb;
-        $table = $wpdb->prefix . 'dt_movement_log';
 
-        // @phpcs:disable
-        $wpdb->query( "ALTER TABLE {$table} ADD INDEX `timestamp` (`timestamp`);" );
-        $wpdb->query( "ALTER TABLE {$table} ADD INDEX `site_record_id` (`site_record_id`);" );
-        $wpdb->query( "ALTER TABLE {$table} ADD INDEX `site_object_id` (`site_object_id`);" );
-        $wpdb->query( "ALTER TABLE {$table} ADD INDEX `lng` (`lng`);" );
-        $wpdb->query( "ALTER TABLE {$table} ADD INDEX `lat` (`lat`);" );
-        // @phpcs:enable
-
+        $timestamp_index = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dt_movement_log WHERE Key_name = 'timestamp'" );
+        if ( empty( $timestamp_index ) ) {
+            $wpdb->query( "ALTER TABLE {$wpdb->prefix}dt_movement_log ADD INDEX timestamp (timestamp)" );
+        }
+        $site_record_index = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dt_movement_log WHERE Key_name = 'site_record_id'" );
+        if ( empty( $site_record_index ) ) {
+            $wpdb->query( "ALTER TABLE {$wpdb->prefix}dt_movement_log' ADD INDEX site_record_id (site_record_id)" );
+        }
+        $site_object_id_index = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dt_movement_log WHERE Key_name = 'site_object_id'" );
+        if ( empty( $site_object_id_index ) ) {
+            $wpdb->query( "ALTER TABLE {$wpdb->prefix}dt_movement_log' ADD INDEX site_object_id (site_object_id)" );
+        }
+        $lng_index = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dt_movement_log WHERE Key_name = 'lng'" );
+        if ( empty( $lng_index ) ) {
+            $wpdb->query( "ALTER TABLE {$wpdb->prefix}dt_movement_log ADD INDEX lng (lng)" );
+        }
+        $lat_index = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dt_movement_log WHERE Key_name = 'lat'" );
+        if ( empty( $lat_index ) ) {
+            $wpdb->query( "ALTER TABLE {$wpdb->prefix}dt_movement_log' ADD INDEX lat (lat)" );
+        }
     }
 
     /**

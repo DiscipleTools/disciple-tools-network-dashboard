@@ -95,12 +95,12 @@ class DT_Network_Dashboard_Migration_Engine
 
             self::sanity_check_expected_tables( $migration->get_expected_tables() );
 
-            if ( (int) get_option( 'dt_network_dashboard_migration_lock', 0 ) ) {
+            if ( !empty( get_transient( 'dt_network_dashboard_migration_lock' ) ) ) {
                 throw new DT_Network_Dashboard_Migration_Lock_Exception();
             }
-            update_option( 'dt_network_dashboard_migration_lock', '1' );
+            set_transient( 'dt_network_dashboard_migration_lock', '1', DAY_IN_SECONDS );
 
-            error_log( gmdate( " Y-m-d H:i:s T" ) . " Starting migrating Network Dashboard to number $activating_migration_number" );
+            error_log( gmdate( ' Y-m-d H:i:s T' ) . ' Starting migrating Network Dashboard to number $activating_migration_number' );
             try {
                 $migration->up();
             } catch ( Throwable $e ) {
@@ -116,7 +116,7 @@ class DT_Network_Dashboard_Migration_Engine
             update_option( 'dt_network_dashboard_migration_number', (string) $activating_migration_number );
             error_log( gmdate( " Y-m-d H:i:s T" ) . " Done migrating Network Dashboard to number $activating_migration_number" );
 
-            update_option( 'dt_network_dashboard_migration_lock', '0' );
+            delete_transient( 'dt_network_dashboard_migration_lock' );
 
             $migration->test();
         }
@@ -146,13 +146,20 @@ class DT_Network_Dashboard_Migration_Engine
 
 
     public static function display_migration_and_lock(){
-        add_action( "dt_utilities_system_details", function () {
-            $lock = get_option( 'dt_network_dashboard_migration_lock', 0 ); ?>
+        add_action( 'dt_utilities_system_details', function () {
+            $lock = get_transient( 'dt_network_dashboard_migration_lock' ); ?>
             <tr>
-                <td>Network Dashboard Migration version: <?php echo esc_html( self::$migration_number ) ?>. Lock: <?php echo esc_html( $lock ); ?>  </td>
+                <td>
+                    <?php echo esc_html( sprintf( 'Network Dashboard Migration version: %1$s of %2$s', self::get_current_db_migration(), self::$migration_number ) ); ?>.
+                    Lock: <?php echo esc_html( $lock ?: 0 ); ?>
+                </td>
                 <td> <button name="reset_lock" value="dt_network_dashboard_migration_lock">Reset Lock</button></td>
             </tr>
         <?php });
+    }
+
+    public static function get_current_db_migration(){
+        return get_option( 'dt_network_dashboard_migration_number' );
     }
 }
 

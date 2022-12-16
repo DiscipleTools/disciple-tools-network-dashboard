@@ -54,7 +54,7 @@ if ( ! function_exists( 'dt_network_site_system' ) ) {
         $system = array(
             'network_dashboard_version' => DT_Network_Dashboard::get_instance()->version ?? 0,
             'network_dashboard_migration' => get_option( 'dt_network_dashboard_migration_number' ),
-            'network_dashboard_migration_lock' => get_option( 'dt_network_dashboard_migration_lock' ),
+            'network_dashboard_migration_lock' => get_transient( 'dt_network_dashboard_migration_lock' ),
             'dt_theme_version' => Disciple_Tools::instance()->version ?? 0,
             'dt_theme_migration' => get_option( 'dt_migration_number' ),
             'dt_theme_migration_lock' => get_option( 'dt_migration_lock' ),
