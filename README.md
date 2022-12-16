@@ -1,4 +1,4 @@
-![Plugin Banner](https://raw.githubusercontent.com/DiscipleTools/disciple-tools-network-dashboard/master/documentation/network-dashboard-banner.png)
+![Build Status](https://github.com/DiscipleTools/disciple-tools-network-dashboard/actions/workflows/ci.yml/badge.svg?branch=master)
 # Disciple.Tools - Network Dashboard
 
 The Network Dashboard creates report data sharing between multiple Disciple.Tools systems. It seeks to
@@ -78,5 +78,5 @@ system for git. For a more details on contribution see the
 
 ![screenshot](https://raw.githubusercontent.com/DiscipleTools/disciple-tools-network-dashboard/master/documentation/files/images/nd-screenshot.png)
 
-[![Build Status](https://travis-ci.com/DiscipleTools/disciple-tools-network-dashboard.svg?branch=master)](https://travis-ci.com/DiscipleTools/disciple-tools-network-dashboard)
+![Build Status](https://github.com/DiscipleTools/disciple-tools-network-dashboard/actions/workflows/ci.yml/badge.svg?branch=master)
 
