@@ -56,3 +56,10 @@ function dt_is_todays_log( $name ) : bool {
 
     return ( $time < strtotime( 'today' ) );
 }
+
+
+//keep activity_timestamp from being recorded in dt_activity_log
+add_filter( 'dt_ignore_fields_logging', function ( $fields ){
+    $fields[] = 'activity_timestamp';
+    return $fields;
+});
