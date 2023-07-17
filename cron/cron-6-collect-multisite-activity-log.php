@@ -117,10 +117,4 @@ if ( is_multisite() && dt_network_dashboard_multisite_is_approved() ){
 
         return true;
     }
-    // do not log activity timestamp to avoid bloating database
-    function dt_network_dashboard_collect_multisite_activity_no_log( $ignore_fields ) {
-        $ignore_fields[] = 'activity_timestamp';
-        return $ignore_fields;
-    }
-    add_filter( 'dt_ignore_fields_logging', 'dt_network_dashboard_collect_multisite_activity_no_log', 99, 1 );
 }
