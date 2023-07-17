@@ -7,7 +7,7 @@ class DT_Delete_Activity_Timestamps extends Job {
     /**
      * Job constructor.
      */
-    public function __construct(  ){
+    public function __construct(){
 
     }
 
