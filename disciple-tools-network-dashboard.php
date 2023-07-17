@@ -68,6 +68,7 @@ add_action( 'after_setup_theme', function () {
      *      Note: this migration is for the Network Dashboard plugin. The migration for the mapping module
      *      is handled inside the /mapping-module/mapping.php file and migrations engine.
      */
+    require_once( plugin_dir_path( __FILE__ ) . '/admin/migration-jobs.php' );
     try {
         require_once( plugin_dir_path( __FILE__ ) . '/admin/class-migration-engine.php' );
         DT_Network_Dashboard_Migration_Engine::migrate( DT_Network_Dashboard_Migration_Engine::$migration_number );
