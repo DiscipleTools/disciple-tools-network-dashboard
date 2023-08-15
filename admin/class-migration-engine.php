@@ -100,7 +100,7 @@ class DT_Network_Dashboard_Migration_Engine
             }
             set_transient( 'dt_network_dashboard_migration_lock', '1', DAY_IN_SECONDS );
 
-            error_log( gmdate( ' Y-m-d H:i:s T' ) . ' Starting migrating Network Dashboard to number $activating_migration_number' );
+            error_log( gmdate( ' Y-m-d H:i:s T' ) . " Starting migrating Network Dashboard to number $activating_migration_number" );
             try {
                 $migration->up();
             } catch ( Throwable $e ) {
@@ -114,7 +114,7 @@ class DT_Network_Dashboard_Migration_Engine
                 throw $e;
             }
             update_option( 'dt_network_dashboard_migration_number', (string) $activating_migration_number );
-            error_log( gmdate( " Y-m-d H:i:s T" ) . " Done migrating Network Dashboard to number $activating_migration_number" );
+            error_log( gmdate( ' Y-m-d H:i:s T' ) . " Done migrating Network Dashboard to number $activating_migration_number" );
 
             delete_transient( 'dt_network_dashboard_migration_lock' );
 
