@@ -96,7 +96,7 @@ class DT_Network_Activity_Log {
             $wpdb->dt_movement_log = $wpdb->prefix . 'dt_movement_log';
         }
         if ( ! isset( $wpdb->dt_location_grid ) ) {
-            $wpdb->dt_location_grid = $wpdb->prefix . 'dt_location_grid';
+            $wpdb->dt_location_grid = apply_filters( 'dt_location_grid_table', $wpdb->prefix . 'dt_location_grid' );
         }
         if ( ! isset( $wpdb->dt_location_grid_meta ) ) {
             $wpdb->dt_location_grid_meta = $wpdb->prefix . 'dt_location_grid_meta';
