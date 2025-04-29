@@ -18,11 +18,11 @@ class DT_Network_Dashboard_Migration_0008 extends DT_Network_Dashboard_Migration
         }
         $site_record_index = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dt_movement_log WHERE Key_name = 'site_record_id'" );
         if ( empty( $site_record_index ) ) {
-            $wpdb->query( "ALTER TABLE {$wpdb->prefix}dt_movement_log' ADD INDEX site_record_id (site_record_id)" );
+            $wpdb->query( "ALTER TABLE {$wpdb->prefix}dt_movement_log ADD INDEX site_record_id (site_record_id)" );
         }
         $site_object_id_index = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dt_movement_log WHERE Key_name = 'site_object_id'" );
         if ( empty( $site_object_id_index ) ) {
-            $wpdb->query( "ALTER TABLE {$wpdb->prefix}dt_movement_log' ADD INDEX site_object_id (site_object_id)" );
+            $wpdb->query( "ALTER TABLE {$wpdb->prefix}dt_movement_log ADD INDEX site_object_id (site_object_id)" );
         }
         $lng_index = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dt_movement_log WHERE Key_name = 'lng'" );
         if ( empty( $lng_index ) ) {
@@ -30,7 +30,7 @@ class DT_Network_Dashboard_Migration_0008 extends DT_Network_Dashboard_Migration
         }
         $lat_index = $wpdb->get_results( "SHOW INDEX FROM {$wpdb->prefix}dt_movement_log WHERE Key_name = 'lat'" );
         if ( empty( $lat_index ) ) {
-            $wpdb->query( "ALTER TABLE {$wpdb->prefix}dt_movement_log' ADD INDEX lat (lat)" );
+            $wpdb->query( "ALTER TABLE {$wpdb->prefix}dt_movement_log ADD INDEX lat (lat)" );
         }
     }
 
