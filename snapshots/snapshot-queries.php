@@ -182,13 +182,15 @@ class DT_Network_Dashboard_Snapshot_Queries {
                 break;
             }
 
-            $data[] = [
-                'label' => 'Gen ' . $gen['generation'],
-                'value' => $gen[$item]
-            ];
+            if ( isset( $gen[$item] ) ) {
+                $data[] = [
+                    'label' => 'Gen ' . $gen['generation'],
+                    'value' => $gen[$item]
+                ];
 
-            if ( $gen[$item] === 0 ) {
-                $end = true;
+                if ( $gen[$item] === 0 ) {
+                    $end = true;
+                }
             }
         }
 
