@@ -100,7 +100,6 @@ function dt_network_dashboard_log_create_posts( $post_type, $post_id, $initial_f
 
         DT_Network_Activity_Log::insert_log( $data );
     }
-
 }
 
 add_action( 'dt_post_updated', 'dt_network_dashboard_log_update_posts', 10, 3 );

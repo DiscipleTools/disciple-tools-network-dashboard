@@ -23,14 +23,12 @@ class DT_Network_Dashboard_Migration_0004 extends DT_Network_Dashboard_Migration
 
         $results = DT_Network_Activity_Log::query_new_contacts();
         DT_Network_Activity_Log::local_bulk_insert( $results );
-
     }
 
     /**
      * @throws \Exception  Got error when dropping table $name.
      */
     public function down() {
-
     }
 
     /**
@@ -38,5 +36,4 @@ class DT_Network_Dashboard_Migration_0004 extends DT_Network_Dashboard_Migration
      */
     public function test() {
     }
-
 }

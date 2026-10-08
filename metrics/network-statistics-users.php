@@ -81,6 +81,5 @@ class DT_Network_Dashboard_Metrics_Statistics_Users extends DT_Network_Dashboard
 
         return $params;
     }
-
 }
 new DT_Network_Dashboard_Metrics_Statistics_Users();

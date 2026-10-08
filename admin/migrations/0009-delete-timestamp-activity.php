@@ -18,14 +18,12 @@ class DT_Network_Dashboard_Migration_0009 extends DT_Network_Dashboard_Migration
                 wp_queue()->push( new DT_Delete_Activity_Timestamps() );
             }
         }
-
     }
 
     /**
      * @throws \Exception  Got error when dropping table $name.
      */
     public function down() {
-
     }
 
     /**
@@ -33,5 +31,4 @@ class DT_Network_Dashboard_Migration_0009 extends DT_Network_Dashboard_Migration
      */
     public function test() {
     }
-
 }

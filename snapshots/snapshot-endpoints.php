@@ -72,7 +72,6 @@ class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpo
                 'permission_callback' => '__return_true',
             )
         );
-
     }
 
     public function live_stats( WP_REST_Request $request ) {
@@ -102,8 +101,5 @@ class DT_Network_Dashboard_Snapshot_Endpoints extends DT_Network_Dashboard_Endpo
 
         return dt_network_site_profile();
     }
-
 }
 DT_Network_Dashboard_Snapshot_Endpoints::instance();
-
-

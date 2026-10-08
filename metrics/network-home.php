@@ -57,6 +57,5 @@ class DT_Network_Dashboard_Metrics_Home extends DT_Network_Dashboard_Metrics_Bas
         $template_for_url[$this->url] = 'template-metrics.php';
         return $template_for_url;
     }
-
 }
 new DT_Network_Dashboard_Metrics_Home();

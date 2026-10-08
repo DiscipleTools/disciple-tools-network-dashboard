@@ -57,5 +57,4 @@ class DT_Network_Dashboard_Migration_0001 extends DT_Network_Dashboard_Migration
      */
     public function test() {
     }
-
 }

@@ -40,7 +40,6 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
             add_filter( 'dashboard_points_geojson', array( $this, 'points_geojson_contacts' ), 10, 3 );
             add_filter( 'dashboard_points_geojson', array( $this, 'points_geojson_groups' ), 10, 3 );
         }
-
     }
 
     public function add_scripts() {
@@ -233,7 +232,6 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         }
 
         return apply_filters( 'dashboard_grid_totals', $grid_list = array(), $post_type, $status );
-
     }
     public function grid_totals_contacts( $grid_list, $post_type, $status ) {
         if ( 'contacts' !== $post_type ) {
@@ -556,7 +554,6 @@ class DT_Network_Dashboard_Metrics_Maps_Area extends DT_Network_Dashboard_Metric
         } else {
             return new WP_Error( __METHOD__, "Invalid post type", array( 'status' => 400 ) );
         }
-
     }
 
     public function get_contacts_grid_list( $status = null ) {

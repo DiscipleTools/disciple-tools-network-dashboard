@@ -81,6 +81,5 @@ class DT_Network_Dashboard_Metrics_Statistics_Groups extends DT_Network_Dashboar
 
         return $params;
     }
-
 }
 new DT_Network_Dashboard_Metrics_Statistics_Groups();

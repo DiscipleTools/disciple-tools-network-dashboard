@@ -23,7 +23,6 @@ class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics_Ba
             $this->js_object_name = $this->key;
             add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ), 99 );
         }
-
     }
 
     public function add_scripts() {
@@ -53,6 +52,5 @@ class DT_Network_Dashboard_Metrics_Sites extends DT_Network_Dashboard_Metrics_Ba
         $template_for_url[$this->url] = 'template-metrics.php';
         return $template_for_url;
     }
-
 }
 new DT_Network_Dashboard_Metrics_Sites();

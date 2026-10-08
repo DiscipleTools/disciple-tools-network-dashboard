@@ -1275,7 +1275,6 @@ class DT_Network_Dashboard_Metrics_Base {
             return 0;
         }
         return $results;
-
     }
 
     public function build_log( $filter = [] ){

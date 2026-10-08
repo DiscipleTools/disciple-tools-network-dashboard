@@ -78,6 +78,5 @@ class DT_Network_Dashboard_Metrics_Maps_Locationlist extends DT_Network_Dashboar
 
         return $params;
     }
-
 }
 new DT_Network_Dashboard_Metrics_Maps_Locationlist();

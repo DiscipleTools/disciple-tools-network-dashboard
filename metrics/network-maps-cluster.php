@@ -79,7 +79,6 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
                 ),
             )
         );
-
     }
 
     public function endpoint( WP_REST_Request $request ){
@@ -95,7 +94,6 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         $post_type = sanitize_text_field( wp_unslash( $params['post_type'] ) );
 
         return apply_filters( 'dashboard_cluster_layer_geojson', $this->_empty_geojson(), $post_type );
-
     }
 
     public function cluster_geojson_contacts( $geojson, $post_type ) {
@@ -154,7 +152,6 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
         );
 
         return $geojson;
-
     }
     public function cluster_geojson_groups( $geojson, $post_type ) {
         if ( 'groups' !== $post_type ) {
@@ -163,6 +160,5 @@ class DT_Network_Dashboard_Metrics_Maps_Cluster extends DT_Network_Dashboard_Met
 
         return $geojson;
     }
-
 }
 new DT_Network_Dashboard_Metrics_Maps_Cluster();

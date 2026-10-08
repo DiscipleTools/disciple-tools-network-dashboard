@@ -35,7 +35,6 @@ class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration
             $strategist = get_role( 'dt_admin' );
             $strategist->add_cap( 'view_network_dashboard' );
         }
-
     }
 
     /**
@@ -51,5 +50,4 @@ class DT_Network_Dashboard_Migration_0000 extends DT_Network_Dashboard_Migration
      */
     public function test() {
     }
-
 }

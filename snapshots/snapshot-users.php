@@ -92,6 +92,5 @@ class DT_Network_Dashboard_Snapshot_Users {
 
         return $data;
     }
-
 }
 DT_Network_Dashboard_Snapshot_Users::instance();

@@ -323,7 +323,7 @@ class DT_Network_Dashboard_Tab_Profile
                                     else if ( is_multisite() && 'multisite' === $site['type'] && dt_network_dashboard_multisite_is_approved() && 'reject' !== $site['receive_activity'] ) {
                                         echo '<div class="row"><span class="nd-site-box multisite">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
-                                    else if ( 'network_dashboard_receiving' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'reject' !== $site['receive_activity'] ) {
+                                    else if ( 'network_dashboard_receiving' === $site['connection_type'] || ( 'network_dashboard_both' === $site['connection_type'] && 'reject' !== $site['receive_activity'] ) ) {
                                         echo '<div class="row"><span class="nd-site-box remote">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
                                 }
@@ -357,7 +357,7 @@ class DT_Network_Dashboard_Tab_Profile
                                     else if ( is_multisite() && 'multisite' === $site['type'] && dt_network_dashboard_multisite_is_approved() && 'none' !== $site['send_activity'] && in_array( $site['type_id'], $approved_sites_ids ) ) {
                                         echo '<div class="row"><span class="nd-site-box multisite">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
-                                    else if ( 'network_dashboard_sending' === $site['connection_type'] || 'network_dashboard_both' === $site['connection_type'] && 'none' !== $site['send_activity'] ) {
+                                    else if ( 'network_dashboard_sending' === $site['connection_type'] || ( 'network_dashboard_both' === $site['connection_type'] && 'none' !== $site['send_activity'] ) ) {
                                         echo '<div class="row"><span class="nd-site-box remote">' . esc_html( $site['name'] ) . '</span></div>';
                                     }
                                 }
@@ -370,7 +370,6 @@ class DT_Network_Dashboard_Tab_Profile
         <br>
         <?php
     }
-
 }
 
 /**
@@ -1460,7 +1459,7 @@ class DT_Network_Dashboard_Tab_System
                     dt_save_log( 'management', 'REFRESH MULTISITE SNAPSHOT', false );
 
                     if ( dt_network_dashboard_collect_multisite( intval( sanitize_key( wp_unslash( $_POST['new-multisite-snapshot'] ) ) ) ) ) {
-                        $message = array( 'notice-success','Successful collection of new snapshot' );
+                        $message = array( 'notice-success', 'Successful collection of new snapshot' );
                     }
                     else {
                         $message = array( 'notice-error', 'Failed collection' );
@@ -1521,7 +1520,7 @@ class DT_Network_Dashboard_Tab_System
 
                 $result = dt_get_site_snapshot( intval( sanitize_key( wp_unslash( $_POST['new-remote-snapshot'] ) ) ) );
                 if ( $result ) {
-                    $message = array( 'notice-success','Successful collection of new snapshot.' );
+                    $message = array( 'notice-success', 'Successful collection of new snapshot.' );
                 }
                 else {
                     $message = array( 'notice-error', 'Failed collection' );
@@ -2045,7 +2044,6 @@ class DT_Network_Dashboard_Tab_System
         <br>
         <?php
     }
-
 }
 
 /**

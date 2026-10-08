@@ -217,8 +217,5 @@ class DT_Network_Dashboard_Network_Endpoints extends DT_Network_Dashboard_Endpoi
             'data' => $activity,
         );
     }
-
 }
 DT_Network_Dashboard_Network_Endpoints::instance();
-
-

@@ -82,6 +82,5 @@ class DT_Network_Dashboard_Metrics_Maps_Hovermap extends DT_Network_Dashboard_Me
 
         return $params;
     }
-
 }
 new DT_Network_Dashboard_Metrics_Maps_Hovermap();

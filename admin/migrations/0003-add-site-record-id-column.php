@@ -38,7 +38,6 @@ class DT_Network_Dashboard_Migration_0003 extends DT_Network_Dashboard_Migration
      * @throws \Exception  Got error when dropping table $name.
      */
     public function down() {
-
     }
 
     /**
@@ -46,5 +45,4 @@ class DT_Network_Dashboard_Migration_0003 extends DT_Network_Dashboard_Migration
      */
     public function test() {
     }
-
 }

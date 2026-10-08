@@ -137,7 +137,6 @@ class DT_Network_Dashboard_Metrics_Activity_Map extends DT_Network_Dashboard_Met
         );
 
         return $geojson;
-
     }
 }
 new DT_Network_Dashboard_Metrics_Activity_Map();

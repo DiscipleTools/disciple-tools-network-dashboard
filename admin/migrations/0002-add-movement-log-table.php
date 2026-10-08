@@ -41,7 +41,7 @@ class DT_Network_Dashboard_Migration_0002 extends DT_Network_Dashboard_Migration
         );
 
         foreach ( $query as $name => $table ) {
-            $rv = $wpdb->query( $table ); // WPCS: unprepared SQL OK
+            $rv = $wpdb->query( $table ); // phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
         }
     }
 
@@ -49,7 +49,6 @@ class DT_Network_Dashboard_Migration_0002 extends DT_Network_Dashboard_Migration
      * @throws \Exception  Got error when dropping table $name.
      */
     public function down() {
-
     }
 
     /**
@@ -57,5 +56,4 @@ class DT_Network_Dashboard_Migration_0002 extends DT_Network_Dashboard_Migration
      */
     public function test() {
     }
-
 }

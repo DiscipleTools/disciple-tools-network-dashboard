@@ -21,7 +21,6 @@ function dt_network_dashboard_denied( $type = null ): bool {
             break;
     }
     return true;
-
 }
 
 function dt_network_dashboard_has_permission(){
@@ -62,7 +61,7 @@ function dt_network_dashboard_site_link_capabilities( $args ) {
  *
  * @return bool
  */
-function dt_network_dashboard_multisite_is_approved() :bool {
+function dt_network_dashboard_multisite_is_approved() : bool {
     if ( ! is_multisite() ) {
         return false;
     }
@@ -103,7 +102,7 @@ function dt_dashboard_approved_sites( $type = 'get', $data = null ) {
 /**
  * @return bool
  */
-function dt_is_current_multisite_dashboard_approved() :bool {
+function dt_is_current_multisite_dashboard_approved() : bool {
     if ( ! is_multisite() ) {
         return false;
     }
@@ -117,7 +116,7 @@ function dt_is_current_multisite_dashboard_approved() :bool {
     return true;
 }
 
-function dt_is_network_dashboard_plugin_active( $site_id = null ) :bool {
+function dt_is_network_dashboard_plugin_active( $site_id = null ) : bool {
 
     if ( is_multisite() ){
         $active_plugins = get_blog_option( $site_id, 'active_plugins' );
@@ -143,7 +142,7 @@ function dt_is_network_dashboard_plugin_active( $site_id = null ) :bool {
  *
  * @return array
  */
-function dt_get_dashboard_approved_sites_by_id( int $id ) :array {
+function dt_get_dashboard_approved_sites_by_id( int $id ) : array {
     $approved_sites = dt_dashboard_approved_sites();
     if ( isset( $approved_sites[$id] ) ) {
         return $approved_sites[$id];

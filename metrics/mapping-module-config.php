@@ -190,8 +190,6 @@ class DT_Network_Mapping_Module_Config
         } else {
             return $mapping_module;
         }
-
     }
-
 }
 DT_Network_Mapping_Module_Config::instance();

@@ -88,7 +88,6 @@ class DT_Network_Dashboard_Site_Post_Type {
         }
 
         return $profile;
-
     }
 
     public static function create( $site_profile, $connection_type, $id ) {
@@ -762,6 +761,5 @@ class DT_Network_Dashboard_Site_Post_Type {
 
         return $needs_update;
     }
-
 }
 DT_Network_Dashboard_Site_Post_Type::instance();

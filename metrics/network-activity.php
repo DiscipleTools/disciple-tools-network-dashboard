@@ -16,7 +16,6 @@ class DT_Network_Dashboard_Metrics_Activity extends DT_Network_Dashboard_Metrics
         $this->key = $this->root_slug . '_' . $this->base_slug . '_' . $this->slug;
 
         add_filter( 'dt_network_dashboard_build_menu', array( $this, 'menu' ), 5 );
-
     }
 
     public function menu( $tree ){

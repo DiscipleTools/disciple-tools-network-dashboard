@@ -60,7 +60,6 @@ function dt_network_dashboard_log_generations( $post_type, $post_id, $initial_fi
 
         DT_Network_Activity_Log::insert_log( $data );
     }
-
 }
 
 /**

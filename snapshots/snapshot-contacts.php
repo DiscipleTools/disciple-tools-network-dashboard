@@ -42,7 +42,6 @@ class DT_Network_Dashboard_Snapshot_Contacts {
         );
 
         return $report_data;
-
     }
 }
 DT_Network_Dashboard_Snapshot_Contacts::instance();

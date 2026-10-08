@@ -597,7 +597,6 @@ class DT_Network_Activity_Log {
             $record['timestamp'],
             $record['hash']
         ) );
-
     }
 
     /**
@@ -963,8 +962,5 @@ class DT_Network_Activity_Log {
             default:
                 break;
         }
-
     }
-
-
 }

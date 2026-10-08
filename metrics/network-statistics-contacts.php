@@ -24,7 +24,6 @@ class DT_Network_Dashboard_Metrics_Overviews_Statistics extends DT_Network_Dashb
         if ( $this->url === $this->url_path ) {
             add_action( 'wp_enqueue_scripts', array( $this, 'add_scripts' ), 99 );
         }
-
     }
 
     public function add_scripts() {
@@ -82,6 +81,5 @@ class DT_Network_Dashboard_Metrics_Overviews_Statistics extends DT_Network_Dashb
 
         return $params;
     }
-
 }
 new DT_Network_Dashboard_Metrics_Overviews_Statistics();

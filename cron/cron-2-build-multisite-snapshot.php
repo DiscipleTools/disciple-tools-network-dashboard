@@ -152,5 +152,3 @@ if ( is_multisite() ){
         return true;
     }
 }
-
-

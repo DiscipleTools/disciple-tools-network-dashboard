@@ -52,4 +52,3 @@ class DT_Network_Dashboard_Snapshot
         }
     }
 }
-
